@@ -1,0 +1,26 @@
+{
+  "deliveredAt": "2026-10-24T17:14:12.418384+09:00",
+  "title": "장고랑 살아보니 07 — 한 끼만 만들랬잖아",
+  "status": "original-artwork-candidates-delivered-for-user-review",
+  "originals": [
+    "output/marketing/jango-sns-ep07-20261024/source-art/scene-01-r1.png",
+    "output/marketing/jango-sns-ep07-20261024/source-art/scene-02-r1.png",
+    "output/marketing/jango-sns-ep07-20261024/source-art/scene-03-r1.png",
+    "output/marketing/jango-sns-ep07-20261024/source-art/scene-04-r2.png",
+    "output/marketing/jango-sns-ep07-20261024/source-art/scene-05-r1.png"
+  ],
+  "overview": "review/overview.jpg",
+  "individualMobilePreviews": [
+    "review/01-360.png",
+    "review/02-360.png",
+    "review/03-360.png",
+    "review/04-360.png",
+    "review/05-360.png"
+  ],
+  "prompts": "prompts/",
+  "generationTool": "official built-in imagegen",
+  "userAdoption": null,
+  "reel": null,
+  "publishedUrl": null,
+  "latestRevision": "revisions/scene-04-expression-r2/revision.json"
+}

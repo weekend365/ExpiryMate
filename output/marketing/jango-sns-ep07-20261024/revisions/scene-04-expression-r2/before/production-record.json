@@ -1,0 +1,52 @@
+{
+  "episode": "jango-sns-ep07-20261024",
+  "completedAt": "2026-10-24T17:10:53.905395+09:00",
+  "method": "official built-in image_gen.imagegen, five separate generation calls with inspected local references",
+  "skill": "/Users/namu/.codex/skills/.system/imagegen/SKILL.md",
+  "authorization": "episode.json",
+  "artwork": "selected-artwork.json",
+  "promptSet": [
+    "prompts/scene-01-r1.txt",
+    "prompts/scene-02-r1.txt",
+    "prompts/scene-03-r1.txt",
+    "prompts/scene-04-r1.txt",
+    "prompts/scene-05-r1.txt"
+  ],
+  "baseReferences": "references.json",
+  "actualPerCallReferences": [
+    "preparation-01-r1.json",
+    "preparation-02-r1.json",
+    "preparation-03-r1.json",
+    "preparation-04-r1.json",
+    "preparation-05-r1.json"
+  ],
+  "review": "visual-review.json",
+  "previewReproduction": "node output/marketing/jango-sns-ep07-20261024/build_review.cjs",
+  "scope": "Artwork candidates and necessary provenance/review files only; no app changes or publication.",
+  "protectedExistingFiles": {
+    "manifest": "preservation-before.json",
+    "count": 619,
+    "unchangedAfterGeneration": true
+  },
+  "checks": [
+    {
+      "command": "pnpm docs:check",
+      "exitCode": 0,
+      "result": "31 metadata entries and 75 indexed links; canonical Expo/EAS build entry."
+    },
+    {
+      "command": "pnpm exec eslint output/marketing/jango-sns-ep07-20261024/build_review.cjs",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check -- output/marketing/jango-sns-ep07-20261024",
+      "exitCode": 0,
+      "note": "New untracked text files additionally inspected directly for trailing whitespace."
+    },
+    {
+      "check": "All source/copy, prompt and actual reference SHA-256 values; five image dimensions; 619 protected existing files",
+      "status": "passed"
+    }
+  ],
+  "testingScope": "No app runtime code changed. No app typecheck/unit suite rerun for artwork-only output."
+}

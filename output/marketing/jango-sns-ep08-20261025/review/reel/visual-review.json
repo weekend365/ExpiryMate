@@ -1,0 +1,27 @@
+{
+  "episode": 8,
+  "reviewedAt": "2026-10-25",
+  "status": "passed-local-visual-review",
+  "nativeVideo": "review/reel/native-0.0.jpg, native-6.5.jpg, native-16.8.jpg, native-27.5.jpg, native-37.2.jpg",
+  "mobileVideo": "review/reel/all-dialogue-states.jpg and timeline-1.jpg through timeline-4.jpg",
+  "cutAndZoom": "review/reel/cuts-and-zoom.jpg",
+  "uiSimulation": "review/reel/ui-overlap-simulation.jpg",
+  "cover": [
+    "review/reel/cover-360.jpg",
+    "review/reel/cover-profile-3x4.jpg",
+    "review/reel/cover-profile-square.jpg"
+  ],
+  "observations": [
+    "All seven scenes and seventeen dialogue states are in storyboard order; the first hook is visible from frame zero.",
+    "At 360×640, Korean dialogue and the fictional AI answers are legible. Each AI answer has an on-frame '이야기 속 AI 대화' label; the phone prop has Pretendard chat text.",
+    "Female and Jango faces, clothing, expressions and props remain continuous. The gentle 100–103% zoom does not cut a dialogue balloon, face or phone answer.",
+    "The brand and single next-episode CTA remain fixed and visible from 37 through 40 seconds.",
+    "The revised cover title is visible in native, 360×640, 3:4 and square previews. The woman's eyes and Jango's face remain visible.",
+    "The illustrative Instagram UI overlay does not cover the dialogue or closing CTA. It is not a screenshot of the live Instagram app."
+  ],
+  "factualDisclosure": "Fictional generic AI chat, not a Jango app feature; disclosed in the on-screen AI card and caption.",
+  "limitations": [
+    "Music was checked by AAC decoding, level, peak, continuity and silence measurements; human listening was unavailable.",
+    "Live Instagram playback, final cover crop, AI label and published caption must be checked after upload."
+  ]
+}

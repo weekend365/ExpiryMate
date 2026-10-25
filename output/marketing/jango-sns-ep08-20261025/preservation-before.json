@@ -1,0 +1,641 @@
+{
+  "recordedAt": "2026-10-25T11:58:00.109162+09:00",
+  "scope": "v18 source originals, canonical character and SNS records, previous episode source art, final Reel MP4 and core records",
+  "files": [
+    {
+      "file": "design/jango/cartoon-series.json",
+      "sha256": "9bc7b4a6aab3af59c98def3cf59b0279112492b7a2a680339b95145c7f49435f",
+      "bytes": 26310
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "bytes": 1279301
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/02-r2.png",
+      "sha256": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09",
+      "bytes": 1255784
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/03-r2.png",
+      "sha256": "5848875e991d14ce53e7eed2ff488fbb3280920f3a84bc794fafc4534eaf7adc",
+      "bytes": 1292597
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/04-r3.png",
+      "sha256": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6",
+      "bytes": 1242582
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/05-r2.png",
+      "sha256": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9",
+      "bytes": 1313297
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png",
+      "sha256": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd",
+      "bytes": 1454474
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/07-r2.png",
+      "sha256": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e",
+      "bytes": 1455822
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/08-r2.png",
+      "sha256": "5da498b5f0e8f60b9d5cf53a8336bc07832467579413526b1fdef4b51a7be0c0",
+      "bytes": 1395054
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+      "sha256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "bytes": 1251545
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/10-r2.png",
+      "sha256": "ef68d5f142571ce57e39984070ffa0262fedea2464e61166694e29e687ff3595",
+      "bytes": 1356941
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+      "sha256": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "bytes": 1193413
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/12-r4.png",
+      "sha256": "b55fa9d0e08b8198e367d16e9af4bf44b2aebb8395594d454ef2f2a92a15b365",
+      "bytes": 911710
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/13-r3.png",
+      "sha256": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04",
+      "bytes": 1432403
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/14-r2.png",
+      "sha256": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83",
+      "bytes": 1340059
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/15-r2.png",
+      "sha256": "8f39ab6b0e3ee5f68dede647e6d9e26354a779201cc113e7ea118584d7ce47af",
+      "bytes": 1389751
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/16-r2.png",
+      "sha256": "bb48947c860c6495e91385a70a5531e273e6c3aa2150970acad39c5d0d7e8e26",
+      "bytes": 1318879
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+      "sha256": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
+      "bytes": 1142806
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/18-r2.png",
+      "sha256": "9dc6f5d4794c88b61cb306d7c784c011b77ff7d9c82c8033ffd1c8b2a68c9e01",
+      "bytes": 1275094
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/19-r2.png",
+      "sha256": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23",
+      "bytes": 1320248
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/20-r2.png",
+      "sha256": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838",
+      "bytes": 1337042
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/21-r2.png",
+      "sha256": "9971aa63fcd09fd32560af952f933502a4c4f03df1722c924f1fb01139b7fc03",
+      "bytes": 1282871
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/22-r2.png",
+      "sha256": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8",
+      "bytes": 1284647
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/23-r2.png",
+      "sha256": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
+      "bytes": 1375571
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "bytes": 1286528
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/25-r3.png",
+      "sha256": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109",
+      "bytes": 1352432
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/26-r3.png",
+      "sha256": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810",
+      "bytes": 1375518
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/27-r2.png",
+      "sha256": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2",
+      "bytes": 1376114
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/28-r3.png",
+      "sha256": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922",
+      "bytes": 1442569
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/29-r2.png",
+      "sha256": "0bc4807f8c774c42597811840ed2f32fa5545eeda97514d8be8fea4b71ed009c",
+      "bytes": 1246999
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/30-r2.png",
+      "sha256": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6",
+      "bytes": 1571012
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/31-r2.png",
+      "sha256": "3713219781448de8e7e1d4d9d17de2b13f5d97da048a657aeda13a1b666e7b67",
+      "bytes": 1354517
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/32-r2.png",
+      "sha256": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d",
+      "bytes": 1302818
+    },
+    {
+      "file": "design/jango/master-set.json",
+      "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+      "bytes": 77329
+    },
+    {
+      "file": "design/jango/masters/v18/master.json",
+      "sha256": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83",
+      "bytes": 10127
+    },
+    {
+      "file": "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
+      "sha256": "70c393a59470556073c95d3844df61e25921c703696be6d9e1f27cd824787e84",
+      "bytes": 17362
+    },
+    {
+      "file": "design/jango/reference/JANGO-STYLE-GUIDE.md",
+      "sha256": "ce89cd43092e3404296be9e32f5c7f4331d8c30c28e87b8e548868b1ee4ddc1a",
+      "bytes": 8727
+    },
+    {
+      "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+      "sha256": "33bd9c3e129e43c5417a2b1450a89b3977b0aa92d3f7b3001a8ba0645b8a2eed",
+      "bytes": 25056
+    },
+    {
+      "file": "design/jango/style-master.json",
+      "sha256": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0",
+      "bytes": 395
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-direction-v3/production-record.json",
+      "sha256": "fabb0b574d344b13201ed82b29865caecfe84b76453b340dcf451257336c4bd2",
+      "bytes": 3202
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/episode.json",
+      "sha256": "842ec2b244f659c9ff6a6a37cca66a6bad8f6a39a81d4bf8ae09b462ac9b624f",
+      "bytes": 2923
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/production-record.json",
+      "sha256": "558c6acbca1a63e09e1c0ca3108121d111f26e9ae7af4bb49832d621f3a8f7c7",
+      "bytes": 13796
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/episode.json",
+      "sha256": "5bb6d0fbcc8bd2c650a36e66798b45b9ca30a4c7fdd63c9d240dbc35784576bb",
+      "bytes": 808
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/production-record.json",
+      "sha256": "1fbf18e7e51739c826c05388d4e367506b5833318dc20864ecf4bb870cd5b403",
+      "bytes": 1928
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/episode.json",
+      "sha256": "a811799ecc27e29c15c00580c1b6aeb756ea98cd571cafa25e80d83c6df1b1f4",
+      "bytes": 3510
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/production-record.json",
+      "sha256": "7092dfde24615068ffbf05a5ec6de443f64bc68b7a8fab87469d764a3d73af67",
+      "bytes": 8122
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/episode.json",
+      "sha256": "e88b31305319f5df954748614ed6a1b860f69ff1ef797274ba2aa0792047f102",
+      "bytes": 4042
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-01.png",
+      "sha256": "aa5025215557a3c3d6bb6ee8ab7f9f98b0ff05e6bc9d25a1976ba55c50e6dbec",
+      "bytes": 3323778
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "bytes": 3471261
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-03.png",
+      "sha256": "0153389c9aa8fd423f6e823d2ec0b0e01dbc3f042c508c37b77b685e336a93a7",
+      "bytes": 3046167
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-04.png",
+      "sha256": "ef75a46ae3d11de97f3a0890f599b19d6c61f64a1c8f1bd03d49757ff03e4099",
+      "bytes": 3143952
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-overview.png",
+      "sha256": "2675dba0508be6c6da03643f1266b524bb4e4424b141a6bce182ad965e6def56",
+      "bytes": 3560687
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/production-record.json",
+      "sha256": "7c06afbc682c803376e6727ca8915f264a4efaba27a9b012d826899781351e4e",
+      "bytes": 7552
+    },
+    {
+      "file": "output/marketing/jango-sns-ep02-20261020/panels/01.png",
+      "sha256": "609e5b860bbc7b5d12be45207bdb5a5df618eb6d5f24783a078b5aa9a695cba7",
+      "bytes": 2570739
+    },
+    {
+      "file": "output/marketing/jango-sns-ep02-20261020/panels/02.png",
+      "sha256": "251a218c6bdff92ac92aae1420b36c038a13b0f9d28bf13f5738f30ae0dea38d",
+      "bytes": 2413816
+    },
+    {
+      "file": "output/marketing/jango-sns-ep02-20261020/panels/03.png",
+      "sha256": "1b77413eba8213d8a0d49770f866f57d9fc83d21e70250b53c8707b6237e0589",
+      "bytes": 2676290
+    },
+    {
+      "file": "output/marketing/jango-sns-ep02-20261020/panels/04.png",
+      "sha256": "b9a90e59095ef9a2ceaa95a04c7a0f1ac80141a3a05c65703b88423a4c1f969c",
+      "bytes": 2389079
+    },
+    {
+      "file": "output/marketing/jango-sns-ep02-20261020/production-record.json",
+      "sha256": "9e6c9721c3213bdfabbb0346ae022c18461f1daa971a4536952cb2f994c47062",
+      "bytes": 8124
+    },
+    {
+      "file": "output/marketing/jango-sns-ep02-20261020/reel/jango-ep02-music.mp4",
+      "sha256": "5cfa19a0e16727dbe990c40069148e102de05da3aa0f58cc142c96bf69551c1f",
+      "bytes": 2614762
+    },
+    {
+      "file": "output/marketing/jango-sns-ep02-20261020/source-art/panel-01-r1.png",
+      "sha256": "3394d753fa9d579e37d266d9e40f915122aa95aa3abe4f61cbe8f9578d8e39a8",
+      "bytes": 2899172
+    },
+    {
+      "file": "output/marketing/jango-sns-ep02-20261020/source-art/panel-02-r1.png",
+      "sha256": "314c1144d71a8708d32c26e223db57d2bcbe7242d4d561cb9d91a761a686a584",
+      "bytes": 2658629
+    },
+    {
+      "file": "output/marketing/jango-sns-ep02-20261020/source-art/panel-03-r1.png",
+      "sha256": "08a2a95e858baaf6af174edd72896b4462d0730e2a4f4bb2dbad19c6738b41f9",
+      "bytes": 2988228
+    },
+    {
+      "file": "output/marketing/jango-sns-ep02-20261020/source-art/panel-04-r1.png",
+      "sha256": "8bf809493fe235d2e671465dcaba5bb2b3df73dd97959137e0a03ca739e1550d",
+      "bytes": 2679913
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/file-hashes.json",
+      "sha256": "44e9979121cde76361180e695911b2186a71187399e1c25c46d3606236ccd7ee",
+      "bytes": 12763
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/production-record.json",
+      "sha256": "129029c0c105e2ec10b8d6d778e4ee378cf1a79de7039aa96cf7c642914c87cb",
+      "bytes": 3571
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/jango-ep03-music.mp4",
+      "sha256": "8edc087ec539eb3a24dc823eaf46228e8d0e8ded6bb6da29f3f17acdae1387a3",
+      "bytes": 13733597
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-01.mp4",
+      "sha256": "cf88f635d239fdbd2f2a78c3eaf29e1078280e4caa5d6f8f89c3180b442a73ea",
+      "bytes": 3562889
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-02.mp4",
+      "sha256": "aaea069ed3fac62ef49a46f88131bba80e95d303a495ad016b3d52be343ed3bc",
+      "bytes": 3208428
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-03.mp4",
+      "sha256": "f6c3f8c80a29a8ca9710702ebdeb2f8c0d81e4147e9aa06b8171eb66759a9b22",
+      "bytes": 3416496
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-04.mp4",
+      "sha256": "3c6d0b62cc2ea4de6a7de73f9f8ce4e408dfde1d5834a1d16e7aec7383cacd84",
+      "bytes": 2947621
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+      "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232",
+      "bytes": 1043724
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-01-r1.png",
+      "sha256": "f45cd09ca94341904fc6c039ef7d5661a80dc4f88f1d971b6edaffd3dec8901a",
+      "bytes": 2930711
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-01-r2.png",
+      "sha256": "2862cdf2ea520b2a51164b72d9b192a5359dcd49f3de9a45555ed7ea03a01fed",
+      "bytes": 2703643
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r1.png",
+      "sha256": "e67c8eb219f920742a1e00c7e92e13f4a0b6b2875b576d35646cec71b2d4376f",
+      "bytes": 2699143
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r2.png",
+      "sha256": "7f46100b0125bef5f99740de6f76668c75580f1f132090421e4109f9f3f8c86e",
+      "bytes": 2248254
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r3.png",
+      "sha256": "639f69c10067514f0f2bad3ae2cb0bb04cc450906b0259ceb3676b791d42a73e",
+      "bytes": 2292070
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+      "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357",
+      "bytes": 2339950
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-03-r1.png",
+      "sha256": "de9be3fe2fad3096c4e3e035ef0fcd917998617308597fda6d1a9db796656c42",
+      "bytes": 2565269
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-04-r1.png",
+      "sha256": "a5e10ea5110c8f4dda876e2d0b2900f5cd421373b5f96456e22d45a3726ba5e6",
+      "bytes": 2345926
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/file-hashes.json",
+      "sha256": "3910e7ea62d9a53a770dd0988689f55fabb5b428c8453ed765b145f166db69a5",
+      "bytes": 3827
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/production-record.json",
+      "sha256": "922712716600eded8a75f3dcef955271919595cf69bda07a9b28da95202461dd",
+      "bytes": 2227
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/jango-ep04-music.mp4",
+      "sha256": "ab6307d677c23cd61fce422e14b563641eb08b17dfafc328a8f01c051714b409",
+      "bytes": 22697613
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/silent.mp4",
+      "sha256": "53e920daaa24053dfe751bc7e0b23cc178f7937a8e8d3f755dfc52817a157396",
+      "bytes": 22096899
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/selected-artwork.json",
+      "sha256": "b9f11c0676ebe9bbb23bb220ebd9f64958329321e9fb95c31fc19301cf9b2ed9",
+      "bytes": 2573
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r1.png",
+      "sha256": "e12e80f4319444952b87c51dfaa1d84f098798e92d86ba3a3d7eac7bf0cf785e",
+      "bytes": 2623301
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r2.png",
+      "sha256": "93163067606ece321451c3fdeda6233a104216848941913bc72ebef0bbbb9233",
+      "bytes": 2491772
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-02-r1.png",
+      "sha256": "a05f790869eedefdbcd40d240cb6eb7c657ed4789040093334edfb3bcf59bdb2",
+      "bytes": 2273183
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r1.png",
+      "sha256": "398859695556a735a9cd5dcaf0b4207632878ee552a75cf20792077c11af5740",
+      "bytes": 2285921
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r2.png",
+      "sha256": "12bd855b1402e0517248fcea722feb813a29f5d33a440e12f128afe64a483c3f",
+      "bytes": 2193410
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-04-r1.png",
+      "sha256": "24abe161550382285a0c4fe00468b5467b5b648f38d3b5ed1f99887924870499",
+      "bytes": 2522968
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/episode.json",
+      "sha256": "76b1b6ced6c3d36982aa3c393969e2482cf2201e987bde77e4257e2fa39093e8",
+      "bytes": 6106
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/file-hashes.json",
+      "sha256": "9fa9b5e209cebce29001cdd1323d080df457302ae64a0f0b82bbcf5456fa8b00",
+      "bytes": 26512
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/production-record.json",
+      "sha256": "d37e84c7585da1e67845ddb48e64b4410ce70c984536a606a0b0fa673f7aba0f",
+      "bytes": 2941
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/jango-ep05-music.mp4",
+      "sha256": "7eb05f5fcb87590f9038fcf1d1f9df90c0326adcd32137913f36953473edd6fe",
+      "bytes": 22622015
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/selected-artwork.json",
+      "sha256": "97faf5e333d55cac513737714ac0e5be96dbe56b85cb3cde2c7afca8b15317da",
+      "bytes": 5120
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-01-r1.png",
+      "sha256": "1353b76d58ed10166bd8eaec27acd44eff6a18e23059d9927d55dda01b434fda",
+      "bytes": 2875228
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-02-r1.png",
+      "sha256": "37c9116c4f3800286ed330d67db9da732abf136535d177056ad78563d38fa248",
+      "bytes": 2794740
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-02-r2.png",
+      "sha256": "46f02c6b61939c25ee699427055cb50ce28b6da6900ced084468439e4af1e8ed",
+      "bytes": 2951123
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-02-r3.png",
+      "sha256": "68bfeaf9601dbe66818201038488674e4258d622b082131f4b5070550498b282",
+      "bytes": 2871449
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r1.png",
+      "sha256": "419ee837d7ae72a4e69b4de5e82cc4e173ab937d38990a171c9c9c2894577377",
+      "bytes": 3151115
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r2.png",
+      "sha256": "ec82d6e7c2527d28c8f16c71b820b05a14b800bdf4fd3cb32fb61372a57c412f",
+      "bytes": 2833746
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r3.png",
+      "sha256": "4e595039c071d67bd5f83d6c0dfa26ebac1a12ea3530828bb14be1ba022ddacf",
+      "bytes": 2876466
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-04-r1.png",
+      "sha256": "05eca16347334245f9f2f8a4b7394341c11ae244fcdd28d2c6687e0d42ecbaf3",
+      "bytes": 3059719
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-04-r2.png",
+      "sha256": "3b74a33c4290c5d7bf6d9582838942db30cecacc361df3da91ec1655a23bfdd7",
+      "bytes": 2941282
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-05-r1.png",
+      "sha256": "92f3fbf3b2c444eebd57fb0fd5428068bec3991aa0b0c40ba189c0125e4369c6",
+      "bytes": 3044610
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-05-r2.png",
+      "sha256": "55fb281c6db658b7330d08c186c697864ffbbd88a57eb1cc8a836f688e697cf2",
+      "bytes": 2927845
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/episode.json",
+      "sha256": "96ed8bc4d8a984a4d2b0ed08f929580972979fa36edb9f3948c625c658cccb50",
+      "bytes": 7868
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/file-hashes.json",
+      "sha256": "33d9c6a19ff26d12cc1b2ce64de4fdca8369231d3985779a26fb78f392c83857",
+      "bytes": 17147
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/production-record.json",
+      "sha256": "e848b7d00e4edbace1d72b3e4c5db26d57e92a52b88b5a4f98286df7a221b033",
+      "bytes": 2057
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/jango-ep06-music.mp4",
+      "sha256": "8f8cd63f4311d4effa11275903541644213ea2e7626467d1e37fa353cb66c331",
+      "bytes": 22487904
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/selected-artwork.json",
+      "sha256": "192703b067fc343f7c0dd2bb0cf5c6de5807dff2396296b6a4258f5aba75e04a",
+      "bytes": 4167
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-01-r1.png",
+      "sha256": "67d54ceeecb0c6fb900588622cb746d19c45a8213efe1ca2eec29416023407e3",
+      "bytes": 2936654
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-02-r1.png",
+      "sha256": "2781016ab53f07b0ffc1d701a88839275815faa9eb3eed36e05020c9af0b213b",
+      "bytes": 3021933
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-03-r1.png",
+      "sha256": "bc1575d6177e43270f0b61e63221bda7ff7ae27b3a7c93bb79e910937d31425a",
+      "bytes": 3025763
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-04-r1.png",
+      "sha256": "d5ce94ac65c536f047c1c7d6231e701e9356493da80a64d4cc6f0c50c45dc77b",
+      "bytes": 2903883
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-05-r1.png",
+      "sha256": "58b69c198bc55d3f0dc619ba1ce1f8030703bb711309d9d8346f0b3037709bd6",
+      "bytes": 2958966
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/episode.json",
+      "sha256": "95ece14bb8b27b4f7dfd116a2b18f5cd00bb7c3f722106492569f28d9caa625d",
+      "bytes": 4191
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/file-hashes.json",
+      "sha256": "6d4a431d0c8b524db0dc49aba78791e549e40587831dd12a187c30a87642fba1",
+      "bytes": 12274
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/production-record.json",
+      "sha256": "44c680d08d0056aeeafd2f1227c37cfcbae645fbebff0c62cde7810e4fbff5f7",
+      "bytes": 3407
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/reel/jango-ep07-music.mp4",
+      "sha256": "e8465a66330818b242ec390f36a6ea5f82831261d9f8fbf429404d10520fd4a7",
+      "bytes": 21493572
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/selected-artwork.json",
+      "sha256": "b71beb34339479feb1f6e0042b4519390a77bec8634a35c980f6e8dacd23c9c2",
+      "bytes": 2056
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-01-r1.png",
+      "sha256": "9521113fdc1fae4ac7c0b61d116c707a4716a347a2f8b052f073db9071c7903f",
+      "bytes": 2797100
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-02-r1.png",
+      "sha256": "e9afac93d2daa98c8950db0dead18be9b5c8cb4b7baf99283ffc76e72031bb03",
+      "bytes": 2779904
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-03-r1.png",
+      "sha256": "6d3ac4d72910031118d066a13fc0834cb4e8e4b8c4e812aea0f5e8ed44e1146f",
+      "bytes": 2760931
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-04-r1.png",
+      "sha256": "3c482b226b65478cb99895bc0d8fd36cc498f14338bd30550e3b4159516803d3",
+      "bytes": 2887174
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-04-r2.png",
+      "sha256": "d124a258dc97996cad9eaa9683946c4bc63debfbd6d077b217b0dbd64c74e235",
+      "bytes": 2796900
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-05-r1.png",
+      "sha256": "20163da303fdb3d8b51ca99b13cc149f84524478a3e09374efae6e17c5b30fcc",
+      "bytes": 2826596
+    }
+  ]
+}

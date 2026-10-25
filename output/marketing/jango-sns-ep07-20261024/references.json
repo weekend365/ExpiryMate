@@ -1,0 +1,30 @@
+[
+  {
+    "imageIndex": 1,
+    "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+    "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "role": "active v18 MASTER: Jango identity, compact body, crayon texture; do not copy plate",
+    "inspectedBeforeGeneration": true
+  },
+  {
+    "imageIndex": 2,
+    "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-02-r1.png",
+    "sha256": "2781016ab53f07b0ffc1d701a88839275815faa9eb3eed36e05020c9af0b213b",
+    "role": "published episode 6: continuing woman identity and indoor ivory knit/forest-green pants; no quilt or oranges",
+    "inspectedBeforeGeneration": true
+  },
+  {
+    "imageIndex": 3,
+    "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+    "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357",
+    "role": "user-directed corrected compact Jango torso, mitten/short-leg connections; exclude phone",
+    "inspectedBeforeGeneration": true
+  },
+  {
+    "imageIndex": 4,
+    "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+    "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+    "role": "approved v6 scene integration and household warmth only; exclude text, balloons, 4:5 framing, old character style",
+    "inspectedBeforeGeneration": true
+  }
+]

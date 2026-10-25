@@ -1,0 +1,131 @@
+{
+  "createdAt": "2026-10-25T12:26:57.693154+09:00",
+  "format": "MP4/H.264/yuv420p,1080x1920,30fps,1200 frames,AAC 48kHz stereo",
+  "seconds": 40,
+  "sceneDurations": [
+    5,
+    5,
+    5,
+    6,
+    6,
+    6,
+    7
+  ],
+  "sceneCuts": [
+    5,
+    10,
+    15,
+    21,
+    27,
+    33
+  ],
+  "stateChanges": {
+    "1": [
+      [
+        0,
+        "01w"
+      ],
+      [
+        2.8,
+        "01j"
+      ]
+    ],
+    "2": [
+      [
+        0,
+        "02w"
+      ],
+      [
+        1.3,
+        "02ai"
+      ],
+      [
+        2.6,
+        "02r"
+      ]
+    ],
+    "3": [
+      [
+        0,
+        "03j"
+      ],
+      [
+        2.6,
+        "03w"
+      ]
+    ],
+    "4": [
+      [
+        0,
+        "04w"
+      ],
+      [
+        1.6,
+        "04ai"
+      ],
+      [
+        3.0,
+        "04r"
+      ]
+    ],
+    "5": [
+      [
+        0,
+        "05w"
+      ],
+      [
+        3.7,
+        "05j"
+      ]
+    ],
+    "6": [
+      [
+        0,
+        "06w"
+      ],
+      [
+        4.0,
+        "06j"
+      ]
+    ],
+    "7": [
+      [
+        0,
+        "07w"
+      ],
+      [
+        2.5,
+        "07j"
+      ],
+      [
+        4.0,
+        "07end"
+      ]
+    ]
+  },
+  "closingBrandAndCTASeconds": [
+    37,
+    40
+  ],
+  "zoom": [
+    1,
+    1.03
+  ],
+  "fixedDialogueLettering": true,
+  "phoneScreenMovesWithArt": true,
+  "narration": false,
+  "newArtworkGenerated": false,
+  "musicSource": "design/jango/audio/monkeys-spinning-monkeys/Monkeys Spinning Monkeys.mp3",
+  "musicSourceSha256": "a5bb345c23849ad0786aa0bc5157a9f2d4039660fe00282e55754d475f36dc14",
+  "musicLicenseRecord": "design/jango/audio/monkeys-spinning-monkeys/license.json",
+  "musicExcerptSeconds": [
+    0,
+    40
+  ],
+  "fadeInSeconds": 0.3,
+  "fadeOutSeconds": 1,
+  "audioTargetLufs": -18,
+  "credit": "Monkeys Spinning Monkeys — Kevin MacLeod (incompetech.com)\n출처: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011\nCC BY 4.0: https://creativecommons.org/licenses/by/4.0/\n원곡 일부 발췌, 음량 조정 및 페이드 적용.",
+  "videoSha256": "8b20567592659921f6e673888eac60a8e5606a775dde6a560b67bbd7e769f4d6",
+  "coverSha256": "ca01c2a3290b6c51196d7c9e8f93d8413a0057d15fdd41c82203b540c1ddfa56"
+}

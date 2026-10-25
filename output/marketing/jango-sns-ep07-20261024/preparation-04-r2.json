@@ -1,0 +1,42 @@
+{
+  "candidate": "scene-04-r2",
+  "preparedAt": "2026-10-24T17:12:44.488841+09:00",
+  "method": "official built-in imagegen targeted edit",
+  "prompt": "prompts/scene-04-r2.txt",
+  "promptSha256": "53c953336a18846928c3dba57c01cc0c8bb371897109a9227f45b99ffa2c4436",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-04-r1.png",
+      "sha256": "3c482b226b65478cb99895bc0d8fd36cc498f14338bd30550e3b4159516803d3",
+      "role": "EDIT TARGET. Preserve full composition and everything outside Jango facial expression.",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "Active v18 MASTER: dark compact eye and simple small-mouth identity, crayon stroke; do not copy wink or food.",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-02-r1.png",
+      "sha256": "e9afac93d2daa98c8950db0dead18be9b5c8cb4b7baf99283ffc76e72031bb03",
+      "role": "Same-episode expression reference: two clean black oval eyes and small closed smile; retain target pose and scene.",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": {
+    "quote": "4번째 컷 장고 표정이 이상해",
+    "interpretation": "Correct episode 7 scene 4 facial expression while retaining the rest of the scene."
+  },
+  "status": "prepared-before-generation",
+  "expression": "Two clean matching dark oval eyes, subtle separate brows, small closed U smile; remove malformed half-eye.",
+  "invariants": "Woman, Jango structure/body/pose, pasta, props, room, composition, native portrait ratio.",
+  "previousCandidate": {
+    "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-04-r1.png",
+    "sha256": "3c482b226b65478cb99895bc0d8fd36cc498f14338bd30550e3b4159516803d3"
+  },
+  "previousStateSnapshot": "revisions/scene-04-expression-r2/before"
+}

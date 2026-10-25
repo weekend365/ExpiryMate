@@ -1,0 +1,75 @@
+{
+  "observedAt": "2026-10-25T01:08:16.953Z",
+  "samples": [
+    [
+      {
+        "currentTime": 0.03475,
+        "duration": 20,
+        "error": null,
+        "muted": false,
+        "paused": false,
+        "videoHeight": 1920,
+        "videoWidth": 1080
+      },
+      {
+        "currentTime": 0.01,
+        "duration": 20,
+        "error": null,
+        "muted": true,
+        "paused": true,
+        "videoHeight": 1920,
+        "videoWidth": 1080
+      }
+    ],
+    [
+      {
+        "currentTime": 7.596109,
+        "duration": 20,
+        "error": null,
+        "muted": false,
+        "paused": false
+      },
+      {
+        "currentTime": 0.01,
+        "duration": 20,
+        "error": null,
+        "muted": true,
+        "paused": true
+      }
+    ],
+    [
+      {
+        "currentTime": 4.815405,
+        "duration": 20,
+        "error": null,
+        "muted": false,
+        "paused": false
+      },
+      {
+        "currentTime": 0.01,
+        "duration": 20,
+        "error": null,
+        "muted": true,
+        "paused": true
+      }
+    ],
+    [
+      {
+        "currentTime": 12.915773,
+        "duration": 20,
+        "error": null,
+        "muted": false,
+        "paused": false
+      },
+      {
+        "currentTime": 0.01,
+        "duration": 20,
+        "error": null,
+        "muted": true,
+        "paused": true
+      }
+    ]
+  ],
+  "loopObserved": true,
+  "humanListening": false
+}

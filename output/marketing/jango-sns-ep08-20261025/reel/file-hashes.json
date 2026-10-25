@@ -1,0 +1,130 @@
+{
+  "episode": 8,
+  "files": [
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-01-r1.png",
+      "sha256": "0b9e69942959b384b1ca3ffd72b947b3f0bee74150f0db6fd88709749ee882a4",
+      "bytes": 2656677
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-02-r3.png",
+      "sha256": "22f1f73e2263ae8c4f3611ca0b971c61e705dbffbf58dd95217e74c1d9172239",
+      "bytes": 2601310
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-03-r2.png",
+      "sha256": "f935d28e1fe0d8b006c49217d40fc17e75517b22bce5749c80d00bb65761b9f6",
+      "bytes": 2573103
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-04-r3.png",
+      "sha256": "4ea5e32fef0d607d03d9ccf9d21fd4366c4e864b9e003dd01cfb701a02d12b92",
+      "bytes": 2593229
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-05-r3.png",
+      "sha256": "bfd9c6daf143cc5a66196b2df484d090a08e7a8e5f15b0eaa7270213c328df7a",
+      "bytes": 2530369
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-06-r2.png",
+      "sha256": "30bc0092c5e1ed6f4f9adf7a5e39f456daf4352bd6e992530b1ce4f01dabc47b",
+      "bytes": 2625352
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-07-r1.png",
+      "sha256": "89daac32e1dc5dacde3ba1f914560b93e7a6842a02803c1bfc59a68c9a05f960",
+      "bytes": 2625003
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/build_reel.py",
+      "sha256": "b11904007d1ccdf9faac8d5c3d7008656dc22de269b7ce26d84466c707e50de5",
+      "bytes": 16886
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/validate_reel.py",
+      "sha256": "9db3cd98cd12474bb35b9f47e619a66850d79ff6c22f2c27dc745e1132a75dae",
+      "bytes": 7451
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/caption.txt",
+      "sha256": "52f8ae7d19834f64e5488a76536d32ce50eb9977a4cbe7b32e45e58ab7ce982a",
+      "bytes": 1547
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/cover.jpg",
+      "sha256": "ca01c2a3290b6c51196d7c9e8f93d8413a0057d15fdd41c82203b540c1ddfa56",
+      "bytes": 1335063
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/reel/jango-ep08-music.mp4",
+      "sha256": "8b20567592659921f6e673888eac60a8e5606a775dde6a560b67bbd7e769f4d6",
+      "bytes": 54323172
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/review/reel/jango-ep08-360.mp4",
+      "sha256": "0ce1c38086d2ff590aa149f7743694ccdb56d48b9d5a42ee21a94f8cb1db0988",
+      "bytes": 10520285
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/reel/preparation.json",
+      "sha256": "eabfdbe1d005724e590aa9a3a1a679a2a5706e78f110f47ba24721589126bd2e",
+      "bytes": 4596
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/reel/production.json",
+      "sha256": "6613abb29113a22d44220ecc632f3a53e17b838d374384cf1d441c6b3ff7082b",
+      "bytes": 2212
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/reel/typography.json",
+      "sha256": "442ff28712d2623cad916025be4ceaed4a8b1674ce5664babd26e9c8ca40234c",
+      "bytes": 12933
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/review/reel/technical-quality.json",
+      "sha256": "0608f22c0a739c9cd91524125825fe71674925a0dd517c4a2df9b394ff7fde1c",
+      "bytes": 2594
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/review/reel/visual-review.json",
+      "sha256": "d40f8a3dae2841442b5fd805532bef57d12d64ab33d5eebb08930dedb5edac1c",
+      "bytes": 1799
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/review/reel/layout-overview.jpg",
+      "sha256": "e936474a65c5537791fbbe2b30ac07f562b38f1b5ef5be5b47a6ebe58053144f",
+      "bytes": 2268236
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/review/reel/all-dialogue-states.jpg",
+      "sha256": "7dc762846213a973e49f4f45d25c507e1d884dedac7f97d042eeed0720fddbd1",
+      "bytes": 3279206
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/review/reel/cuts-and-zoom.jpg",
+      "sha256": "06202e0b39569027a5495190b5ebee6ec57538dc0704b93a4620426c2fb5ca3a",
+      "bytes": 2894977
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/review/reel/ui-overlap-simulation.jpg",
+      "sha256": "6df224fc6f87aae95d099eca4b779fd29a4705998dba4eb5dc497afe7e34c68b",
+      "bytes": 3275245
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/review/reel/cover-360.jpg",
+      "sha256": "e76c0cee34952cd611ba2ee70202ce94849eb6a466e51540540f0fa95642bb0c",
+      "bytes": 143705
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/review/reel/cover-profile-square.jpg",
+      "sha256": "c8fb1c96738b7de1ca212d233c0823eaeea5525b32ff6c744c061a03f3584463",
+      "bytes": 98629
+    },
+    {
+      "file": "output/marketing/jango-sns-ep08-20261025/review/reel/cover-profile-3x4.jpg",
+      "sha256": "7990983ac7d9a5ac83acc3cbc0f4edb374c0b7152de93b1ad1dcf7e08268da0e",
+      "bytes": 120553
+    }
+  ]
+}

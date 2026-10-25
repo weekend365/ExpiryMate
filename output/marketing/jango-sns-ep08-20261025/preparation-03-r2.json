@@ -1,0 +1,35 @@
+{
+  "candidate": "scene-03-r2",
+  "preparedAt": "2026-10-25T12:04:36.389173+09:00",
+  "method": "official built-in imagegen edit",
+  "prompt": "prompts/scene-03-r2.txt",
+  "promptSha256": "926c08a34c730e801b00ee6e98631b911ad83d367c1cfd27f678a980495af628",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-03-r1.png",
+      "sha256": "c2b085f65a6569623c198c74e67b71f1295c1bfa0676b945acdfd90e2a105f59",
+      "role": "edit target: episode 8 first-pass scene; preserve unchanged elements",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 MASTER: Jango identity, compact apron body, crayon texture; exclude plate and wink",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+      "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357",
+      "role": "user-corrected compact torso and short legs; mitten connections; blank phone-screen staging; exclude freezer and food",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation",
+  "revisionReason": "mitten pointing anatomy",
+  "preservation": "preservation-before.json",
+  "supersedesCandidateForReview": "scene-03-r1"
+}

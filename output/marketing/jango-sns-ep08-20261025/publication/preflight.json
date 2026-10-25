@@ -1,0 +1,38 @@
+{
+  "episode": 8,
+  "account": "@jango_plz",
+  "status": "video-preview-ready-awaiting-direct-cover-selection",
+  "authorizationQuote": "릴스로 만들어서 인스타그램에 게시해줘.",
+  "reel": "reel/jango-ep08-music.mp4",
+  "cover": "cover.jpg",
+  "caption": "caption.txt",
+  "profileBefore": {
+    "postCount": 13,
+    "newestPost": "https://www.instagram.com/jango_plz/reel/De5fiEEyLtg/",
+    "episode8Found": false,
+    "links": [
+      "https://apps.apple.com/kr/app/id6793375883",
+      "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+    ]
+  },
+  "uploadAttempt": {
+    "method": "Chrome Instagram browser extension filechooser.setFiles",
+    "result": "Instagram reported it could not read the MP4 file in the browser; no post was created.",
+    "manualSelectionRequested": true,
+    "manualSelectionConfirmedByUser": true,
+    "instagramEditorVerified": {
+      "videoPreview": true,
+      "aspectRatio": "9:16 selected",
+      "durationSeconds": 40,
+      "soundEnabled": true
+    },
+    "coverAutomaticUpload": "The cover filename appeared in the file input, but Instagram continued showing a video frame as the cover; direct cover selection requested.",
+    "settingsInspection": "chrome://extensions browser navigation was rejected by browser URL security policy; no setting was inspected or changed."
+  },
+  "remaining": [
+    "Wait for the selected cover JPG to appear as the custom cover",
+    "Apply caption and AI-content label",
+    "Publish one Reel and verify profile count, playback, cover and caption",
+    "Save publication URL and screenshot"
+  ]
+}

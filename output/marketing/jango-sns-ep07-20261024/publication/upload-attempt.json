@@ -1,0 +1,18 @@
+{
+  "updatedAt": "2026-10-25T05:21:58.572910+09:00",
+  "account": "jango_plz",
+  "status": "waiting-for-visible-chrome-file-picker",
+  "video": "reel/jango-ep07-music.mp4",
+  "videoSha256": "e8465a66330818b242ec390f36a6ea5f82831261d9f8fbf429404d10520fd4a7",
+  "shareClicked": false,
+  "publishedUrl": null,
+  "existingPostCountObserved": 12,
+  "browserUploadResult": "Instagram reported that the browser could not read the video file after documented filechooser selection.",
+  "nativePickerResult": "Path navigation and selection were visible, but Open remained disabled. Subsequent native calls could not find the Chrome window.",
+  "nextStep": "User asked to bring Instagram and file picker to the foreground. Resume file selection, cover, caption, AI label, publishing and verification.",
+  "screenshot": "upload-blocked.jpg",
+  "duplicateAvoidance": "No Share action occurred. Inspect profile first if upload state becomes uncertain.",
+  "resolvedAt": "2026-10-25T10:11:21.378062+09:00",
+  "currentStatus": "resolved-published-once",
+  "resolutionRecord": "instagram.json"
+}

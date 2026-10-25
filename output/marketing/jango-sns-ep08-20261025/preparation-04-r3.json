@@ -1,0 +1,35 @@
+{
+  "candidate": "scene-04-r3",
+  "preparedAt": "2026-10-25T12:06:43.808194+09:00",
+  "method": "official built-in imagegen edit",
+  "prompt": "prompts/scene-04-r3.txt",
+  "promptSha256": "f271ac4c84069ee2fc7b8837dfa071cee563b14aaa81467f277d7d5b9b3779aa",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-04-r2.png",
+      "sha256": "10395af8b0dce04b8a23fe2882705b72470c3f370864e65e5d0d8c03f6072324",
+      "role": "edit target: r2 phone reveal or reaction; widen framing only",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "v18 MASTER identity; no plate",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-01-r1.png",
+      "sha256": "0b9e69942959b384b1ca3ffd72b947b3f0bee74150f0db6fd88709749ee882a4",
+      "role": "room and cast continuity; no pose copying",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation",
+  "revisionReason": "Widen r2 shot to preserve entire Jango hat, safe center face placement and upper dialogue room.",
+  "preservation": "preservation-before.json",
+  "supersedesCandidateForReview": "scene-04-r2"
+}

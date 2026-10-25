@@ -1,0 +1,47 @@
+{
+  "createdAt": "2026-10-24T17:22:13.071231+09:00",
+  "format": "MP4/H.264/yuv420p,1080x1920,30fps,600 frames,AAC 48kHz stereo",
+  "seconds": 20,
+  "sceneDurations": [
+    3,
+    3,
+    4,
+    6,
+    4
+  ],
+  "sceneCuts": [
+    3,
+    6,
+    10,
+    16
+  ],
+  "dialogueChange": 12,
+  "closingBrandAndQuestionSeconds": [
+    16,
+    20
+  ],
+  "zoom": [
+    1,
+    1.03
+  ],
+  "zoomAnchor": [
+    540,
+    1040
+  ],
+  "fixedLettering": true,
+  "narration": false,
+  "newArtworkGenerated": false,
+  "musicSource": "design/jango/audio/monkeys-spinning-monkeys/Monkeys Spinning Monkeys.mp3",
+  "musicSourceSha256": "a5bb345c23849ad0786aa0bc5157a9f2d4039660fe00282e55754d475f36dc14",
+  "musicLicenseRecord": "design/jango/audio/monkeys-spinning-monkeys/license.json",
+  "musicExcerptSeconds": [
+    0,
+    20
+  ],
+  "fadeInSeconds": 0.3,
+  "fadeOutSeconds": 1,
+  "audioTargetLufs": -18,
+  "credit": "Monkeys Spinning Monkeys — Kevin MacLeod (incompetech.com)\n출처: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011\nCC BY 4.0: https://creativecommons.org/licenses/by/4.0/\n원곡 일부 발췌, 음량 조정 및 페이드 적용.",
+  "videoSha256": "e8465a66330818b242ec390f36a6ea5f82831261d9f8fbf429404d10520fd4a7",
+  "coverSha256": "5fd1fd3764f284a0a35bf827b4eefeb64e1375381b3b11dc3beaf939f4c90746"
+}

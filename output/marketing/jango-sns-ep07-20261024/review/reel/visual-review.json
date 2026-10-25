@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-10-25T05:21:58.572910+09:00",
+  "method": "Direct visual inspection of native frames, 360px contact sheets, cut boundaries and cover crops; no numerical score or release signature.",
+  "status": "local-visual-review-and-live-instagram-review-complete",
+  "evidence": [
+    "layout-overview.jpg",
+    "native-10.jpg",
+    "timeline-1.jpg",
+    "timeline-2.jpg",
+    "timeline-3.jpg",
+    "timeline-4.jpg",
+    "cuts-and-zoom-1.jpg",
+    "cuts-and-zoom-2.jpg",
+    "ui-overlap-sheet.jpg",
+    "cover-profile-3x4.jpg"
+  ],
+  "observations": {
+    "artwork": "Scene 4 uses r2 with two clean oval eyes, soft brows and a readable sheepish smile. Prior r1 is preserved.",
+    "continuity": "Brown bun, ivory knit sweater, forest-green trousers and warm kitchen remain coherent. Dry pasta becomes the mound, followed by two plates and four storage containers.",
+    "lettering": "Korean is legible in 360px views. Balloons stay fixed; tails indicate the intended speaker. First dialogue is visible at zero seconds.",
+    "timing": "Cuts at 3, 6, 10 and 16 seconds; speaker change at 12 seconds. Ending brand and comment invitation remain for four seconds.",
+    "motion": "100 to 103 percent uniform zoom. No blank edges or essential-face/dialogue crop observed at shot start, middle and end.",
+    "simulatedOverlay": "Essential eyes, mouths, dialogue, pasta reveal and left explanatory mitten remain visible. Some peripheral right fork/glove/hinge/shoe overlap simulated right-side controls. The simulation is not a guarantee for all devices.",
+    "cover": "Separate 1080x1920 cover with 이게 한 끼라고? and 장고랑 살아보니 07. Title and central character survive inspected 3:4 crop.",
+    "fit": "Native 941x1672 uniformly fits 1080x1920 with less than one native background pixel cropped; no nonuniform stretching.",
+    "featureClaims": "No app UI or unverified function claim in this fictional household comedy."
+  },
+  "realTimePlayback": "Instagram editor and published player were run through a loop with read-only playback samples. Perceptual human listening not performed.",
+  "audioReview": "Full decoded audio measured technically; human listening not performed because no audio-perception tool is available.",
+  "technicalReport": "technical-quality.json",
+  "livePublicationReport": "../../publication/instagram.json",
+  "liveInstagramReview": {
+    "record": "../../publication/instagram.json",
+    "captionAndAiLabelVerified": true,
+    "coverTitleAndCharacterVisibleInProfile": true,
+    "essentialDialogueAndFacesVisibleInDesktopPlayer": true,
+    "editorDurationSeconds": 20,
+    "publishedPlaybackProgressAndLoopObserved": true
+  }
+}

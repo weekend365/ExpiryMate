@@ -1,0 +1,194 @@
+{
+  "id": "jango-sns-ep08-20261025",
+  "episode": 8,
+  "title": "AI한테 반박하려다가",
+  "preparedAt": "2026-10-25T11:58:00.109162+09:00",
+  "status": "storyboard-confirmed-artwork-produced-pending-user-review",
+  "authorization": {
+    "quote": "3안으로 원화 생성해줘",
+    "context": "Selection of proposal 3 after expansion to seven scenes and forty seconds.",
+    "scope": "Generate seven text-free original-art candidates and review derivatives only; artwork adoption, Reel rendering and publication remain later steps."
+  },
+  "storyboard": [
+    {
+      "number": 1,
+      "seconds": [
+        0,
+        5
+      ],
+      "action": "여성이 소파에 앉아 휴대전화를 들고 장고를 부른다.",
+      "shot": "medium-wide establishing two-shot",
+      "expression": "woman curious and bright; Jango attentive friendly closed smile",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "AI가 나를 한 단어로 표현해 준대. 나도 해볼까?"
+        },
+        {
+          "speaker": "장고",
+          "text": "좋아. 내가 옆에서 확인해 줄게."
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "seconds": [
+        5,
+        10
+      ],
+      "action": "여성이 첫 답을 읽고 기분 좋게 웃는다. 휴대전화 화면을 가까이 보여준다.",
+      "shot": "closer woman and phone, Jango listening at right",
+      "expression": "woman delighted and proud; Jango attentive",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "내 장점은?"
+        },
+        {
+          "speaker": "AI",
+          "text": "상상력."
+        },
+        {
+          "speaker": "여성",
+          "text": "역시. 나 아이디어는 진짜 많잖아."
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "seconds": [
+        10,
+        15
+      ],
+      "action": "장고가 벽에 붙은 오래된 냉장고 정리 메모를 장갑 전체로 가리키고 여성은 멋쩍게 설명한다.",
+      "shot": "medium two-shot with blank memo insert area on wall",
+      "expression": "Jango gently teasing and matter-of-fact; woman slightly sheepish yet confident",
+      "dialogue": [
+        {
+          "speaker": "장고",
+          "text": "맞아. 냉장고 정리 계획도 엄청 자세하지."
+        },
+        {
+          "speaker": "여성",
+          "text": "그건 제대로 하려고 준비 중인 거야."
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "seconds": [
+        15,
+        21
+      ],
+      "action": "여성이 두 번째 답을 읽고 미소가 멈춘다. 화면과 당황한 얼굴을 함께 보여준다.",
+      "shot": "close reaction with blank phone screen staged for exact later typesetting",
+      "expression": "woman taken aback, raised brow, closed small mouth; Jango sympathetic neutral short mouth",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "그럼 내 단점은?"
+        },
+        {
+          "speaker": "AI",
+          "text": "미루기."
+        },
+        {
+          "speaker": "여성",
+          "text": "잠깐. 이건 좀 억울한데?"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "seconds": [
+        21,
+        27
+      ],
+      "action": "여성이 앞으로 몸을 기울이며 열린 손바닥으로 진지하게 설명하고 장고는 듣는다.",
+      "shot": "medium conversational two-shot",
+      "expression": "woman mildly indignant, explaining; Jango calm listening with small neutral mouth",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "할 일 순서를 정하는 거랑 미루는 건 다르지."
+        },
+        {
+          "speaker": "장고",
+          "text": "그럼 그렇게 설명해 봐."
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "seconds": [
+        27,
+        33
+      ],
+      "action": "여성이 몸을 곧게 세우고 휴대전화를 보며 반박할 내용을 준비한다. 장고가 고개를 살짝 기울인다.",
+      "shot": "medium closer two-shot, poised typing action",
+      "expression": "woman determined and energized; Jango genuinely curious",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "좋아. 아닌 이유 세 가지로 딱 정리해서 보내야겠다."
+        },
+        {
+          "speaker": "장고",
+          "text": "언제?"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "seconds": [
+        33,
+        40
+      ],
+      "action": "휴대전화는 테이블 위에 내려놓고 여성은 편안하게 소파에 기댄다. 장고는 카메라를 보며 담담하게 반응한다.",
+      "shot": "wider visual punchline and closing, relaxed pose",
+      "expression": "woman content and relaxed eyes closed; Jango neutral short-mouth deadpan looking at viewer, no warped squint",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "내일. 오늘은 일단 좀 쉬고."
+        },
+        {
+          "speaker": "장고",
+          "text": "…정확하네."
+        }
+      ]
+    }
+  ],
+  "plannedReel": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "durationSeconds": 40,
+    "sceneCount": 7,
+    "safeArea": [
+      96,
+      280,
+      900,
+      1420
+    ],
+    "motion": "gentle 100-to-103 percent zoom; hard cuts; fixed lettering",
+    "lettering": "Gaegu dialogue and brand, Pretendard fictional chat and memo; added later",
+    "music": "Monkeys Spinning Monkeys — Kevin MacLeod; inherited default",
+    "narration": false,
+    "closing": {
+      "seconds": [
+        37,
+        40
+      ],
+      "brand": "장고야 부탁해",
+      "cta": "장고의 다음 일상도 함께해요"
+    },
+    "cover": "Separate later cover: AI한테 반박하려다가"
+  },
+  "featureEvidence": "Fictional generic AI-chat comedy. Does not depict or claim a personality-analysis feature of the Jango app. Phone screen and wall memo intentionally blank in original artwork.",
+  "guide": {
+    "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+    "sha256": "33bd9c3e129e43c5417a2b1450a89b3977b0aa92d3f7b3001a8ba0645b8a2eed"
+  },
+  "artworkCompletionRecord": "production-record.json"
+}

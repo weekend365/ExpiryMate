@@ -1,0 +1,56 @@
+{
+  "episode": 8,
+  "account": "@jango_plz",
+  "status": "published-cover-mismatch",
+  "authorizedBy": "릴스로 만들어서 인스타그램에 게시해줘.",
+  "postUrl": "https://www.instagram.com/jango_plz/reel/De5ySfnyC8u/",
+  "verifiedAt": "2026-10-25T12:56:29+09:00",
+  "media": {
+    "file": "reel/jango-ep08-music.mp4",
+    "sha256": "8b20567592659921f6e673888eac60a8e5606a775dde6a560b67bbd7e769f4d6",
+    "localSpecification": "1080x1920 H.264, 30 fps, AAC, 40 seconds",
+    "instagramPlayback": {
+      "visible": true,
+      "playing": true,
+      "observedCurrentTimeSeconds": 6.949,
+      "observedDurationSeconds": 40,
+      "instagramTranscodedSize": [720, 1280],
+      "browserMutedDuringCheck": true,
+      "audioPresentInLocalExport": true,
+      "humanListening": false
+    }
+  },
+  "postChecks": {
+    "profilePostCountBefore": 13,
+    "profilePostCountAfter": 14,
+    "newestReelMatchesUrl": true,
+    "captionMatchesPreparedText": true,
+    "aiContentLabelVisible": true,
+    "musicCreditAndLicenseInCaption": true,
+    "sceneDescriptionInCaption": true,
+    "profileLinks": [
+      "https://apps.apple.com/kr/app/id6793375883",
+      "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+    ]
+  },
+  "cover": {
+    "plannedFile": "cover.jpg",
+    "sha256": "ca01c2a3290b6c51196d7c9e8f93d8413a0057d15fdd41c82203b540c1ddfa56",
+    "userConfirmedManualSelection": true,
+    "observedOnProfileAndReelsTab": "The first video frame is shown instead of the planned title cover, including after profile refresh.",
+    "webEditAttempt": "The published Reel's Edit screen offered caption, location, collaborators and AI label, but no cover control.",
+    "correctionStatus": "not applied; do not claim the title cover is live or create a duplicate post"
+  },
+  "screenshots": [
+    {
+      "file": "publication/instagram-post.png",
+      "sha256": "5be71cc5b1aa442b51a8c0f55f639f94e96492c48ed2f62604dbfc2ff21334b2"
+    },
+    {
+      "file": "publication/instagram-profile.png",
+      "sha256": "a46178d0f4cf1aaa94cfd98282e919f697c5e1e6fe1046c3a20806a8bd1e4db2"
+    }
+  ],
+  "localQa": "review/reel/technical-quality.json",
+  "preflight": "publication/preflight.json"
+}

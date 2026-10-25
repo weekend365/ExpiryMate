@@ -1,0 +1,35 @@
+{
+  "candidate": "scene-05-r2",
+  "preparedAt": "2026-10-25T12:04:36.389173+09:00",
+  "method": "official built-in imagegen edit",
+  "prompt": "prompts/scene-05-r2.txt",
+  "promptSha256": "4d27fc8e713cd15c7692528fba05e3fb163d88c0cbb8fe870f3f95f532d16d9a",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-05-r1.png",
+      "sha256": "b77bed6613f7a1482fbf8a68811026546d502cc70a883d769b109b8ff078b787",
+      "role": "edit target: episode 8 first-pass scene; preserve unchanged elements",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 MASTER: Jango identity, compact apron body, crayon texture; exclude plate and wink",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+      "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357",
+      "role": "user-corrected compact torso and short legs; mitten connections; blank phone-screen staging; exclude freezer and food",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation",
+  "revisionReason": "preserve complete Jango hat inside frame",
+  "preservation": "preservation-before.json",
+  "supersedesCandidateForReview": "scene-05-r1"
+}

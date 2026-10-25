@@ -1,0 +1,72 @@
+{
+  "episode": "jango-sns-ep08-20261025",
+  "recordedAt": "2026-10-25T12:10:54.444744+09:00",
+  "status": "candidate-pending-user-review",
+  "selectionBy": "assistant visual review for original-art delivery; not user adoption",
+  "scope": "Episode-8 original-art review only",
+  "scenes": [
+    {
+      "scene": 1,
+      "candidate": "scene-01-r1",
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-01-r1.png",
+      "sha256": "0b9e69942959b384b1ca3ffd72b947b3f0bee74150f0db6fd88709749ee882a4",
+      "width": 941,
+      "height": 1672,
+      "generationRecord": "generation-01-r1.json"
+    },
+    {
+      "scene": 2,
+      "candidate": "scene-02-r3",
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-02-r3.png",
+      "sha256": "22f1f73e2263ae8c4f3611ca0b971c61e705dbffbf58dd95217e74c1d9172239",
+      "width": 941,
+      "height": 1672,
+      "generationRecord": "generation-02-r3.json"
+    },
+    {
+      "scene": 3,
+      "candidate": "scene-03-r2",
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-03-r2.png",
+      "sha256": "f935d28e1fe0d8b006c49217d40fc17e75517b22bce5749c80d00bb65761b9f6",
+      "width": 941,
+      "height": 1672,
+      "generationRecord": "generation-03-r2.json"
+    },
+    {
+      "scene": 4,
+      "candidate": "scene-04-r3",
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-04-r3.png",
+      "sha256": "4ea5e32fef0d607d03d9ccf9d21fd4366c4e864b9e003dd01cfb701a02d12b92",
+      "width": 941,
+      "height": 1672,
+      "generationRecord": "generation-04-r3.json"
+    },
+    {
+      "scene": 5,
+      "candidate": "scene-05-r3",
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-05-r3.png",
+      "sha256": "bfd9c6daf143cc5a66196b2df484d090a08e7a8e5f15b0eaa7270213c328df7a",
+      "width": 941,
+      "height": 1672,
+      "generationRecord": "generation-05-r3.json"
+    },
+    {
+      "scene": 6,
+      "candidate": "scene-06-r2",
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-06-r2.png",
+      "sha256": "30bc0092c5e1ed6f4f9adf7a5e39f456daf4352bd6e992530b1ce4f01dabc47b",
+      "width": 941,
+      "height": 1672,
+      "generationRecord": "generation-06-r2.json"
+    },
+    {
+      "scene": 7,
+      "candidate": "scene-07-r1",
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-07-r1.png",
+      "sha256": "89daac32e1dc5dacde3ba1f914560b93e7a6842a02803c1bfc59a68c9a05f960",
+      "width": 941,
+      "height": 1672,
+      "generationRecord": "generation-07-r1.json"
+    }
+  ]
+}

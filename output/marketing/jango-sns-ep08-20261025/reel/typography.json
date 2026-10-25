@@ -1,0 +1,611 @@
+{
+  "safeArea": [
+    96,
+    280,
+    900,
+    1420
+  ],
+  "textBoxes": [
+    {
+      "role": "fictional phone UI",
+      "text": "AI 대화",
+      "bbox": [
+        338,
+        1046,
+        410,
+        1068
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 25,
+      "fixedToFrame": false
+    },
+    {
+      "role": "fictional phone UI",
+      "text": "내 장점은?",
+      "bbox": [
+        318,
+        1144,
+        430,
+        1170
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 27,
+      "fixedToFrame": false
+    },
+    {
+      "role": "fictional phone UI",
+      "text": "AI 대화",
+      "bbox": [
+        338,
+        1046,
+        410,
+        1068
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 25,
+      "fixedToFrame": false
+    },
+    {
+      "role": "fictional phone UI",
+      "text": "내 장점은?",
+      "bbox": [
+        318,
+        1144,
+        430,
+        1170
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 27,
+      "fixedToFrame": false
+    },
+    {
+      "role": "fictional phone UI",
+      "text": "상상력",
+      "bbox": [
+        318,
+        1231,
+        430,
+        1269
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 43,
+      "fixedToFrame": false
+    },
+    {
+      "role": "fictional phone UI",
+      "text": "AI 대화",
+      "bbox": [
+        445,
+        1057,
+        517,
+        1079
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 25,
+      "fixedToFrame": false
+    },
+    {
+      "role": "fictional phone UI",
+      "text": "내 단점은?",
+      "bbox": [
+        430,
+        1124,
+        532,
+        1144
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 24,
+      "fixedToFrame": false
+    },
+    {
+      "role": "fictional phone UI",
+      "text": "AI 대화",
+      "bbox": [
+        445,
+        1057,
+        517,
+        1079
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 25,
+      "fixedToFrame": false
+    },
+    {
+      "role": "fictional phone UI",
+      "text": "내 단점은?",
+      "bbox": [
+        430,
+        1124,
+        532,
+        1144
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 24,
+      "fixedToFrame": false
+    },
+    {
+      "role": "fictional phone UI",
+      "text": "미루기",
+      "bbox": [
+        436,
+        1186,
+        526,
+        1218
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 35,
+      "fixedToFrame": false
+    },
+    {
+      "role": "01w 여성",
+      "text": "AI가 나를 한 단어로",
+      "bbox": [
+        245,
+        297,
+        815,
+        368
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "01w 여성",
+      "text": "표현해 준대.",
+      "bbox": [
+        355,
+        381,
+        705,
+        441
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "01w 여성",
+      "text": "나도 해볼까?",
+      "bbox": [
+        348,
+        454,
+        712,
+        527
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "01j 장고",
+      "text": "좋아. 내가 옆에서",
+      "bbox": [
+        281,
+        334,
+        779,
+        404
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "01j 장고",
+      "text": "확인해 줄게.",
+      "bbox": [
+        354,
+        418,
+        706,
+        490
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02w 여성",
+      "text": "내 장점은?",
+      "bbox": [
+        378,
+        384,
+        682,
+        440
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02ai fictional-chat label",
+      "text": "이야기 속 AI 대화",
+      "bbox": [
+        382,
+        327,
+        676,
+        365
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 43,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02ai AI answer",
+      "text": "상상력.",
+      "bbox": [
+        399,
+        414,
+        659,
+        494
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 91,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02r 여성",
+      "text": "역시. 나 아이디어는",
+      "bbox": [
+        252,
+        342,
+        808,
+        404
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02r 여성",
+      "text": "진짜 많잖아.",
+      "bbox": [
+        355,
+        416,
+        705,
+        482
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "03j 장고",
+      "text": "맞아. 냉장고 정리",
+      "bbox": [
+        281,
+        340,
+        779,
+        408
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "03j 장고",
+      "text": "계획도 엄청 자세하지.",
+      "bbox": [
+        222,
+        420,
+        838,
+        484
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "03w 여성",
+      "text": "그건 제대로 하려고",
+      "bbox": [
+        264,
+        351,
+        796,
+        403
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "03w 여성",
+      "text": "준비 중인 거야.",
+      "bbox": [
+        310,
+        416,
+        750,
+        473
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04w 여성",
+      "text": "그럼 내 단점은?",
+      "bbox": [
+        304,
+        384,
+        756,
+        440
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04ai fictional-chat label",
+      "text": "이야기 속 AI 대화",
+      "bbox": [
+        382,
+        327,
+        676,
+        365
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 43,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04ai AI answer",
+      "text": "미루기.",
+      "bbox": [
+        399,
+        414,
+        659,
+        494
+      ],
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sizePx": 91,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04r 여성",
+      "text": "잠깐. 이건 좀",
+      "bbox": [
+        340,
+        342,
+        720,
+        399
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04r 여성",
+      "text": "억울한데?",
+      "bbox": [
+        392,
+        412,
+        668,
+        482
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05w 여성",
+      "text": "할 일 순서를",
+      "bbox": [
+        352,
+        312,
+        708,
+        382
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05w 여성",
+      "text": "정하는 거랑 미루는 건",
+      "bbox": [
+        220,
+        396,
+        840,
+        452
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05w 여성",
+      "text": "다르지.",
+      "bbox": [
+        429,
+        466,
+        631,
+        512
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05j 장고",
+      "text": "그럼 그렇게",
+      "bbox": [
+        368,
+        337,
+        692,
+        403
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05j 장고",
+      "text": "설명해 봐.",
+      "bbox": [
+        384,
+        416,
+        676,
+        487
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "06w 여성",
+      "text": "좋아. 아닌 이유",
+      "bbox": [
+        310,
+        304,
+        750,
+        372
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "06w 여성",
+      "text": "세 가지로 딱 정리해서",
+      "bbox": [
+        220,
+        385,
+        840,
+        442
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "06w 여성",
+      "text": "보내야겠다.",
+      "bbox": [
+        370,
+        455,
+        690,
+        520
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "06j 장고",
+      "text": "언제?",
+      "bbox": [
+        452,
+        386,
+        608,
+        438
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07w 여성",
+      "text": "내일. 오늘은",
+      "bbox": [
+        355,
+        337,
+        705,
+        406
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07w 여성",
+      "text": "일단 좀 쉬고.",
+      "bbox": [
+        340,
+        419,
+        720,
+        487
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07j 장고",
+      "text": "…정확하네.",
+      "bbox": [
+        362,
+        380,
+        698,
+        444
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07end brand",
+      "text": "장고야 부탁해",
+      "bbox": [
+        308,
+        346,
+        752,
+        410
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 83,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07end single CTA",
+      "text": "장고의 다음 일상도",
+      "bbox": [
+        318,
+        434,
+        742,
+        486
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 57,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07end single CTA",
+      "text": "함께해요",
+      "bbox": [
+        436,
+        490,
+        624,
+        536
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 57,
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover series",
+      "text": "장고랑 살아보니 08",
+      "bbox": [
+        342,
+        478,
+        718,
+        522
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 49,
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover title",
+      "text": "AI한테 반박하려다가",
+      "bbox": [
+        212,
+        536,
+        848,
+        604
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 80,
+      "fixedToFrame": true
+    }
+  ],
+  "phoneUI": "Pretendard text moves with physical phone",
+  "balloonSha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232",
+  "coverSha256": "ca01c2a3290b6c51196d7c9e8f93d8413a0057d15fdd41c82203b540c1ddfa56"
+}

@@ -1,0 +1,141 @@
+{
+  "id": "jango-sns-ep07-20261024",
+  "episode": 7,
+  "title": "한 끼만 만들랬잖아",
+  "preparedAt": "2026-10-24T17:03:39.359724+09:00",
+  "status": "storyboard-confirmed-artwork-produced-pending-user-review",
+  "authorization": {
+    "quote": "원화 생성해줘.",
+    "context": "Direct reply to the proposed five-scene 20-second episode 7 storyboard.",
+    "scope": "Produce five text-free original-art candidates for review. No new Reel production, publication, commit or push requested in this turn."
+  },
+  "storyboard": [
+    {
+      "number": 1,
+      "seconds": [
+        0,
+        3
+      ],
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "딱 한 끼만 만들자."
+        }
+      ],
+      "action": "여성이 마른 파스타 양을 가늠하고 장고가 자신 있게 고개를 끄덕인다.",
+      "shot": "medium kitchen two-shot",
+      "expression": "woman focused and gently doubtful; Jango confident helpful closed smile"
+    },
+    {
+      "number": 2,
+      "seconds": [
+        3,
+        6
+      ],
+      "dialogue": [
+        {
+          "speaker": "장고",
+          "text": "이건 좀 부족해 보여."
+        }
+      ],
+      "action": "장고가 마른 면을 한 움큼 더 보탠다.",
+      "shot": "closer hands and Jango shot",
+      "expression": "earnest overconfident judgment"
+    },
+    {
+      "number": 3,
+      "seconds": [
+        6,
+        10
+      ],
+      "dialogue": [
+        {
+          "speaker": "자막",
+          "text": "잠시 후"
+        },
+        {
+          "speaker": "둘",
+          "text": "……"
+        }
+      ],
+      "action": "큰 그릇의 파스타 산 앞에서 포크를 든 둘이 굳는다.",
+      "shot": "wide reveal",
+      "expression": "silent wide-eyed stunned reaction"
+    },
+    {
+      "number": 4,
+      "seconds": [
+        10,
+        16
+      ],
+      "dialogue": [
+        {
+          "seconds": [
+            10,
+            12
+          ],
+          "speaker": "여성",
+          "text": "우리 둘인데?"
+        },
+        {
+          "seconds": [
+            12,
+            16
+          ],
+          "speaker": "장고",
+          "text": "내일의 우리도 있잖아."
+        }
+      ],
+      "action": "여성은 장고를 바라보고 장고는 능청스럽게 답한다.",
+      "shot": "medium reaction two-shot",
+      "expression": "woman bemused side-eye, Jango sheepish but smug rationalization"
+    },
+    {
+      "number": 5,
+      "seconds": [
+        16,
+        20
+      ],
+      "dialogue": [
+        {
+          "speaker": "브랜드",
+          "text": "장고야 부탁해"
+        },
+        {
+          "speaker": "행동 안내",
+          "text": "면 양 조절 실패담, 댓글로!"
+        }
+      ],
+      "action": "식사할 두 접시와 보관 용기들. 장고는 뿌듯하고 여성은 웃는다.",
+      "shot": "warm wider resolution",
+      "expression": "woman amused laughing, Jango proudly pleased"
+    }
+  ],
+  "plannedReel": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "durationSeconds": 20,
+    "sceneCount": 5,
+    "timingReason": "Approved per-episode timing for setup, quantity reveal, two-line punchline and four-second closing.",
+    "motion": "100-to-103% gentle zoom per scene; hard cuts; fixed lettering",
+    "safeArea": [
+      96,
+      280,
+      900,
+      1420
+    ],
+    "lettering": "Gaegu dialogue/brand later, no generated text",
+    "music": "Monkeys Spinning Monkeys — Kevin MacLeod; inherited canonical default",
+    "narration": false,
+    "cover": "Separate later cover: 이게 한 끼라고?; woman and Jango beside pasta mound"
+  },
+  "featureEvidence": "No app UI or feature claims; fictional household comedy.",
+  "approvalStatus": "Episode-7 SNS Reel production and Instagram publication authorized by the latest user request.",
+  "artworkCompletionRecord": "production-record.json",
+  "currentStatus": "published",
+  "adoptionRecord": "publication/adoption.json",
+  "reelProductionRecord": "reel/production.json",
+  "publicationRecord": "publication/instagram.json",
+  "publishedUrl": "https://www.instagram.com/jango_plz/reel/De5fiEEyLtg/"
+}

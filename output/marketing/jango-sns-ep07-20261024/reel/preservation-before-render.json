@@ -1,0 +1,2688 @@
+{
+  "recordedAt": "2026-10-24T17:20:09.610225+09:00",
+  "episodeFiles": [
+    {
+      "file": "build_review.cjs",
+      "sha256": "48280fab3186f2f0fa3d2e2d39a929ab3bd429dfaaec06e7415033eb0081ad82"
+    },
+    {
+      "file": "delivery.json",
+      "sha256": "f06d30e0a9c340deb1bc164a6124908335fe158f9e47bad8245bc0384731027d",
+      "snapshot": "reel/before/delivery.json"
+    },
+    {
+      "file": "episode.json",
+      "sha256": "fdfca96f4ad61384bda6674543a669edf8f72889338513624caeea06923047de",
+      "snapshot": "reel/before/episode.json"
+    },
+    {
+      "file": "file-hashes.json",
+      "sha256": "219ed7bb5d024456ddb6728c1ec8c0c4c3abfe8ecc2cfb10e3ec3f491938089f",
+      "snapshot": "reel/before/file-hashes.json"
+    },
+    {
+      "file": "generation-01-r1.json",
+      "sha256": "f4e7974ebc9d1ba05c4d21b75bc0f0690c84e3dab3f5357abc037c4f40deac76"
+    },
+    {
+      "file": "generation-02-r1.json",
+      "sha256": "2e704afcedee9d5fcfd4e1b4131eea13356d94090cfe146c1ec67a79162aed5d"
+    },
+    {
+      "file": "generation-03-r1.json",
+      "sha256": "f5b5987aa822878d627da18b229a0ce98b364726f4607faf58873ce018033b5f"
+    },
+    {
+      "file": "generation-04-r1.json",
+      "sha256": "5b0467f67b2ade633f10c601bd2870af0c177c0c0f2983c72ad67db6a2c476e6"
+    },
+    {
+      "file": "generation-04-r2.json",
+      "sha256": "c3caf4cd5871989dc4a4fdf5e513be26ff0d33722f627fa993863f8ef06e048c"
+    },
+    {
+      "file": "generation-05-r1.json",
+      "sha256": "870c4617de0d1864ae65c2e38708ed54c266c0791698592df1806982d89eb753"
+    },
+    {
+      "file": "preparation-01-r1.json",
+      "sha256": "80cdb6bed5ca86a1844e031be0712cc9d0ba631385379396b6490c5a718eeca7"
+    },
+    {
+      "file": "preparation-02-r1.json",
+      "sha256": "8ae0f319543af6f9ad3e0f5ab370e612fdbc3dac843baf40f3c20f82031db9ec"
+    },
+    {
+      "file": "preparation-03-r1.json",
+      "sha256": "44c310d357dcbfbc5da201d90aeefd2e27c3a7ef4d81230a665289603b28636b"
+    },
+    {
+      "file": "preparation-04-r1.json",
+      "sha256": "d73a7149ee66ddf5b9ba0563820c79c2600d4fa97330aff1319718911eced66b"
+    },
+    {
+      "file": "preparation-04-r2.json",
+      "sha256": "63db1ec8c312d773ad9e9e9efd4e89e785d214c6bbef57d4d9a384b3b3c8db67"
+    },
+    {
+      "file": "preparation-05-r1.json",
+      "sha256": "abb72c301f603e61b8be0ba2b31348ee4a4fc1f44a00164e8e811598027ac2fb"
+    },
+    {
+      "file": "preservation-before.json",
+      "sha256": "9e0a1c899fd4b632e3f476f707d91ee71f08fd323e0e04b7ebd18f9b7fd6ffd8"
+    },
+    {
+      "file": "production-record.json",
+      "sha256": "d8af8ce5087266c6ed8675873b80beae1aa9f4586c68149f0321e93277a56c3a",
+      "snapshot": "reel/before/production-record.json"
+    },
+    {
+      "file": "prompts/common-spec.txt",
+      "sha256": "62b16672ce63bf53267efa9aef60e418e6e1b2d6dfd40a7610d709194c94d130"
+    },
+    {
+      "file": "prompts/scene-01-r1.txt",
+      "sha256": "9155ad3a74344d3381e9f25bb822401ae03ea593f9c16896d4dda653c37554c1"
+    },
+    {
+      "file": "prompts/scene-02-r1.txt",
+      "sha256": "eb649f09c8a49e835187bbf14c34fd619a3643a832e59ae47e2c252a57e9f83e"
+    },
+    {
+      "file": "prompts/scene-03-r1.txt",
+      "sha256": "369e7de2d5c48d01651eec9ec7d8d894e743cd2a9f83d4ec902f07097529c05a"
+    },
+    {
+      "file": "prompts/scene-04-r1.txt",
+      "sha256": "63822610a1616cfd07196f23fbd4ef8f665d4114f213e79bd620efe218d40413"
+    },
+    {
+      "file": "prompts/scene-04-r2.txt",
+      "sha256": "53c953336a18846928c3dba57c01cc0c8bb371897109a9227f45b99ffa2c4436"
+    },
+    {
+      "file": "prompts/scene-05-r1.txt",
+      "sha256": "73d55acec1cf38f0e82e8bc1558c087c24669b0bacc4ba53853f3bbfecf64d03"
+    },
+    {
+      "file": "references.json",
+      "sha256": "88a521352399312cd16fca411aace44d79b55d2d34f30b27d66b53fb5b227d79"
+    },
+    {
+      "file": "review/01-360.png",
+      "sha256": "a807215a80c416cd44e1cd82fab85705324dc152b87fad59192f2c9cd3622f28"
+    },
+    {
+      "file": "review/02-360.png",
+      "sha256": "dc15d961f55110ae6131319c04fde3e5d6eeca116f58cbd66aba447ff5817f53"
+    },
+    {
+      "file": "review/03-360.png",
+      "sha256": "c5e6cfae29534ba8f0f253acaee625424c4f9bcd84654283ee1a9234d0ef2751"
+    },
+    {
+      "file": "review/04-360.png",
+      "sha256": "853e22c52f5955856f2a9707ec42c8d96d3ecbea8739295b2f3c593bb3772083"
+    },
+    {
+      "file": "review/05-360.png",
+      "sha256": "e64f524dc31451f4bcf0e6594bc95004b128fcc909f50379be244a11ed82d682"
+    },
+    {
+      "file": "review/overview.jpg",
+      "sha256": "871fce10300202321a23d3bb5d8e1b01df5f570b744e5c7185352eb27067f445"
+    },
+    {
+      "file": "revisions/scene-04-expression-r2/before/build_review.cjs",
+      "sha256": "29848b4415463100d237a1a3a44e04b0a72e4feaabbd0ca5c6f57bbc9b487c85"
+    },
+    {
+      "file": "revisions/scene-04-expression-r2/before/delivery.json",
+      "sha256": "54853331d6f12210d36917f7fbb432b9440711a0c9e8784ca02d9327ad2cfc58"
+    },
+    {
+      "file": "revisions/scene-04-expression-r2/before/file-hashes.json",
+      "sha256": "88cedde389ac4c135db40628a8d53f174f63a9b91647d9b5e1742c7301af1e6e"
+    },
+    {
+      "file": "revisions/scene-04-expression-r2/before/production-record.json",
+      "sha256": "ea31e9eed2a83ea4ac76761b7b81fa047dc9c834eda471c6ee71674b2011423e"
+    },
+    {
+      "file": "revisions/scene-04-expression-r2/before/review/04-360.png",
+      "sha256": "df549438b5b785a94e5a50b1c622dfb066df3e9d99738a07a5befb08ff313118"
+    },
+    {
+      "file": "revisions/scene-04-expression-r2/before/review/overview.jpg",
+      "sha256": "b43e572cc360557244fdddb73fafccb9415d5794bdcde4ea0f843254b049f9cb"
+    },
+    {
+      "file": "revisions/scene-04-expression-r2/before/selected-artwork.json",
+      "sha256": "28a3130f1e1f45cb8c53a14779cab2e4e8ed38aba75af694cf9619dd39e31c52"
+    },
+    {
+      "file": "revisions/scene-04-expression-r2/before/visual-review.json",
+      "sha256": "1a4bebb8e595123a2dba9d68f619e64c4a1dffd9ca1aee03f0b0e6912a83f0b5"
+    },
+    {
+      "file": "revisions/scene-04-expression-r2/preservation-before.json",
+      "sha256": "76a71c9a0bae9076c59cacf5f14ffcbd36ed198caf215bcf751ddac686d804b7"
+    },
+    {
+      "file": "revisions/scene-04-expression-r2/revision.json",
+      "sha256": "b1ced21ada05b3d98f85469fc41823d3462c85321395dc9ceb54e94482cba958"
+    },
+    {
+      "file": "selected-artwork.json",
+      "sha256": "e806ba58537ddcdcc33e9ae73b550df0ef6dc2c088e3ba390c183ce6e0500e2d",
+      "snapshot": "reel/before/selected-artwork.json"
+    },
+    {
+      "file": "source-art/scene-01-r1.png",
+      "sha256": "9521113fdc1fae4ac7c0b61d116c707a4716a347a2f8b052f073db9071c7903f"
+    },
+    {
+      "file": "source-art/scene-02-r1.png",
+      "sha256": "e9afac93d2daa98c8950db0dead18be9b5c8cb4b7baf99283ffc76e72031bb03"
+    },
+    {
+      "file": "source-art/scene-03-r1.png",
+      "sha256": "6d3ac4d72910031118d066a13fc0834cb4e8e4b8c4e812aea0f5e8ed44e1146f"
+    },
+    {
+      "file": "source-art/scene-04-r1.png",
+      "sha256": "3c482b226b65478cb99895bc0d8fd36cc498f14338bd30550e3b4159516803d3"
+    },
+    {
+      "file": "source-art/scene-04-r2.png",
+      "sha256": "d124a258dc97996cad9eaa9683946c4bc63debfbd6d077b217b0dbd64c74e235"
+    },
+    {
+      "file": "source-art/scene-05-r1.png",
+      "sha256": "20163da303fdb3d8b51ca99b13cc149f84524478a3e09374efae6e17c5b30fcc"
+    },
+    {
+      "file": "visual-review.json",
+      "sha256": "3b9fee9137895cf78185f5104a4d36f321462c5f3f2b3bfe60fc66a04c6986fd"
+    }
+  ],
+  "protectedFiles": [
+    {
+      "file": "AGENTS.md",
+      "sha256": "8c6cfcf825935022b61d6555e5990c9adc6124e4dc5f26208fe983dfe8ada3ba"
+    },
+    {
+      "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+      "sha256": "33bd9c3e129e43c5417a2b1450a89b3977b0aa92d3f7b3001a8ba0645b8a2eed"
+    },
+    {
+      "file": "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
+      "sha256": "70c393a59470556073c95d3844df61e25921c703696be6d9e1f27cd824787e84"
+    },
+    {
+      "file": "design/jango/reference/JANGO-STYLE-GUIDE.md",
+      "sha256": "ce89cd43092e3404296be9e32f5c7f4331d8c30c28e87b8e548868b1ee4ddc1a"
+    },
+    {
+      "file": "design/jango/quality/README.md",
+      "sha256": "fa7215a5e215e9f3f19113b201d95e5538ea01e381ae29e53266a259d494e09a"
+    },
+    {
+      "file": "design/jango/cartoon-series.json",
+      "sha256": "9bc7b4a6aab3af59c98def3cf59b0279112492b7a2a680339b95145c7f49435f"
+    },
+    {
+      "file": "design/jango/masters/v18/master.json",
+      "sha256": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83"
+    },
+    {
+      "file": "design/jango/master-set.json",
+      "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+    },
+    {
+      "file": "design/jango/style-master.json",
+      "sha256": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/02-r2.png",
+      "sha256": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/03-r2.png",
+      "sha256": "5848875e991d14ce53e7eed2ff488fbb3280920f3a84bc794fafc4534eaf7adc"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/04-r3.png",
+      "sha256": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/05-r2.png",
+      "sha256": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png",
+      "sha256": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/07-r2.png",
+      "sha256": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/08-r2.png",
+      "sha256": "5da498b5f0e8f60b9d5cf53a8336bc07832467579413526b1fdef4b51a7be0c0"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+      "sha256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/10-r2.png",
+      "sha256": "ef68d5f142571ce57e39984070ffa0262fedea2464e61166694e29e687ff3595"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+      "sha256": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/12-r4.png",
+      "sha256": "b55fa9d0e08b8198e367d16e9af4bf44b2aebb8395594d454ef2f2a92a15b365"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/13-r3.png",
+      "sha256": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/14-r2.png",
+      "sha256": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/15-r2.png",
+      "sha256": "8f39ab6b0e3ee5f68dede647e6d9e26354a779201cc113e7ea118584d7ce47af"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/16-r2.png",
+      "sha256": "bb48947c860c6495e91385a70a5531e273e6c3aa2150970acad39c5d0d7e8e26"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+      "sha256": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/18-r2.png",
+      "sha256": "9dc6f5d4794c88b61cb306d7c784c011b77ff7d9c82c8033ffd1c8b2a68c9e01"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/19-r2.png",
+      "sha256": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/20-r2.png",
+      "sha256": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/21-r2.png",
+      "sha256": "9971aa63fcd09fd32560af952f933502a4c4f03df1722c924f1fb01139b7fc03"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/22-r2.png",
+      "sha256": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/23-r2.png",
+      "sha256": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/25-r3.png",
+      "sha256": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/26-r3.png",
+      "sha256": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/27-r2.png",
+      "sha256": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/28-r3.png",
+      "sha256": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/29-r2.png",
+      "sha256": "0bc4807f8c774c42597811840ed2f32fa5545eeda97514d8be8fea4b71ed009c"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/30-r2.png",
+      "sha256": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/31-r2.png",
+      "sha256": "3713219781448de8e7e1d4d9d17de2b13f5d97da048a657aeda13a1b666e7b67"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/32-r2.png",
+      "sha256": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d"
+    },
+    {
+      "file": "design/jango/masters/v18/README.md",
+      "sha256": "fdd97b28d2e5efc5609cece7c24ee830bad21322c361336894b6d74ced0a1096"
+    },
+    {
+      "file": "design/jango/masters/v18/restoration-verification.json",
+      "sha256": "2267d2005aa88fc3c13621de725686b74ae9d2a3053f63928751d7f69b794870"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/README.md",
+      "sha256": "39f174a276b95b5e1ff2929244015f0715fe42d467961b40dcc75aa6b5fdbbce"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/delivery.json",
+      "sha256": "f1529d3afd09aa760346341499076354fe88c02be3e9d3720e28741949b59d3d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/episode.json",
+      "sha256": "e88b31305319f5df954748614ed6a1b860f69ff1ef797274ba2aa0792047f102"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-01.png",
+      "sha256": "aa5025215557a3c3d6bb6ee8ab7f9f98b0ff05e6bc9d25a1976ba55c50e6dbec"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-03.png",
+      "sha256": "0153389c9aa8fd423f6e823d2ec0b0e01dbc3f042c508c37b77b685e336a93a7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-04.png",
+      "sha256": "ef75a46ae3d11de97f3a0890f599b19d6c61f64a1c8f1bd03d49757ff03e4099"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-caption.txt",
+      "sha256": "6cd9c91df1f2f558fed4a61e3aed393379975794f3ea1b83cdfd4451d52802e4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-overview.png",
+      "sha256": "2675dba0508be6c6da03643f1266b524bb4e4424b141a6bce182ad965e6def56"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/library-replacements.json",
+      "sha256": "497b5b8b232f3ec251030b2d009f5aef3420f4e3b760e9abed573790455ce499"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/preparation-03-r2.json",
+      "sha256": "29631254934fa31cdb09bc77d42123f021bbb10d6bfc81b95f7b3b85e0e4fb8d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/preparation.json",
+      "sha256": "403e649aa2595bd153f289e01b561a5ab32bb181de7112c4c66671e633d0b65e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/production-record.json",
+      "sha256": "7c06afbc682c803376e6727ca8915f264a4efaba27a9b012d826899781351e4e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/prompts/03-r1.txt",
+      "sha256": "f8f63ab3f37a06f53faf4b500f706154c6287ae07446c49065a6f117667cc741"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/prompts/03-r2.txt",
+      "sha256": "63113ada32786bacfb00704854ce619d7e16f93859c7fd1eee1b277cae6d0a7a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/prompts/04-r1.txt",
+      "sha256": "0e85fb269c611e2081c10550b909d3770e6d687078c46077287bc072ee312218"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/render-report.json",
+      "sha256": "deccee1ce8b5a04fc5ca6c6a9f1cd49c7847a0d711a46f5b2024c07b3a1669b0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/review-mobile-360.png",
+      "sha256": "00f8bdf33d1ef34a8fdb5a2fa4ac7255f3af961ff5b885fa340544adac3fb6dc"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/typography-report.json",
+      "sha256": "deb078acc7f169588b2bd884e64edf4fea7eefa529184a1e9be0a46b9b333847"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/validation.json",
+      "sha256": "a4634642b8acd7fb334f5ad8f8d08b02d2c4b8a878c1a11f3bfb7d42eb1a255f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/visual-review.json",
+      "sha256": "20ac87724904dc17bb33c3d21ae8ae628f4b535076075e06b5a49e8d172af0ac"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/README.md",
+      "sha256": "cbaf4747b6fc6cf94e41af851fc68228f097ee2b848206b371a36f66d465ff08"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/asset-provenance.json",
+      "sha256": "ba93c65e4da85a07c1c572675c7e37bcdab66e8bdb85f15848a8f70d172aadd0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/build.py",
+      "sha256": "022c466c631f02ce46ef77fb7f596cd71e807dc45ccd046a250b3e576e605b1f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/caption.txt",
+      "sha256": "e160f1f890609e64ae47278bfd11f44a7ae26613df3e534e3655a120eb3709b0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/check.py",
+      "sha256": "4ebae2c81986d71b66b0e2d67c993df8b5d85b6eab1def701d5b2c9e5193b397"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/cover.jpg",
+      "sha256": "c9d099c330855f0eee4d3936abbbf86ca8fbaa2a37418050da2da0dfb8c15566"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/cover.png",
+      "sha256": "ab28569fa234891516bef755c9edaa3d5c346b4f4cb796568b4a7e133a78a115"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/file-hashes.json",
+      "sha256": "44e9979121cde76361180e695911b2186a71187399e1c25c46d3606236ccd7ee"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/generation-01-r1.json",
+      "sha256": "67de662c8e6303edd433f85adb982843eeaad2fec79314dd04653ba44670f220"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/generation-01-r2.json",
+      "sha256": "d3ba8a701c74cd19fd5487508c1b2b4a61e6b4e8b47222d155f1409323bdf127"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/generation-02-r1.json",
+      "sha256": "ac93868d941fae0f3d302b300bb283aed7aa8cf9a909beee4378b909ec5c75e6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/generation-02-r2.json",
+      "sha256": "c9dc8b38f1440cc759dc0c0debf61ce8b20a582454204d47569b07c213c6714b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/generation-02-r3.json",
+      "sha256": "124b358888db90fb2e463227ce42d0f5cbe6e5628ab05c2bbb272b1878878939"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/generation-02-r4.json",
+      "sha256": "b6e6e198b95f057706f1f53f6cba43d3a4361c350a53054b485dd4a5300e90b0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/generation-03-r1.json",
+      "sha256": "c4bec59ac8200d122b1aa19050b0f59768d52260c1f345e158cb997be954f053"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/generation-04-r1.json",
+      "sha256": "feb6876e7af46d4910e78975b4c4d4ce404af414aabb32ea6fe15a3a80b17c1f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/generation-balloon-r1.json",
+      "sha256": "1048c960259dae46a6898e731674b9b05605ee4c4d6bb940d25a0a1195c10920"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/layers/01-dialogue.png",
+      "sha256": "7e25638f7600654d99c26baedc8ddb6e1cc85a102371e15a558fa21936cd050a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/layers/02-dialogue.png",
+      "sha256": "f8da97368c6d3e5740c8430c0ab2eee1db311f2e342289d6976ccf859063f415"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/layers/03-dialogue.png",
+      "sha256": "68385cdc04c7f8664e626111151b2a8256db7b73e2d9e7cc3b5734dd4e10cb31"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/layers/04-cta.png",
+      "sha256": "f6634b5a40e4b23787df1d60f429555d250a299af87d34bf9874763dd83918f9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/layers/04-dialogue.png",
+      "sha256": "1edad99b17caf8232061a3e12e42742ebc9d28a247c1e88c8c69163bcb6af6fd"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/layers/cover.png",
+      "sha256": "309659ba2378801482a222f0a49a59e97d9a0b47cbefbd24790ad41828014ef1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/layers/phone-labels.png",
+      "sha256": "ad65ffb9f4c57e798ec9fbc76c16b226c1173523a40aad691057f7f790d7ac39"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/music/Carefree.mp3",
+      "sha256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/music/license.json",
+      "sha256": "cfe322a0dea62d46760f387e258f355585db7212edd91d74098a76091b647182"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/music/source-license.png",
+      "sha256": "b1d0cc3b51222d4233981324391fe0fa5c0a689681eb2714383125640327fca8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/preparation-02-r1.json",
+      "sha256": "2d45ece764efc038ac945fabf321247fc455e717c3ce34220023a60e9ac7ce33"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/preparation-02-r4.json",
+      "sha256": "eb292f95899ab00ea0364538b399b1b83c03b8584bbc428cac45c1efd7e73798"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/preparation-03-r1.json",
+      "sha256": "e33f29561e2dbcb2225cbaa29a4283263309ec6119c8bc712c921692dc256401"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/preparation-04-r1.json",
+      "sha256": "c7be18cf0c2f415a0dba4e57820568f970626cb74bd4dc75c794e8c3a7c6cc24"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/preparation.json",
+      "sha256": "34d8512ac92b4b50c4e615f9522b6152070a97852c3c2062b64ae6b6cff727e3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/preservation-baseline.json",
+      "sha256": "1ec208b349a1002d8b456d63b84d52fb41b19ed514afc9aee6a0de2f269bc978"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/production-record.json",
+      "sha256": "129029c0c105e2ec10b8d6d778e4ee378cf1a79de7039aa96cf7c642914c87cb"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/balloon-r1.txt",
+      "sha256": "54b747cf5df4f5fe52f589597745c79f30c723cc40931c8d1167c022b59b7cc1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/scene-01-r1.txt",
+      "sha256": "127630ff18c18d6340f5e3671f2503b07a2a26b880d57fe354de8aa35eb6a7a2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/scene-01-r2.txt",
+      "sha256": "cb24a691c25983b36424eb7eecd6106ec70fec5e96853ee5a3fdf7ad358b9834"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/scene-02-r1.txt",
+      "sha256": "4a876207603c4bf9d10c54b8d631b90e52caa8e6b8d6cb56c2827525be1993de"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/scene-02-r2.txt",
+      "sha256": "ee4f889999ddf43c78ed2b64e7abc81222e21d9bed6b2c681a414ec45bfd6350"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/scene-02-r3.txt",
+      "sha256": "8c7e754de4f1a4be1aac05a6e08c6aca29336de3e2ec53fbf4901d604ae3226b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/scene-02-r4.txt",
+      "sha256": "05b016bca9be649294e40833b27dd2a2c20211344a531562fc08c8d911a0fb02"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/scene-03-r1-final.txt",
+      "sha256": "bbd64c7bddfe4b17280d733df365b370e3ca4341062d5350121123bec226e42e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/scene-03-r1.txt",
+      "sha256": "6416a6b035ca6ebbb913d2858795665b97030459b5a2c32a8822383a13b2a9a1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/scene-04-r1-final.txt",
+      "sha256": "24416a93747e9b431e632f66fd612c6bc789400473e78be65b901ab4ce29d439"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/prompts/scene-04-r1.txt",
+      "sha256": "bcec841aa0fee90ae49e4a1532dfdd573af02d4239e6dc7fc9cf5ea81e7194eb"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/cover-and-sound.jpg",
+      "sha256": "ae464d21545a803566d70aaea07fdbeefd670acabb84efd423eaeb9e1d58297a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/posted-playback.json",
+      "sha256": "9e696a2a48973a284df79056b917a3508b9ebd83178ad728a81273f2eaf32237"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/prepublish-check.json",
+      "sha256": "0547668a9a2822d9dcf4bcd045c4e2aaa3331078daf4528817336969751fe34b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/prepublish-settings.jpg",
+      "sha256": "a4c690dec31f9a147a7b5c26029be6199111ac09c3eec8b71d94669b89c34781"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/preview-playback.jpg",
+      "sha256": "6f02063693e51346d824911cf24135a8525de2a1c10837cdfb27e018e8d5a70f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/preview-playback.json",
+      "sha256": "1830a1421f53fb9bdde900ec7e769c28b3b5872ac7a584156d4cdab171c07877"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/profile-download-links.jpg",
+      "sha256": "a691b973eaa19dd9e71f7599a23949282c6b48c1566d7f70370aaef5406e2639"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/profile-posted.jpg",
+      "sha256": "10cb28b7eac4e74d32cf9988c3741541456882cf99ebd7cd22e07851556383b2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/profile-thumbnail.jpg",
+      "sha256": "f7db163c07af4eadce8c3277e5e066d80e0655ac24dca6685772da5917be6569"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/publication.json",
+      "sha256": "a4dcba32077d7b65244e87d69d90aaa7294fa8121142cdd9e44418edf79283b0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/reel-posted.jpg",
+      "sha256": "603fd82dfb59bb3f8ec00030178649535f9161b52fe9744d3a6bf0f7b59015d4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/publication/shared-confirmation.jpg",
+      "sha256": "b1500f37f7990a47e9e546cbbc72cb04f95f136c0f6f87985917afe259dc61da"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/concat.txt",
+      "sha256": "b2f4a545989aeee2d196da4de6a042c084579d6d6eef8db374fa8ee072cf232b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/final-command.json",
+      "sha256": "e841274e4d52071eee20d21c80cbc8615f0082764fd0278d07db684eb31dd5a4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/final.log",
+      "sha256": "abf26fdfe9e552b8705c743575e115f922f67afaa6d79a3466c6e7efa5599cc1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/jango-ep03-music.mp4",
+      "sha256": "8edc087ec539eb3a24dc823eaf46228e8d0e8ded6bb6da29f3f17acdae1387a3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/production.json",
+      "sha256": "ccfe653b4a9ab2ce76eb5c1055407167c328fcf30f33e7902d69f73bd4b4ba9c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/proxy-command.json",
+      "sha256": "fd9727d40b62e39a8be78aa2d516071fc9e3d474b3f853eaf8eadfbabee51c67"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/proxy.log",
+      "sha256": "48df96c320df852f12c6df65d4ddb18fc97a040690c2e783184e112a1ebedd92"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-01-command.json",
+      "sha256": "a864d8076a8d5dc38d4ea4ee9c2720cfc2f33afc294eb370841c34079dd08aad"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-01.log",
+      "sha256": "6f455412d0ff2a2202cb125a28fd1efcfbe16aec49d72a5ddc3026e743e37331"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-01.mp4",
+      "sha256": "cf88f635d239fdbd2f2a78c3eaf29e1078280e4caa5d6f8f89c3180b442a73ea"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-02-command.json",
+      "sha256": "48c91edbb85e0437097e8e3476cbec150bba28555a1edb97b17298586c9a6776"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-02.log",
+      "sha256": "e3d4fc43fab71b8067071505e92f4b47ec6f2618dbeef7638f814d1a1285db3a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-02.mp4",
+      "sha256": "aaea069ed3fac62ef49a46f88131bba80e95d303a495ad016b3d52be343ed3bc"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-03-command.json",
+      "sha256": "4a05ebb0031f6a262e2f5bd98fe96e4d588be103c61675ef6bc8fcbe887e4acc"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-03.log",
+      "sha256": "bef2ed056f1635c4ff606d45aa7a9b33faba8ea780ce9ba35e04cc7b0734bfe5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-03.mp4",
+      "sha256": "f6c3f8c80a29a8ca9710702ebdeb2f8c0d81e4147e9aa06b8171eb66759a9b22"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-04-command.json",
+      "sha256": "42ea29a7b9833baa7b3f22235026ecbdf82cc69d9704a67cb0167630a60c78f1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-04.log",
+      "sha256": "fcb3ec8ec35dc4c2df951706a270bf3c5cb17f3fb3672a88dde3abbbb1b32f3d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/reel/scene-04.mp4",
+      "sha256": "3c6d0b62cc2ea4de6a7de73f9f8ce4e408dfde1d5834a1d16e7aec7383cacd84"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/01-360.png",
+      "sha256": "d501e4090066eded407b449b245e7be73a6ce2741e771087db1424318f6fe149"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/01-start.png",
+      "sha256": "dba46ffc945b815a48a0076ebf015d7014b1950ccc003227d3edaaec89ba6029"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/02-360.png",
+      "sha256": "eb2d3b16397ac9b4fc3327f8c0bc2a313fc5ec967d29fc8d2c76e97544ed3136"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/02-start.png",
+      "sha256": "a8f30ef8695b20b679cd588a418e899841f2135dfa57a4d76202526e51efa1d2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/03-360.png",
+      "sha256": "8dab553017c5296eb14b02083f0b895d1613f879a0fe3272b838afbc09fccefe"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/03-start.png",
+      "sha256": "b972efae1a2d6cf75e15742681da619e1937c3f168f6c35c3c5e47b482382d6c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/04-360.png",
+      "sha256": "79237db662b6468ed8e8f26aa05d8bd41b748cac7f97c5645405e23e10b2774d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/04-end-360.png",
+      "sha256": "931cda2c218874ceed244462b698dfdb2458de2b62995b2cfd6faf1966f4a484"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/04-end.png",
+      "sha256": "2254e2f0a70edaadb7c47917b088095840522750c580175b0f491cec9f38ad83"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/04-start.png",
+      "sha256": "daa6530ac4b203ea00dba3228025b1acc2fa06d8a9e0247800f48b589e14ebdb"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/audio-comparison.json",
+      "sha256": "46ab370228ac911509ac4e1316db80797e1599bf2374e13a6c09e7b3444fa40b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/audio-review.mp3",
+      "sha256": "749e27a904dba12b9bb61c5bb0a4570450e394ad55cbca3006c9b62479c1c317"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/cover-360.png",
+      "sha256": "33d381031bb88f373e2e6a4d52ffa84ae677a4c9c4d8c693b02c543ebddda1af"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/cover-profile-3x4.jpg",
+      "sha256": "766b88bc2a93729abe8f4dd629caae90f1c8ee546f7241eac89ea0190a1861cd"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/cover-profile-square.jpg",
+      "sha256": "8fff51f987565d764889d2b444fbeb821daa28aa2ea580449f46a8c618a3f415"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/decode.log",
+      "sha256": "5df8ecb045982340d87bac5da6f00a85cc9206b472111ee4d74b013d1e20b768"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/docs-check.log",
+      "sha256": "98ed5236e4bd08df6b8f3514e4937bef8cc2295afbd7a01465d2d0d3bbb391cd"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/index.html",
+      "sha256": "e0fe78d5d5b7eb4655b6cca50a2797eb958fba09dfe62a00262384fee4292e8b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/jango-ep03-360.mp4",
+      "sha256": "e549f9a7cd98a76e76b62015eef5e96a924cbddb8edaaf47ea18ea3436c204fd"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/lint.log",
+      "sha256": "c6d195ddd82878bc652ab5da9a8ab79d18683944b5eddeb07fb531bab75e11ae"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-00.jpg",
+      "sha256": "46cab81f28ae6c60c2b48bb22080ffa0322119a54c665686d4ee1c9787651218"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-01.jpg",
+      "sha256": "9d5de1401890304ef0e2c0846b5383778a20948cbb9fa7141924515793db139b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-02.jpg",
+      "sha256": "358ec00cc5d8a443d9ffa0bb3125da787e7eeefa89ece818dfebe605a2e45821"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-03.jpg",
+      "sha256": "fe226146ae28f7e387dff9509134398cd7bab25bb732381fbdd3a0d7bb4174ca"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-04.jpg",
+      "sha256": "83ed6a186d1c0849c6669e83486ec493ffef7ce324109ce2a9f485aa03e32f09"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-05.jpg",
+      "sha256": "99e13505ea5aa4a8dc8ebd873cf42680b65af052433c42ef616254390c130956"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-06.jpg",
+      "sha256": "2cc6f58fbd6edbe3f1c34b97d5f6ca3ae59c65be517a2ea0f60504189668daa1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-07.jpg",
+      "sha256": "d1f7ada23f8e0d7eb99ef2a17a9f996fe33e07c96cb7a362584aa6aa8ccfa5df"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-08.jpg",
+      "sha256": "444cf324933845476aaf650c83c8b562d860cee968be3691afd2d5d8b09c8785"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-09.jpg",
+      "sha256": "2a15079edb7089772b6b7c3f08f1fed078eb26c5b685e1bf9652f0a1d851781c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-10.jpg",
+      "sha256": "e85f38fb22aa1926ea5174b3bc5bd097a0d7de1c438cc14c226e2bf8a1d46910"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-11.jpg",
+      "sha256": "c5167067db1eeb1fbae70e5c98c98e41870cbc732d5594e5eaeb0b9d7a0a7157"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-12.jpg",
+      "sha256": "163f7317f1bf19f00e422eb2a410d0a5eeace3e550d747b21c8d19cb24cde816"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-13.jpg",
+      "sha256": "8a85663dfaa184bd912e878bde7900c934183d929b6b42247f3630d744044b01"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-14.jpg",
+      "sha256": "e049d0696daee2f56a1bc77b9214f074b350c24b9ffef8e5027cfa105be1996f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-sheet-1.jpg",
+      "sha256": "c9294a84956e5396543b683ea7222e501202e43ebd370d92ea0d2a086f013e95"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-sheet-2.jpg",
+      "sha256": "0ea5eba1c195d46a103dceef56a3b49d9419912672b9872862b3199298fec3be"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/playback-sheet-3.jpg",
+      "sha256": "fa203022c6d1f03d370a1dfa5926b00e29a2cc1f0dc727db623c0362ec90f7d8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/repository-checks.json",
+      "sha256": "ab01ff90b42941c598646b333e7f97195b926cfe34b50b969d9a5f2d2d95366d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/storyboard-360.jpg",
+      "sha256": "32aa5a74d3d8ae23694ad5dffc10c588f2ead952ed0cb80434dfb1ccebbe6c9f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/technical-quality.json",
+      "sha256": "b786c47d5f02f6362c0592fdcab07b92ed9492fca84c087fa6febec805ed5d4a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/test.log",
+      "sha256": "9275b2f00b8c610c3497ba2b191950da0e10331414eac544fd7aba2793087033"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/typecheck.log",
+      "sha256": "c34d554fbc64c3af8116249b66535da6c623917a8e0fe867d767cb176c8b47af"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/review/visual-review.json",
+      "sha256": "6ccfcbc2b363859653a17f0582536e28a92dcc30046c2f25b14fcb7befdf460b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/scenes/01.png",
+      "sha256": "d4fee460bd0084c6cf7743854af44cb4174b08378accd96fcfdf2f9cf4926015"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/scenes/02.png",
+      "sha256": "bf0bc0dcf61b4cc36a3068574221280f73abdf6ed4309efaef9506ae5e452590"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/scenes/03.png",
+      "sha256": "6d10e61363a5ce19315b13c6b1b96967045111280b2808cae10e2a1c0349996d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/scenes/04.png",
+      "sha256": "f1e4362fcaf77db373f078bfec51db7b51b22272f39380beabcf1bdc4c4197e1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+      "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-01-r1.png",
+      "sha256": "f45cd09ca94341904fc6c039ef7d5661a80dc4f88f1d971b6edaffd3dec8901a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-01-r2.png",
+      "sha256": "2862cdf2ea520b2a51164b72d9b192a5359dcd49f3de9a45555ed7ea03a01fed"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r1.png",
+      "sha256": "e67c8eb219f920742a1e00c7e92e13f4a0b6b2875b576d35646cec71b2d4376f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r2.png",
+      "sha256": "7f46100b0125bef5f99740de6f76668c75580f1f132090421e4109f9f3f8c86e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r3.png",
+      "sha256": "639f69c10067514f0f2bad3ae2cb0bb04cc450906b0259ceb3676b791d42a73e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+      "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-03-r1.png",
+      "sha256": "de9be3fe2fad3096c4e3e035ef0fcd917998617308597fda6d1a9db796656c42"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-04-r1.png",
+      "sha256": "a5e10ea5110c8f4dda876e2d0b2900f5cd421373b5f96456e22d45a3726ba5e6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/typography-report.json",
+      "sha256": "9f2a25d456bc3e9a6b644bf18cc193cd23d119428268bb0898ea2bb2acd328e5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/README.md",
+      "sha256": "c54de802a61b26dbc9fff4657a6b76c8e2746c9a08ae2ce0ddf507efd3cab001"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/REEL-README.md",
+      "sha256": "a94ca5dcde221e5a4710e40b4e637f211d4acf223bb7cb39aab80e5fe494ebf5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/build_reel.py",
+      "sha256": "4a6aa46694bf564a3860b1bc0c0551a6798f41372f51de1cf0e719c8002ce353"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/caption.txt",
+      "sha256": "4a7962360659db5d8aa9e71f1214666f4a2477bf2f6fd5765d44d3c029888812"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/cover.jpg",
+      "sha256": "4aef302dd78b88bc049d7fd0de9fdd8ccf3be750cc8b85c72f8ac802735bb69e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/cover.png",
+      "sha256": "b9cac8f9a48e944639b43303c931b2077107cb4e3665e68de1bfe1e33a0c518d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/file-hashes.json",
+      "sha256": "3910e7ea62d9a53a770dd0988689f55fabb5b428c8453ed765b145f166db69a5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/generation-01-r1.json",
+      "sha256": "8d058657764b27caa97004de11413a34699ebe7742b079d8910e50db0aca1607"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/generation-01-r2.json",
+      "sha256": "384affeb04a4d6c655049248e0db0daeef06416e8f937fb664dbd2ac741995bd"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/generation-02-r1.json",
+      "sha256": "42c294f8ca46131b50705c860980e3ae3137577076b9d680c6ed464888c53aba"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/generation-03-r1.json",
+      "sha256": "8867fbfc11bd94e7f8e3fe949cb430deca5b0b7335c29b3328ee2b5486b67466"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/generation-03-r2.json",
+      "sha256": "c20ace45ce70a985ef3459c8b89c26675daa186c9cd3b066ffc563104319f7e7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/generation-04-r1.json",
+      "sha256": "668cae6173d8253ed941b7333bd4ba6b82212d1ac04d11400a947472f0fca833"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/layers/01.png",
+      "sha256": "1347c6f26c12f483a7be9bcd6ab3dee7b682ef48710fb23cab14c58122dce495"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/layers/02.png",
+      "sha256": "621cb86d3284dd630ff9873cd0dcea060d68df60ca548f573e71622666a8a317"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/layers/03a.png",
+      "sha256": "b8867ad5ca1d6c8c08ef9b20c4ee51f4dd720880e4bdf47719821b5c516105c1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/layers/03b.png",
+      "sha256": "bc708789f0947aa6a2bd77476a6e322a4f90fde0bfcb03e0080ac8690d12121a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/layers/04.png",
+      "sha256": "be759e2e2e027d4e217f7c13af14a35bcfd8e25dbc374d5169d6f63a0ef49389"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/layers/cta.png",
+      "sha256": "9d4dbfa19b5a8ad37a93bdc585502f76c77690aa3b0bb193b74e4fd6fffb1dc0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/music/Carefree.mp3",
+      "sha256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/music/license.json",
+      "sha256": "cfe322a0dea62d46760f387e258f355585db7212edd91d74098a76091b647182"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/music/source-license.png",
+      "sha256": "b1d0cc3b51222d4233981324391fe0fa5c0a689681eb2714383125640327fca8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/preparation-01-r1.json",
+      "sha256": "d38010c482a3e211392f7b9a77638530c4e0692f32d5136d2c6d9322b90ab8da"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/preparation-01-r2.json",
+      "sha256": "149f8dfa20d7113d7deba19cfd3ac5f3f4f6c9b5f75960ee854a6afbd0223092"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/preparation-02-r1.json",
+      "sha256": "c773114347a4750093bcd0eee1778edc14fe95e1070ee1f4e94e5c38a2a51929"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/preparation-03-r1.json",
+      "sha256": "4044f91de5d71023223b8aaf13622803d942dd11679e30e3f8faa077d370af30"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/preparation-03-r2.json",
+      "sha256": "54b2986c756328265ec531c868b881eaca068e02896879b4152471d8802b70c8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/preparation-04-r1.json",
+      "sha256": "c32e1915c9a904f03d3e11e9cf8292ad5c76e95bdb1d1b647610f712a8c85218"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/preparation.json",
+      "sha256": "1e6b64309408c9842f2a35f4e1ac824099b83c20d3e5d9d3551c9d000bd0f997"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/preservation-baseline.json",
+      "sha256": "134cc312b95e9ba190bbd834c55f7d87bd6688a40c7a0a0f3866218db6c338cc"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/production-record.json",
+      "sha256": "922712716600eded8a75f3dcef955271919595cf69bda07a9b28da95202461dd"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/prompts/scene-01-r1.txt",
+      "sha256": "b4edb6f4c19f3a696ae9c5eb3296914c0ccc233bb8c59d6c6fec610c10bf2c7a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/prompts/scene-01-r2.txt",
+      "sha256": "4c6628594953bc00a57a81c1356c6cea776ff5d6547582b00a41bf26f0760ad7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/prompts/scene-02-r1.txt",
+      "sha256": "f63c976ce3c729db6f5326e3cf7fcb9eeb0d8d9eeae56de8f53837ff7889dc1b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/prompts/scene-03-r1.txt",
+      "sha256": "faf7ad56c1a226ebacb0ec8b577f2c0c94d9d2e33d4c62d3e97fc0c035d58c2d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/prompts/scene-03-r2.txt",
+      "sha256": "f961daa731ee5e9fc760c5244aca549644db5b5dfbb3f37e81355a7f1cb195f0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/prompts/scene-04-r1.txt",
+      "sha256": "4f44b99843ee93c39d6ec71d230af50583472c7b6aa2d2f9791ee4b831baac81"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/publication/file-hashes.json",
+      "sha256": "6666f726e1f5d16326995a587a10729ba0a4a834db54889777c39e15ef9dde4e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/publication/preflight.json",
+      "sha256": "bb8ddb37486a201c83df675ab816ea89ddbd3352936b3cc32856adde45a15814"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/publication/preparation.json",
+      "sha256": "378619c423e07d2ade09e528216a33601d960a8ec859215d08adf229d290a736"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/publication/profile-published.jpg",
+      "sha256": "b5e5f2af45cbb591fe4c6fde98eda96048ed6b98bf36717c3c8c06e362604f7c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/publication/published-ui.txt",
+      "sha256": "eeabd815c28c31d22be823d4a53f8185280a10073e92cea71ef3774343affd2d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/publication/published.json",
+      "sha256": "0cc1db0d38446e39199bdd8405461f1407580925cfbcb91b0baaf66aab509be6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/publication/ready-to-publish.jpg",
+      "sha256": "be8cba90fdc2160810b328c4d4f193603136b98a4263b1bca236a45b606a8135"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/publication/reel-published.jpg",
+      "sha256": "fe48b460b518605cb20805235299ccdedc0067aacddfae60c752932d97baad6b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/publication/share-success.jpg",
+      "sha256": "5651c5d89aa71422561ab37949f5471c909dc867ba0688779c0618d0867591ce"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/final-command.json",
+      "sha256": "a70e95f48a7821cd0d207aed453084395c375596d242ebbafaa072849d647534"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/final.log",
+      "sha256": "76ed605d0bb7d4a329c3f45e7f5a6d69a13ad670867a9fe2a1195580e6f721c6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/jango-ep04-music.mp4",
+      "sha256": "ab6307d677c23cd61fce422e14b563641eb08b17dfafc328a8f01c051714b409"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/production.json",
+      "sha256": "0fb690782fb2d7ab2008e10d0f278522d28a6e0e22e7bdd02a294287f67780ed"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/proxy-command.json",
+      "sha256": "fe25dc66aff84a21ddcca18468e7561c2936c7adaaa9b255f941aed98458311d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/proxy.log",
+      "sha256": "b1b9fa004821e1b0e74ffb9f0488661829947f9ec382ba7fe977c8385513b1b1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/silent-command.json",
+      "sha256": "3401ac63a38caaf85fcf2b313500d40b198942df207cb2388f75f6496a9f00a9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/silent.log",
+      "sha256": "7269dc1ef7a8232087d454f730b6220f9100fbc100c7e4a23f883b0db2342049"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel/silent.mp4",
+      "sha256": "53e920daaa24053dfe751bc7e0b23cc178f7937a8e8d3f755dfc52817a157396"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel-file-hashes.json",
+      "sha256": "f17840eaec2610668ded6e25191a648c1c9a000731b1584532c46d2bfaac78cd"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel-preparation.json",
+      "sha256": "823160050418daf4ead0fd29fc96d3ab4c1355be1d03954c9435ca4efa6168bf"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel-production-record.json",
+      "sha256": "e232e15d23e7f11f629e4b9af37d98c468ab6f086cfe4256103a3295cda2e5a2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel-source-baseline.json",
+      "sha256": "42e6255cd92d9214f926f7d2f00eaa671388051d65140f0c2d13249eb90979ec"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/reel-typography.json",
+      "sha256": "ffbc84a53a4492262b0f8ed698b2b359ef6a481dc3cf6f18281313bf4c55956d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/render_ui.py",
+      "sha256": "505658b9acb6d0d88d58863c96aae0fc7766b373969772721d22dc80f092ab7f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/01-360.png",
+      "sha256": "53382c25b796357484630b585aa71cfe2fdde978cc91f98a2da0e8d205b5850f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/02-360.png",
+      "sha256": "b76a47ea81f999b0800b018cf8cb444d67d45f8567505b7cdd26b5f8132bba62"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/03-360.png",
+      "sha256": "d08527ed790df42764e360a520f49254e0547ddeaebb5dd17f96e06a8feca259"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/04-360.png",
+      "sha256": "16a472df3c0451e8479467916f35ed190135c8b263714c3fe763213f535fba27"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/artifact-checks.json",
+      "sha256": "e134034031a095a63a1b2b187ce0e960a60e5716560be72c1fa9bba58aadfc89"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/index.html",
+      "sha256": "177d2b8de156e601ebe97980e66b5c92e38e29af7775adc7827dc64d1872ec6b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/overview.jpg",
+      "sha256": "e2a3cc31df07fa09a7761be604d67d609c373cb61d7a11ebdc85cca4ca7dd8a5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/01-base-360.png",
+      "sha256": "d03e4173b90fd84bf549e8c9fcc424649391ac376ed2b82940da525054a50f57"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/01-base.png",
+      "sha256": "1df2999ef9eb40e138c1f66c40c6df582cc0b2703ffa5fb6b618cb2fecc42538"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/02-analysis-360.png",
+      "sha256": "9e1ade3477259a5a618926f6d593df35fa3393f409ee36aa409f7641ce4dad88"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/02-analysis.png",
+      "sha256": "6b9590be3d9d652f0e33d3e29c14bdf3a931251bf7feef08fc5cb2c4adafb08c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/02-camera-360.png",
+      "sha256": "934b15f2b1d1346d3dfb09d2da7e9d1f0af134dfd729fa6b40b751e59bdc7658"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/02-camera.png",
+      "sha256": "f7e83716e433322c2a8c3815f310b577f970390d957e1f0895b7cb050cf6181e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/03-candidates-360.png",
+      "sha256": "0b7fb57e2d5adc14c6b2f3e2d9a35d8ea41eb72d017d7c524fbba2a9e5cd6b5a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/03-candidates.png",
+      "sha256": "49c79143d94c2364984bdc1167b749f9216d5ec4176e0985539c098b9fe2410a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/03-details-360.png",
+      "sha256": "c12983d5bbaabc0bc3ffcdd03ea97ce2a5a728cb5ce9be9d0541b7b6988ebcee"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/03-details.png",
+      "sha256": "f3948bb74b88f0965ec458e4c63d446fbd919a3eb2262976503434243076ad65"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/03-ready-360.png",
+      "sha256": "9392df85f4e90b0c08499d00b9818846e027e6834e2b94f5295b767e056d58c6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/03-ready.png",
+      "sha256": "f2420b4b6f6d91dda95ccb192148c25dac37b598c2f19dec5accae8f42b41c45"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/04-complete-360.png",
+      "sha256": "fc291241fee96cb5695cc996f0d60d286e5f38d5b76e77b44358b9f47afc7650"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/04-complete.png",
+      "sha256": "bad21b301bf5f4cf606fb7f1b0e28461f33e0e38c19ef842052f3233e649bc86"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/04-cta-360.png",
+      "sha256": "163e4eea4e83c48a32bafe90b8bbd5b60c7c6b9471da8892aa2706370db03ee5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/04-cta.png",
+      "sha256": "61dce7b62622638b8c365e331f59046317736e43beab41b28a97cbbfae32797a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/cover-360.png",
+      "sha256": "9b52cb99d69721fef03323e488f7db967bcd8672d979255cbb9c31e13847cd87"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/cover-profile-3x4.jpg",
+      "sha256": "52b3ec9d8fe7a97c3fa9475b350a147fb1258f2bc3511e044eac612ab62f9531"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/cover-profile-square.jpg",
+      "sha256": "48a5f9a8f536cc61fcec251b3392351abe20d1fcec0b4701bb315a13cae9e8f6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/decoded-00.0.jpg",
+      "sha256": "7873d4bd9a3bb0bc158b83f7198fdace1099fa77e3b68706570c408dc2308276"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/decoded-04.0.jpg",
+      "sha256": "0f2fd08acb4d1ec0347fca1f1be9707ac85e7e6151ec9e84a9c6c4db741f0b2e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/decoded-08.2.jpg",
+      "sha256": "bee8648c11e61ea676fbfe8c75b346053d21fd34ef1bcfeba693633b61f32ea9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/decoded-09.0.jpg",
+      "sha256": "60d073d326498dadbb5ca522a924a033c953ea15705159ca441d710616f58352"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/decoded-12.0.jpg",
+      "sha256": "ab4cf6ef51a310f86dd1613b73f5ab2845c3962175982529920c4507db6b322d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/decoded-15.0.jpg",
+      "sha256": "3c7f4dcb3ecd6ef3d867d5e96e9b233e1abe9272286bf0806d8c6b9c1d296b76"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/decoded-18.0.jpg",
+      "sha256": "b533ab42027872778fc8bb131594bd35d3b9815fb9f2cfd7d3b7d7a20ce05743"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/decoded-21.0.jpg",
+      "sha256": "4d58332ab9eb5fa93fe4cd481e087bd47f73749e44a290ca2012c907632af396"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/decoded-timeline.jpg",
+      "sha256": "2e127cce55abfdc25cb707b9e21a04c724a321beeade1ca23b540c38cb1c16fd"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-00.00.jpg",
+      "sha256": "73f8cb01a1d0b0ed2e1d14aec307517f6e6b019b40fef43b987d2ba629560fa4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-02.00.jpg",
+      "sha256": "d284d26a530588f112ba2ca1d3745489e4a4e80f5efae3eee9607dbdd2dc2b4e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-03.97.jpg",
+      "sha256": "0c30dd9a410502124f1b5bee27233f39de0675793ab7e1ae777385a5954a7887"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-04.00.jpg",
+      "sha256": "969ec8521bd573723464f324088a96fbc9956fd1d50a59d2d3da7ac01bee8f33"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-06.50.jpg",
+      "sha256": "6eec26372e5773e74a39dd87b757dd41f96d58f2fa8eaf23b75b62701a61594f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-08.97.jpg",
+      "sha256": "5a0f504def07d74c2043154fba690898786c8a3c46f2fb96727914c9e7cf0625"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-09.00.jpg",
+      "sha256": "94b65dbc79c176cdd784ae3aaaba1698bcad1ebf7dd1d816632efbb3e0e91760"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-13.50.jpg",
+      "sha256": "3e54976264b586ce463ee60f990df47af5c561706ce4623dac69d3d9e0e24470"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-17.97.jpg",
+      "sha256": "52e2e74f0bc971bdf96ef489af4bf49f28e3499ab2ee9f0eb3983a86246ec75b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-18.00.jpg",
+      "sha256": "dd2de74e6ba3c26a80247e0e8495c3583e17ad20644fb1fc057f0aaeb9a1b7ab"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-21.00.jpg",
+      "sha256": "4351873f203b34a33e91640769031db05d790f6f186256bb488a283361488c27"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/frame-23.97.jpg",
+      "sha256": "a4aac357f529d0828a3628f25557f5d9faf3e8f94d4c88f797dbddd58246c8ed"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/index.html",
+      "sha256": "a9f1a72064ec0b811a56bf1d1b433a9798ca6abe472e281f7a31cb0134692d06"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/jango-ep04-360.mp4",
+      "sha256": "4e792418cd89fa579a3ab3492ad4beb9a1a63891ff4b348ad3aefbf53fd31f70"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/preservation-and-frame-check.json",
+      "sha256": "1cc1d8829218be4d6434778b43401eaaa456d40723b589368964cad21b5074ff"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/repository-checks.json",
+      "sha256": "314d4ad736b046a445047e92c8fefd1c666674dc917ea0ee04c471b55bba2139"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/storyboard-360.jpg",
+      "sha256": "c5ef6fae1757b8b09ce7624d25cbb3ce2779764d50f743dc2ab5b60202ed49c3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/technical-decode.log",
+      "sha256": "75af286871e12647b07632b123ac63c231964c5713e078ab89f39426b45eb028"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/technical-report.json",
+      "sha256": "e0aefbaa2eee3ded9314084a31afa7a7ed0586c95f8e93f2d855227957c0513c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/ui-overlap-01.jpg",
+      "sha256": "de94bd051427c6dc20061bd042383aa47e5e576a0538ca87332ccf8705bd3fb9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/ui-overlap-02.jpg",
+      "sha256": "583ba93e3b832e8f61f54da7262b2cd85ae1fd6f9e34b001c2c93a0db36e9886"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/ui-overlap-03.jpg",
+      "sha256": "7f19be1425b748243a7b9e8ca363fdc4c6b93e0e7b2ba791bebd625f62b53fde"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/ui-overlap-04.jpg",
+      "sha256": "fdb7aa0116f16cfdfe4736cec269f4c35f046acd94bb0c126ffd38815c618803"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/ui-overlap-sheet.jpg",
+      "sha256": "9dcc86deec94111934eddff5e59ce8ad3e5821fe8c5e4ce524296964819267c4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/reel/visual-review.json",
+      "sha256": "07d77ee3f2b4103619fa1dfe8d7ff77c399a6a1b801600806d1e6f3f32cc3592"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/repository-checks.json",
+      "sha256": "d400ec7d8bf38d0e3caead0005bad6cd117380427f45e4f3ae7f6c558c736fdc"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/review/visual-review.json",
+      "sha256": "e71174e8353fec74653fb3e4d013db5872fde12b531268e61de9b6a838858647"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/scenes/01-base.png",
+      "sha256": "3d40957dbf8ac3e8b1a0527fd12460652ac3f4805a0171bc82eebc6a4fb66696"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/scenes/02-analysis.png",
+      "sha256": "c0746c20f79d667f6b798984b901ec9e21e47737b1d78f727665320d91e8ffd1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/scenes/02-camera.png",
+      "sha256": "0f4de97d1b7f59be17e41206f20a2db4f896a4ea3aae34ae048747fcc8b03478"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/scenes/03-candidates.png",
+      "sha256": "9abe3a246ebd4c6c24ff218ed461cf6e0986a765a56b89818d1d402f7c2d2ec0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/scenes/03-details.png",
+      "sha256": "e8d0b471940bd3f02360a2db8d60ca2037c1757162b0ac865f277a693924b415"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/scenes/03-ready.png",
+      "sha256": "516a9c858c8c569d987a268f0c0796e2d5ab43ab48ad932d5246e92bdd4ff0c0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/scenes/04-complete.png",
+      "sha256": "07b461f365fa13526c52dacdeeca0dd150cf516f24ab650d0d5ca27f25852449"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/selected-artwork.json",
+      "sha256": "b9f11c0676ebe9bbb23bb220ebd9f64958329321e9fb95c31fc19301cf9b2ed9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r1.png",
+      "sha256": "e12e80f4319444952b87c51dfaa1d84f098798e92d86ba3a3d7eac7bf0cf785e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r2.png",
+      "sha256": "93163067606ece321451c3fdeda6233a104216848941913bc72ebef0bbbb9233"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-02-r1.png",
+      "sha256": "a05f790869eedefdbcd40d240cb6eb7c657ed4789040093334edfb3bcf59bdb2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r1.png",
+      "sha256": "398859695556a735a9cd5dcaf0b4207632878ee552a75cf20792077c11af5740"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r2.png",
+      "sha256": "12bd855b1402e0517248fcea722feb813a29f5d33a440e12f128afe64a483c3f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-04-r1.png",
+      "sha256": "24abe161550382285a0c4fe00468b5467b5b648f38d3b5ed1f99887924870499"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/analysis.png",
+      "sha256": "dc8e8b9221da51fc18b8c6050fe6c38515354a2eb6e293fb374582257793b84c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/camera.png",
+      "sha256": "4db60b9b06ac1a0e5ab751f2b15a9a7449f30ae7491a0e2703e32bcc51757181"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/candidates.png",
+      "sha256": "9cc22cda65d7c7f7006e945d6f0e6b7959b8b8e343844d18e3d1c5324e3ccb6b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/complete.png",
+      "sha256": "9c67128f7ea6841f73c14bbd5f852793cbdef9fb7ca41222469dd6953438b82c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/design-tokens.json",
+      "sha256": "a9134d753936066de93a8b05e7aa52d193f54995d5daeef431857277d2f1975b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/details.png",
+      "sha256": "442d1874c37498576ef4896348f87a02414ab57d14087622265e2ffe7223eb59"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/ready.png",
+      "sha256": "e512c955afcbc7d2a2e4ea72c121661d653be9670cd014694901b8b07d0c2a17"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/receipt-mask-01.png",
+      "sha256": "46081f1059a17b821ab6e5197d781f17f760a8ea7e21b0e82a62720d976b9184"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/receipt-mask-02.png",
+      "sha256": "740d97a3863bf2d44f0c76763b9bb36e7e19347369944e77883a747d59be4db5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/receipt-mask-04.png",
+      "sha256": "b60cf5c72a0660efae60c766d17bc3100bbf6119f16df185afc553a85270bcfb"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/receipt.png",
+      "sha256": "c0b5520da3e58ef609273dd5f2f0190d769e5ceb6afd6cbbe8b7a6f6f176726e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/screen-mask-02.png",
+      "sha256": "11fe19c626eef98cc6eed66dfd85b9d9556e06d0f37364dee943790acf84cb02"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/screen-mask-03.png",
+      "sha256": "75b034f4dcbbb685901e1f53d05d9b4e79fdbf5c2ebb6b42948c8d81479a2393"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/screen-mask-04.png",
+      "sha256": "ad0a243a2c063d21dd8f838548172006b04570b333c8948b7e198af40c40199c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/ui/typography.json",
+      "sha256": "396baf892d93320f8221cc20caf217336de1c7dba296b94258740448e2735c01"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/validate_reel.py",
+      "sha256": "6b6251ca30eebb31f2d21fdcb30922d89be7bf5ced59a68a8da9e77ab678b5f7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/alt-text.json",
+      "sha256": "562e4660e98d3d6e56c5bc0b6371d7d7625f493025246bfce2d34aee4ea551ad"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/archive.json",
+      "sha256": "42a92a7a8f4dd6adcad405f6bc2dce2a87ba9facf7072baab7a7b17cbf06de6a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/build_reel.py",
+      "sha256": "276e43bb2569ed9504e5546e12db81584a07f129a1c7202deeac1f0d4d398299"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/build_review.py",
+      "sha256": "4b1f8746942b6d636745ab7d756aa20ac9f64ab7970a0b14aeb4387469b96334"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/caption.txt",
+      "sha256": "a1fc66d3f05ae85cd802a7261d85fcdb58f15977f143c64d8af79210a001ebb6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/cleanup/before-episode.json",
+      "sha256": "afee21e428621faff5f599e658781f102ac83cc223cee4dc6a9a990f71106aca"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/cleanup/before-file-hashes.json",
+      "sha256": "47149827bc2651f3a0e116496225a33ccc71c264ffdc97fe9f611dabfbe2a058"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/cleanup/before-production-record.json",
+      "sha256": "70869169bd10d953203b85c728bdc9f7369119274b07fa66503caeb695d9a36e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/cleanup/before-selected-artwork.json",
+      "sha256": "87153c6b37a1dd7be4d4f26f4f1ca050a6c163178455dd87e37d0fac09295b4f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/cleanup/validation.json",
+      "sha256": "064ebfb1ccaca37140fe2ef32846e1913ffe746a8e18e55a2838143d1fd804f6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/cleanup.json",
+      "sha256": "83d59625eb196570466bcef23686927ad952f308a2b4f66be9df67fb624fb10a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/cover.jpg",
+      "sha256": "d115671a4aea2baca11358288ba47e66f92a3ab89ff0d28d42884b3cf578f8a8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/episode.json",
+      "sha256": "76b1b6ced6c3d36982aa3c393969e2482cf2201e987bde77e4257e2fa39093e8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/file-hashes.json",
+      "sha256": "9fa9b5e209cebce29001cdd1323d080df457302ae64a0f0b82bbcf5456fa8b00"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-01-r1.json",
+      "sha256": "58f00c3f20dee0fc28c84ccc5154f0c5ebb6c343e5e737e2f2fba07a13b412bb"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-02-r1.json",
+      "sha256": "80f75645d22dc2f965c7a4d6431347bd0471adbaf9912cc65c1ee6433401e29c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-02-r2.json",
+      "sha256": "d930812dbee22dfe37619a6820489e8db162903f5372c10578ee5f7c0289f8d8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-02-r3.json",
+      "sha256": "24840211e49d79b2099488dc94fafe2fdf2770d5dd99e053d1e560a6ee096863"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-03-r1.json",
+      "sha256": "9f420a28d6cf63af37494c4533557c168fe49473f6aff5dea78f34dd1f0eb4da"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-03-r2.json",
+      "sha256": "eb2891c774e4bf769bb2ea1ef583126b956ebf9fee862470bc60be98d6091284"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-03-r3.json",
+      "sha256": "9163b6249e6a4bba8c29a97680de62b516e35e5117e956b7d993f8c8b264f38f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-04-r1.json",
+      "sha256": "3fb08a60e1e112cd87c0c0df135fa52acdb4888e76132af14eed72bc1f554056"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-04-r2.json",
+      "sha256": "e2d0ec8c98ddd74ac581a7a333d7a95df105b8fb05d13435db96ddc122668ef9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-05-r1.json",
+      "sha256": "a2256820fb90115227c8dbf2bbc6e02ff741377fb316d8be3afc38bbc0fe79f2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/generation-05-r2.json",
+      "sha256": "a96f87034a06e733049a102bb5b7a256a5257fe3d701d88b5514cb2cfe994dc5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/layers/01.png",
+      "sha256": "65c11d17668f1ed6c984bd1771c9093f70dfbeceaf98a323dd5dcc87d0584503"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/layers/02.png",
+      "sha256": "b042887d45173253bfd5b817d8b47544d3819eb4a60795b4870cef23dbb8d524"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/layers/03.png",
+      "sha256": "4be3a01873e41580dd2d4f7e836b0a11e568e3a1723f9c8bb760329ccbdc6dff"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/layers/04a.png",
+      "sha256": "d9712598565b8a39ed84ab110adbb1e0ef01803111a4cbd33b1e152f498ebbd1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/layers/04b.png",
+      "sha256": "3562ef081028b01a30ce85d055e40e8945d22096d356124ca729f1b4d7dbebd5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/layers/05.png",
+      "sha256": "9a917370958500e9ec739e0377fc8d56e0ed9fb43fce60039b5f10ad141826bb"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/layers/cover.png",
+      "sha256": "fd2c64c8f75cc4f847a87fc29b8130a55d19a6ccfb2f844c0bcc5bced309781c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/layers/store-hours.png",
+      "sha256": "58667587c362a79275df53b9eae3257c67a6c71510d9bc764ed5bfc6a503428e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/music/Carefree.mp3",
+      "sha256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/music/license.json",
+      "sha256": "48d0cbe354239b59844057f001853cf3e6f74038d332b5a1bbb2b5f4a8923e5a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/music/source-license.png",
+      "sha256": "b1d0cc3b51222d4233981324391fe0fa5c0a689681eb2714383125640327fca8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-01-r1.json",
+      "sha256": "ae8651959a604d69fb17e9edc403d9a99ad60249589427e0488f72628b7f7201"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-02-r1.json",
+      "sha256": "8aa17b2ab8dce826df8358fecd460bc61e2c08de8e777c6d2b033f5f3f78e901"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-02-r2.json",
+      "sha256": "7e13a39b918678603a87b88eae038b949a13f194770c92d68714e12c918fe091"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-02-r3.json",
+      "sha256": "9eb393903673ae04cbb5e4bf611103774054e77d2f4323f3ced39ced9309f044"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-03-r1.json",
+      "sha256": "166cd4b1124e25af8e3a75d74d1bb26c62c2ce4c4c68d224fae52d0d0337cd47"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-03-r2.json",
+      "sha256": "bd1d018a84ea41a4a2e152ab9bf0b5bd34de4371739e7d1c9442a680f68154e0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-03-r3.json",
+      "sha256": "0299aaa0c1b955cad5905c9aff5de31c998d1de02d9713c2fa43c8f14c9ba608"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-04-r1.json",
+      "sha256": "fa8aabdb0ab25eb20c50f0be732c7378828875b730206227fc478e1ba64e3d08"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-04-r2.json",
+      "sha256": "5beddce4e8c20ff6eda479e3e2cb2855201a58547a0f5f226596ba502a3d72fe"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-05-r1.json",
+      "sha256": "7a9c16560fde6da7d769bcbc05044aa591fdfe14fb1b26168f30a6dd62d610c3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preparation-05-r2.json",
+      "sha256": "b480900ef27da206a2d5f1e68a9876af43a5e715f4e6c409a59117ce01ed2259"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/preservation-baseline.json",
+      "sha256": "b6767ed2583dd7764f56405eb4bca4e16ccb04babd8d1d97a3c6d338c013439d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/production-record.json",
+      "sha256": "d37e84c7585da1e67845ddb48e64b4410ce70c984536a606a0b0fa673f7aba0f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-01-r1.txt",
+      "sha256": "ad75ad4a1b1f15c2dc65e89e3b92ff503a869f51918c70d1c146611bd772833b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-02-r1.txt",
+      "sha256": "10f89f725582c997cd50ac7da23b82ad718b1950eb04018212395a8a0df96726"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-02-r2.txt",
+      "sha256": "9e34a27edca52d40e5fe7bbc6f78541d6391f360c42055b7f7c38d4b5dd94792"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-02-r3.txt",
+      "sha256": "51241feee7bacbd48a9fc1b72f6f13b92a06b623a9add19989754a75fc43a064"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-03-r1.txt",
+      "sha256": "3cebec84f913fb965e256ed14ad0a6b41807378ed962533224f5de92fa8c6dd5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-03-r2.txt",
+      "sha256": "547e6a86ffd10b795cfdf372c9af492f7e919719add7bda720f6fa4e07002a97"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-03-r3.txt",
+      "sha256": "307bd59aa17f9a6480fbdaf51caa390cd6cc283e290216b16db2f8a9493550ce"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-04-r1.txt",
+      "sha256": "37d106330ac46ad4c122d979dd864ddecc71839e204dc4851a59229802da3209"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-04-r2.txt",
+      "sha256": "711bd5e30daec8785eed4af5edd50d9e973f473f916a6c201ce332c5749d4cbe"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-05-r1.txt",
+      "sha256": "1edf878723f75efb8f5402a7d9dc3049e0d17f636d92c88fb1e00d9e2f142f67"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/prompts/scene-05-r2.txt",
+      "sha256": "33d146a51a47b59f1339d7692b62d505d5eeedc27d27a4e5a510501c5b91e16a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/cover-and-sound.jpg",
+      "sha256": "c6d9a5dee2e91400c2563f824ebdbfda1c5b315e600c0357a51dae50fd80f6a8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/file-hashes.json",
+      "sha256": "bfcb0c6491a6bc95c5d1f7a0ecf6f682900d51606978676ae5a6800498e12456"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/handoff.json",
+      "sha256": "25a6af2532466aedd1aba0404b354be69e39f999c5e4b88fa1a1fa002be193ed"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/posted-caption.txt",
+      "sha256": "a1fc66d3f05ae85cd802a7261d85fcdb58f15977f143c64d8af79210a001ebb6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/preparation.json",
+      "sha256": "2aecef71a0d2be0943757be9fc01895c593271c01a072133fd9b9dcc071bf528"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/profile-links.jpg",
+      "sha256": "d232bedd7a8638009fb81edd61780873917a2c522ba32473ebd262d790077eb4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/profile-published.jpg",
+      "sha256": "f0628c4c6a4b1a0824a9ca038a6937d035411590e5a1be31ae7a9d0118772096"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/published-ui.txt",
+      "sha256": "142feb2493df256ef974bfb8a4ffe8719e74e9e9ff99e48c0adce9795b6c05d6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/published.json",
+      "sha256": "eece3dffda8d709cd3a8f912bb94bf1db60231165c0514ccf65362aab24b2f3c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/ready-to-publish.jpg",
+      "sha256": "ca9df99546ad69f1beb5336f46df01a477945f46656d5da7849f7aede4e53220"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/reel-published.jpg",
+      "sha256": "4dd8845e255e9be67bf167f1cac04c9ba994bc3b1ca423dff1f15ed352e340b9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/resume-after-user-preview.json",
+      "sha256": "649de38215089fa70ea8afb6cfa6efcd4b64ec95a126567c3c65857b1bffbd8d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/publication/share-success.jpg",
+      "sha256": "df27daf2af470d678e8b0d40e142c9014af474066b713b65dac836243ee8ff9f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/before-episode.json",
+      "sha256": "bd472435fbe17ae7e5c144639297d98ebc6115e7757af998b28e44a4151771ec"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/before-production-record.json",
+      "sha256": "c92bbd63ad36e91670b19921913c259261d7d2e31ff87d5533cb5bb42c58ea2d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/before-selected-artwork.json",
+      "sha256": "42ca253c003311775a2c99127c381c4ea9324c93f183a11176edeb8336ec0bcf"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/delivery.json",
+      "sha256": "250ed778cac65b52982661e888f2b525cae05105a0946a65d9dc1f27d9b14b0d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/file-hashes.json",
+      "sha256": "d19b9c27cfcc7b9b6c11c9cb876f308d625ac581b3b34c47d68e5484a3e84384"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/final-command.json",
+      "sha256": "e7133130f6abd45a5b572bbedb1802b4ed31a5b3d057a5f17079a163c73b4a18"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/intermediate-cleanup.json",
+      "sha256": "d449aaf364d0ce54182ded2309a651e9bdd35c25cf640bfd4e77870eb5b3f9da"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/jango-ep05-music.mp4",
+      "sha256": "7eb05f5fcb87590f9038fcf1d1f9df90c0326adcd32137913f36953473edd6fe"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/preparation.json",
+      "sha256": "21baa3ed65257e77c0b41da76e141c3e58296e92600cdb7a05ac99b10449269d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/preservation-before-render.json",
+      "sha256": "9557c64f3bab4abbbb70bfc65e27bc8692da83ecb98116178696c52446a6a7ad"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/production.json",
+      "sha256": "69cb25782c2f98cb81bfff06c5e2e8b7baf82c93cd52f17d3b39e6cf7ee4391d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/proxy-command.json",
+      "sha256": "9bf36072492c6c8b2c166a4c904e4a4f2b25b2d1c8a8c85f8aa85d5b593845ee"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/silent-command.json",
+      "sha256": "47a2efeb6795616a1ff898af8b807a51ef58df382ec95c186fe85dee69f4c9b1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/typography.json",
+      "sha256": "8564c5f37f9d91d5bcae3648a46fe5aaab0291ed2b61b076f4b5c65cfccc73ac"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/reel/voice-decision.json",
+      "sha256": "adad7d3e026f15df5dd789f24115757339cfab5e6424ec2e2197f3730cb1c4a2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/01-360.png",
+      "sha256": "adbb83fd558b3e0fe3561225ffee303cbde71af57b5352098378bb265a57b945"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/02-360.png",
+      "sha256": "1297f7d7b64f8737c8608d7073faa5890d1bf07e1ea47e0f971ab9626f3de26c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/03-360.png",
+      "sha256": "529d49d16a1b04259f994e86682eeb09cf0e91156a51cc885552690890028921"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/04-360.png",
+      "sha256": "920b68e2ac35026f567407c85bf838a798b82900ce55ab484aa231ca2a6a93dd"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/05-360.png",
+      "sha256": "66007a23c4fec2b4808937ace3e00404e68272a1ecaf4f645ac11c4b5133b7be"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/artifact-checks.json",
+      "sha256": "630a7118f598c14a7ab0904ca79a79c3f2781f6a25177c9fc105d1193045c144"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/index.html",
+      "sha256": "8f6ca4696ffc564ab347c76786f8ff7dcb2d7a4e994be518e5d0777ce45a4ba5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/overview.jpg",
+      "sha256": "4450b4449c0174434bc2d3cd0aed5e763594552529ed972b0d853090c81eb86a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/cover-profile-3x4.jpg",
+      "sha256": "33939cfe7f0b4a858c34b0377163f36293714258931c650da6fd79f6923e964b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/cover-profile-square.jpg",
+      "sha256": "4aa70a791d6e80f76b5012e08a3b73162033b562479c9c1e90bcd02bb4c839f6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/cuts-and-zoom-1.jpg",
+      "sha256": "f3f76f6e7397009d2decfc9a513348f2db7f06783785464e2c7da295f95e64a0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/cuts-and-zoom-2.jpg",
+      "sha256": "b2228805df0f3165e93d1813c9612dea2303a45b74c4df2448d7002392882284"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/jango-ep05-360.mp4",
+      "sha256": "0b860c95858bd11322caed0740a3ed2ca17c59a9d682d9ff6101c8a0b5b89f42"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/layout-overview.jpg",
+      "sha256": "6f6e6c3d45f830128aa7134430b3a61b1793081a86efdccd4ac1753f3f2a6a90"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/native-06.00.jpg",
+      "sha256": "574ed4cce26bb83711e7a00291ca865fed1c65400799a9f4fdd5fb413ff71d07"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/repository-checks.json",
+      "sha256": "ab514727436085af3b9c4767eebc4afb6136135f58c7add900d0c7e3096dabee"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/technical-quality.json",
+      "sha256": "0130152688dc0bb16fb08cade544503b44f8ba7ce910a706b62b7475c2f889e5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/timeline-00-09.jpg",
+      "sha256": "3aa59c55c93905e96a10feb2ba943e889e8acde90e1a6353ecc499092c28a22f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/timeline-10-19.jpg",
+      "sha256": "6548e7f7c8a02ba0b35a8deac213dee803d7b32bed2cafb714165d3a1434f8bf"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/ui-overlap-sheet.jpg",
+      "sha256": "582791ea6128424892fab3d643a3cc555e94b3939ed77d856bd01bf093a83fa0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/reel/visual-review.json",
+      "sha256": "65fd5e4eda255cf754a48d31a34ce2530fe5652ed49af59031e795aa2d97313a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/repository-checks.json",
+      "sha256": "b8b3bc4dae3d72d6da4b43b6f988af3b66a554578fed18c98c67955dee889642"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/review/visual-review.json",
+      "sha256": "776841d938fed171a69065be94981b7962cbe2a2a4029a416f179854ea913dc5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/revisions/queue-mochi-20261021/before/alt-text.json",
+      "sha256": "55787e12c1756a7171f7f9d2306e5bc194a107eeed9d6aae71d8dfb2231771c7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/revisions/queue-mochi-20261021/before/build_review.py",
+      "sha256": "6a6d76aec8f687d7ac5c88c395ac8eb97134f7c80d8f5620106e937a37648ef1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/revisions/queue-mochi-20261021/before/episode.json",
+      "sha256": "ef461def55b25d7181c5a42972ea3a18c319d5add143509807554ce382497d18"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/revisions/queue-mochi-20261021/before/file-hashes.json",
+      "sha256": "ae904f3a48b6f86df51e46134106e545064af4439ca2e632e7b3f0c017e79ee6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/revisions/queue-mochi-20261021/before/production-record.json",
+      "sha256": "3790ffdf78c87fd009b26602d860111e474493e9c45084cbcc2dcfb31b45492e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/revisions/queue-mochi-20261021/before/review/artifact-checks.json",
+      "sha256": "4479147ad3950c379e7620b595a8b687c34db9c53c46d8770d72975fefb7a731"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/revisions/queue-mochi-20261021/before/review/overview.jpg",
+      "sha256": "95ce2950c98fd2b8d9985183126b89b1ed727fcf77be0a53938664e773ca0814"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/revisions/queue-mochi-20261021/before/review/visual-review.json",
+      "sha256": "4e5fd23ad1b4e9c22ed00d90e308eefccb4561c6f9f008cca73b50ad3d540b51"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/revisions/queue-mochi-20261021/before/selected-artwork.json",
+      "sha256": "389f570de42cff78ace48747c43375003619d4583d2754403063520b350b975a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/revisions/queue-mochi-20261021/revision.json",
+      "sha256": "bdbc465e073078b4e2ec45d9b397987baf40315f8646ca6985e299ea0ae0906a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/selected-artwork.json",
+      "sha256": "97faf5e333d55cac513737714ac0e5be96dbe56b85cb3cde2c7afca8b15317da"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-01-r1.png",
+      "sha256": "1353b76d58ed10166bd8eaec27acd44eff6a18e23059d9927d55dda01b434fda"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-02-r1.png",
+      "sha256": "37c9116c4f3800286ed330d67db9da732abf136535d177056ad78563d38fa248"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-02-r2.png",
+      "sha256": "46f02c6b61939c25ee699427055cb50ce28b6da6900ced084468439e4af1e8ed"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-02-r3.png",
+      "sha256": "68bfeaf9601dbe66818201038488674e4258d622b082131f4b5070550498b282"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r1.png",
+      "sha256": "419ee837d7ae72a4e69b4de5e82cc4e173ab937d38990a171c9c9c2894577377"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r2.png",
+      "sha256": "ec82d6e7c2527d28c8f16c71b820b05a14b800bdf4fd3cb32fb61372a57c412f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r3.png",
+      "sha256": "4e595039c071d67bd5f83d6c0dfa26ebac1a12ea3530828bb14be1ba022ddacf"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-04-r1.png",
+      "sha256": "05eca16347334245f9f2f8a4b7394341c11ae244fcdd28d2c6687e0d42ecbaf3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-04-r2.png",
+      "sha256": "3b74a33c4290c5d7bf6d9582838942db30cecacc361df3da91ec1655a23bfdd7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-05-r1.png",
+      "sha256": "92f3fbf3b2c444eebd57fb0fd5428068bec3991aa0b0c40ba189c0125e4369c6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-05-r2.png",
+      "sha256": "55fb281c6db658b7330d08c186c697864ffbbd88a57eb1cc8a836f688e697cf2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/validate_reel.py",
+      "sha256": "e393fb79992ad6d98bb23ceafc5a1126f7db15b652620ed8de52c7fec0865217"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/build_audition_page.py",
+      "sha256": "e98e7abe651f9547771f7a0340bf532ff92f28c9d04b1dff69d4dde00b9c69b9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/build_previews.py",
+      "sha256": "7d5a81b148b22d816f2b05624c834a4e20f098aa0411379634fa4ce1dc6bc2c2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/delivery.json",
+      "sha256": "e34ef2739149874cca0f94dc301b9ec4676e6e562e3e36bd58f9077e00d0b863"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/dialogue-generation.json",
+      "sha256": "359aefb42eb5c9367493638367a9d30e7b22c5783c62464374a479a3749c34c8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/dialogue-mix.json",
+      "sha256": "354bc3e74f9b32e13c84f9089568659fed4d3f44b9595cf16a1dfb510511af28"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/dialogue-preparation.json",
+      "sha256": "7f6b6d440f452da0be5bf5dafef51590fa816881cab73c09f9987487e7a62782"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/file-hashes.json",
+      "sha256": "4bb644db056af4f3011741535bdf307035e0b3939ba9cae0b5e8086964335314"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/generate_dialogue.py",
+      "sha256": "bd193bbdd96e2c56fc3452379227636d3bffb3dda0085f180702725ed54ffcf3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/generate_samples.py",
+      "sha256": "a5c3a9271f2712030afbe2be48f56c9a81dddacfc38a95e7b56a040d6788d33e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/generation-progress.json",
+      "sha256": "40f048efdee0fc58b57b42d6cb15190038d69e3f7b095951874570d762dcb813"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/generation-record.json",
+      "sha256": "ab45c2f94f97207e61e49410f47842d62167d4d3058aebf7a8c78f67f041bff0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/licenses/Supertonic-3-OpenRAIL-M.txt",
+      "sha256": "0d944a9110fed9a9602d60e0423a272903e7bd21ab060490774efc77c2275e9f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/licenses/VoiceStudio-AGPL-3.0.txt",
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/model-source-hashes.json",
+      "sha256": "9144269b0dd8448333c0377d5e3363b4d5fb417735f8986ce11dd3a5efbc54ec"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/preparation.json",
+      "sha256": "111d61350163c32b4c3340ca771a2d0fb0183ea17f25920c80038ac0b7fc8952"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/preview-record.json",
+      "sha256": "be3229b4343c05e467ff61a0920978911ac574e976388a9c3a442f250440f48b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/quality-record.json",
+      "sha256": "7bbbd5f8c29926582413b809ca6c98504266869b08f62da1107faed387af0e6d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition/voicestudio-source-hashes.json",
+      "sha256": "1a15698aee079af94877c41cc2f1ba5645321bede517e32dc9e14d299ae02ebe"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition-youth-r2/build_samples.py",
+      "sha256": "07e132e6751640673f5ac548aefd639c5d646a7db0f1d014f917eb5fb1648081"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition-youth-r2/delivery.json",
+      "sha256": "54b7a8167772ff0afd902c09be7db1c4205015b3d49df5e71eaeadbfba4df4fe"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition-youth-r2/file-hashes.json",
+      "sha256": "56dc869136d7a0663e230d93636575b857e82c0383aa0be6b0982b249da9d4ef"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition-youth-r2/generate_raw.py",
+      "sha256": "124faa10bca157ed8da82b70482ed64037c145a3d181da9632d8d60d5166acd1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition-youth-r2/generation-record.json",
+      "sha256": "73b1791e7f799e1843c825b83673bc500367b02e0f08e87aa7390b5f242f7e1c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition-youth-r2/preparation.json",
+      "sha256": "053129450c6cde89883e20b810c2ebf337cca47d035aed3f843664a784e745c8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition-youth-r2/processing-record.json",
+      "sha256": "58c7137ab0833ea4beb8a6f0a474bc08969bbe903eed49a079dbad3cae27ec25"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-audition-youth-r2/quality-record.json",
+      "sha256": "b9d3eb246678353b27819fd12369634a8389281a936a3ced9fc2711d42b049f2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/voice-feasibility.json",
+      "sha256": "f87966deab160027f826dc07d3392404c22e628f08f13942526df4ed99aace39"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/build_reel.py",
+      "sha256": "69408f202823049b9f2bc10c495af49153c572cfe4ca48395f3ef9f5cda209ca"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/build_review.cjs",
+      "sha256": "0718f9e6f75b5f3710a0cd84189f9ccc3678afbce633703d3710704c4d7520f2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/caption.txt",
+      "sha256": "ae6d9f82339418780259196d0ab357d06522f27b3cd6dc15c7da7211f06b3aae"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/cover.jpg",
+      "sha256": "ff2089eb33feadbbd434fb566f5d72e89b2c403387e531ed1bd933b13a13a9e7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/delivery.json",
+      "sha256": "f919fa78fcc3c5020d6daae29258a3c39c0fc5b52c0a8f25cbe1b1dbece0b8de"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/episode.json",
+      "sha256": "96ed8bc4d8a984a4d2b0ed08f929580972979fa36edb9f3948c625c658cccb50"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/file-hashes.json",
+      "sha256": "33d9c6a19ff26d12cc1b2ce64de4fdca8369231d3985779a26fb78f392c83857"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/generation-01-r1.json",
+      "sha256": "663181793650c1bf2ae02c8aa297d6d8bac8a36f345e91178fa2ef2639016efa"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/generation-02-r1.json",
+      "sha256": "15113ab34c97630b31e022e95f917aba880add96b70a25f14003ed46b8810822"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/generation-03-r1.json",
+      "sha256": "8401fc7aef4aaf755d9ffd13ce0274e9161d1496958797de743d8d0b05deb3bb"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/generation-04-r1.json",
+      "sha256": "d1f1a378fe1a2bc8220061b5ba5ebcfc87ef72cec41174d34707f3d9d9e122cc"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/generation-05-r1.json",
+      "sha256": "973f16a8167bd5ca8705fecd664a95dcc624140e2b9edbc6a90f635941fe5383"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/layers/01.png",
+      "sha256": "929188663527c8d908c61e5d19e3136584eb17ceb2bbb6d07ed9b15319a3ac68"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/layers/02.png",
+      "sha256": "cec7fbb4d140c036eebc433a114c480ac67c1de223b8b7a335255acb8a455c90"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/layers/03.png",
+      "sha256": "510e960fcf843bbea7af47b81181b6442424bafe4a001be3ffb43f1b2d7152cf"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/layers/04a.png",
+      "sha256": "525b534831da0ec6a279054cf41dfb821eba63f3c6ee98f24ec5a473851008e6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/layers/04b.png",
+      "sha256": "57d6263852697a50cd7f05754a1731ba92606529c98d852847eebfd8aa20478b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/layers/05.png",
+      "sha256": "104e55b1d86e7964ca3bd07d1efe486cbad57c27cdc5f54117e7f15dff4f942c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/layers/cover.png",
+      "sha256": "15698ab6c93680f6e7fe468b892e4eb6e223259a7c14ce1b8ab0c1dea2ab17ba"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/preparation-01-r1.json",
+      "sha256": "bf51755b7fe133cc701506b560b7fb17fbf50ecef33affd1790c733ae325e9d9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/preparation-02-r1.json",
+      "sha256": "94c74372f36edf691d63127d853ffd689cfb402ddfd9603b4d4da7c30f796d31"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/preparation-03-r1.json",
+      "sha256": "6e958b98ef0fa9836a43b3ae846d6c958e103f1d94781ba30091067b7f1b1ed9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/preparation-04-r1.json",
+      "sha256": "1ea0b3fb25ff1e62fff2d90ea8320970b7140a50aa316a281572bb463f2e78a0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/preparation-05-r1.json",
+      "sha256": "65bf30a1aadaf7d076d03b648e1c2f420019fadd32fdaf09e27bd52c6575b65c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/production-record.json",
+      "sha256": "e848b7d00e4edbace1d72b3e4c5db26d57e92a52b88b5a4f98286df7a221b033"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/prompts/common-spec.txt",
+      "sha256": "73dcfacf66950fdafd97db0e70ad06d2a94446b548742b2472fd794823c701a4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/prompts/scene-01-r1.txt",
+      "sha256": "1cf6b31e8371b129575d1f7b18c76db31e69c0bc762aba4b73e39dca5666a554"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/prompts/scene-02-r1.txt",
+      "sha256": "2f078f18189ab91764a3c2b9815b8ca0f721ba4f311c17515d969db1f93d3182"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/prompts/scene-03-r1.txt",
+      "sha256": "cdd55a5e0375e47b5d8fbe6cacedcb3b3c0d7e00201dcc86eb229f417bac5a19"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/prompts/scene-04-r1.txt",
+      "sha256": "68ee2d19f1f5c19bfae4b53d8eb61abfab9edb254b219bae25e3723b076a8af1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/prompts/scene-05-r1.txt",
+      "sha256": "7a1c819a8f0bcae1034a326ab6acd9d2d737197e3a7edfd52c25393401b8cc99"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/adoption.json",
+      "sha256": "2b7c81e804e9df2339651842fa7b3c3dff24b39dfbf16ba1aa7696481f50e208"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/before-delivery.json",
+      "sha256": "5a7c5056bd7cf297eead1fd060914ba5dd891c68b289608022fd32ff9fa921a3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/before-episode.json",
+      "sha256": "588f195a77693c134f014b5bc4de07fcc9e102556b6f421020b9cc45f30254ea"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/before-file-hashes.json",
+      "sha256": "6ff1794394e7a353b13001b33602f587dfff7db4f2598312ba15a0c84c62157a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/before-production-record.json",
+      "sha256": "9875fa827193aff3edb05d36265e27d546bc7c5682e246f080fb731e48a76e4f"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/before-selected-artwork.json",
+      "sha256": "0d22a31bedab684ee10b88d10ebe89f2509feff6af3007733a57acb1a847fd2b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/before-share.jpg",
+      "sha256": "fdadd0ae9a4e0267d4283af67df23f356863bc59191b51d6f9076055cdcd1f81"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/commit-preparation.json",
+      "sha256": "e2515c0ac0a2f06711c974877ba9a60d3637e4b0eb26b5ae1ec54e9d6fdc94b5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/preparation.json",
+      "sha256": "31563b711086da9a7301c990fd5f8110987cff2eff0341a9a9ab110c2f6d6d6b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/profile-published.jpg",
+      "sha256": "c02f435041ea32115f7160089d0e7b0c988773e274693c5fd703810094cf33b5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/published-caption.txt",
+      "sha256": "ae6d9f82339418780259196d0ab357d06522f27b3cd6dc15c7da7211f06b3aae"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/published-player.json",
+      "sha256": "99cfad23bc57e67221491c0bcc39720de06d70ab8e48473c8749608d82b9c7f2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/reel-published.jpg",
+      "sha256": "1082faebd8081ec210e5ef9aefba8f81a17119df54efc3232b0a2305d4a6be8e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/shared-confirmation.jpg",
+      "sha256": "19a15dedb270b71355a0ec10f149f63ab4d645ebcaaa61976a968403685b8c3a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/verbatim-records-before-commit.tar.gz",
+      "sha256": "8ac83cd5ced46647864dd8e810b5bc44b525dccc9a2e7c4a588885a0d88aadfe"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/publication/verification.json",
+      "sha256": "1c7c6b885533918473c57a51084e8a4b6b8e44d3d73ffd704f85ccced43db602"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/before-build_review.cjs.txt",
+      "sha256": "2cc5759d07ddc0505a46b4d6bb909157424e225580814264731ecb3f0eed2be5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/before-episode.json",
+      "sha256": "9f076b637b829bb8caad101895d7d7e64fcf864dc14ae47ab49cc42a26cb66b6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/before-file-hashes.json",
+      "sha256": "edca2805af4d112b9dec1d011eb835b926310570071126a408610dcfd53320ce"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/before-selected-artwork.json",
+      "sha256": "d271f7621f0859ec3bf4009c646bec40a46bc013b09826a89fd9cfbf2e198bec"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/final-command.json",
+      "sha256": "f318691c68e5307db7afd3b7028014abf80e67da202377cb4dff0ca3b801458e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/final-integrity.json",
+      "sha256": "a9f29b108857f85cf061a67b9066192fb03aad9fb6ad6eb2338252609b14883d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/final.log",
+      "sha256": "d308352f68b0fb04bfbfb0feac5e587e1e38fa3532a4c633291d59bab5c5d62d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/jango-ep06-music.mp4",
+      "sha256": "8f8cd63f4311d4effa11275903541644213ea2e7626467d1e37fa353cb66c331"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/preparation.json",
+      "sha256": "82377920820faa3744136616ffa32e7f04909b3c3d24f0c19653c8aff5748c68"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/preservation-before-render.json",
+      "sha256": "0f95903a90f839fade2654742d9b5c4b02a0bcfb9d3c2a2f2226ce75d31ef756"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/production.json",
+      "sha256": "086855d4490101d0437ddc4c685634155588c37a40a858e763d72b86abe4d60b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/proxy-command.json",
+      "sha256": "0889cfc7649aa1a0a3c8917e849b56b501d23826496029ff5d9e84c620795ef1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/proxy.log",
+      "sha256": "4e21d2b3e665c5a067d0a766fa7ffa8565147427d317851eb83b9cedaedf77f6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/toolchain.json",
+      "sha256": "d0e1e24aa415dc24fb2f3627c574203a6d4031de8b467769db2f210d4f35aab3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/typography.json",
+      "sha256": "9ec6e33646d6198fc0a73009aecc01a9a8f92b20de3285612984d6c084e4d058"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/video-command.json",
+      "sha256": "1954fe9172b2579492a3fafd141bfca69fdc763a54072a663387f7566b008244"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/video.log",
+      "sha256": "e02231e294934d3f54f10692be21dab76946dc204bb8fd4d8b38d05e23c58d36"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/01-360.png",
+      "sha256": "c92dca467fa25891643cbcaa4e97f9651900da361195cd83f40fad5af965ef40"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/02-360.png",
+      "sha256": "61dd339c52dfc8fe8bc0a160978fdd40f38a441a117d8cdfd55ed200d34e74a6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/03-360.png",
+      "sha256": "4a82a2f0c16da64043628cf969ed7fd179f79329d2c807b4b39832a2969dd554"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/04-360.png",
+      "sha256": "9bed49105fa6137323ce888b5dcfa0d71bc6f1867e6870e6670f0dedbbe1d5f3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/05-360.png",
+      "sha256": "ae2541a5126213f3bf959f462bf9d5ccbce9bf487f9d90331e07e76568e32d2c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/artifact-checks.json",
+      "sha256": "84b39b8d5cd21e7478ad5af2920369efafd3576ac02ab916fa561b5dc327b75c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/overview.jpg",
+      "sha256": "1bcd4068fb70a6ca224d2f5a2aa4e6727ede8dba9a7967cd07bcbe66491766e4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/cover-360.jpg",
+      "sha256": "58544f6b9dbaea17aa8f7bfb82aeedee660c42f9101a3ec5e7b43a7c9a1a5caf"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/cover-profile-3x4.jpg",
+      "sha256": "b3ffcb02760cf0e95a879ed69b285b2dbd1c9efe92694bb8bdc69370c793d895"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/cover-profile-square.jpg",
+      "sha256": "46acf273347c157e5b36689cb7de32b1efff701d4c2c26e78bcf132f8d72ca5e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/cuts-and-zoom-1.jpg",
+      "sha256": "e75b917a86c57e1eddc87f0515a2cee1317d83efb6b53de02cfa9cbc278d7ef4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/cuts-and-zoom-2.jpg",
+      "sha256": "c343c601d0a30ed8ff2779ed23b7d241b67996f25eae1380bf63f7b256765511"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/decode.log",
+      "sha256": "fd573a472d9089996a31f15e74e5b8eeb01970f92bce6a40932188921ba346e3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/jango-ep06-360.mp4",
+      "sha256": "7a9fef949f622294b8abd27ec9ebf0a0c962259cb09d19fe57c7fbeff18ed310"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/layout-overview.jpg",
+      "sha256": "7e7abd9319649b60ad3ebd6222f983866e9732ea2490f66ccd6574faa21e748d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/native-00.jpg",
+      "sha256": "886062687ed171b1839f9a366002427eb99054f3dd05af4cc4ea2ac899eca9a8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/native-02.jpg",
+      "sha256": "1ee12aa25903076eee3c5a658abb49669e53ed596f8cc584fddcf7275a97825c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/native-06.jpg",
+      "sha256": "377967cf533e9e7de556e7b0f0bc9106857d3167535cb68ceb70801b042a0c04"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/native-10.jpg",
+      "sha256": "b810f378d9292f4c3a33fe7eaf1381c99824223dfdd27086a5d28dc85418092a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/native-12.jpg",
+      "sha256": "2382fbbbc887144d7e1f2119c5d9dd1024e68814d3524e12a50b845cfb96911a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/native-16.jpg",
+      "sha256": "5d2b236df9f24d1ae1f4f276904b7eea64bc67c475245753678ed9c00f54be1e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/repository-checks.json",
+      "sha256": "18fe48db4b6c21eb0fd963822960165caa2763f3fa1c6ecc0a8c5bda456ea10b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/technical-quality.json",
+      "sha256": "b2e66a1ec4fa547caf51a56f681e7599fbb9e561c17a95d1f9cdee852df7ebd5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/timeline-1.jpg",
+      "sha256": "b84d89f775cc6c582fe8d445b09fb844776b2f7ed4dd27ec3c8e29a8b78b113b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/timeline-2.jpg",
+      "sha256": "6dbdbf66faf9693c881d9dad0a899f1e2b59c3f0c5a3ad215f2754e0737e0496"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/timeline-3.jpg",
+      "sha256": "0bf0bfc0a03079589ceb53860c04a2cf2bf4d0e4fe35cf8ada22bc093d9072b7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/timeline-4.jpg",
+      "sha256": "f0ff2da157e69e33344a5e81aafc7d8bff3f49baab73beaf0c8fe935c14fb66d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/ui-overlap-sheet.jpg",
+      "sha256": "39b74ab2fa16e9025cb315e52a3ed40e4741dc62b16c19a0c1222a833c1026c7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/visual-review.json",
+      "sha256": "f98763fd40d649c6b6fa815a2315be1c67359b62eb303b795ba20c5b094df4dd"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/repository-checks.json",
+      "sha256": "f41e6c27e0cc9ffad644416cf0ee0ce2aa4387edf79fbbe35ae43eb8a71dd917"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/visual-review.json",
+      "sha256": "aca29fb537117cf49741da8897b2d177678d8a11298433f99ad5f52d10b03bcb"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/scenes/01.png",
+      "sha256": "d3c2e9392c9c3f877a357ba779837b3e13bdbc7e01579e58499bd33aa5d01919"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/scenes/02.png",
+      "sha256": "e61508b3d27e75216d733497623e9ec998c5a20cfc59a20c8b7d479658da6072"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/scenes/03.png",
+      "sha256": "36338ffdc569c15270ed97f0aaee2a2f423a697a208154e2b88728c166c036fc"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/scenes/04.png",
+      "sha256": "802ca292ec0b3aa6e4c0a91111f19dab0ef817704e5d7aef789491f67e897e2d"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/scenes/05.png",
+      "sha256": "1b1e5cc7ce7f7fe19448dfd7399782ecb44ac505d9c3f306b5f81ea7336f3a50"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/selected-artwork.json",
+      "sha256": "192703b067fc343f7c0dd2bb0cf5c6de5807dff2396296b6a4258f5aba75e04a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-01-r1.png",
+      "sha256": "67d54ceeecb0c6fb900588622cb746d19c45a8213efe1ca2eec29416023407e3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-02-r1.png",
+      "sha256": "2781016ab53f07b0ffc1d701a88839275815faa9eb3eed36e05020c9af0b213b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-03-r1.png",
+      "sha256": "bc1575d6177e43270f0b61e63221bda7ff7ae27b3a7c93bb79e910937d31425a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-04-r1.png",
+      "sha256": "d5ce94ac65c536f047c1c7d6231e701e9356493da80a64d4cc6f0c50c45dc77b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-05-r1.png",
+      "sha256": "58b69c198bc55d3f0dc619ba1ce1f8030703bb711309d9d8346f0b3037709bd6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/validate_reel.py",
+      "sha256": "50104f9f6cc5c2b485fa6fc6424ae525225e00d61d7e701bad9a2a994594097c"
+    }
+  ]
+}

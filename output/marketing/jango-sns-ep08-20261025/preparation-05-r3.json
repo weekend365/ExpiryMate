@@ -1,0 +1,28 @@
+{
+  "candidate": "scene-05-r3",
+  "preparedAt": "2026-10-25T12:09:48.596784+09:00",
+  "method": "official built-in imagegen edit",
+  "prompt": "prompts/scene-05-r3.txt",
+  "promptSha256": "f4693517a827bb534eee8ca0f04ae8a1731f6cc426ec5454ce96cadb5d4e32f0",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-05-r2.png",
+      "sha256": "159d9ea45e80165357f3b341157faa5ca22f573caf5d23d46fc66db5e5887598",
+      "role": "edit target: keep all except viewer-right wink",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep08-20261025/source-art/scene-05-r1.png",
+      "sha256": "b77bed6613f7a1482fbf8a68811026546d502cc70a883d769b109b8ff078b787",
+      "role": "open-eye expression reference only; not framing",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation",
+  "revisionReason": "Restore natural two-open-eye listening expression accidentally changed to wink in r2.",
+  "lineage": "r3 -> r2/r1 -> preparation-05-r1 and preparation-05-r2 -> v18 original 24-r2.png",
+  "preservation": "preservation-before.json"
+}

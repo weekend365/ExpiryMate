@@ -1,0 +1,36 @@
+{
+  "deliveredAt": "2026-10-24T17:14:12.418384+09:00",
+  "title": "장고랑 살아보니 07 — 한 끼만 만들랬잖아",
+  "status": "reel-published-and-verified",
+  "originals": [
+    "output/marketing/jango-sns-ep07-20261024/source-art/scene-01-r1.png",
+    "output/marketing/jango-sns-ep07-20261024/source-art/scene-02-r1.png",
+    "output/marketing/jango-sns-ep07-20261024/source-art/scene-03-r1.png",
+    "output/marketing/jango-sns-ep07-20261024/source-art/scene-04-r2.png",
+    "output/marketing/jango-sns-ep07-20261024/source-art/scene-05-r1.png"
+  ],
+  "overview": "review/overview.jpg",
+  "individualMobilePreviews": [
+    "review/01-360.png",
+    "review/02-360.png",
+    "review/03-360.png",
+    "review/04-360.png",
+    "review/05-360.png"
+  ],
+  "prompts": "prompts/",
+  "generationTool": "official built-in imagegen",
+  "userAdoption": "publication/adoption.json",
+  "reel": "reel/jango-ep07-music.mp4",
+  "publishedUrl": "https://www.instagram.com/jango_plz/reel/De5fiEEyLtg/",
+  "latestRevision": "revisions/scene-04-expression-r2/revision.json",
+  "cover": "cover.jpg",
+  "caption": "caption.txt",
+  "reelReview": [
+    "review/reel/technical-quality.json",
+    "review/reel/visual-review.json"
+  ],
+  "updatedAt": "2026-10-25T10:11:21.378062+09:00",
+  "publishedAt": "2026-10-25T10:09:03+09:00",
+  "publicationRecord": "publication/instagram.json",
+  "publicationScreenshot": "publication/reel-published.jpg"
+}

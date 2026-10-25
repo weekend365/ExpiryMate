@@ -1,0 +1,119 @@
+{
+  "episode": "jango-sns-ep08-20261025",
+  "completedAt": "2026-10-25T12:12:07.546753+09:00",
+  "stage": "seven text-free original-art candidates",
+  "method": "official built-in imagegen, separate generation per scene plus targeted edits; no CLI fallback",
+  "originalGenerationCount": 7,
+  "editGenerationCount": 8,
+  "generationRecords": [
+    {
+      "generation": "generation-01-r1.json",
+      "candidate": "scene-01-r1",
+      "sha256": "0b9e69942959b384b1ca3ffd72b947b3f0bee74150f0db6fd88709749ee882a4"
+    },
+    {
+      "generation": "generation-02-r1.json",
+      "candidate": "scene-02-r1",
+      "sha256": "a72034cf35fcb24d5d966ee0740ab4a8a5306604549852c42f7f58b49e860b41"
+    },
+    {
+      "generation": "generation-02-r2.json",
+      "candidate": "scene-02-r2",
+      "sha256": "815afbf97938b7fbb55d3ab77cded2717b788caa381796cd4ff1bb5b9ca18e77"
+    },
+    {
+      "generation": "generation-02-r3.json",
+      "candidate": "scene-02-r3",
+      "sha256": "22f1f73e2263ae8c4f3611ca0b971c61e705dbffbf58dd95217e74c1d9172239"
+    },
+    {
+      "generation": "generation-03-r1.json",
+      "candidate": "scene-03-r1",
+      "sha256": "c2b085f65a6569623c198c74e67b71f1295c1bfa0676b945acdfd90e2a105f59"
+    },
+    {
+      "generation": "generation-03-r2.json",
+      "candidate": "scene-03-r2",
+      "sha256": "f935d28e1fe0d8b006c49217d40fc17e75517b22bce5749c80d00bb65761b9f6"
+    },
+    {
+      "generation": "generation-04-r1.json",
+      "candidate": "scene-04-r1",
+      "sha256": "23e16bdb2652f3581d4b70f5056ec9d84ea1adec63d23023ccb44abd0fbc5c54"
+    },
+    {
+      "generation": "generation-04-r2.json",
+      "candidate": "scene-04-r2",
+      "sha256": "10395af8b0dce04b8a23fe2882705b72470c3f370864e65e5d0d8c03f6072324"
+    },
+    {
+      "generation": "generation-04-r3.json",
+      "candidate": "scene-04-r3",
+      "sha256": "4ea5e32fef0d607d03d9ccf9d21fd4366c4e864b9e003dd01cfb701a02d12b92"
+    },
+    {
+      "generation": "generation-05-r1.json",
+      "candidate": "scene-05-r1",
+      "sha256": "b77bed6613f7a1482fbf8a68811026546d502cc70a883d769b109b8ff078b787"
+    },
+    {
+      "generation": "generation-05-r2.json",
+      "candidate": "scene-05-r2",
+      "sha256": "159d9ea45e80165357f3b341157faa5ca22f573caf5d23d46fc66db5e5887598"
+    },
+    {
+      "generation": "generation-05-r3.json",
+      "candidate": "scene-05-r3",
+      "sha256": "bfd9c6daf143cc5a66196b2df484d090a08e7a8e5f15b0eaa7270213c328df7a"
+    },
+    {
+      "generation": "generation-06-r1.json",
+      "candidate": "scene-06-r1",
+      "sha256": "49a2afdf3cf6671d9528e6340a618ef2609812262c5f916a43644d7c0c1b3a63"
+    },
+    {
+      "generation": "generation-06-r2.json",
+      "candidate": "scene-06-r2",
+      "sha256": "30bc0092c5e1ed6f4f9adf7a5e39f456daf4352bd6e992530b1ce4f01dabc47b"
+    },
+    {
+      "generation": "generation-07-r1.json",
+      "candidate": "scene-07-r1",
+      "sha256": "89daac32e1dc5dacde3ba1f914560b93e7a6842a02803c1bfc59a68c9a05f960"
+    }
+  ],
+  "selectedArtwork": "selected-artwork.json",
+  "promptSet": "prompts/",
+  "referenceSources": "references.json",
+  "lineage": "Each preparation records actual indexed images and SHA-256; edits point to earlier candidates and active v18 ancestry.",
+  "originalBytePreservation": true,
+  "sourceDimensions": [
+    941,
+    1672
+  ],
+  "sourceAspectRatioNote": "Near-native 9:16 generated size; original bytes retained. Final 1080x1920 Reel export is a later stage.",
+  "reviewDerivatives": "Uniform 360x640 downscales and numbered overview using existing local sharp; no content retouching in code.",
+  "visualReview": "visual-review.json",
+  "preservation": "preservation-check.json",
+  "checks": [
+    {
+      "command": "pnpm docs:check",
+      "exitCode": 0,
+      "result": "31 metadata entries, 75 indexed links and mobile build entry passed."
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "command": "node build_review.cjs",
+      "exitCode": 0,
+      "result": "Decoded all seven selected PNGs and built previews."
+    },
+    {
+      "check": "prompt/reference/source/selection hashes",
+      "result": "all recorded generations and references matched"
+    }
+  ],
+  "scope": "Original artwork delivery only. No Reel render, Instagram publication, app/API/DB/MASTER edit, commit or push."
+}

@@ -1,0 +1,41 @@
+{
+  "observedAt": "2026-10-25T01:10:25.990Z",
+  "samples": [
+    [
+      {
+        "currentTime": 11.068385,
+        "duration": 20.010666,
+        "error": null,
+        "muted": true,
+        "paused": false,
+        "videoHeight": 1280,
+        "videoWidth": 720
+      }
+    ],
+    [
+      {
+        "currentTime": 0.056568,
+        "duration": 20.010666,
+        "error": null,
+        "muted": false,
+        "paused": false,
+        "videoHeight": 1280,
+        "videoWidth": 720
+      }
+    ]
+  ],
+  "originalAudio": "/reels/audio/28813618871599594/",
+  "aiContentLabelVisible": true,
+  "captionMatches": true,
+  "publishedAt": [
+    {
+      "dateTime": "2026-10-25T01:09:03.000Z",
+      "text": "41초"
+    },
+    {
+      "dateTime": "2026-10-25T01:09:03.000Z",
+      "text": "41초 전"
+    }
+  ],
+  "humanListening": false
+}

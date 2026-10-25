@@ -1,0 +1,314 @@
+{
+  "nativeArtworkSize": [
+    941,
+    1672
+  ],
+  "outputSize": [
+    1080,
+    1920
+  ],
+  "uniformFraming": "Uniform cover fit; under one native background pixel removed for ratio rounding.",
+  "fixedText": [
+    {
+      "role": "01 woman",
+      "text": "딱 한 끼만",
+      "renderedText": "딱 한 끼만",
+      "sizePx": 76,
+      "bbox": [
+        530,
+        280,
+        846,
+        344
+      ],
+      "inkHeightPx": 64,
+      "fixedToFrame": true
+    },
+    {
+      "role": "01 woman",
+      "text": "만들자.",
+      "renderedText": "만들자.",
+      "sizePx": 76,
+      "bbox": [
+        582,
+        356,
+        794,
+        430
+      ],
+      "inkHeightPx": 74,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02 Jango",
+      "text": "이건 좀",
+      "renderedText": "이건 좀",
+      "sizePx": 76,
+      "bbox": [
+        571,
+        290,
+        789,
+        350
+      ],
+      "inkHeightPx": 60,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02 Jango",
+      "text": "부족해 보여.",
+      "renderedText": "부족해 보여.",
+      "sizePx": 76,
+      "bbox": [
+        496,
+        362,
+        864,
+        424
+      ],
+      "inkHeightPx": 62,
+      "fixedToFrame": true
+    },
+    {
+      "role": "03 time cue",
+      "text": "잠시 후",
+      "renderedText": "잠시 후",
+      "sizePx": 72,
+      "bbox": [
+        592,
+        297,
+        798,
+        351
+      ],
+      "inkHeightPx": 54,
+      "fixedToFrame": true
+    },
+    {
+      "role": "03 shared pause",
+      "text": "……",
+      "renderedText": "......",
+      "sizePx": 82,
+      "bbox": [
+        606,
+        424,
+        774,
+        436
+      ],
+      "inkHeightPx": 11,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04 woman",
+      "text": "우리 둘인데?",
+      "renderedText": "우리 둘인데?",
+      "sizePx": 74,
+      "bbox": [
+        493,
+        312,
+        869,
+        384
+      ],
+      "inkHeightPx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04 Jango",
+      "text": "내일의 우리도",
+      "renderedText": "내일의 우리도",
+      "sizePx": 74,
+      "bbox": [
+        478,
+        287,
+        876,
+        352
+      ],
+      "inkHeightPx": 65,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04 Jango",
+      "text": "있잖아.",
+      "renderedText": "있잖아.",
+      "sizePx": 74,
+      "bbox": [
+        573,
+        364,
+        781,
+        431
+      ],
+      "inkHeightPx": 67,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05 brand",
+      "text": "장고야 부탁해",
+      "renderedText": "장고야 부탁해",
+      "sizePx": 76,
+      "bbox": [
+        473,
+        285,
+        877,
+        343
+      ],
+      "inkHeightPx": 58,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05 single closing question",
+      "text": "면 양 조절 실패담,",
+      "renderedText": "면 양 조절 실패담,",
+      "sizePx": 54,
+      "bbox": [
+        477,
+        356,
+        873,
+        410
+      ],
+      "inkHeightPx": 54,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05 single closing question",
+      "text": "댓글로!",
+      "renderedText": "댓글로!",
+      "sizePx": 54,
+      "bbox": [
+        597,
+        416,
+        753,
+        464
+      ],
+      "inkHeightPx": 49,
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover title",
+      "text": "이게 한",
+      "renderedText": "이게 한",
+      "sizePx": 90,
+      "bbox": [
+        554,
+        380,
+        816,
+        451
+      ],
+      "inkHeightPx": 71,
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover title",
+      "text": "끼라고?",
+      "renderedText": "끼라고?",
+      "sizePx": 90,
+      "bbox": [
+        550,
+        463,
+        820,
+        520
+      ],
+      "inkHeightPx": 57,
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover series",
+      "text": "장고랑 살아보니 07",
+      "renderedText": "장고랑 살아보니 07",
+      "sizePx": 46,
+      "bbox": [
+        364,
+        1367,
+        716,
+        1409
+      ],
+      "inkHeightPx": 42,
+      "fixedToFrame": true
+    }
+  ],
+  "balloons": [
+    {
+      "role": "01 woman",
+      "xy": [
+        438,
+        246
+      ],
+      "size": [
+        500,
+        250
+      ],
+      "mirrored": true,
+      "tailDirection": "down-left"
+    },
+    {
+      "role": "02 Jango",
+      "xy": [
+        420,
+        242
+      ],
+      "size": [
+        520,
+        260
+      ],
+      "mirrored": false,
+      "tailDirection": "down-right"
+    },
+    {
+      "role": "03 shared pause",
+      "xy": [
+        510,
+        361
+      ],
+      "size": [
+        360,
+        180
+      ],
+      "mirrored": false,
+      "tailDirection": "down-right"
+    },
+    {
+      "role": "04 woman",
+      "xy": [
+        416,
+        244
+      ],
+      "size": [
+        530,
+        265
+      ],
+      "mirrored": true,
+      "tailDirection": "down-left"
+    },
+    {
+      "role": "04 Jango",
+      "xy": [
+        407,
+        238
+      ],
+      "size": [
+        540,
+        270
+      ],
+      "mirrored": false,
+      "tailDirection": "down-right"
+    },
+    {
+      "role": "05 shared ending",
+      "xy": [
+        360,
+        220
+      ],
+      "size": [
+        630,
+        315
+      ],
+      "mirrored": false,
+      "tailDirection": "down-right"
+    }
+  ],
+  "balloonSource": {
+    "file": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+    "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232"
+  },
+  "font": {
+    "file": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+    "sha256": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+    "license": "design/jango/emoticons/kakao-32/v18/fonts/OFL.txt"
+  },
+  "storyboardCopyPreserved": true,
+  "appScreen": null
+}

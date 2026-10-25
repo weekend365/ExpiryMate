@@ -1,0 +1,12 @@
+{
+  "submittedAt": "2026-10-25T01:08:59.159Z",
+  "account": "jango_plz",
+  "shareClickCount": 1,
+  "video": "reel/jango-ep07-music.mp4",
+  "cover": "cover.jpg",
+  "captionFile": "caption.txt",
+  "captionMatches": true,
+  "aiLabelChecked": true,
+  "audioEnabled": true,
+  "accessibility": "Caption contains Korean scene description; no per-image alt text field in Reel composer."
+}

@@ -1,0 +1,56 @@
+{
+  "reviewedAt": "2026-10-24T17:10:53.905395+09:00",
+  "status": "ready-for-user-artwork-review",
+  "method": "Inspected all five native generated image outputs and each separate 360x640 preview; no automated score or approval signature.",
+  "observations": [
+    {
+      "scene": 1,
+      "reading": "The woman holds a modest dry spaghetti bundle; compact Jango reacts confidently beside the empty green-rim bowl.",
+      "anatomy": "Connected human hands; short Jango apron and legs, two shoes on a visible stool.",
+      "framing": "Upper-center/right wall available for lettering planning; woman hair reaches above the inner safe-area band."
+    },
+    {
+      "scene": 2,
+      "reading": "Jango visibly adds a separate dry bundle; earnest eyebrows distinguish the judgment from scene 1.",
+      "anatomy": "Raised mitten grasps a bundle, free glove connected to short sleeve; torso remains compact.",
+      "framing": "Additional strands and expressions read at 360px; peripheral hat/right glove extend beyond the conservative inner guide."
+    },
+    {
+      "scene": 3,
+      "reading": "Large tomato-pasta mound and two frozen fork-holding reactions read without dialogue.",
+      "anatomy": "One fork per character; Jango lower body naturally occluded by food/table.",
+      "framing": "Mound is a central clear silhouette; right-side fork and bowl base require later Reel UI overlay inspection."
+    },
+    {
+      "scene": 4,
+      "reading": "Woman looks toward Jango; palm-up mitten and asymmetrical eyebrow/eye expression communicate the excuse.",
+      "anatomy": "Intentional sheepish expression differs from basic MASTER face; connected two arms, one fork, no elongated torso.",
+      "framing": "Closer reaction composition; lower bowl is foreground. Leftward free mitten separates from face and food."
+    },
+    {
+      "scene": 5,
+      "reading": "Two meal plates, four filled storage containers and nearly empty serving bowl resolve the quantity gag. Both characters smile.",
+      "anatomy": "Compact Jango body with gloved hands at waist; woman fork and hand near mouth are separate and connected.",
+      "framing": "Storage containers occupy foreground; central faces and food readable at 360px. Lower container edges need later caption-UI check."
+    }
+  ],
+  "continuity": {
+    "woman": "Same brown bun, face design, ivory cable-knit sweater and forest-green pants across five scenes.",
+    "jango": "v18 identity, small body, chef hat, viewer-left mint handle/pineapple, viewer-right hinges, round mittens maintained.",
+    "setting": "Left autumn window, honey-oak kitchen, trailing plant, sage-checked cloth and sage-rim dish family repeated.",
+    "story": "Dry spaghetti -> added bundle -> tomato-pasta mound -> excuse -> portioned meal/leftovers."
+  },
+  "text": "No generated words or speech balloons; Korean storyboard dialogue remains in episode.json for later separate lettering.",
+  "nativeDimensions": [
+    941,
+    1672
+  ],
+  "aspectNote": "Native tool output is approximately 9:16. Original bytes preserved; 360x640 review files use uniform contain fit, no non-uniform stretch.",
+  "derivatives": "Only deterministic resize/contact sheet and numeric review labels, using Sharp; no generated-art pixels painted or repaired offline.",
+  "futureReelChecks": [
+    "Fixed Korean lettering has not been composited or evaluated for reading time.",
+    "Peripheral hat/glove/fork/bowl areas extend beyond the conservative inner guide. Test actual Instagram UI overlay and the full zoom before final Reel production; reposition/recompose as necessary.",
+    "Video motion/playback, sound, cover crop and publication checks belong to the later Reel stage."
+  ],
+  "userAdoption": null
+}

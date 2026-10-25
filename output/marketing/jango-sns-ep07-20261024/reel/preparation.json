@@ -1,0 +1,98 @@
+{
+  "preparedAt": "2026-10-24T17:20:09.610225+09:00",
+  "authority": {
+    "quote": "릴스 생성해서 인스타그램에 게시해줘.",
+    "scope": "Use the selected five episode-7 artwork scenes including corrected scene-04-r2; compose a 20-second Reel with canonical BGM, custom cover, Korean caption/scene description, AI label; publish one new Reel to jango_plz. No commit/push."
+  },
+  "sources": [
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-01-r1.png",
+      "sha256": "9521113fdc1fae4ac7c0b61d116c707a4716a347a2f8b052f073db9071c7903f",
+      "role": "selected scene 1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-02-r1.png",
+      "sha256": "e9afac93d2daa98c8950db0dead18be9b5c8cb4b7baf99283ffc76e72031bb03",
+      "role": "selected scene 2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-03-r1.png",
+      "sha256": "6d3ac4d72910031118d066a13fc0834cb4e8e4b8c4e812aea0f5e8ed44e1146f",
+      "role": "selected scene 3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-04-r2.png",
+      "sha256": "d124a258dc97996cad9eaa9683946c4bc63debfbd6d077b217b0dbd64c74e235",
+      "role": "selected scene 4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-05-r1.png",
+      "sha256": "20163da303fdb3d8b51ca99b13cc149f84524478a3e09374efae6e17c5b30fcc",
+      "role": "selected scene 5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+      "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232",
+      "role": "approved prior speech balloon reused; uniform resize/mirror only"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sha256": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+      "role": "Korean dialogue/brand font"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/fonts/OFL.txt",
+      "sha256": "53a9ce47085d9fef613c7ecb3730dc80d25962510bbea231b89564f58240f251",
+      "role": "font license"
+    },
+    {
+      "file": "design/jango/audio/monkeys-spinning-monkeys/Monkeys Spinning Monkeys.mp3",
+      "sha256": "a5bb345c23849ad0786aa0bc5157a9f2d4039660fe00282e55754d475f36dc14",
+      "role": "default licensed instrumental BGM"
+    },
+    {
+      "file": "design/jango/audio/monkeys-spinning-monkeys/license.json",
+      "sha256": "f61ca67a12c3489b05edd04f15a6ca00340d67881c52185ad84f6f8f5c556edf",
+      "role": "music rights and required credit"
+    }
+  ],
+  "guide": {
+    "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+    "sha256": "33bd9c3e129e43c5417a2b1450a89b3977b0aa92d3f7b3001a8ba0645b8a2eed"
+  },
+  "timeline": {
+    "durationSeconds": 20,
+    "sceneDurations": [
+      3,
+      3,
+      4,
+      6,
+      4
+    ],
+    "cutSeconds": [
+      3,
+      6,
+      10,
+      16
+    ],
+    "dialogueChange": 12,
+    "endingSeconds": [
+      16,
+      20
+    ]
+  },
+  "render": "Uniform fit to 1080x1920, gentle 100-to-103% zoom per shot, fixed separate Gaegu layers, hard cuts; H.264/30fps/AAC.",
+  "music": {
+    "title": "Monkeys Spinning Monkeys — Kevin MacLeod",
+    "excerptSeconds": [
+      0,
+      20
+    ],
+    "fadeInSeconds": 0.3,
+    "fadeOutSeconds": 1,
+    "loudnessTargetLufs": -18,
+    "narration": false
+  },
+  "story": "Household comedy, no app UI or product-function claims.",
+  "status": "prepared-before-reel-composition"
+}

@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-10-24T17:14:12.418384+09:00",
+  "request": "4번째 컷 장고 표정이 이상해",
+  "status": "corrected-candidate-ready-for-user-review",
+  "candidate": "scene-04-r2",
+  "replacesSelection": "scene-04-r1",
+  "correction": "Removed malformed half-closed viewer-right eye/lower stroke. Both eyes are solid dark ovals, brows separate and restrained, small closed smile.",
+  "method": "official built-in imagegen localized facial-expression edit",
+  "prompt": "prompts/scene-04-r2.txt",
+  "preparation": "preparation-04-r2.json",
+  "generation": "generation-04-r2.json",
+  "visualReview": {
+    "nativeOutputInspected": true,
+    "individual360PreviewInspected": true,
+    "result": "Two clear matching oval eyes read at mobile width, with mild sheepish brows and a small smile. Woman, Jango pose/proportions, food and kitchen composition visually retained.",
+    "limitation": "Generative edit may change texture pixels outside the targeted expression; no byte-identical exterior claim. Actual Reel UI/lettering/motion checks remain for later production."
+  },
+  "preservation": {
+    "episodeOriginalsUnchanged": 5,
+    "priorMasterEpisodeAndPolicyFilesUnchanged": 619,
+    "beforeState": "before/",
+    "note": "Previous artwork, preparation/generation records and previous pointer/review snapshots preserved."
+  },
+  "checks": {
+    "sourceCopyReferencePromptHashes": "passed",
+    "selectedArtworkHashes": "passed",
+    "previewBuild": "passed",
+    "targetedESLint": "passed"
+  },
+  "userAdoption": null
+}

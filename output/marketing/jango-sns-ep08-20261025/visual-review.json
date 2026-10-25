@@ -1,0 +1,72 @@
+{
+  "reviewedAt": "2026-10-25T12:12:07.546753+09:00",
+  "reviewer": "assistant visual inspection; not user adoption or signed release",
+  "stage": "original artwork only",
+  "status": "ready-for-user-artwork-review",
+  "nativeImagesInspected": true,
+  "mobilePreviewsInspected": true,
+  "previewSize": [
+    360,
+    640
+  ],
+  "overview": "review/overview.jpg",
+  "scenes": [
+    {
+      "scene": 1,
+      "candidate": "scene-01-r1",
+      "finding": "Continuing woman invites Jango with phone back visible. Compact seated mascot, two gloves and shoes; warm room and upper wall established."
+    },
+    {
+      "scene": 2,
+      "candidate": "scene-02-r3",
+      "finding": "Happy response reveal uses enlarged phone screen in foreground. r2 overly tight hat framing corrected in r3. Full hat and compact body visible; phone screen intentionally blank."
+    },
+    {
+      "scene": 3,
+      "candidate": "scene-03-r2",
+      "finding": "Single blank task note remains on wall; gesture corrected from narrow finger-like shape to broad one-thumb mitten. Mild teasing and sheepish woman read at 360px."
+    },
+    {
+      "scene": 4,
+      "candidate": "scene-04-r3",
+      "finding": "Puzzled woman and restrained concerned Jango contrast scene 2. Phone front exposed for later reply. r2 cropping corrected; hat, gloves and feet fit."
+    },
+    {
+      "scene": 5,
+      "candidate": "scene-05-r3",
+      "finding": "Woman explains with one open hand, phone in the other. Jango listens. r2 framing correction preserved; incidental wink removed in r3 to restore two natural open eyes."
+    },
+    {
+      "scene": 6,
+      "candidate": "scene-06-r2",
+      "finding": "Determined woman has one poised typing finger, one phone. Jango small O mouth conveys curiosity. Full hat restored. Lower body is intentionally naturally occluded by sofa cushion in closer shot."
+    },
+    {
+      "scene": 7,
+      "candidate": "scene-07-r1",
+      "finding": "Phone rests face-down on coffee table, woman relaxes into sofa, Jango looks forward with simple oval eyes and neutral short mouth. Clear visual punchline."
+    }
+  ],
+  "identityChecks": {
+    "sameWomanAndOutfit": true,
+    "compactJangoBody": true,
+    "mittenConnectionsReviewed": true,
+    "noDuplicateLimbsObserved": true,
+    "entireChefHatVisibleInSelectedScenes": true,
+    "phoneContinuityReviewed": true,
+    "noGeneratedWritingOrBalloons": true
+  },
+  "intentionalExpressionExpansion": {
+    "scene6": "small O mouth expresses genuine curiosity; SNS expressive variant, no automatic mouth-gate pass claimed"
+  },
+  "unresolvedArtworkIssues": [],
+  "deferredToReelStage": [
+    "Exact Korean dialogue and fictional AI chat typesetting",
+    "37–40 second closing brand and CTA",
+    "Actual 1080x1920 export and motion safety",
+    "Full 360x640 video playback and reading time",
+    "Instagram controls overlay and cover/profile crop",
+    "BGM mix, credits, audio listening and decoding checks"
+  ],
+  "featureDisclosure": "Generic fictional AI conversation, not a Jango app feature demo. No personality-analysis functionality is claimed for Jango."
+}
