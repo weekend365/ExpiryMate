@@ -25,6 +25,7 @@ import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { ListRow } from "../../src/components/ListRow";
 import { SettingsGroup } from "../../src/components/SettingsGroup";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { IapUnavailableState } from "../../src/features/monetization/IapUnavailableState";
 import {
@@ -417,7 +418,7 @@ function SubscriptionStoreScreen() {
     );
 
   return (
-    <SettingsScreen>
+    <SettingsScreen backgroundTreatment="reading">
       <SubscriptionStatusSection
         state={screenState}
         activeDescription={`${formatSubscriptionStore(entitlement?.store)} · ${formatSubscriptionExpiry(entitlement?.expiresAt)}까지`}
@@ -428,10 +429,15 @@ function SubscriptionStoreScreen() {
 
       <SettingsGroup
         title="냉장고를 덜 버리는 습관"
-        description="AI 횟수만 늘리는 대신, 매주 실제로 덜 버릴 수 있는 흐름을 만들어요."
         content="plain"
       >
         <View style={styles.benefitCard}>
+          <MascotSpeechBubble
+            message="필요한 도움인지 함께 살펴봐요. 이용 횟수와 요금도 확인해 주세요."
+            mood="point"
+            size="small"
+            layout="adaptive"
+          />
           <BenefitLine text="30·90일 소비·폐기 추세, 폐기율, 주간 비교" />
           <BenefitLine text="임박 재료와 자주 버린 분류를 바탕으로 한 실천 제안" />
           <BenefitLine text="요리 추천 월 60회 · 하루 최대 5회" />

@@ -1,0 +1,31 @@
+{
+  "version": "1.4.4",
+  "releaseMode": "full-public-after-store-approval",
+  "authorization": {
+    "implementationRequest": "PLEASE IMPLEMENT THIS PLAN: 1.4.4 업데이트 커밋·main 푸시·양대 스토어 출시",
+    "latestRequest": "바로 전체 공개해",
+    "precedingRequest": "그냥 양대 스토어에 바로 배포해줘.",
+    "date": "2026-10-25",
+    "effect": "Proceed with production submission and full public release after approval. Additional price investigation and native QA are no longer release hold conditions for this version."
+  },
+  "knownUnverified": {
+    "iosPriceConsistency": "Previous TestFlight KOR storefront with USD metadata versus KRW native purchase sheet remains unresolved; no manual currency conversion added.",
+    "nativeDesignVerification": "Current background and Jango changes have Web evidence. Complete native matrix not verified; iPhone Mirroring touch control failed.",
+    "qaExceptionLimitedTo": "1.4.4 and these recorded checks; none marked passed."
+  },
+  "preserved": {
+    "countries": true,
+    "subscriptionPolicy": true,
+    "apiContract": true,
+    "database": true
+  },
+  "checks": {
+    "docs": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "backgroundAudit": "passed",
+    "jangoCheck": "passed",
+    "fullTests": "running"
+  },
+  "androidClientFile": "Existing EAS secret file assigned to production and preview; value and FCM credentials preserved."
+}

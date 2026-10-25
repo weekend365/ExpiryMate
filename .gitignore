@@ -21,6 +21,13 @@ apps/mobile/e2e/screenshots/baseline/**/*.png
 .env
 /output/jango-approved/
 
+# Temporary Jango gate fixtures must never enter the artwork registry in git.
+/design/jango/emoticons/unregistered-test.png
+/design/jango/emoticons/kakao-32/gate-test-*/
+/design/jango/quality/candidates/gate-test-*.json
+/design/jango/quality/jobs/gate-test-*/
+/design/jango/quality/reports/gate-test-*.json
+
 # Reproducible marketing archives, render temporary files, and QA captures.
 /output/marketing/**/*.zip
 /output/marketing/**/*.sb-*

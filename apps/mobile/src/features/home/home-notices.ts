@@ -74,7 +74,7 @@ export function getHomeNotices(input: {
       message: input.expiringGroups.length > 0
         ? getExpiringNoticeMessage(input.expiringGroups)
         : `7일 안에 기한이 오는 재료 ${input.within7DaysCount}건을 살펴보세요.`,
-      mood: "speak",
+      mood: "check",
       action: "expiring",
       actionHint: "보관함에 임박 재료 필터 적용",
     }];
@@ -84,7 +84,7 @@ export function getHomeNotices(input: {
     return [{
       id: "unknown",
       message: `재료 ${input.unknownExpiryCount}건의 기한을 확인해 주세요.`,
-      mood: "speak",
+      mood: "check",
       action: "unknown",
       actionHint: "기한 미입력 재료 확인",
     }];
@@ -133,8 +133,8 @@ export function getHomeNotices(input: {
   if (input.hasLoaded && input.hasInventory) {
     return [{
       id: "calm",
-      message: "오늘은 급한 재료가 없어요. 보관 중인 재료를 살펴보세요.",
-      mood: "check",
+      message: "오늘은 급한 기한이 없어요. 재료를 같이 살펴볼까요?",
+      mood: "idle",
     }];
   }
 

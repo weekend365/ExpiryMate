@@ -62,7 +62,7 @@ export default function SpacesSettingsScreen() {
   };
 
   return (
-    <SettingsScreen
+    <SettingsScreen background="sharing"
       footer={
         <Button
           icon={Plus}

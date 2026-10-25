@@ -8,6 +8,12 @@ const backgrounds = [
   ["Recommendations", "kitchen-cooking"],
   ["Shopping", "shopping-preparation"],
   ["Login", "login-welcome"],
+  ["Welcome room", "welcome-room"],
+  ["Ingredient preparation", "ingredient-prep"],
+  ["Cooking workspace", "cooking-workspace"],
+  ["Settings study", "settings-study"],
+  ["Insights journal", "insights-journal"],
+  ["Shared table", "shared-table"],
 ].map(([name, stem]) => {
   const record = JSON.parse(fs.readFileSync(
     new URL(`../../../design/backgrounds/${stem}-crayon-v1.json`, import.meta.url),
@@ -15,6 +21,18 @@ const backgrounds = [
   ));
   if (!/^[a-f0-9]{64}$/.test(record.sha256)) {
     throw new Error(`${name} source requires a SHA-256 provenance record.`);
+  }
+  if (record.promptSha256) {
+    const prompt = fs.readFileSync(new URL(`../../../design/backgrounds/${record.prompt}`, import.meta.url));
+    if (createHash("sha256").update(prompt).digest("hex") !== record.promptSha256) {
+      throw new Error(`${name} generation prompt differs from its provenance record.`);
+    }
+  }
+  for (const reference of record.styleReferences ?? []) {
+    const bytes = fs.readFileSync(new URL(`../../../${reference.file}`, import.meta.url));
+    if (createHash("sha256").update(bytes).digest("hex") !== reference.sha256) {
+      throw new Error(`${name} style reference differs from its provenance record.`);
+    }
   }
   return { name, source: record.source, destination: `${stem}-bg.png`, sourceHash: record.sha256 };
 });

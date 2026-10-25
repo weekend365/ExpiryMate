@@ -29,6 +29,7 @@ vi.mock("react-native", () => ({
   View: ({ children }: { children?: ReactNode }) => children,
   Pressable: ({ children }: { children?: ReactNode }) => children,
 }));
+vi.mock("../../components/MascotSpeechBubble", () => ({ MascotSpeechBubble: () => null }));
 vi.mock("../../components/AppText", () => ({ AppText: ({ children }: { children?: ReactNode }) => children }));
 vi.mock("../../components/Button", () => ({ Button: (props: { children?: ReactNode; onPress?: () => void }) => {
   if (props.children === "월간으로 시작하기") mocks.startPurchase = props.onPress;

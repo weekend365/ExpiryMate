@@ -34,13 +34,14 @@ export default function SettingsScreen() {
   );
 
   return (
-    <Screen bottomInsetMode="navigator" testID="settings-screen">
+    <Screen background="settings" bottomInsetMode="navigator" testID="settings-screen">
       <View style={[styles.brandCard, shouldStack && styles.brandCardStacked]}>
-        <Mascot size="small" mood="idle" />
+        <Mascot size="medium" mood="acknowledge" decorative />
         <View style={styles.brandCopy}>
           <AppText variant="heading" style={styles.brandName}>
             {appBrand.appNameKo}
           </AppText>
+          <AppText variant="bodySmall">알림과 추천을 생활 리듬에 맞춰봐요.</AppText>
           <AppText variant="caption" tone="subtext">
             {appBrand.appNameEn} · {appBrand.productLineKo}
           </AppText>
@@ -50,24 +51,23 @@ export default function SettingsScreen() {
       <View style={styles.section}>
         <SectionHeader
           title="내 장고 설정"
-          description="알림, 추천, 냉장고, 계정을 여기서 바꿔요."
         />
         <View style={styles.card}>
           <ListRow
             title="알림"
-            description="유통기한 알림 시점과 켜고 끄기를 맞춰요."
+            description="기한 알림 시점·시간"
             icon={Bell}
             onPress={() => router.push("/settings/notifications")}
           />
           <ListRow
-            title="요리 추천 맞춤 설정"
-            description="알레르기, 식단, 매운맛과 조리도구를 기억해요."
+            title="추천 맞춤 설정"
+            description="알레르기·식단·매운맛·조리도구"
             icon={ChefHat}
             onPress={() => router.push("/settings/recipe-preferences")}
           />
           <ListRow
             title="조리 중 화면 켜두기"
-            description="조리 단계를 보는 동안 화면이 자동으로 꺼지지 않아요."
+            description={keepCookingScreenAwake ? "켜짐 · 조리 중 화면 꺼짐을 막아요." : "꺼짐 · 기기의 화면 설정을 따라요."}
             icon={Sun}
             trailing={
               <Switch
@@ -88,19 +88,19 @@ export default function SettingsScreen() {
           />
           <ListRow
             title="보관 위치"
-            description="냉장·냉동 외에 나만의 자리를 추가해요."
+            description="냉장·냉동·나만의 위치"
             icon={MapPin}
             onPress={() => router.push("/settings/storage-locations")}
           />
           <ListRow
             title="함께 쓰는 냉장고"
-            description="가족이나 동료를 초대하고 냉장고를 바꿔요."
+            description="가족·동료 초대와 냉장고 전환"
             icon={Users}
             onPress={() => router.push("/settings/spaces")}
           />
           <ListRow
             title="계정"
-            description="내 계정 확인, 로그아웃, 계정 정리를 살펴봐요."
+            description="계정 정보·로그아웃·계정 정리"
             icon={UserRound}
             onPress={() => router.push("/settings/account")}
           />
@@ -134,7 +134,7 @@ export default function SettingsScreen() {
             />
           ) : null}
           <ListRow
-            title="장고에게 물어보기"
+            title="문의하기"
             description="불편한 점이나 궁금한 점을 남겨 주세요."
             icon={MessageCircleHeart}
             onPress={() => router.push("/settings/support")}

@@ -47,7 +47,7 @@ export default function AcceptSpaceInvitationScreen() {
 
   if (!token) {
     return (
-      <Screen contentWidth="form">
+      <Screen background="sharing" contentWidth="form">
         <EmptyState
           kind="error"
           mood="worry"
@@ -60,7 +60,7 @@ export default function AcceptSpaceInvitationScreen() {
 
   if (!isRegistered) {
     return (
-      <Screen
+      <Screen background="sharing"
         contentWidth="form"
         footer={
           <Button
@@ -83,7 +83,7 @@ export default function AcceptSpaceInvitationScreen() {
   }
 
   return (
-    <Screen
+    <Screen background="sharing"
       contentWidth="form"
       title="함께 쓸 준비가 됐어요"
       subtitle="유통기한 알림을 받을지도 지금 고를 수 있어요."

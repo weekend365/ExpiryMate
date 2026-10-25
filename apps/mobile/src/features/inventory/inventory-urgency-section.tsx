@@ -142,6 +142,7 @@ export function ExpiryTrafficLamp({
       accessibilityState={{ selected }}
       style={({ pressed }) => [
         styles.expiryTrafficLamp,
+        selected && styles.expiryTrafficLampSelected,
         pressed && styles.headerFilterButtonPressed,
       ]}
     >
@@ -156,6 +157,12 @@ export function ExpiryTrafficLamp({
         selected={selected}
         showGlow={selected}
       />
+      <AppText variant="caption" scaleRole="chrome" densityAware={false}>
+        {label}
+      </AppText>
+      <AppText variant="bodySmallStrong" scaleRole="chrome" densityAware={false}>
+        {count}건
+      </AppText>
     </Pressable>
   );
 }

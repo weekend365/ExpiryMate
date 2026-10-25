@@ -24,9 +24,9 @@ describe("inventory expiry filter contract", () => {
       header.indexOf('label="만료"'),
     );
     expect(header.indexOf('label="만료"')).toBeLessThan(
-      header.indexOf('label="곧"'),
+      header.indexOf('label="7일 내"'),
     );
-    expect(header.indexOf('label="곧"')).toBeLessThan(
+    expect(header.indexOf('label="7일 내"')).toBeLessThan(
       header.indexOf('label="여유"'),
     );
     expect(header).toContain(

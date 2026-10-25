@@ -22,9 +22,17 @@ import {
 } from "../shared/responsive-layout";
 import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { AppText } from "./AppText";
+import {
+  ScreenBackground,
+  type ScreenBackgroundPreset,
+  type ScreenBackgroundTreatment,
+} from "./ScreenBackground";
 
 export interface ScreenProps extends PropsWithChildren {
   title?: string;
+  /** Opt-in scene behind the existing content; camera and legacy scenes omit it. */
+  background?: ScreenBackgroundPreset;
+  backgroundTreatment?: ScreenBackgroundTreatment;
   subtitle?: string;
   scroll?: boolean;
   refreshControl?: ReactElement<RefreshControlProps>;
@@ -66,6 +74,8 @@ export interface ScreenProps extends PropsWithChildren {
 export function Screen({
   children,
   title,
+  background,
+  backgroundTreatment = "standard",
   subtitle,
   scroll = true,
   refreshControl,
@@ -168,6 +178,7 @@ export function Screen({
       }
       testID={testID}
     >
+      {background ? <ScreenBackground preset={background} treatment={backgroundTreatment} /> : null}
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         // Android uses softwareKeyboardLayoutMode=resize; only pad when a sticky

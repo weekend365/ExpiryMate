@@ -104,7 +104,7 @@ export default function InventoryActivityScreen() {
   );
   const items = query.data?.pages.flatMap((page) => page.items) ?? [];
   return (
-    <Screen
+    <Screen background="records" backgroundTreatment="reading"
       scroll
       topInsetMode="none"
       density="compact"

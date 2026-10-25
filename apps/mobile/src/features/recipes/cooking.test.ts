@@ -215,7 +215,7 @@ describe("cooking flow helpers", () => {
     );
     expect(getCookingGuideMessage(2, 2)).toBe("요리가 거의 완성됐어요.");
     expect(getCookingGuideMessage(3, 2)).toBe(
-      "완성된 요리를 먼저 즐겨 주세요. 사용한 재료 정리는 지금 하거나 홈에서 나중에 이어갈 수 있어요.",
+      "저도 한 입만… 마음으로요. 사용한 재료 정리는 지금 하거나 홈에서 나중에 이어갈 수 있어요.",
     );
     expect(getCookingGuideMessage(4, 2)).toBe(
       "실제로 사용한 양이 다르면 수정할 수 있어요.",

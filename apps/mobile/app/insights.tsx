@@ -11,6 +11,7 @@ import { Lightbulb, Sparkles, Warehouse } from "lucide-react-native";
 import { useState } from "react";
 import { LayoutAnimation, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../src/components/AppText";
+import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
 import { Button } from "../src/components/Button";
 import { SkeletonBlock } from "../src/components/ContentSkeleton";
 import { FeedbackBanner } from "../src/components/FeedbackBanner";
@@ -62,7 +63,7 @@ export default function InsightsScreen() {
   }
 
   return (
-    <Screen
+    <Screen background="records"
       scroll
       topInsetMode="none"
       contentWidth="form"
@@ -95,7 +96,7 @@ export default function InsightsScreen() {
 
 function InsightsSkeleton() {
   return (
-    <Screen
+    <Screen background="records"
       scroll
       topInsetMode="none"
       contentWidth="form"
@@ -117,7 +118,7 @@ function InsightsErrorScreen({
   onRetry: () => void;
 }) {
   return (
-    <Screen
+    <Screen background="records"
       scroll
       topInsetMode="none"
       contentWidth="form"
@@ -306,7 +307,12 @@ function ReportContent({ overview }: { overview: PlusInsights }) {
         >
           {overview.wasteRatePercent}%
         </AppText>
-        <AppText variant="bodySmall">{weeklyMessage}</AppText>
+        <MascotSpeechBubble
+          message={weeklyMessage}
+          mood="check"
+          size="small"
+          layout="adaptive"
+        />
         <AppText variant="caption" tone="subtext">
           {formatDateKorean(overview.period.from)}부터 {formatDateKorean(overview.period.to)}까지
         </AppText>

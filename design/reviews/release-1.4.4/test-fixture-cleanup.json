@@ -1,0 +1,66 @@
+{
+  "reason": "Accidentally tracked unit-test fixtures block Jango check and candidate-count tests. Removal authorized in release plan.",
+  "removedFiles": [
+    {
+      "file": "design/jango/emoticons/kakao-32/gate-test-44135/derivation.json",
+      "sha256": "6d43c536fc5e58777adc26dffcd65f0bbd485b32870b25310c014bcec2bcd6c1",
+      "bytes": 933
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/gate-test-44135/source.png",
+      "sha256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "bytes": 1251545
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/gate-test-44135/sticker.png",
+      "sha256": "6b2bb7a9de13f1c1e84488bdd515339f74b33ff9ce13ab1b4e97a343a992d57a",
+      "bytes": 113951
+    },
+    {
+      "file": "design/jango/emoticons/unregistered-test.png",
+      "sha256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "bytes": 1251545
+    },
+    {
+      "file": "design/jango/quality/candidates/gate-test-44135.json",
+      "sha256": "bc831a36a72fcb0f35eb7e9b1b97e251bb86b366f9d0eac7a677caf391b3df7b",
+      "bytes": 761
+    },
+    {
+      "file": "design/jango/quality/jobs/gate-test-44135/master-mouth.png",
+      "sha256": "ed012fc1e7a588a6da38a4811105527fa7fad3f47a66ba6db4e2b1c53e781d26",
+      "bytes": 13260
+    },
+    {
+      "file": "design/jango/quality/jobs/gate-test-44135/preflight.json",
+      "sha256": "fa44972a7b052b5f0f0b8e0a5bf7ec9b0be0f29bffe7788a0462d14f2556a006",
+      "bytes": 4706
+    },
+    {
+      "file": "design/jango/quality/jobs/gate-test-44135/prompt.txt",
+      "sha256": "6485ac1a6c26c3a5fb77f822f46d7f5dc45bbde36e3e6b765403f2bfd29fd0e3",
+      "bytes": 5342
+    },
+    {
+      "file": "design/jango/quality/reports/gate-test-44135.json",
+      "sha256": "670c22e4281a614ec2b3fc39b06c9476d76c92fe85978f171c10e8c7ccdc2ce5",
+      "bytes": 6082
+    }
+  ],
+  "originalReference": {
+    "source": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+    "sourceSHA256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+    "sticker": "design/jango/emoticons/kakao-32/v18/stickers/09.png",
+    "stickerSHA256": "6b2bb7a9de13f1c1e84488bdd515339f74b33ff9ce13ab1b4e97a343a992d57a"
+  },
+  "originalsModified": false,
+  "referencesChecked": [
+    "master-set.json",
+    "quality/releases.json",
+    "quality/history",
+    "quality/candidates",
+    "quality/reports"
+  ],
+  "removedCandidate": "gate-test-44135",
+  "scope": "Exact temporary test fixtures only; no quality thresholds, trusted keys, or review signatures changed."
+}

@@ -78,7 +78,6 @@ describe("Jango notice presentation contract", () => {
       "app/(tabs)/settings.tsx",
       "app/auth/login.tsx",
       "app/onboarding.tsx",
-      "app/register-photo.tsx",
       "src/components/MascotSpeechBubble.tsx",
     ];
     const directMascotFiles = [join(MOBILE_ROOT, "app"), join(MOBILE_ROOT, "src")]

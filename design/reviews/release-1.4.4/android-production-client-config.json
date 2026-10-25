@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-25T09:24:22.500Z",
+  "name": "GOOGLE_SERVICES_JSON",
+  "type": "FILE_BASE64",
+  "visibility": "SECRET",
+  "environments": [
+    "preview",
+    "production"
+  ],
+  "existingVariableIdUnchanged": true,
+  "fileBytesChanged": false,
+  "credentialsExpanded": false,
+  "method": "Existing secret file assigned to preview and production; contents never downloaded or logged."
+}

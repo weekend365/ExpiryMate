@@ -78,7 +78,7 @@ export default function RegisterScreen() {
   };
 
   return (
-    <Screen
+    <Screen background="welcome" backgroundTreatment="reading"
       contentWidth="form"
       density="compact"
       footer={

@@ -22,7 +22,6 @@ import { BottomSheet } from "../src/components/BottomSheet";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
 import { FeedbackBanner } from "../src/components/FeedbackBanner";
-import { Mascot } from "../src/components/Mascot";
 import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
 import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
@@ -515,8 +514,8 @@ export default function RegisterPhotoScreen() {
         ? "기한과 자리를 채운 뒤 한 번에 넣을게요. 틀린 줄은 눌러서 고쳐 주세요."
         : "이번에는 넣을 재료를 찾지 못했어요. 다른 사진으로 다시 해볼까요?";
     }
-    return `${savedCount}가지를 냉장고에 잘 넣어 뒀어요.`;
-  }, [items.length, savedCount, step]);
+    return undefined;
+  }, [items.length, step]);
 
   const acquirePhoto = useCallback(
     async (selection: PhotoIntakeSelection) => {
@@ -789,7 +788,7 @@ export default function RegisterPhotoScreen() {
           onShowAccessDetails={() => setAccessDetailsVisible(true)}
         />
       ) : (
-        <Screen
+        <Screen background="ingredients"
           key={step === "done" ? "photo-registration-complete" : "photo-registration-flow"}
           title={title}
           subtitle={subtitle}
@@ -799,9 +798,10 @@ export default function RegisterPhotoScreen() {
             <View style={styles.loadingCard}>
               <PhotoFlowProgress current={1} />
               <MascotSpeechBubble
-                message="글자와 재료를 천천히 읽고 있어요."
+                message="사진 속 재료를 읽고 있어요."
                 mood="think"
                 size="medium"
+                layout="adaptive"
                 textVariant="body"
               />
             </View>
@@ -810,6 +810,13 @@ export default function RegisterPhotoScreen() {
         {step === "review" && items.length ? (
           <View style={styles.reviewStack}>
             <PhotoFlowProgress current={2} />
+            <MascotSpeechBubble
+              message="이렇게 읽었어요. 이름과 기한을 확인해 주세요."
+              mood="check"
+              size="medium"
+              layout="adaptive"
+              animation="none"
+            />
             {flowIssue ? (
               <FeedbackBanner
                 tone={flowIssue.tone ?? "danger"}
@@ -1091,7 +1098,13 @@ export default function RegisterPhotoScreen() {
 
         {step === "done" ? (
           <View style={styles.loadingCard}>
-            <Mascot mood="praise" size="large" />
+            <MascotSpeechBubble
+              message={`재료 ${savedCount}개 넣었어요. 든든하네요!`}
+              mood="praise"
+              size="large"
+              layout="adaptive"
+              textVariant="bodyStrong"
+            />
           </View>
         ) : null}
         </Screen>

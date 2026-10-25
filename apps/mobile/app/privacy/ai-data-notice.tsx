@@ -75,7 +75,7 @@ export default function AiDataNoticeScreen() {
 
   return (
     <>
-      <Screen
+      <Screen background="settings" backgroundTreatment="reading"
         title="요리 추천과 사진 안내"
         subtitle={`${appBrand.characterNameKo}가 요리를 추천하거나 사진으로 재료를 읽을 때 어떤 정보가 쓰이는지 알려드릴게요.`}
         footer={

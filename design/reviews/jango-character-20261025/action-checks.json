@@ -1,0 +1,60 @@
+[
+  {
+    "state": "undo",
+    "buttons": [
+      {
+        "h": 48,
+        "label": "장고 알림 닫기",
+        "w": 48
+      },
+      {
+        "h": 48,
+        "label": "되돌리기",
+        "w": 142.625
+      }
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "state": "partial",
+    "buttons": [
+      {
+        "h": 48,
+        "label": "장고 알림 닫기",
+        "w": 48
+      }
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "state": "full",
+    "buttons": [
+      {
+        "h": 48,
+        "label": "장고 알림 닫기",
+        "w": 48
+      },
+      {
+        "h": 96,
+        "label": "장보기에서 찾기",
+        "w": 222
+      }
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "state": "error",
+    "buttons": [
+      {
+        "h": 48,
+        "label": "장고 알림 닫기",
+        "w": 48
+      }
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  }
+]

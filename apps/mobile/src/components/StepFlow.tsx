@@ -5,6 +5,8 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  useReducedMotion,
+  cancelAnimation,
 } from "react-native-reanimated";
 import { ChevronLeft } from "lucide-react-native";
 import { colors, radius, spacing, controlSize } from "../shared/theme";
@@ -34,6 +36,9 @@ interface StepFlowProps extends PropsWithChildren {
   /** When set, replaces the step description with a speaking-mascot bubble. */
   guideMessage?: string;
   guideMood?: MascotMood;
+  guideSize?: "small" | "medium" | "large";
+  guideLayout?: "inline" | "stacked" | "adaptive";
+  guideAnimation?: "entrance" | "none";
   /**
    * `compact` drops the chrome card and eyebrow so 장고's bubble carries
    * the step question. Use when the stack header already owns Back.
@@ -58,6 +63,9 @@ export function StepFlow({
   headerAccessory,
   guideMessage,
   guideMood = "speak",
+  guideSize = "small",
+  guideLayout = "inline",
+  guideAnimation = "entrance",
   density = "default",
   hideBack = false,
   children,
@@ -71,13 +79,23 @@ export function StepFlow({
   const isCompact = density === "compact";
   const showProgress = steps.length > 1;
   const showBack = !hideBack;
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
+    if (reduceMotion || guideAnimation === "none") {
+      contentOpacity.value = 1;
+      contentOffset.value = 0;
+      return;
+    }
     contentOpacity.value = 0;
     contentOffset.value = spacing.sm;
     contentOpacity.value = withSpring(1, SPRING);
     contentOffset.value = withSpring(0, SPRING);
-  }, [contentOffset, contentOpacity, safeIndex]);
+    return () => {
+      cancelAnimation(contentOpacity);
+      cancelAnimation(contentOffset);
+    };
+  }, [contentOffset, contentOpacity, safeIndex, reduceMotion, guideAnimation]);
 
   const contentStyle = useAnimatedStyle(() => ({
     opacity: contentOpacity.value,
@@ -137,7 +155,9 @@ export function StepFlow({
           message={compactMessage}
           supportingMessage={resolvedGuide}
           mood={guideMood}
-          size="small"
+          size={guideSize}
+          layout={guideLayout}
+          animation={guideAnimation}
           density="compact"
           textVariant="bodyStrong"
           style={styles.compactBubble}
@@ -273,7 +293,9 @@ export function StepFlow({
             <MascotSpeechBubble
               message={resolvedGuide}
               mood={guideMood}
-              size="small"
+              size={guideSize}
+              layout={guideLayout}
+              animation={guideAnimation}
             />
           ) : null}
         </View>

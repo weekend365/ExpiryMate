@@ -104,14 +104,14 @@ export function formatIngredientDdayLabel(daysUntilExpiry: number | null) {
   }
 
   if (daysUntilExpiry < 0) {
-    return `D+${Math.abs(daysUntilExpiry)}`;
+    return `${Math.abs(daysUntilExpiry)}일 지남`;
   }
 
   if (daysUntilExpiry === 0) {
     return "오늘";
   }
 
-  return `D-${daysUntilExpiry}`;
+  return `${daysUntilExpiry}일 남음`;
 }
 
 export function getRecipeCardSignals(
@@ -127,7 +127,7 @@ export function getRecipeCardSignals(
     const expiryLabel =
       formatIngredientDdayLabel(firstExpiring.daysUntilExpiry) ?? "임박";
     signals.push({
-      label: `${expiryLabel} ${withObjectParticle(firstExpiring.name)} 먼저`,
+      label: `${firstExpiring.name} · ${expiryLabel} · 먼저 사용`,
       tone: "warning",
     });
   } else if (missingCount > 0) {
@@ -146,17 +146,6 @@ export function getRecipeCardSignals(
   }
 
   return signals.slice(0, 2);
-}
-
-function withObjectParticle(value: string) {
-  const lastCharacter = value.at(-1);
-  if (!lastCharacter) return value;
-
-  const syllableIndex = lastCharacter.charCodeAt(0) - 0xac00;
-  const isHangulSyllable = syllableIndex >= 0 && syllableIndex <= 0x2ba3;
-  const hasFinalConsonant = isHangulSyllable && syllableIndex % 28 !== 0;
-
-  return `${value}${hasFinalConsonant ? "을" : "를"}`;
 }
 
 function getRecipeDecisionContext(

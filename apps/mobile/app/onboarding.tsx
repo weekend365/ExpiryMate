@@ -19,7 +19,7 @@ export default function OnboardingScreen() {
     router.replace("/auth/login");
   };
   return (
-    <Screen
+    <Screen background="welcome"
       contentWidth="form"
       testID="onboarding-screen"
       footer={
@@ -31,9 +31,9 @@ export default function OnboardingScreen() {
     >
       <View style={styles.hero}>
         <AppText variant="label" tone="primary">{appBrand.appNameKo}</AppText>
-        <Mascot size="medium" mood="encourage" />
-        <AppText variant="heading" style={styles.centered}>재료를 넣으면 기한을 챙기고 요리를 추천해요</AppText>
-        <AppText variant="body" tone="subtext" style={styles.centered}>남은 재료를 알뜰한 한 끼로 이어보세요.</AppText>
+        <Mascot size="large" mood="encourage" decorative />
+        <AppText variant="heading" style={styles.centered}>안녕하세요, 장고예요. 재료 챙기는 일, 같이 해볼까요?</AppText>
+        <AppText variant="body" tone="subtext" style={styles.centered}>재료를 넣으면 기한을 챙기고, 남은 재료로 요리를 추천해요.</AppText>
       </View>
       <View style={styles.example}>
         <AppText variant="bodyStrong">유통기한을 한눈에 확인해요</AppText>

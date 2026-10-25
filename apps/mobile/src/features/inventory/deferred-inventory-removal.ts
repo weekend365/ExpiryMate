@@ -21,6 +21,14 @@ export type CommittedInventoryRemoval = {
   spaceId: string;
 };
 
+export function getCommittedConsumptionMessage(removal: CommittedInventoryRemoval | null) {
+  const consumed = removal?.entries.filter((entry) => entry.action === "consume") ?? [];
+  if (!consumed.length) return null;
+  return consumed.length === 1
+    ? `${consumed[0]!.item.displayName} 사용을 기록했어요. 남은 재료도 같이 챙겨요.`
+    : `재료 ${consumed.length}개의 사용을 기록했어요. 남은 재료도 같이 챙겨요.`;
+}
+
 export function getCommittedFullConsumeTarget(
   removal: CommittedInventoryRemoval | null,
 ) {

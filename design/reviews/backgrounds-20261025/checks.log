@@ -1,0 +1,103 @@
+Documentation
+> expirymate-monorepo@ docs:check /Users/namu/Desktop/ExpiryMate
+> node scripts/check-docs.mjs && node scripts/check-mobile-build-entry.mjs
+
+문서 검사 통과: metadata 31개, links 78개
+Mobile Expo/EAS build entry is canonical and unambiguous.
+
+Lint
+> expirymate-monorepo@ lint /Users/namu/Desktop/ExpiryMate
+> eslint . --max-warnings=0 && node scripts/check-design-system.mjs
+
+Design system check passed (40 Admin and 232 mobile source files).
+
+Background source and sync
+> @expirymate/mobile@0.1.0 backgrounds:audit /Users/namu/Desktop/ExpiryMate/apps/mobile
+> node scripts/sync-background-assets.mjs --check
+
+Home background matches its source artwork.
+Inventory background matches its source artwork.
+Recommendations background matches its source artwork.
+Shopping background matches its source artwork.
+Login background matches its source artwork.
+Welcome room background matches its source artwork.
+Ingredient preparation background matches its source artwork.
+Cooking workspace background matches its source artwork.
+Settings study background matches its source artwork.
+Insights journal background matches its source artwork.
+Shared table background matches its source artwork.
+
+Whole workspace typecheck
+packages/shared typecheck: Done
+apps/mobile pretypecheck: Done
+apps/admin pretypecheck: Done
+apps/api pretypecheck: Done
+apps/admin typecheck: Done
+apps/mobile typecheck: Done
+apps/api typecheck: Done
+
+Workspace tests
+packages/shared test:  Test Files  24 passed (24)
+packages/shared test:       Tests  162 passed (162)
+apps/api test:  Test Files  72 passed | 2 skipped (74)
+apps/api test:       Tests  618 passed | 6 skipped (624)
+apps/mobile test:  Test Files  113 passed (113)
+apps/mobile test:       Tests  678 passed (678)
+
+Existing root artwork test failures
+not ok 11 - fresh candidate, valid test signature, forgery, stale prompt and uncertain pose remain enforced
+  ---
+  duration_ms: 139484.49875
+  location: 'file:///Users/namu/Desktop/ExpiryMate/scripts/jango-design-gate.test.mjs:148:1'
+  failureType: 'testCodeFailure'
+  error: 'Unregistered artwork: design/jango/emoticons/unregistered-test.png'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    check (file:///Users/namu/Desktop/ExpiryMate/scripts/jango-design-gate.mjs:398:107)
+    promote (file:///Users/namu/Desktop/ExpiryMate/scripts/jango-design-gate.mjs:410:3)
+    TestContext.<anonymous> (file:///Users/namu/Desktop/ExpiryMate/scripts/jango-design-gate.test.mjs:162:2)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:631:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:374:18)
+    Test.postRun (node:internal/test_runner/test:715:19)
+    Test.run (node:internal/test_runner/test:673:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:374:7)
+  ...
+
+not ok 37 - retirement retains 97 originals and diagnostics as exact bytes and closes 97 candidates
+  ---
+  duration_ms: 1302.451708
+  location: 'file:///Users/namu/Desktop/ExpiryMate/scripts/jango-history.test.mjs:9:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    33 !== 32
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 32
+  actual: 33
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/namu/Desktop/ExpiryMate/scripts/jango-history.test.mjs:16:9)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:631:25)
+    Test.start (node:internal/test_runner/test:542:17)
+    startSubtest (node:internal/test_runner/harness:216:17)
+  ...
+1..41
+# tests 41
+# suites 0
+# pass 39
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 382046.136833
+ ELIFECYCLE  Command failed with exit code 1.
+ ELIFECYCLE  Test failed. See above for more details.

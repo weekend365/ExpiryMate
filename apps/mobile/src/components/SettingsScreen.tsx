@@ -8,12 +8,13 @@ import { SettingsDensityProvider } from "./settings-density";
 export function SettingsScreen({
   topInsetMode = "none",
   density = "compact",
+  background = "settings",
   children,
   ...props
 }: ScreenProps) {
   return (
     <SettingsDensityProvider density={density}>
-      <Screen {...props} topInsetMode={topInsetMode} density={density}>
+      <Screen {...props} background={background} topInsetMode={topInsetMode} density={density}>
         {children}
       </Screen>
     </SettingsDensityProvider>

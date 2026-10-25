@@ -163,7 +163,7 @@ export default function VerifyEmailScreen() {
   const isRateLimited = message.includes("너무 많");
 
   return (
-    <Screen
+    <Screen background="welcome"
       contentWidth="form"
       title="메일 확인"
       subtitle="장고가 메일을 같이 살펴볼게요."

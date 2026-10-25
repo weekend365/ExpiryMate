@@ -30,6 +30,8 @@ interface FeedbackBannerProps {
   /** Lets hero placements use the same spacing as Home and Recommendations. */
   speechDensity?: "default" | "compact";
   speechTextVariant?: AppTextVariant;
+  speechMood?: MascotMood;
+  speechLayout?: "inline" | "stacked" | "adaptive";
   /** Set to `null` to keep a transient notice until the user closes it. */
   autoDismissMs?: number | null;
   onDismiss?: () => void;
@@ -79,6 +81,8 @@ export function FeedbackBanner({
   transient = false,
   speechDensity = "compact",
   speechTextVariant = "bodyStrong",
+  speechMood,
+  speechLayout = "inline",
   autoDismissMs = DEFAULT_FEEDBACK_AUTO_DISMISS_MS,
   onDismiss,
 }: FeedbackBannerProps) {
@@ -161,7 +165,8 @@ export function FeedbackBanner({
       <MascotSpeechBubble
         message={title}
         supportingMessage={description}
-        mood={palette.mascotMood}
+        mood={speechMood ?? palette.mascotMood}
+        layout={speechLayout}
         density={speechDensity}
         textVariant={speechTextVariant}
         onDismiss={isTransientNotice ? dismiss : undefined}

@@ -1,0 +1,305 @@
+{
+  "date": "2026-10-25",
+  "routes": 27,
+  "screenBranches": 41,
+  "groups": {
+    "welcome": 6,
+    "ingredients": 3,
+    "cooking": 1,
+    "settings": 11,
+    "records": 2,
+    "sharing": 4
+  },
+  "checks": [
+    {
+      "file": "onboarding.tsx",
+      "preset": "welcome",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "c4b0b3fe5362595b2f4c31c2d0d02125234ca752842cc2cc6358f1ee23752aab",
+      "previousSha256": "6efab8d9566cc231e6f7b9b0f338f35ce792923e68fb970f74497ddc5fbfa2c9",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "auth/register.tsx",
+      "preset": "welcome",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "ecbc62b575a9432ac5c0537d8fae6a623b210799e0b4b860b9d27a4455f03f83",
+      "previousSha256": "6455c38a6b3868a78e0c03b4b12125847d8a697d28c499520a6a195fa2b5e36a",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "auth/forgot-password.tsx",
+      "preset": "welcome",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "241b3ea76c8d7538078b833cc60b87d8f2e9ecad03ed630629608948d0db6795",
+      "previousSha256": "1a223dd69e8d278b69105a6f2c8c84af558cce058b2d75535ce21456b8fe965f",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "auth/reset-password.tsx",
+      "preset": "welcome",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "f653513218dadcd9583ab655f9e1944fc813442784ed6ad7d2766f26a61f4720",
+      "previousSha256": "94c63f14823c8e56f93e76b342fd6b39ee5fae32a7d844348c1de5130ceacc0f",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "auth/verify-email.tsx",
+      "preset": "welcome",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "24cca0cdfb941f9e417d8d2aac980002be60577d214df19b26ee4900d22eea83",
+      "previousSha256": "3152a88f00f4c2a27c1e6be17bbed64c8728865c291bd4fc427db97b1d94c0e8",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "auth/verify-pending.tsx",
+      "preset": "welcome",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "0c737c5e94aed0a4f40a2a458e7b1f6758812c0dca0ff6f7e13bc24736dc7abf",
+      "previousSha256": "cf7a9eef7e314103a4e4f222dc41b3b390e79dd6b62f0b88ea41acf0bdf7bbec",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "register.tsx",
+      "preset": "ingredients",
+      "treatment": "standard",
+      "screenBranches": 2,
+      "inherited": false,
+      "sourceSha256": "85edef023c2ea65b384c7bd560393dd802e1f858affa385e1f2ea737fc0343c1",
+      "previousSha256": "7efb6faa5ca58040b5fec6e7e648a40154b627fa9e411d471e9b381334587999",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "register-photo.tsx",
+      "preset": "ingredients",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "5e4786539829c94483afe237c81edf101d4bdaa0bab8351bb1078b6501ede123",
+      "previousSha256": "c5809d92bbe17379ec3cce6e3e9bb2331c3905748c47cf092cb6150c8c3ae4ea",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "inventory/[id].tsx",
+      "preset": "ingredients",
+      "treatment": "standard",
+      "screenBranches": 4,
+      "inherited": false,
+      "sourceSha256": "f4ae994428347e7d4caa8178a55175fce273c8e65be3f71379f32a54632c4bf2",
+      "previousSha256": "b3303401cec5dbb7e9d4952af9bf8fcf4f807e336c8043ab56c144bfeab5ca9f",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "cooking/[recommendationId].tsx",
+      "preset": "cooking",
+      "treatment": "reading",
+      "screenBranches": 5,
+      "inherited": false,
+      "sourceSha256": "40c47ed7635f7c7e40a60eb3891d111e8cf00bc34defaa39cc2bdfad6166c683",
+      "previousSha256": "228d731eb16637fecba29642775e2de1c0db18445422d3fce7a266e6f21bf6b3",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "(tabs)/settings.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "5fe59c0138d338ab08bdb6ddfffc589b91b6d30c1808be076595f5210dc03463",
+      "previousSha256": "1834206bf5ce9b85ec85f0e0c03caed4a0d9d82641781625230885a6fdc24445",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "privacy/index.tsx",
+      "preset": "settings",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "743093a4e80075537f04147a5dba218f2b3efe0a34c52038c2ab36509859b1c6",
+      "previousSha256": "935537a97f416c93013fa4f80372df58f9de2f8d27cb3ee28d2fd38fb6b8fc3c",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "privacy/ai-data-notice.tsx",
+      "preset": "settings",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "bf1e287316f01b132286b09f3e1983a2ec894e443fa4caa932219f15d435720d",
+      "previousSha256": "c67e4cfb6b1ae5ca5fd18868280c964cd953e1c0ecc010fc7ca27543728ef4d7",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "privacy/account-delete.tsx",
+      "preset": "settings",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "ca943a045dcbc084db303d6174205ac6ae39d8d5af8bb9d66d502ffec169aa28",
+      "previousSha256": "5ffae08bc1f675bba7e48e43deb656760f535268cb274b39cc4f63323a67b440",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "insights.tsx",
+      "preset": "records",
+      "treatment": "standard",
+      "screenBranches": 3,
+      "inherited": false,
+      "sourceSha256": "a12bd7575ee99a1d37d1f7b3d54404ecb34b0a3c0d083f0697466dd45f6b4cbf",
+      "previousSha256": "27caa20a15062f758845f43e44236ecf91aa019c80c327702919fd3785245078",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "inventory/activity.tsx",
+      "preset": "records",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "8de42338ca7523868c59019bb2e87ff05935cc5ca64a700949f69ed9a2236f4d",
+      "previousSha256": "6bbbb95ab783d6d4b5fe8b8ab8f3829c61719a863bd9b57b3ffc9c5154893472",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "settings/spaces.tsx",
+      "preset": "sharing",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "322f2a04de84ca67995618e640e18057f13d859cea821a64746635f523e3dd20",
+      "previousSha256": "f8083a24ca4d3148cafd23151c7c12693140df52e92b66e94c169185344950fb",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "settings/spaces/[spaceId].tsx",
+      "preset": "sharing",
+      "treatment": "standard",
+      "screenBranches": 3,
+      "inherited": false,
+      "sourceSha256": "09c9914e87742304cac85a195d780852ef704f93b2512b953e1a9cda644f7b30",
+      "previousSha256": "225bfec3000f5bdc0b4c3f595ead6a53d533a2237b8791c79f38e6fe2cf6643b",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "spaces/invitations/accept.tsx",
+      "preset": "sharing",
+      "treatment": "standard",
+      "screenBranches": 3,
+      "inherited": false,
+      "sourceSha256": "8bb40e908d1aec916ec897d8a6836b82905ad1eacb7ee244c154258a91281f20",
+      "previousSha256": "c7faee143138994fcf2275d472c467615847f45508dc3e621ef63132c94c1596",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "spaces/invitations/code.tsx",
+      "preset": "sharing",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "inherited": false,
+      "sourceSha256": "f579f5d760bde0b15bb3acbf0d62582fb7b0f4c0a732abc914633837534b872e",
+      "previousSha256": "006eb148b241297cf3d373392b32cfe1678c120bc007d28d700a63f3c95700c6",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "settings/account.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "inherited": true,
+      "screenBranches": 1,
+      "sourceSha256": "0d90f40a097d0b82ef480fc6ee72fd87989aaf8954d3365339a788192d84c9dd",
+      "previousSha256": "0d90f40a097d0b82ef480fc6ee72fd87989aaf8954d3365339a788192d84c9dd",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "settings/notifications.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "inherited": true,
+      "screenBranches": 1,
+      "sourceSha256": "312c48582e18c2e7d08cc0af0d6332bd718438ce8ce365e63e1bcec105b8205d",
+      "previousSha256": "312c48582e18c2e7d08cc0af0d6332bd718438ce8ce365e63e1bcec105b8205d",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "settings/recipe-preferences.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "inherited": true,
+      "screenBranches": 1,
+      "sourceSha256": "bae8d47486fb4eb1765915c658241934296866106ae679ceb822da81b7362d0e",
+      "previousSha256": "bae8d47486fb4eb1765915c658241934296866106ae679ceb822da81b7362d0e",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "settings/recommendation-credits.tsx",
+      "preset": "settings",
+      "treatment": "reading",
+      "inherited": true,
+      "screenBranches": 1,
+      "sourceSha256": "dc0837293d5768c41471160231d517798085b2c33f23c51087e330719523927c",
+      "previousSha256": "94a5ba48a27930cc4d4155ed462ca0b2a149734d5ca6a6e93fb3a174f1adfc51",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "settings/storage-locations.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "inherited": true,
+      "screenBranches": 1,
+      "sourceSha256": "45a5c93e0d72da351fa197bc1e0071ff5f67d416914336225804bad21ca4b739",
+      "previousSha256": "45a5c93e0d72da351fa197bc1e0071ff5f67d416914336225804bad21ca4b739",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "settings/subscription.tsx",
+      "preset": "settings",
+      "treatment": "reading",
+      "inherited": true,
+      "screenBranches": 1,
+      "sourceSha256": "5a0125cf36bd625d390799bf25e8873a0bbf0d53cae06184392114c8f5e169da",
+      "previousSha256": "4e1db8cc6c0f5186ee4600fd08843f91a360a4cdfa58813f78e0ab04a3decaf2",
+      "onlySceneAttributesChanged": true
+    },
+    {
+      "file": "settings/support.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "inherited": true,
+      "screenBranches": 1,
+      "sourceSha256": "2c411e457e3d8d1f855d52ed67f981f9bfa79e45ccf75574467a6d241306cbe7",
+      "previousSha256": "2c411e457e3d8d1f855d52ed67f981f9bfa79e45ccf75574467a6d241306cbe7",
+      "onlySceneAttributesChanged": true
+    }
+  ],
+  "unchangedRoutes": [
+    "(tabs)/_layout.tsx",
+    "(tabs)/home.tsx",
+    "(tabs)/inventory.tsx",
+    "(tabs)/recommendations.tsx",
+    "(tabs)/shop.tsx",
+    "_layout.tsx",
+    "auth/login.tsx",
+    "index.tsx",
+    "scanner.tsx"
+  ],
+  "excludedComponentsUnchanged": true,
+  "originalFiveBackgroundsUnchanged": {
+    "apps/mobile/assets/backgrounds/login-welcome-bg.png": "e6992b8d99609c01f1648f2690e77481cd26ccf0336d5bce9137ad3f9346e30b",
+    "apps/mobile/assets/backgrounds/kitchen-cooking-bg.png": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+    "apps/mobile/assets/backgrounds/home-welcome-bg.png": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+    "apps/mobile/assets/backgrounds/shopping-preparation-bg.png": "44720e9280b6657a566fe52c107829665aae00cf1022bafe7e53b5bba81e030d",
+    "apps/mobile/assets/backgrounds/fridge-interior-bg.png": "9327e58d2c122199738b706219f73ce4ec237a3c91e3f207481021afcd5a8067"
+  },
+  "trackedTestArtworkRestored": true
+}

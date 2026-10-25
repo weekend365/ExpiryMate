@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-25",
+  "baselineHead": "822e2fe30e1e9edfa06764b31c668cf676352ebd",
+  "baselineUi": "working tree at task start, including preceding Jango character changes",
+  "checks": [
+    {
+      "command": "pnpm --filter @expirymate/mobile backgrounds:sync",
+      "status": "passed",
+      "assets": 11
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile backgrounds:audit",
+      "status": "passed",
+      "assets": 11,
+      "checks": [
+        "source hash",
+        "runtime bytes",
+        "new prompt hash",
+        "new style reference hashes"
+      ]
+    },
+    {
+      "command": "pnpm lint",
+      "status": "passed",
+      "designSources": {
+        "admin": 40,
+        "mobile": 232
+      }
+    },
+    {
+      "command": "pnpm typecheck",
+      "status": "passed",
+      "scope": "whole workspace, shared build, Prisma client generation"
+    },
+    {
+      "command": "pnpm -r --if-present test",
+      "status": "passed",
+      "shared": 162,
+      "api": 618,
+      "mobile": 678,
+      "passed": 1458,
+      "skipped": 6
+    },
+    {
+      "command": "pnpm test",
+      "status": "failed-existing",
+      "passed": 39,
+      "failed": 2,
+      "phase": "jango:test before workspace tests",
+      "failures": [
+        "Unregistered artwork: design/jango/emoticons/unregistered-test.png",
+        "33 !== 32 candidate count"
+      ]
+    },
+    {
+      "command": "focused background and responsive component tests",
+      "status": "passed",
+      "tests": 38
+    },
+    {
+      "command": "pnpm docs:check",
+      "status": "passed",
+      "metadata": 31,
+      "links": 78
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  ],
+  "routes": 27,
+  "screenBranches": 41,
+  "webComparisonCases": 126,
+  "screenshots": 16,
+  "estimatedContrast": {
+    "count": 1148,
+    "min": 4.5651640563203495,
+    "fails": []
+  },
+  "unchangedArtworkRestored": {
+    "path": "design/jango/emoticons/unregistered-test.png",
+    "matchesHead": true,
+    "sha256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+  },
+  "native": {
+    "androidConnectedDevices": 0,
+    "bootedIosSimulators": 0,
+    "installedToolchainAvailable": true,
+    "newNativeSessionStarted": false,
+    "nativeAcceptance": "not verified",
+    "webFixtures": {
+      "actualRouteComponents": 10,
+      "composedSamples": 4,
+      "safeAreaInsets": 0,
+      "animations": "static",
+      "fontScale": [
+        1,
+        1.3,
+        2
+      ],
+      "width": [
+        320,
+        360,
+        780
+      ],
+      "services": "local stubs without real authentication, API, purchase, or permission requests",
+      "fonts": "5 Pretendard weights loaded before rendering"
+    }
+  },
+  "initialTestTimeout": {
+    "phase": "mobile test concurrent with root artwork test",
+    "test": "mascot anatomy reproducibility",
+    "timeoutMs": 20000,
+    "resolvedBy": "rerun without concurrent root artwork workload",
+    "timeoutChanged": false
+  }
+}

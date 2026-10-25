@@ -43,7 +43,7 @@ export default function ResetPasswordScreen() {
   };
 
   return (
-    <Screen
+    <Screen background="welcome"
       contentWidth="form"
       title="비밀번호 다시 정하기"
       subtitle="새 비밀번호를 입력해 주세요."

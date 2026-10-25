@@ -216,8 +216,10 @@ export function ShoppingListPanel({
         notices={[
           {
             id: "shopping-list-guide",
-            mood: "speak",
-            message: "살 재료를 적어 주세요. 구매한 재료는 체크하면 돼요!",
+            mood: items.some((item) => item.completedAt && !item.inventoryItemId) ? "check" : "shopping",
+            message: items.some((item) => item.completedAt && !item.inventoryItemId)
+              ? "구매한 재료를 보관함에도 넣어둘까요? 구매 목록에서 재료를 눌러 주세요."
+              : "살 재료, 같이 챙겨요. 산 것은 체크해 주세요.",
           },
         ]}
       >

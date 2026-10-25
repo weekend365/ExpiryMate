@@ -3,9 +3,9 @@ import {
   isTrackedItem,
   type InventoryItem,
 } from "@expirymate/shared";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { Plus, Trash2 } from "lucide-react-native";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FlatList,
   ImageBackground,
@@ -39,7 +39,7 @@ import {
   getInventoryHeroNotices,
   type InventoryHeroAction,
 } from "../../src/features/inventory/inventory-hero";
-import { getCommittedFullConsumeTarget } from "../../src/features/inventory/deferred-inventory-removal";
+import { getCommittedConsumptionMessage, getCommittedFullConsumeTarget } from "../../src/features/inventory/deferred-inventory-removal";
 import {
   InventoryFilterToolbar,
   InventoryMoreMenuButton,
@@ -72,8 +72,10 @@ import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 import { useStoreReview } from "../../src/features/store-review/use-store-review";
+import { useAuth } from "../../src/features/auth/use-auth";
 
 export default function InventoryScreen() {
+  const { sessionUserId } = useAuth();
   const { shouldStackDense } = useResponsiveLayout();
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
   const filterParam = parseInventoryViewFilter(params.filter);
@@ -103,6 +105,7 @@ export default function InventoryScreen() {
   );
   const [shoppingOfferTarget, setShoppingOfferTarget] =
     useState<InventoryItem | null>(null);
+  const [consumptionNotice, setConsumptionNotice] = useState<string | null>(null);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
     null,
   );
@@ -125,21 +128,30 @@ export default function InventoryScreen() {
   }, [location, selectableOptions]);
 
   useEffect(() => {
+    if (lastCommittedRemoval?.spaceId !== activeSpaceId) return;
     const committedTarget = getCommittedFullConsumeTarget(lastCommittedRemoval);
 
     if (committedTarget) {
       setShoppingOfferTarget(committedTarget);
+    } else {
+      setConsumptionNotice(getCommittedConsumptionMessage(lastCommittedRemoval));
     }
 
     if (lastCommittedRemoval) {
       clearLastCommittedRemoval();
     }
-  }, [clearLastCommittedRemoval, lastCommittedRemoval]);
+  }, [activeSpaceId, clearLastCommittedRemoval, lastCommittedRemoval]);
+
+  useFocusEffect(useCallback(() => () => {
+    setShoppingOfferTarget(null);
+    setConsumptionNotice(null);
+  }, []));
 
   useEffect(() => {
     setShoppingOfferTarget(null);
+    setConsumptionNotice(null);
     setQuickEditItem(null);
-  }, [activeSpaceId]);
+  }, [activeSpaceId, sessionUserId]);
 
   const applyFilter = (nextFilter: InventoryViewFilter) => {
     setFilter(nextFilter);
@@ -245,7 +257,7 @@ export default function InventoryScreen() {
   );
   const inventoryActionNoticeTone = actionError
     ? "danger"
-    : visibleRemovalNotice || shoppingOfferTarget
+    : visibleRemovalNotice || shoppingOfferTarget || consumptionNotice
       ? "success"
       : null;
   const inventoryActionNotice = actionError ? (
@@ -253,6 +265,8 @@ export default function InventoryScreen() {
       testID="inventory-action-notice"
       tone="danger"
       title="앗, 잠시 문제가 생겼어요"
+      presentation="mascot"
+      speechLayout="adaptive"
       description={actionError}
       transient
       speechDensity="default"
@@ -267,11 +281,15 @@ export default function InventoryScreen() {
       testID="inventory-action-notice"
       tone="success"
       title={visibleRemovalNotice}
+      presentation="mascot"
+      speechMood="check"
+      speechLayout="adaptive"
       actionLabel="되돌리기"
-      speechActionPlacement="inside"
+      speechActionPlacement="below"
       onAction={() => {
         deferredRemoval.undoRemoval();
         setShoppingOfferTarget(null);
+        setConsumptionNotice(null);
       }}
       transient
       speechDensity="default"
@@ -284,8 +302,11 @@ export default function InventoryScreen() {
         testID="inventory-action-notice"
         tone="success"
         title={`${shoppingOfferTarget.displayName} 다 썼어요.`}
+        presentation="mascot"
+        speechMood="praise"
+        speechLayout="adaptive"
         actionLabel="장보기에서 찾기"
-        speechActionPlacement="inside"
+        speechActionPlacement="below"
         onAction={() => {
           trackAffiliateEntryTap("inventory_consumed");
           router.push({
@@ -302,6 +323,17 @@ export default function InventoryScreen() {
         onDismiss={() => setShoppingOfferTarget(null)}
       />
     </AffiliateEntryImpression>
+  ) : consumptionNotice ? (
+    <FeedbackBanner
+      tone="success"
+      title={consumptionNotice}
+      presentation="mascot"
+      speechMood="praise"
+      speechLayout="adaptive"
+      speechTextVariant="bodySmall"
+      transient
+      onDismiss={() => setConsumptionNotice(null)}
+    />
   ) : null;
   const inventoryStatusHero = useMemo(
     () =>
@@ -359,6 +391,8 @@ export default function InventoryScreen() {
   const inventoryDefaultHero = inventoryStatusNotices.length ? (
     <JangoHeroNoticeCarousel
       notices={inventoryStatusNotices}
+      size="small"
+      layout="adaptive"
     />
   ) : null;
   const inventoryFilterHero = inventoryActionNotice ?? inventoryDefaultHero;
@@ -436,6 +470,7 @@ export default function InventoryScreen() {
     setQuickEditItem(null);
     setIsSelectionMode(true);
     setShoppingOfferTarget(null);
+    setConsumptionNotice(null);
     setActionErrorMessage(null);
     deferredRemoval.clearError();
     setSelectedIds(initialId ? [initialId] : []);
@@ -475,6 +510,7 @@ export default function InventoryScreen() {
 
   const openCleanupSheet = (item: InventoryItem) => {
     setShoppingOfferTarget(null);
+    setConsumptionNotice(null);
     setActionErrorMessage(null);
     deferredRemoval.clearError();
     setCleanupItem(item);
@@ -529,6 +565,7 @@ export default function InventoryScreen() {
     // Optimistic: leave selection mode immediately so the next pick feels instant.
     setActionErrorMessage(null);
     setShoppingOfferTarget(null);
+    setConsumptionNotice(null);
     deferredRemoval.clearError();
     setSelectedIds([]);
     setIsSelectionMode(false);
@@ -542,6 +579,7 @@ export default function InventoryScreen() {
     setCleanupItem(null);
     setActionErrorMessage(null);
     setShoppingOfferTarget(null);
+    setConsumptionNotice(null);
     deferredRemoval.scheduleRemoval(item, "consume");
   };
 
@@ -549,6 +587,7 @@ export default function InventoryScreen() {
     setCleanupItem(null);
     setActionErrorMessage(null);
     setShoppingOfferTarget(null);
+    setConsumptionNotice(null);
     deferredRemoval.scheduleRemoval(item, "consume", amountBase);
   };
 

@@ -349,7 +349,7 @@ export default function InventoryEditScreen() {
 
   if (itemQuery.isLoading) {
     return (
-      <Screen contentWidth="form" topInsetMode="none">
+      <Screen background="ingredients" contentWidth="form" topInsetMode="none">
         <EmptyState
           kind="loading"
           mood="idle"
@@ -362,7 +362,7 @@ export default function InventoryEditScreen() {
 
   if (!item) {
     return (
-      <Screen contentWidth="form" topInsetMode="none">
+      <Screen background="ingredients" contentWidth="form" topInsetMode="none">
         <EmptyState
           kind="error"
           mood="worry"
@@ -377,7 +377,7 @@ export default function InventoryEditScreen() {
 
   if (isFinalStatus) {
     return (
-      <Screen contentWidth="form" topInsetMode="none">
+      <Screen background="ingredients" contentWidth="form" topInsetMode="none">
         <EmptyState
           kind="success"
           mood="happy"
@@ -395,7 +395,7 @@ export default function InventoryEditScreen() {
   }
 
   return (
-    <Screen
+    <Screen background="ingredients"
       contentWidth="form"
       contentStyle={inventoryFormStyles.screenSections}
       topInsetMode="none"

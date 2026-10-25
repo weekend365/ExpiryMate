@@ -155,7 +155,7 @@ function RecommendationCreditsStoreScreen() {
   };
 
   return (
-    <SettingsScreen>
+    <SettingsScreen backgroundTreatment="reading">
       <SettingsGroup
         title="필요한 만큼 충전하기"
         description={`현재 ${monetization.access?.paidCredits.balance ?? 0}회 보유 · 자동 갱신되지 않아요.`}

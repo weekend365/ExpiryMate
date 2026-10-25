@@ -22,7 +22,7 @@ describe("getRecommendationHeroStatus", () => {
         errorMessage: "추천을 만들지 못했어요",
       }),
     ).toEqual({
-      message: "냉장고를 들여다보는 중이에요. 다른 화면을 봐도 괜찮아요.",
+      message: "재료로 뭘 만들지 생각 중이에요. 다른 화면을 봐도 괜찮아요.",
       mood: "think",
     });
   });
@@ -139,7 +139,7 @@ describe("getRecommendationHeroStatus", () => {
       }),
     ).toEqual({
       message: "재료를 넣으면 오늘 요리를 골라 드릴게요.",
-      mood: "speak",
+      mood: "encourage",
     });
   });
 
@@ -154,4 +154,13 @@ describe("getRecommendationHeroStatus", () => {
       mood: "worry",
     });
   });
+});
+
+it("uses confirmed recipe counts and keeps errors ahead of celebration", () => {
+  expect(getRecommendationHeroStatus({ ...idle, justGenerated: true, hasRecommendationResult: true, recommendationCount: 2 }))
+    .toMatchObject({ mood: "excited", message: "2가지 골랐어요! 오늘 끌리는 메뉴가 있나요?" });
+  expect(getRecommendationHeroStatus({ ...idle, justGenerated: true, errorMessage: "연결을 확인해 주세요." }).mood).toBe("worry");
+});
+it("does not mention unfiltered raw ingredients during safety-aware generation", () => {
+  expect(getRecommendationHeroStatus({ ...idle, isGenerating: true, hasSafetyPreferences: true, ingredientNames: ["우유"] }).message).not.toContain("우유");
 });

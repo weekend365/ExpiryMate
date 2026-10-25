@@ -30,7 +30,8 @@ export function HomeHero({
     <SurfaceCard variant="hero" tone={heroTone} style={styles.heroCard}>
       <JangoHeroNoticeCarousel
         density={getHomeHeroDensity(width, fontScale)}
-        layout={getHomeHeroDensity(width, fontScale) === "compact" ? "stacked" : "inline"}
+        size="medium"
+        layout="adaptive"
         notices={notices.map((notice) => ({
           id: notice.id,
           message: notice.message,

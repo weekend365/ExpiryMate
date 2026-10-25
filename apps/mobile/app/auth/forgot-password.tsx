@@ -53,7 +53,7 @@ export default function ForgotPasswordScreen() {
   };
 
   return (
-    <Screen
+    <Screen background="welcome"
       contentWidth="form"
       title="비밀번호를 잊었어요"
       subtitle="재설정 링크를 메일로 보내드릴게요."

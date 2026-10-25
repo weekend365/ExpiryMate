@@ -30,6 +30,7 @@ export function getRecommendationHeroStatus(input: {
   isGenerating: boolean;
   justGenerated: boolean;
   hasRecommendationResult: boolean;
+  recommendationCount?: number;
   errorMessage?: string | null;
   isQuotaError: boolean;
   isCapacityError: boolean;
@@ -41,7 +42,9 @@ export function getRecommendationHeroStatus(input: {
 }): RecommendationHeroStatus {
   if (input.isGenerating) {
     return {
-      message: "냉장고를 들여다보는 중이에요. 다른 화면을 봐도 괜찮아요.",
+      message: !input.hasSafetyPreferences && input.ingredientNames?.length
+        ? `${input.ingredientNames.join(" · ")}로 뭘 만들지 생각 중이에요. 다른 화면을 봐도 괜찮아요.`
+        : "재료로 뭘 만들지 생각 중이에요. 다른 화면을 봐도 괜찮아요.",
       mood: "think",
     };
   }
@@ -56,21 +59,23 @@ export function getRecommendationHeroStatus(input: {
   if (input.needsIngredients && !input.hasRecommendationResult) {
     return {
       message: "재료를 넣으면 오늘 요리를 골라 드릴게요.",
-      mood: "speak",
+      mood: "encourage",
     };
   }
 
   if (input.justGenerated) {
     return {
-      message: "추천이 준비됐어요. 같이 살펴볼까요?",
-      mood: "happy",
+      message: input.recommendationCount
+        ? `${input.recommendationCount}가지 골랐어요! 오늘 끌리는 메뉴가 있나요?`
+        : "추천이 준비됐어요. 같이 살펴볼까요?",
+      mood: "excited",
     };
   }
 
   if (input.hasRecommendationResult) {
     return {
       message:
-        "이 요리들로 오늘을 채워볼까요? 조건만 바꿔도 다시 골라 드릴게요.",
+        "오늘 끌리는 메뉴가 있나요? 재료와 조리 시간을 같이 살펴봐요.",
       mood: "cooking",
     };
   }

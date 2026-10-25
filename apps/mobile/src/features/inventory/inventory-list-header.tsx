@@ -79,7 +79,8 @@ export function InventoryFilterToolbar({
   hasActiveFilters: boolean;
   onClearFilters: () => void;
 }) {
-  const { isComfortableText } = useResponsiveLayout();
+  const { isComfortableText, isRegular } = useResponsiveLayout();
+  const stackFilters = shouldStackDense || !isRegular;
 
   return (
     <View
@@ -139,13 +140,13 @@ export function InventoryFilterToolbar({
         <View
           style={[
             styles.filterPairRow,
-            shouldStackDense && styles.filterPairRowDense,
+            stackFilters && styles.filterPairRowDense,
           ]}
         >
           <View
             style={[
               styles.filterControls,
-              shouldStackDense && styles.filterControlsDense,
+              stackFilters && styles.filterControlsDense,
             ]}
           >
             <View
@@ -183,14 +184,14 @@ export function InventoryFilterToolbar({
                 }
               />
               <ExpiryTrafficLamp
-                label="곧"
+                label="7일 내"
                 count={facetCounts.status.within7}
                 tone="warning"
                 hasData={facetCounts.status.within7 > 0}
                 selected={filter === "within7"}
                 onPress={() => onToggleExpiryFilter("within7")}
                 testID="inventory-expiry-filter-within7"
-                accessibilityLabel={`곧 ${facetCounts.status.within7}건`}
+                accessibilityLabel={`7일 내 기한 ${facetCounts.status.within7}건`}
                 accessibilityHint={
                   filter === "within7"
                     ? "다시 누르면 전체 보관함을 보여 드려요."
@@ -217,7 +218,7 @@ export function InventoryFilterToolbar({
             <View
               style={[
                 styles.locationFilterTile,
-                shouldStackDense && styles.locationFilterTileDense,
+                stackFilters && styles.locationFilterTileDense,
                 hasLocationFilter && styles.locationFilterTileActive,
               ]}
             >
@@ -256,6 +257,7 @@ export function InventoryFilterToolbar({
             disabled={!hasActiveFilters}
             style={({ pressed }) => [
               styles.moreMenuButton,
+              styles.clearFiltersButton,
               pressed && hasActiveFilters && styles.headerFilterButtonPressed,
             ]}
             accessibilityRole="button"
@@ -272,6 +274,9 @@ export function InventoryFilterToolbar({
               size={spacing.md}
               strokeWidth={2.4}
             />
+            <AppText variant="bodySmall" tone={hasActiveFilters ? "default" : "muted"}>
+              필터 해제
+            </AppText>
           </Pressable>
         </View>
       </View>

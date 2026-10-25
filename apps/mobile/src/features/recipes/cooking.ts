@@ -512,7 +512,7 @@ export function getCookingGuideMessage(
     return "준비한 재료를 하나씩 눌러 주세요.";
   }
   if (currentIndex === cookingStepCount + 1) {
-    return "완성된 요리를 먼저 즐겨 주세요. 사용한 재료 정리는 지금 하거나 홈에서 나중에 이어갈 수 있어요.";
+    return "저도 한 입만… 마음으로요. 사용한 재료 정리는 지금 하거나 홈에서 나중에 이어갈 수 있어요.";
   }
   if (currentIndex > cookingStepCount + 1) {
     return "실제로 사용한 양이 다르면 수정할 수 있어요.";

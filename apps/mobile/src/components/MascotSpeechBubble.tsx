@@ -12,16 +12,18 @@ import Animated, {
   useSharedValue,
   withSpring,
   useReducedMotion,
+  cancelAnimation,
 } from "react-native-reanimated";
 import { appBrand } from "@expirymate/shared";
 import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { AppText, type AppTextVariant } from "./AppText";
+import { LARGE_TEXT_MIN_FONT_SCALE, useResponsiveLayout } from "../shared/responsive-layout";
 import { Mascot, type MascotMood } from "./Mascot";
 
 interface MascotSpeechBubbleProps {
   message: string;
   mood?: MascotMood;
-  size?: "small" | "medium";
+  size?: "small" | "medium" | "large";
   numberOfLines?: number;
   style?: StyleProp<ViewStyle>;
   /** Headline lines (step questions, success) should read as the main copy. */
@@ -33,8 +35,10 @@ interface MascotSpeechBubbleProps {
    * that sit above a list, not as the page title.
    */
   density?: "default" | "compact";
-  /** Opt-in full-width copy for narrow home screens with large text. */
-  layout?: "inline" | "stacked";
+  /** Adaptive guides keep the full body and copy visible on small/large-text screens. */
+  layout?: "inline" | "stacked" | "adaptive";
+  /** Input and cooking guides stay still while the user works. */
+  animation?: "entrance" | "none";
   /** Adds a close affordance for transient, event-driven notices only. */
   onDismiss?: () => void;
   /** Optional link appended to the message in the same text line. */
@@ -62,6 +66,7 @@ export function MascotSpeechBubble({
   supportingMessage,
   density = "default",
   layout = "inline",
+  animation = "entrance",
   onDismiss,
   inlineActionLabel,
   onInlineAction,
@@ -69,11 +74,16 @@ export function MascotSpeechBubble({
   const opacity = useSharedValue(0);
   const offset = useSharedValue(0);
   const isCompact = density === "compact";
-  const isStacked = layout === "stacked";
+  const { shouldStackDense, fontScale } = useResponsiveLayout();
+  // Native 1.3 can arrive as 1.2999999523162842. Only normalize this opt-in layout.
+  const isLargeText = Math.round(fontScale * 1_000_000) / 1_000_000 >= LARGE_TEXT_MIN_FONT_SCALE;
+  const isStacked = layout === "stacked" ||
+    (layout === "adaptive" && (size === "large" ||
+      (size === "medium" ? shouldStackDense : isLargeText)));
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (reduceMotion) {
+    if (reduceMotion || animation === "none") {
       opacity.value = 1;
       offset.value = 0;
       return;
@@ -82,7 +92,11 @@ export function MascotSpeechBubble({
     offset.value = spacing.xs;
     opacity.value = withSpring(1, SPRING);
     offset.value = withSpring(0, SPRING);
-  }, [message, mood, offset, opacity, reduceMotion]);
+    return () => {
+      cancelAnimation(opacity);
+      cancelAnimation(offset);
+    };
+  }, [message, mood, offset, opacity, reduceMotion, animation]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
@@ -110,7 +124,7 @@ export function MascotSpeechBubble({
             }`
       }
     >
-      <Mascot size={size} mood={mood} style={styles.mascot} />
+      <Mascot size={size} mood={mood} decorative style={styles.mascot} />
       <View style={[styles.bubbleColumn, isStacked && styles.bubbleColumnStacked]}>
         <View
           style={[

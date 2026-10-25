@@ -18,7 +18,7 @@ describe("getInventoryHeroNotice", () => {
       getInventoryHeroNotice({ ...populated, isSelectionMode: true }),
     ).toEqual({
       show: true,
-      mood: "speak",
+      mood: "check",
       tone: "neutral",
       message: "정리할 재료를 골라 주세요.",
     });
@@ -99,9 +99,9 @@ describe("getInventoryHeroNotice", () => {
       }),
     ).toEqual({
       show: true,
-      mood: "speak",
-      tone: "neutral",
-      message: "조건에 맞는 재료 2개를 모아 뒀어요.",
+      mood: "worry",
+      tone: "danger",
+      message: "기한 지난 재료 2개예요. 상태부터 확인해 주세요.",
     });
 
     expect(
@@ -112,9 +112,9 @@ describe("getInventoryHeroNotice", () => {
       }),
     ).toEqual({
       show: true,
-      mood: "speak",
+      mood: "point",
       tone: "neutral",
-      message: "조건에 맞는 재료 3개를 모아 뒀어요.",
+      message: "7일 안에 기한이 오는 재료 3개를 모았어요.",
     });
 
     expect(
@@ -125,9 +125,9 @@ describe("getInventoryHeroNotice", () => {
       }),
     ).toEqual({
       show: true,
-      mood: "speak",
+      mood: "point",
       tone: "neutral",
-      message: "조건에 맞는 재료 5개를 모아 뒀어요.",
+      message: "조건에 맞는 재료 5개를 모았어요.",
     });
   });
 
@@ -155,7 +155,7 @@ describe("getInventoryHeroNotice", () => {
       }),
     ).toEqual({
       show: true,
-      mood: "speak",
+      mood: "check",
       tone: "warning",
       message: "7일 안에 손볼 재료 3개를 확인할까요?",
       action: "show_within7",

@@ -36,7 +36,7 @@ describe("inventory action notice contract", () => {
     );
     expect(screen).not.toContain('description="다시 채워둘까요?"');
     expect(screen).toContain('actionLabel="장보기에서 찾기"');
-    expect(screen).toContain('speechActionPlacement="inside"');
+    expect(screen).toContain('speechActionPlacement="below"');
     expect(feedbackBanner).toContain('speechActionPlacement = "below"');
     expect(feedbackBanner).toContain(
       'speechActionPlacement === "inside"',

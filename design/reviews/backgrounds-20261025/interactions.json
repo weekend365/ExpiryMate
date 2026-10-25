@@ -1,0 +1,8 @@
+{
+  "submitInitiallyEnabled": false,
+  "submitAfterTypingEnabled": true,
+  "privacyErrorBackground": true,
+  "privacyLoadingBackground": true,
+  "privacyRecoveredBackground": true,
+  "privacyRecoveredText": "지금 8건의 추천이 남아 있어요. 정리하면 바로 지워져요."
+}

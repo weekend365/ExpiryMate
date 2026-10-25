@@ -80,7 +80,7 @@ describe("major flow deduplication contract", () => {
     const screen = read("app/register-photo.tsx");
 
     expect(screen).toContain('if (step === "loading") return "사진 분석"');
-    expect(screen).toContain('message="글자와 재료를 천천히 읽고 있어요."');
+    expect(screen).toContain('message="사진 속 재료를 읽고 있어요."');
     expect(screen).not.toContain("저장 준비를 마쳤어요");
     expect(screen).not.toMatch(/`\$\{readyCount\}개 재료 추가`/);
     expect(screen).toContain('"확인된 재료 먼저 추가"');

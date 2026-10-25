@@ -1,0 +1,310 @@
+{
+  "baseCommit": "822e2fe30e1e9edfa06764b31c668cf676352ebd",
+  "authorization": "장고 중심 개선안 반영해줘.",
+  "method": "React Native Web component fixtures; example data; native integrations not exercised",
+  "source": {
+    "apps/mobile/app/(tabs)/inventory.tsx": {
+      "beforeSHA256": "81007b74d990117461b185a26dc657be3ea75744eadb01a99d582c6b98b872d1",
+      "afterSHA256": "eab55e5def1ae7b182808cc1e661651856ec453769b21d7a77e92b5213c5b585"
+    },
+    "apps/mobile/app/(tabs)/recommendations.tsx": {
+      "beforeSHA256": "308a61b9e856aa3804ad559093a893fc6113adf52890d7fa507f2485e1e4d0cf",
+      "afterSHA256": "691a15ed04e2d370d238100281d9699afa4785ec92985c993b384d15557f128b"
+    },
+    "apps/mobile/app/(tabs)/settings.tsx": {
+      "beforeSHA256": "f230b60f2c93d8488b82d980a14bb1d0fa3828e0095739f3f9a87f6c3e52b3b5",
+      "afterSHA256": "1834206bf5ce9b85ec85f0e0c03caed4a0d9d82641781625230885a6fdc24445"
+    },
+    "apps/mobile/app/cooking/[recommendationId].tsx": {
+      "beforeSHA256": "3fd07f6e72b8e39eb20d9f82cf340e32a33f23e77f1d9e98acf12630958ccc99",
+      "afterSHA256": "228d731eb16637fecba29642775e2de1c0db18445422d3fce7a266e6f21bf6b3"
+    },
+    "apps/mobile/app/insights.tsx": {
+      "beforeSHA256": "0a68f553ce146b89b400a478ae71a249b4ec301fb8ad05b255a5c3f2282d6c39",
+      "afterSHA256": "27caa20a15062f758845f43e44236ecf91aa019c80c327702919fd3785245078"
+    },
+    "apps/mobile/app/onboarding.tsx": {
+      "beforeSHA256": "8b247c0b85f31517e1d35114a342f8159abf9bdae111bac6d77400d0a123b4a7",
+      "afterSHA256": "6efab8d9566cc231e6f7b9b0f338f35ce792923e68fb970f74497ddc5fbfa2c9"
+    },
+    "apps/mobile/app/register-photo.tsx": {
+      "beforeSHA256": "41d2e8699621a99aa5a38f1cc9ea4626b4f0e4d4505fe159b3e1c96c0fd77df2",
+      "afterSHA256": "c5809d92bbe17379ec3cce6e3e9bb2331c3905748c47cf092cb6150c8c3ae4ea"
+    },
+    "apps/mobile/app/register.tsx": {
+      "beforeSHA256": "8dc4188a1ca3dc23b0e38a520ad206f0a3676d4f6c1e086e06317450dbf4de76",
+      "afterSHA256": "7efb6faa5ca58040b5fec6e7e648a40154b627fa9e411d471e9b381334587999"
+    },
+    "apps/mobile/app/settings/subscription.tsx": {
+      "beforeSHA256": "648c9857fe645739f70f1fdadd645d2c4335ac356c11a62043c21ae2f612806c",
+      "afterSHA256": "4e1db8cc6c0f5186ee4600fd08843f91a360a4cdfa58813f78e0ab04a3decaf2"
+    },
+    "apps/mobile/app/settings/support.tsx": {
+      "beforeSHA256": "b8bf74a55675d01c6936512ec0abe088584b6069d2227af6269657261d00c05c",
+      "afterSHA256": "2c411e457e3d8d1f855d52ed67f981f9bfa79e45ccf75574467a6d241306cbe7"
+    },
+    "apps/mobile/src/components/FeedbackBanner.tsx": {
+      "beforeSHA256": "32a81802f5ae8696cde588d8b9fb55a99932c5dcefa9f8e77d720d03fe6d9f1a",
+      "afterSHA256": "18d20935396fe52f1d7d0967c5cdeb88445fe142c4cb0c94960c99c256ba14cf"
+    },
+    "apps/mobile/src/components/JangoHeroNoticeCarousel.tsx": {
+      "beforeSHA256": "c0c16a8ba6b0c6aac184d19c472e591896bc47cfea37865e8b97a510ceefa616",
+      "afterSHA256": "ed2b19db7334e45ad8805628e3e195438f667c65d2b6e33457e05026b4e2d99c"
+    },
+    "apps/mobile/src/components/Mascot.tsx": {
+      "beforeSHA256": "0f177a3863d48686633b3c8d14eeff8b93b4f9332a5e92faba2805cb5997888a",
+      "afterSHA256": "0b15009cd03a1e954c2b34b31e03cb2ac16b3384863a935f58ccb03b7c369f0c"
+    },
+    "apps/mobile/src/components/MascotSpeechBubble.tsx": {
+      "beforeSHA256": "7168abbb6156c7eb0c93fa54e61a356673ffb3e724994fd7cf04b9038709f607",
+      "afterSHA256": "db7f9d7a1eaefd86d305bdcacde5f37ef587a2ea298c3d12308f12b87d0c7398"
+    },
+    "apps/mobile/src/components/StepFlow.tsx": {
+      "beforeSHA256": "1c88dd077896b472438a56b55d5d72b9489e001b5d537488a47026a4574398a6",
+      "afterSHA256": "1c38044a0cda7f1b4ce6ab114f3baed2e0601a3c989d7f9f931cb56dcb8f0e9e"
+    },
+    "apps/mobile/src/features/home/home-hero.tsx": {
+      "beforeSHA256": "e5e614c63ed078b39a4cfb9e625fc8e6b270ef73d3a3ac1b7b1f9a83a3742a96",
+      "afterSHA256": "b9c293e8ebe6b0bdda0d36a80d4a1d61b9055ed751a200777347d599e4acb321"
+    },
+    "apps/mobile/src/features/home/home-notices.ts": {
+      "beforeSHA256": "ff17236c827b4c7824a4fcb1e7396dc9ef3aeb25bfc19ebc662dbccf1ead79ae",
+      "afterSHA256": "ad9f5263794654348826aa6328e76d27f7ea7ee60c3815bdcd40e08c28749d47"
+    },
+    "apps/mobile/src/features/inventory/deferred-inventory-removal.test.ts": {
+      "beforeSHA256": "53b7508319c112c096e37473d30338ff53d8bec1be424866bce896c971fdff75",
+      "afterSHA256": "ea4c6e18661fb2deae90868677fa6dd0d67aad2ca721a61b9c8911d6bb9053e9"
+    },
+    "apps/mobile/src/features/inventory/deferred-inventory-removal.ts": {
+      "beforeSHA256": "c9fd1c624658534176d387690961f0edbdb76e179d1ef23cc443513fac702139",
+      "afterSHA256": "bc1b99aa3c2a7fe95dc8a877e05e815840df8c9a11a7b48568db958212e81af5"
+    },
+    "apps/mobile/src/features/inventory/inventory-action-notice-contract.test.ts": {
+      "beforeSHA256": "35c7588a096baedb74809d6a61d6a169c3928f8f12473b9d66780597dfce0409",
+      "afterSHA256": "47330b5434189690afab5d50c1e8952af00fa4b16093643fefb48258fd960f71"
+    },
+    "apps/mobile/src/features/inventory/inventory-expiry-filter-contract.test.ts": {
+      "beforeSHA256": "9c55a3be1abe1c9dcd1505dfaef39f35526cf2fdaa33ec8bb15e5247d18f23ba",
+      "afterSHA256": "8bef404cbf82104c628e7e7fd5fe7df2e012209232e6720c3edae83efbfe063c"
+    },
+    "apps/mobile/src/features/inventory/inventory-hero.test.ts": {
+      "beforeSHA256": "c9fbe9fc0514120da6f6ac0d6a10de75a3255af57e5bee925adabbaee8e08f1e",
+      "afterSHA256": "3f3ef827cee5af0a52d9bbfe695c7ff682f7157b3bc1b5a47971a36e848afb99"
+    },
+    "apps/mobile/src/features/inventory/inventory-hero.ts": {
+      "beforeSHA256": "20734d65924afd861858799e4061d8ed68c5fd3a97176dabb526a99ecfc20be2",
+      "afterSHA256": "aed4570b6b23ab3e53bb1ea924754241463b30d2f5b2bf64d2856a4bbb4d9511"
+    },
+    "apps/mobile/src/features/inventory/inventory-list-header.tsx": {
+      "beforeSHA256": "bc9c36d79519f6c2a10d40342dc478fd9d78f815d1fd401822797e99af90205a",
+      "afterSHA256": "b6cc522f640ee3a7078a684423325144ac8d49fc53316f78b9a1bf5b199f8142"
+    },
+    "apps/mobile/src/features/inventory/inventory-screen-styles.ts": {
+      "beforeSHA256": "5651b1234cb89fd1cc148f468bf244cb41ac0323a188b33b289f7ce2ca32add5",
+      "afterSHA256": "d5f8fd79e3ebd09470f4b3a406eef057cbbe816908057f544bd90b1a41652b81"
+    },
+    "apps/mobile/src/features/inventory/inventory-urgency-section.tsx": {
+      "beforeSHA256": "3b9950b2ae09c87e70a462f546dd3300b68743955ba045aa9ff332d08d5b146f",
+      "afterSHA256": "5c6e1154e218211eb9a3178ed05483c2668521c3ff78feed49f64b227367e120"
+    },
+    "apps/mobile/src/features/inventory/review-consumption.test.ts": {
+      "beforeSHA256": "e7d7f410e034eefc39c0963dfc1517b4f853ff06d0c7354124ab5164e6088b85",
+      "afterSHA256": "67b51de15fa156d9f4bc2ba2579a2401b0754ae00a05d0172c5cafbeae960220"
+    },
+    "apps/mobile/src/features/inventory/use-deferred-inventory-item-removal.ts": {
+      "beforeSHA256": "cce3dd3eaafc34ccd769a7f818abf76fb992d88c7dc55bbd6830d170222f4516",
+      "afterSHA256": "c69bf9db0c16a560f01d220b282f1b255a9b453184d1ef62c8a13848783b79db"
+    },
+    "apps/mobile/src/features/recipes/cooking.test.ts": {
+      "beforeSHA256": "1a1a3695e0c4f5eac33c72927a8ca98b1f02e416ba517cdfa277ea47ee01a75e",
+      "afterSHA256": "634ce397dcca6ea7ebf5e74b8e30e94b9ff9f23f767c713ae0875750b9faf9d7"
+    },
+    "apps/mobile/src/features/recipes/cooking.ts": {
+      "beforeSHA256": "66570ed05e11273958671cc72cd0f00eec6133961462788b88b71884ec6049f7",
+      "afterSHA256": "0ab3ee2c691353b79e42410b947c4b5c386da04f1873560e7467768d05d56952"
+    },
+    "apps/mobile/src/features/recipes/recipe-detail-sheet.tsx": {
+      "beforeSHA256": "5805ba32710983b2c672ea4218482be6ad5a638b9f518e13e14143363695ca22",
+      "afterSHA256": "f68b774f1b925c4badc9b06f4233da2ad37d410e70e539f30f2224f72e3e98d0"
+    },
+    "apps/mobile/src/features/recipes/recipe-detail.test.ts": {
+      "beforeSHA256": "d0aa1ebadcf3205513fd5faa0334463f0bfdd0f3fa600c131f56d9e5e2484bfa",
+      "afterSHA256": "d1c4c22fd55aaf1ffe35a29afdc9ab8ebac67e63c09ee03ff562c0c8b44e21ad"
+    },
+    "apps/mobile/src/features/recipes/recipe-detail.ts": {
+      "beforeSHA256": "c5d40c72c3995b1987622284e269746c56bc03f38b0b0df697960557e7084efb",
+      "afterSHA256": "156b152b0d3fd884e38b7946164a6d19ac5d0e910ab2b8176ae5520e8ce872b0"
+    },
+    "apps/mobile/src/features/recipes/recommendation-hero.test.ts": {
+      "beforeSHA256": "0c4f656f375b76cd6e187a0abe54b938d40ad355d1753e23668190480cf94c0e",
+      "afterSHA256": "05d64a0d19be1390ce885a014c8c7505d40fedb90bbc194e0dc07ab85f5ad686"
+    },
+    "apps/mobile/src/features/recipes/recommendation-hero.ts": {
+      "beforeSHA256": "1d2657da73dfb6d54c6e912bf872b86fa95ab915729eca2f124c8c66f5064d84",
+      "afterSHA256": "8ec54af8dd833d966d3a84570cfdcdde5f39eac67230bde3c8f5fc0c90beb1aa"
+    },
+    "apps/mobile/src/features/registration/registration-completion-notices.test.ts": {
+      "beforeSHA256": "c915efc6420bcfaae94ebbdaeaaccd81d133f6ca0af39ac4be0bcfe6948f168c",
+      "afterSHA256": "520a99107410f6072524b3e708642b3201602c0de9f5ddbfbaff3385c76501a4"
+    },
+    "apps/mobile/src/features/registration/registration-completion-notices.ts": {
+      "beforeSHA256": "e2cb658607ffb546ef368b6f296f0b35bd3db55b1977957cfc39519ac034bf80",
+      "afterSHA256": "6fb228eacf222427dbdfdc0c26f8d03b7f9886ac2f8f3cc31f0de1c1d2757b34"
+    },
+    "apps/mobile/src/features/shopping/shopping-hero-card.tsx": {
+      "beforeSHA256": "eeab29be8c3ddb522adb6cf9135a7d9ad74beeb1d825b2250589cd24a2ab86e3",
+      "afterSHA256": "1c482370db32ffbb03b78289a601b07403f0a34e60a9958e4fa513fb1840fa9a"
+    },
+    "apps/mobile/src/features/shopping/shopping-list-panel.tsx": {
+      "beforeSHA256": "178d0406db80cc0f503dc9670e69d41aa7e6080b6bd25b4fa08e95ebb209cb22",
+      "afterSHA256": "bdfeb93cf69b64fac2c7e5a1037a76b47541246ba70f9c0b07ba8340fd224f08"
+    },
+    "apps/mobile/src/features/subscriptions/subscription-restore.test.tsx": {
+      "beforeSHA256": "ca6ecf0dff9aafb27349a24a6227b49c4e732923b11d7d549325674ee752f6dc",
+      "afterSHA256": "a6e5ea2a22f63c14da34cd4a4c582d3d9329683faaefb47dd5aeac00338c2138"
+    },
+    "apps/mobile/src/shared/flow-deduplication-contract.test.ts": {
+      "beforeSHA256": "a02fb95f8c6227b018b9800e6d13a9a171f6fe14cce9e9b4155132c582a983e3",
+      "afterSHA256": "57c6885d5cbc9920c1d84383b3fc046f72fcb0c1e5f35eafb640fd7e2a405a09"
+    },
+    "apps/mobile/src/shared/mascot-notice-contract.test.ts": {
+      "beforeSHA256": "75de3f363a02213df0a41bc7670a28176f4fa8fd174911fad9815b2d63b7911f",
+      "afterSHA256": "c3db6353492ab69fc6f6f78fdc13345f1bd04fc6f93f36717500eea804f9f2dd"
+    }
+  },
+  "artifacts": {
+    "action-checks.json": "6b6fd301569e7c1db24d6fef131e999068ea6ac6b0362b6961570c493f3b9b3d",
+    "home-360-1.jpg": "366d921cbfb5cd835f009c96b42607025230e35e2e2f3d4cc0633afa76ab5988",
+    "inventory-320-2.jpg": "edb8240b7b6bdb4e854f842815b99acf0a8b83b50cebe9ea83115a2d720d2200",
+    "layout-checks.json": "68efc6df255e188db5b2a474ba1d77fa1a8f3a7850e3b71711f1deb1767f6773",
+    "photo-review-360-1.jpg": "b97af937b1e4df7da9123238e0bec59935237564f94614c61e1438eaf9f2c9f1",
+    "recommendation-320-2.jpg": "c188c14ad5738a930d3843ab4c3f1d1632faacd126b1ba24d5ff5768c141055d",
+    "registration-360-1.jpg": "15747799d198a8e32dfc97d3d76f22bf2fe0c42fbf3609fb74629fa523160050",
+    "settings-360-1.jpg": "928e3490a511e245a8028a2c0495fb2d34066c371c255daed518a46ea352b0e0",
+    "state-checks.json": "eb5293c9e776bb173102f46f09d292a9133e5141a376c375f7795c96b61178ab",
+    "README.md": "d5ca3bc6a2c7fb8a7c506245b7cc30c26c346c0cf3e2e666b4b571e8b8eb3273"
+  },
+  "existingCharacterAssets": {
+    "design/jango/style-master.json": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0",
+    "design/jango/masters/v18/master.json": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83",
+    "apps/mobile/assets/characters/moods.json": "87265289706fad52c0b0424e33a5482f7a2d62742b60f420581002132f2b40e2",
+    "apps/mobile/assets/characters/runtime/full/jango-check@3x.png": "ea23ae11273ba83536f646ece8a933c0a35df62d4b1aa8c7cfec0e728880a91a",
+    "apps/mobile/assets/characters/runtime/full/jango-worry@3x.png": "0b01781b0f6295e2cf13e6c03b9ba5ed9807c37078b54ddc5acb4a5e926f8f87",
+    "apps/mobile/assets/characters/runtime/full/jango-encourage.png": "52448cfe6739ec23c871d4260243e21ed636c6a059942eed92befe3247a46c38",
+    "apps/mobile/assets/characters/runtime/full/jango-point@3x.png": "8fc6c3783c87c780378e0db5838baf043a83350e02525de954bd76f2f6a2f09b",
+    "apps/mobile/assets/characters/runtime/full/jango-cooking@2x.png": "997b5e27ab4db60fa50655ad5523cdd72de2f93a3d0136f4926b518ad0f8257f",
+    "apps/mobile/assets/characters/runtime/full/jango-think@2x.png": "f46b18f97680fe727765e326ead2a1f4c6171e2e33e0dfc619679a82967d6caf",
+    "apps/mobile/assets/characters/runtime/full/jango-acknowledge@3x.png": "fd85076fb2a6df4457ceb2f1954ba24537b7c89f1add78e96c1330a1d64fdb9c",
+    "apps/mobile/assets/characters/runtime/full/jango-empty@2x.png": "0798f58ccf25752e862e6203e140d41f9e1e5799f8a2d6670d55f55f953cf954",
+    "apps/mobile/assets/characters/runtime/full/jango-empty.png": "15369e5aa407e102a561a89426de4949a3571ca7e0c14eec9fcd65084a5d231e",
+    "apps/mobile/assets/characters/runtime/full/jango-point.png": "40cd5e3976f2601d0edfa4e70fe4b4a320230f9f431c9278b0eead5822f67934",
+    "apps/mobile/assets/characters/runtime/full/jango-empty@3x.png": "26f2547f518676100197ef615619d1626bcd829b00de72ab8e33a698283eafc0",
+    "apps/mobile/assets/characters/runtime/full/jango-think@3x.png": "61cb6605d9eb6260f2ab649c89b61e5d1dce382cf1bb19f8d40fc16298382ec9",
+    "apps/mobile/assets/characters/runtime/full/jango-acknowledge@2x.png": "4005fa003760854f0838b02326b86e66c27ac46f4b902a5d3915a27db0ddcc75",
+    "apps/mobile/assets/characters/runtime/full/jango-cooking@3x.png": "33fc5c3373ffb373c87170f968c3e0fc6cc80cd7cbbbda1a6c8b7b7509c345af",
+    "apps/mobile/assets/characters/runtime/full/jango-point@2x.png": "0bb5c899abe96b53e31e6cb5790f464edc79b12367771078903afb14bd950f26",
+    "apps/mobile/assets/characters/runtime/full/jango-enjoy.png": "b6b55a786b2ae6f88fe31c42e3eba8222b844f683ee0a0b0e7b8ca6944957bfe",
+    "apps/mobile/assets/characters/runtime/full/jango-worry@2x.png": "0d64d6c24795fbfa96bcfc184080bec35be104c93666c36597a9160ed149ab9d",
+    "apps/mobile/assets/characters/runtime/full/jango-check@2x.png": "44a4ab8b8e36f9da1889e03fac5ecc465394024f053bf6149fa4c01a57f53708",
+    "apps/mobile/assets/characters/runtime/full/jango-shopping@3x.png": "f1b3cd7afbcd256a1393fe14b7b9101fc2b97d7c2353c0a25c76f789ea18b6d2",
+    "apps/mobile/assets/characters/runtime/full/jango-check.png": "f05e2678eff44e5a08c086c7d2c6c0429746cceadc3c5d0d3d7020cd296dfb85",
+    "apps/mobile/assets/characters/runtime/full/jango-happy.png": "75ee49295c3e0efbf87462df8357a38c2d83ea9704c2de1e5e606781ee405e7c",
+    "apps/mobile/assets/characters/runtime/full/jango-praise.png": "ed5539c83ad51e4b2abc8f51b1acde966acb2b9681289e1792a8ca5829031a1e",
+    "apps/mobile/assets/characters/runtime/full/jango-speak.png": "7c1324c299ffca8275895b0caa29e23111f759b32c7980b206ec169940d6d299",
+    "apps/mobile/assets/characters/runtime/full/jango-shopping@2x.png": "2a7dcb4c2a16630ae87d427437277343a1ff394b27b7c0c94ea9ea4b2a5974c8",
+    "apps/mobile/assets/characters/runtime/full/jango-enjoy@3x.png": "57607b55fc472ad995e82748e144d7968db75e3083409e54f8e2daf7b0805e70",
+    "apps/mobile/assets/characters/runtime/full/jango-speak@3x.png": "a7962c369279a9abdc35be38a4189ea7cc3660781d7c7405631dd4e136a073c2",
+    "apps/mobile/assets/characters/runtime/full/jango-praise@2x.png": "d88c5673fdd26d83c2b3e9469d456de803cd9e9d2c8e2c6d76985047a5336c11",
+    "apps/mobile/assets/characters/runtime/full/jango-encourage@2x.png": "c32e480384f3e735568732b68ebb2ceec978245b1ad23746feaf3bafe92757ba",
+    "apps/mobile/assets/characters/runtime/full/jango-happy@2x.png": "33cf1c92728810461502d16245f39ad3deb70a3eaccf400defcd297730916ad0",
+    "apps/mobile/assets/characters/runtime/full/jango-happy@3x.png": "0536635e2f32c0579b3852b34bf2a2166a43287a6df26ee58c680c56f103b62a",
+    "apps/mobile/assets/characters/runtime/full/jango-acknowledge.png": "e5b61b9dff1e7071af63164ee4b373b9b7c8ebfc759cfe0d97ffc9c028c45b4b",
+    "apps/mobile/assets/characters/runtime/full/jango-encourage@3x.png": "90b570a65656c0b6f37fd169c2728148cd92fff23eaf3011c6ef0b0699b22c28",
+    "apps/mobile/assets/characters/runtime/full/jango-praise@3x.png": "276985296a08db8cb336ac9291a9b3c2f0d8618494e9ac15b8735ae4bf9fde7c",
+    "apps/mobile/assets/characters/runtime/full/jango-speak@2x.png": "1a4acb873119984d379dfa9e47d606c951b90c842033429db28660271a538f17",
+    "apps/mobile/assets/characters/runtime/full/jango-enjoy@2x.png": "12e0b33ec5d024b027c09b72c70136aa1a2b7b9126d2515175d40cca3265cdc9",
+    "apps/mobile/assets/characters/runtime/full/jango-comfort.png": "98246d444fc7178449b95fe4b42f829a431da90f08458b460b0a58ae895e20ba",
+    "apps/mobile/assets/characters/runtime/full/jango-excited@3x.png": "4ab297c630964546e15a8d1c17d8218a43ed601738cbee6ae1f4b3dd695b4bb5",
+    "apps/mobile/assets/characters/runtime/full/jango-excited.png": "180c1ced0d16da7190b5dc8f927f6377330d7a7ef8043a6e754114a60c291bfb",
+    "apps/mobile/assets/characters/runtime/full/jango-idle@2x.png": "4786adbe9aee32c5d1f361ac49e684ee6a01a0a71b00e2c745d578ba853ccccb",
+    "apps/mobile/assets/characters/runtime/full/jango-comfort@3x.png": "e6d275d9728412f1b6bced0b8a893611dd60a6f34a5a97b3f2eb5add450b2fe7",
+    "apps/mobile/assets/characters/runtime/full/jango-cooking.png": "04a44dd1e154f27f76a9a699de7b4dadcdc0056f3d6fc33400501cd08ade92a9",
+    "apps/mobile/assets/characters/runtime/full/jango-think.png": "b327ad260bc59d5b281147747412fdab5a64257110385a0fbd08ff50b9f2d934",
+    "apps/mobile/assets/characters/runtime/full/jango-idle.png": "93afccb79b89e37ed4240f618a29c3a92587f91438a888d3ab3cc37a1cc3ed58",
+    "apps/mobile/assets/characters/runtime/full/jango-shopping.png": "31bf45982fd1351129c68811ac21df28e4ff73148f17d9db4f7ddba37a0d2ec8",
+    "apps/mobile/assets/characters/runtime/full/jango-comfort@2x.png": "7d3aea90ad9ded2b85fe392002729f462154458fb7fcc4463920601114c0364c",
+    "apps/mobile/assets/characters/runtime/full/jango-idle@3x.png": "f00ec9716fb0679c7a6a084c9acf2b2be087f7a2ea1d80a62209e60947db3640",
+    "apps/mobile/assets/characters/runtime/full/jango-worry.png": "389c761c6d474bf4583875aaa1ea6d72d682af190bab5d98b6e0bf8a4451753e",
+    "apps/mobile/assets/characters/runtime/full/jango-excited@2x.png": "a68c1907fd559ce4c95b8a193d15b578a59c1ad69cacbfe0bf35fc18a025c0df",
+    "apps/mobile/assets/characters/runtime/small/jango-check@3x.png": "1cb1641ea561229f70d6ac71b285f41384a2d0d3e6f7953a482af9670daf7749",
+    "apps/mobile/assets/characters/runtime/small/jango-worry@3x.png": "4e8265f49e09f200bea835ee43cac878d3bf17a4df21dc88588faea28e1b0101",
+    "apps/mobile/assets/characters/runtime/small/jango-encourage.png": "b42b2655ffbd4bfcb4257e8c79b52922955a687c307b58c6dd78b93272570237",
+    "apps/mobile/assets/characters/runtime/small/jango-point@3x.png": "dd86541ab878bb86adf962a1c448921258698050743713defca42bf365e4d655",
+    "apps/mobile/assets/characters/runtime/small/jango-cooking@2x.png": "89ddae5f5ce6b65ec8f844b65431228f70a6c5c3202e6c1c5b4dd4c0f544c722",
+    "apps/mobile/assets/characters/runtime/small/jango-think@2x.png": "532e06f10c0fb2831a2931936242293ac0b293c52451d385769bcf161af0c85b",
+    "apps/mobile/assets/characters/runtime/small/jango-acknowledge@3x.png": "d3e1bf1632561cc9596e870d568cd8b99a885d77bc9b33a2ae523e79df7ca909",
+    "apps/mobile/assets/characters/runtime/small/jango-empty@2x.png": "adf02b03b5b17ae716ee26c6eebc32b33bdb5b5ec06a96213be966c5cddb8a90",
+    "apps/mobile/assets/characters/runtime/small/jango-empty.png": "2585270d5fbd4ba5918f5a3e8a5574af2e9b5f41dfff0fc832f9555c28ae258e",
+    "apps/mobile/assets/characters/runtime/small/jango-point.png": "9c88cba1c6308c60e65c8facecb293c1d1429109dfc8d46a99c571c121dae3a3",
+    "apps/mobile/assets/characters/runtime/small/jango-empty@3x.png": "d1e568aa61c6a81f2340c5ca775287ffbc642c52c8a3ba2574288db68d271fc5",
+    "apps/mobile/assets/characters/runtime/small/jango-think@3x.png": "4649e0ca5ce29dd993222bc569e24d31782fbe76958142d536addd72b6b9f2b2",
+    "apps/mobile/assets/characters/runtime/small/jango-acknowledge@2x.png": "a7d8018bf5b722a8ff714573df9967e20a8159cd43c61843a2e738b0e892fd0d",
+    "apps/mobile/assets/characters/runtime/small/jango-cooking@3x.png": "20c2330da0ddd687adac764d28acd1b9d15f238e2ddeebc2eae0369e5ae81133",
+    "apps/mobile/assets/characters/runtime/small/jango-point@2x.png": "f2000959fdcad8b670460a8bae1f04eb36b11b3066b02d0511af517cecb10444",
+    "apps/mobile/assets/characters/runtime/small/jango-enjoy.png": "a90e1d4a6c46403eb34eabdd757336549a99dedd2cd0c9f447039234a43293e0",
+    "apps/mobile/assets/characters/runtime/small/jango-worry@2x.png": "1db73e595f0281ec1a242a12f93aaeca76f46971d915a518db7fb68e4fca7ab5",
+    "apps/mobile/assets/characters/runtime/small/jango-check@2x.png": "97ccf060d26da459253f5d120f6c70b1dc3f4827a360666f37eb6e2c606a1fcf",
+    "apps/mobile/assets/characters/runtime/small/jango-shopping@3x.png": "e7c0b1fce9bcfe1ff1af6e1ed9563d9232d3f35998d46715e8df20a00d578775",
+    "apps/mobile/assets/characters/runtime/small/jango-check.png": "2d04e9daa30fef23827e4540617dd597ee4439e0fcf2aa1787789fbd9b929387",
+    "apps/mobile/assets/characters/runtime/small/jango-happy.png": "9148bc2d619d89b290b15286eb412c65fe4891f1c2146e297d0ef0dcd33ff434",
+    "apps/mobile/assets/characters/runtime/small/jango-praise.png": "7efbba25ad1c04b4a607d86dcf8e22ba81c682f5d21a2bb74b7374599ffbd8d6",
+    "apps/mobile/assets/characters/runtime/small/jango-speak.png": "5dc0eae600cbf33fd63b6a7a691f0d511edab804d8153a5eedd9ad6340ae5e19",
+    "apps/mobile/assets/characters/runtime/small/jango-shopping@2x.png": "a8a507319321e59b57c5f9e2d17bd025c3affbd141f425d34cad4b7b066b56e9",
+    "apps/mobile/assets/characters/runtime/small/jango-enjoy@3x.png": "b39d97b352e8add6562a5a75e63a112bc130d8da3b00a8981d8036ed818a9808",
+    "apps/mobile/assets/characters/runtime/small/jango-speak@3x.png": "35902e89912a4b186387839151cef2f7fb69f65e8073457017f8b8a2f02d8a24",
+    "apps/mobile/assets/characters/runtime/small/jango-praise@2x.png": "f8df0f37dc3acb4e499a32c028d1b8f9740ca7d449c4098af502e3bef39e2498",
+    "apps/mobile/assets/characters/runtime/small/jango-encourage@2x.png": "adbad82131a9bba8abe26fbb8a7e6b578acc6678f72c37b9b6c1b2fe02e17ccb",
+    "apps/mobile/assets/characters/runtime/small/jango-happy@2x.png": "ee9c7b9c43897e71f5458ae08d152155dd0e656f93ed05f7315cd5ffe40ba7cf",
+    "apps/mobile/assets/characters/runtime/small/jango-happy@3x.png": "5a9a3c33cdb59c7f7c64739ea8b135527932b4aecdcc99c1f7e83d7032899c6b",
+    "apps/mobile/assets/characters/runtime/small/jango-acknowledge.png": "bfb264c4dbe679d636bc600e9918a2d802a45d2b683918148c8116d9c66dc007",
+    "apps/mobile/assets/characters/runtime/small/jango-encourage@3x.png": "d371a18c7cfefc2706f8728b025928ec9793114e0ff2d63f6ca7f9824d25ee70",
+    "apps/mobile/assets/characters/runtime/small/jango-praise@3x.png": "481b0a604b8d1edadad48dccbf747793a7d72307d090624f702bc3647c63e4fa",
+    "apps/mobile/assets/characters/runtime/small/jango-speak@2x.png": "ae2281437be1cbb78191f61c833e9a1254e14c7caf5e683b473fcb8326df5645",
+    "apps/mobile/assets/characters/runtime/small/jango-enjoy@2x.png": "c054bf0207cae75a216aaa3c929b36dd876f521623947b538898bd47fdfaf393",
+    "apps/mobile/assets/characters/runtime/small/jango-comfort.png": "bc8753bc1823e090ab88dc8af6b3172930d85e32e881588df04e17610a66ae34",
+    "apps/mobile/assets/characters/runtime/small/jango-excited@3x.png": "ca44e3eb3e6900429cf856bdc04df93e472682f11d7960d5bd4c39c1cf621bfd",
+    "apps/mobile/assets/characters/runtime/small/jango-excited.png": "e23af77604407de7d6d53ac572b9895963d2c4062d5f64af6260dccfb0788868",
+    "apps/mobile/assets/characters/runtime/small/jango-idle@2x.png": "48a7d664c619094f0b4574d6cf7cccdea00098159c5d407007fea00b9b40c217",
+    "apps/mobile/assets/characters/runtime/small/jango-comfort@3x.png": "6e0a28a2a500f1d3d767158acc946f348fe06f477a636c6246c858c11a075337",
+    "apps/mobile/assets/characters/runtime/small/jango-cooking.png": "559e49aa3dab58599d52fbc5c068f2f1c5753e7a72469174e71768f4071c7293",
+    "apps/mobile/assets/characters/runtime/small/jango-think.png": "a44c9282c1fc7b03fee358229df096e6dc82ee600d5cf531b4511e1e8a180071",
+    "apps/mobile/assets/characters/runtime/small/jango-idle.png": "07491815edc70a6d658e935ab14a8290b2fccda3a92508602aee8794a9061df8",
+    "apps/mobile/assets/characters/runtime/small/jango-shopping.png": "762cfa6f233698eecf13a5c679affc1f66e68703b73f564207109233495630e5",
+    "apps/mobile/assets/characters/runtime/small/jango-comfort@2x.png": "3d816dfad519cb7b29fe8b0f3566f5b6c3996231be5ae9893966241dab60f7e6",
+    "apps/mobile/assets/characters/runtime/small/jango-idle@3x.png": "508ba3ff16dc21d03e439900198aea8b6fe224d44690e7dcb9ea2dd39288cfcf",
+    "apps/mobile/assets/characters/runtime/small/jango-worry.png": "7625d8c28b530eced009d67b7041e6be20601ec2b4bd726854aecc19e7e85b72",
+    "apps/mobile/assets/characters/runtime/small/jango-excited@2x.png": "1fd4b3e8972cb430d74422b2d20ac9795a2cb5c2843dcdebe764c8c3d30db0eb"
+  },
+  "validation": {
+    "docs": "passed (31 metadata / 77 links)",
+    "lint": "passed",
+    "typecheck": "workspace passed; final mobile passed",
+    "workspaceTests": {
+      "sharedPassed": 162,
+      "apiPassed": 618,
+      "mobilePassed": 673,
+      "apiSkipped": 6
+    },
+    "followupInventoryTestsPassed": 19,
+    "rootTests": {
+      "passed": 39,
+      "failed": 2,
+      "preExistingFailures": [
+        "Unregistered artwork: design/jango/emoticons/unregistered-test.png",
+        "retirement candidates: actual 33, expected 32"
+      ]
+    },
+    "nativeIntegration": "not run; no booted iOS simulator",
+    "nativeAssetsChanged": false
+  }
+}

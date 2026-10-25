@@ -1,0 +1,34 @@
+{
+  "source": "shared-table-crayon-v1.png",
+  "sha256": "d065cc301089c7163c5d63452ac40debd4c3317c1d77835dd458d35b4a6e35c6",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "tool": "built-in image_gen (new illustration with style references)",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a171f9-7cd3-7352-985a-d58901338a25/exec-b8547f94-18e2-4ca9-82b8-129dc0efbb0e.png",
+  "prompt": "shared-table-crayon-v1.prompt.txt",
+  "promptSha256": "16af8089463678151722f07bd983df2eb38dac5a944ea2d108d8939d315f235d",
+  "styleReferences": [
+    {
+      "file": "design/backgrounds/home-welcome-crayon-v1.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+      "role": "style-reference-only"
+    },
+    {
+      "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+      "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+      "role": "style-reference-only"
+    }
+  ],
+  "runtime": "apps/mobile/assets/backgrounds/shared-table-bg.png",
+  "status": "implemented-under-user-request",
+  "date": "2026-10-25",
+  "constraints": [
+    "opaque",
+    "no character",
+    "no text or numbers",
+    "no functional icons",
+    "quiet central content area"
+  ]
+}

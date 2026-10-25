@@ -3,6 +3,7 @@ import { Clock3, ShoppingBasket, Utensils } from "lucide-react-native";
 import { StyleSheet, View } from "react-native";
 import { OptionalMissingIngredientsCard } from "../affiliate/optional-missing-ingredients";
 import { AppText } from "../../components/AppText";
+import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
 import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
 import { useResponsiveLayout } from "../../shared/responsive-layout";
@@ -104,10 +105,21 @@ function RecipeDetailContent({
 }) {
   const { shouldStack } = useResponsiveLayout();
   const usedIngredientRows = getUsedIngredientRows(dish, inventorySnapshot);
+  const firstExpiring = usedIngredientRows
+    .filter((ingredient) => ingredient.daysUntilExpiry !== null && ingredient.isExpiring)
+    .sort((left, right) => (left.daysUntilExpiry ?? Infinity) - (right.daysUntilExpiry ?? Infinity))[0];
 
   return (
     <>
-      <AppText style={styles.recipeDetailSummary}>{dish.summary}</AppText>
+      <MascotSpeechBubble
+        mood={firstExpiring && (firstExpiring.daysUntilExpiry ?? 0) < 0 ? "worry" : "cooking"}
+        message={dish.summary}
+        supportingMessage={firstExpiring
+          ? `${firstExpiring.name} · ${formatIngredientDdayLabel(firstExpiring.daysUntilExpiry)}. 사용 전 상태를 확인해 주세요.`
+          : undefined}
+        size="small"
+        layout="adaptive"
+      />
 
       <View style={styles.recipeBlock}>
         <AppText style={styles.blockTitle}>사용할 재료</AppText>
@@ -221,12 +233,6 @@ function RecipeDetailContent({
 const styles = StyleSheet.create({
   footerStack: {
     gap: spacing.xs,
-  },
-  recipeDetailSummary: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.body.fontFamily,
-    color: colors.subtext,
   },
   recipeBlock: {
     gap: spacing.xs,

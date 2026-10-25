@@ -1,0 +1,34 @@
+{
+  "source": "insights-journal-crayon-v1.png",
+  "sha256": "1e2a89b059722429d77be4d24dc20a6db901794d92f155bba975c4f37bdf9f5a",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "tool": "built-in image_gen (new illustration with style references)",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a171f9-7cd3-7352-985a-d58901338a25/exec-f42fda02-81a0-4a1d-8e18-ac86c8b3fbb0.png",
+  "prompt": "insights-journal-crayon-v1.prompt.txt",
+  "promptSha256": "178fa5c0a0a140beea60ffaf31b46e5304ca10f38dafd12e7b408c2dbc9f5684",
+  "styleReferences": [
+    {
+      "file": "design/backgrounds/home-welcome-crayon-v1.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+      "role": "style-reference-only"
+    },
+    {
+      "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+      "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+      "role": "style-reference-only"
+    }
+  ],
+  "runtime": "apps/mobile/assets/backgrounds/insights-journal-bg.png",
+  "status": "implemented-under-user-request",
+  "date": "2026-10-25",
+  "constraints": [
+    "opaque",
+    "no character",
+    "no text or numbers",
+    "no functional icons",
+    "quiet central content area"
+  ]
+}

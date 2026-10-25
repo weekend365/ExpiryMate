@@ -66,7 +66,7 @@ export default function AccountDeleteScreen() {
 
   return (
     <>
-      <Screen
+      <Screen background="settings" backgroundTreatment="reading"
         title="계정과 데이터 정리"
         subtitle="정리하면 되돌릴 수 없어요. 천천히 확인해 주세요."
         footer={

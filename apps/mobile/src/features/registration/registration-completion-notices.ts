@@ -3,7 +3,7 @@ import type { JangoHeroNoticeItem } from "../../components/JangoHeroNoticeCarous
 import type { RegistrationRewardNotice } from "../../store/registration-store";
 import { formatPutAwayMessage, formatPutAwaySupportingMessage } from "../inventory/inventory-form-copy";
 
-/** Existing completion copy/order; call only after the save has succeeded. */
+/** Saved results lead the completion guide; call only after the save succeeds. */
 export function getRegistrationCompletionNotices({
   latestItem,
   sessionCount,
@@ -16,6 +16,16 @@ export function getRegistrationCompletionNotices({
   onRecommendations: () => void;
 }): JangoHeroNoticeItem[] {
   return [
+    {
+      id: "put-away",
+      mood: latestItem ? "praise" : "acknowledge",
+      message: latestItem ? formatPutAwayMessage(latestItem.displayName) : "등록한 재료는 보관함에서 확인해 주세요.",
+      supportingMessage: latestItem ? formatPutAwaySupportingMessage({
+        expiryDate: latestItem?.expiryDate,
+        expirySource: latestItem?.expirySource,
+        sessionCount,
+      }) : undefined,
+    },
     ...(sessionCount >= 2
       ? [{
           id: "recipe-recommend",
@@ -23,6 +33,7 @@ export function getRegistrationCompletionNotices({
           message: "요리 추천 받아볼까요?",
           supportingMessage: "방금 넣은 재료로 메뉴를 찾아볼게요.",
           onPress: onRecommendations,
+          actionLabel: "이 재료로 요리 추천받기",
           accessibilityHint: "추천 받을게요",
         }]
       : []),
@@ -34,15 +45,5 @@ export function getRegistrationCompletionNotices({
           supportingMessage: `현재 ${rewardNotice.balance}/${rewardNotice.balanceLimit}회 보유하고 있어요.`,
         }]
       : []),
-    {
-      id: "put-away",
-      mood: "praise",
-      message: latestItem ? formatPutAwayMessage(latestItem.displayName) : "잘 넣어뒀어요",
-      supportingMessage: formatPutAwaySupportingMessage({
-        expiryDate: latestItem?.expiryDate,
-        expirySource: latestItem?.expirySource,
-        sessionCount,
-      }),
-    },
   ];
 }

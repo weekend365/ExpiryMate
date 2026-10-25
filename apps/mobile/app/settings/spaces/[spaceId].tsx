@@ -110,7 +110,7 @@ export default function SpaceDetailScreen() {
   if (!spaceId || !space) {
     if (spaceId && isLoading) {
       return (
-        <SettingsScreen>
+        <SettingsScreen background="sharing">
           <EmptyState
             kind="loading"
             mood="idle"
@@ -122,7 +122,7 @@ export default function SpaceDetailScreen() {
     }
 
     return (
-      <SettingsScreen>
+      <SettingsScreen background="sharing">
         <EmptyState
           kind="error"
           mood="worry"
@@ -199,7 +199,7 @@ export default function SpaceDetailScreen() {
   return (
     <>
       <Stack.Screen options={{ title: space?.name ?? "함께 쓰는 냉장고" }} />
-      <SettingsScreen
+      <SettingsScreen background="sharing"
         footer={
           canInvite ? (
             <Button

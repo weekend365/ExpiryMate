@@ -72,8 +72,9 @@ export default function SupportSettingsScreen() {
   return (
     <SettingsScreen>
       <MascotSpeechBubble
-        message="한 가지만 골라 주시면, 장고가 운영팀에 잘 전해 줄게요."
-        mood="idle"
+        message="불편했던 점을 들려주세요. 운영팀에 전해드릴게요."
+        mood="acknowledge"
+        layout="adaptive"
         density="compact"
       />
 

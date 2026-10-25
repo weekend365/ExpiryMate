@@ -73,7 +73,7 @@ export default function PrivacyScreen() {
 
   return (
     <>
-      <Screen topInsetMode="none">
+      <Screen background="settings" backgroundTreatment="reading" topInsetMode="none">
         <View style={styles.section}>
           <SectionHeader
             title="살펴보기"

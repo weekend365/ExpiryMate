@@ -67,7 +67,7 @@
         "EXPO_IOS_PERSONAL_TEAM": "0",
         "SENTRY_DISABLE_AUTO_UPLOAD": "true",
         "JANGO_STORE_QA": "true",
-        "JANGO_STORE_QA_APP_VERSION": "1.4.4",
+        "JANGO_STORE_QA_APP_VERSION": "1.4.5",
         "JANGO_STORE_QA_API_ORIGIN": "https://api-qa-c321.up.railway.app",
         "EXPO_PUBLIC_OAUTH_REDIRECT_URI": "https://api-qa-c321.up.railway.app/oauth/callback",
         "EXPO_PUBLIC_API_BASE_URL": "https://api-qa-c321.up.railway.app"

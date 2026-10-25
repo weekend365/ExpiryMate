@@ -238,6 +238,9 @@ export const opacity = {
   pressed: 0.84,
   scrim: 0.28,
   subtle: 0.72,
+  /** Warm paper overlay on decorative scene images, never on foreground UI. */
+  sceneVeil: 0.84,
+  sceneReadingVeil: 0.97,
 } as const;
 
 export type Opacity = typeof opacity;

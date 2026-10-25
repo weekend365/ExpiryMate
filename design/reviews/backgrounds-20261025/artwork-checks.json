@@ -1,0 +1,128 @@
+{
+  "date": "2026-10-25",
+  "tool": "built-in image_gen",
+  "veil": 0.84,
+  "readingVeil": 0.97,
+  "artworks": [
+    {
+      "stem": "welcome-room",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sourceSha256": "2f2379a34cd7e60e13f73843348f3f2525e47259008d113891a592c6a640e701",
+      "runtimeMatchesSource": true,
+      "promptAndStyleReferenceHashesMatch": true,
+      "standardMinContrast": {
+        "text": 9.533902324260453,
+        "subtext": 4.972218072988181,
+        "primaryForeground": 4.710021827919437
+      },
+      "readingMinContrast": {
+        "text": 12.146709735873513,
+        "subtext": 6.334876068780861,
+        "mutedText": 4.561391351957349,
+        "primaryForeground": 6.000823802000057
+      }
+    },
+    {
+      "stem": "ingredient-prep",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sourceSha256": "05d536d91cb94439e37eb067c566c9fe32f7862555718d06d8f10ba27c6c0b1b",
+      "runtimeMatchesSource": true,
+      "promptAndStyleReferenceHashesMatch": true,
+      "standardMinContrast": {
+        "text": 9.198886404761664,
+        "subtext": 4.7974971504303925,
+        "primaryForeground": 4.54451433268063
+      },
+      "readingMinContrast": {
+        "text": 12.072982964793168,
+        "subtext": 6.296425330440914,
+        "mutedText": 4.533705117303991,
+        "primaryForeground": 5.964400657596029
+      }
+    },
+    {
+      "stem": "cooking-workspace",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sourceSha256": "7f49a5f79da291ef1d00ad5ad188cf26e96696794c6d7b64ed24598282425d3c",
+      "runtimeMatchesSource": true,
+      "promptAndStyleReferenceHashesMatch": true,
+      "standardMinContrast": {
+        "text": 9.384518543159027,
+        "subtext": 4.894309918389855,
+        "primaryForeground": 4.636221945584327
+      },
+      "readingMinContrast": {
+        "text": 12.114022998931716,
+        "subtext": 6.3178289480278575,
+        "mutedText": 4.549116669969215,
+        "primaryForeground": 5.984675614275545
+      }
+    },
+    {
+      "stem": "settings-study",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sourceSha256": "1314accad920f2185b5823b2bd85c97406c2bcd3e2cd8168d210352391aef405",
+      "runtimeMatchesSource": true,
+      "promptAndStyleReferenceHashesMatch": true,
+      "standardMinContrast": {
+        "text": 9.551507738683755,
+        "subtext": 4.981399828454171,
+        "primaryForeground": 4.718719408763361
+      },
+      "readingMinContrast": {
+        "text": 12.150420886035139,
+        "subtext": 6.336811545700764,
+        "mutedText": 4.562784981065243,
+        "primaryForeground": 6.0026572168677
+      }
+    },
+    {
+      "stem": "insights-journal",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sourceSha256": "1e2a89b059722429d77be4d24dc20a6db901794d92f155bba975c4f37bdf9f5a",
+      "runtimeMatchesSource": true,
+      "promptAndStyleReferenceHashesMatch": true,
+      "standardMinContrast": {
+        "text": 9.466609467015031,
+        "subtext": 4.93712281507608,
+        "primaryForeground": 4.676777221911416
+      },
+      "readingMinContrast": {
+        "text": 12.131835118314227,
+        "subtext": 6.327118506374451,
+        "mutedText": 4.555805563429101,
+        "primaryForeground": 5.993475313311651
+      }
+    },
+    {
+      "stem": "shared-table",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sourceSha256": "d065cc301089c7163c5d63452ac40debd4c3317c1d77835dd458d35b4a6e35c6",
+      "runtimeMatchesSource": true,
+      "promptAndStyleReferenceHashesMatch": true,
+      "standardMinContrast": {
+        "text": 9.578020411947856,
+        "subtext": 4.995226988486169,
+        "primaryForeground": 4.731817431539684
+      },
+      "readingMinContrast": {
+        "text": 12.15608456911128,
+        "subtext": 6.339765327519904,
+        "mutedText": 4.564911834803045,
+        "primaryForeground": 6.005455239126346
+      }
+    }
+  ]
+}

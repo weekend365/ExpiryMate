@@ -237,7 +237,7 @@ export default function CookingScreen() {
 
   if (recommendationQuery.isPending) {
     return (
-      <Screen contentWidth="wide" density="compact" topInsetMode="none">
+      <Screen background="cooking" backgroundTreatment="reading" contentWidth="wide" density="compact" topInsetMode="none">
         <EmptyState
           kind="loading"
           mood="think"
@@ -250,7 +250,7 @@ export default function CookingScreen() {
 
   if (!recommendationId || recommendationQuery.isError || !dish) {
     return (
-      <Screen
+      <Screen background="cooking" backgroundTreatment="reading"
         contentWidth="wide"
         density="compact"
         topInsetMode="none"
@@ -275,7 +275,7 @@ export default function CookingScreen() {
 
   if (!isDraftHydrated) {
     return (
-      <Screen contentWidth="wide" density="compact" topInsetMode="none">
+      <Screen background="cooking" backgroundTreatment="reading" contentWidth="wide" density="compact" topInsetMode="none">
         <EmptyState
           kind="loading"
           mood="think"
@@ -297,7 +297,7 @@ export default function CookingScreen() {
     ).slice(0, 3);
 
     return (
-      <Screen
+      <Screen background="cooking" backgroundTreatment="reading"
         contentWidth="wide"
         density="compact"
         topInsetMode="none"
@@ -596,7 +596,7 @@ export default function CookingScreen() {
 
   return (
     <>
-      <Screen
+      <Screen background="cooking" backgroundTreatment="reading"
         contentWidth="wide"
         density="compact"
         topInsetMode="none"
@@ -618,6 +618,9 @@ export default function CookingScreen() {
             uncheckedPrepCount,
           )}
           guideMood={currentIndex >= completionStepIndex ? "enjoy" : "cooking"}
+          guideSize={currentIndex >= completionStepIndex ? "large" : "small"}
+          guideLayout="adaptive"
+          guideAnimation="none"
         >
         {draftSaveError ? (
           <View

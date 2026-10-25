@@ -8,6 +8,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildInventoryUndoLabel,
   getCommittedFullConsumeTarget,
+  getCommittedConsumptionMessage,
   inventoryRemovalQueryKeys,
   isPendingForDifferentSpace,
   type InventoryRemovalEntry,
@@ -106,4 +107,12 @@ describe("isPendingForDifferentSpace", () => {
       ]),
     ).toBe("2개 재료를 폐기했어요");
   });
+});
+
+it("describes a saved partial use without claiming the ingredient is depleted", () => {
+  expect(getCommittedConsumptionMessage(null)).toBeNull();
+  expect(getCommittedConsumptionMessage({ spaceId: "space-a", entries: [removalEntry({ action: "discard" })] })).toBeNull();
+  const partial = getCommittedConsumptionMessage({ spaceId: "space-a", entries: [removalEntry({ amountBase: 1 })] });
+  expect(partial).toContain("우유 사용을 기록했어요");
+  expect(partial).not.toContain("다 썼어요");
 });

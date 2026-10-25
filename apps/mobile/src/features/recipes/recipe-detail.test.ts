@@ -47,11 +47,11 @@ describe("recipe-detail", () => {
     expect(formatCompactDishMeta(dish)).toBe("15분 · 2인분 · 쉬움");
   });
 
-  it("formats D-day labels", () => {
+  it("formats remaining days in natural language", () => {
     expect(formatIngredientDdayLabel(null)).toBeNull();
-    expect(formatIngredientDdayLabel(-2)).toBe("D+2");
+    expect(formatIngredientDdayLabel(-2)).toBe("2일 지남");
     expect(formatIngredientDdayLabel(0)).toBe("오늘");
-    expect(formatIngredientDdayLabel(3)).toBe("D-3");
+    expect(formatIngredientDdayLabel(3)).toBe("3일 남음");
   });
 
   it("summarizes expiry impact, inventory coverage, and missing ingredients", () => {
@@ -81,7 +81,7 @@ describe("recipe-detail", () => {
         ],
       ),
     ).toEqual([
-      { label: "D-1 우유를 먼저", tone: "warning" },
+      { label: "우유 · 1일 남음 · 먼저 사용", tone: "warning" },
       { label: "추가 재료 1개", tone: "neutral" },
     ]);
   });

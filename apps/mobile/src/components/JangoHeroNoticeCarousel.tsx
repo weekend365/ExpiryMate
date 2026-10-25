@@ -27,9 +27,9 @@ export type JangoHeroNoticeItem = {
 
 type JangoHeroNoticeCarouselProps = {
   notices: JangoHeroNoticeItem[];
-  size?: "small" | "medium";
+  size?: "small" | "medium" | "large";
   density?: "default" | "compact";
-  layout?: "inline" | "stacked";
+  layout?: "inline" | "stacked" | "adaptive";
   textVariant?: AppTextVariant;
   bubbleStyle?: StyleProp<ViewStyle>;
   onIndexChange?: (index: number) => void;
@@ -163,9 +163,9 @@ function JangoHeroNoticeBubble({
   bubbleStyle,
 }: {
   notice: JangoHeroNoticeItem;
-  size: "small" | "medium";
+  size: "small" | "medium" | "large";
   density: "default" | "compact";
-  layout: "inline" | "stacked";
+  layout: "inline" | "stacked" | "adaptive";
   textVariant?: AppTextVariant;
   bubbleStyle?: StyleProp<ViewStyle>;
 }) {

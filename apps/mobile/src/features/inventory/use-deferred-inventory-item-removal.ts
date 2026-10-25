@@ -4,6 +4,7 @@ import {
 } from "@expirymate/shared";
 import { useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useFocusEffect } from "expo-router";
 import {
   batchConsumeInventoryItems,
   batchDiscardInventoryItems,
@@ -30,6 +31,8 @@ type PendingRemoval = {
   entries: InventoryRemovalEntry[];
   timeoutId: ReturnType<typeof setTimeout>;
   spaceId: string;
+  sessionUserId: string | undefined;
+  feedbackEpoch: number;
 };
 
 function removeItemsFromCache(
@@ -136,16 +139,33 @@ export function useDeferredInventoryItemRemoval() {
   const pendingRef = useRef<PendingRemoval | null>(null);
   const sessionUserIdRef = useRef(sessionUserId);
   sessionUserIdRef.current = sessionUserId;
+  const feedbackContext = useRef({ sessionUserId, activeSpaceId, epoch: 0 });
+  if (feedbackContext.current.sessionUserId !== sessionUserId ||
+      feedbackContext.current.activeSpaceId !== activeSpaceId) {
+    feedbackContext.current = { sessionUserId, activeSpaceId, epoch: feedbackContext.current.epoch + 1 };
+  }
   const [undoLabel, setUndoLabel] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isCommitting, setIsCommitting] = useState(false);
   const [lastCommittedRemoval, setLastCommittedRemoval] =
-    useState<CommittedInventoryRemoval | null>(null);
+    useState<(CommittedInventoryRemoval & { feedbackEpoch: number }) | null>(null);
+
+  useFocusEffect(useCallback(() => () => {
+    feedbackContext.current.epoch += 1;
+    setLastCommittedRemoval(null);
+    setErrorMessage(null);
+  }, []));
 
   const commitPinned = useCallback(
     async (pending: PendingRemoval, options: { silent: boolean }) => {
+      // A delayed undo window must never submit under a different login.
+      if (pending.sessionUserId !== sessionUserIdRef.current) return;
+      const canShowFeedback = () => !options.silent &&
+        pending.feedbackEpoch === feedbackContext.current.epoch &&
+        pending.sessionUserId === feedbackContext.current.sessionUserId &&
+        pending.spaceId === feedbackContext.current.activeSpaceId;
       const keys = inventoryRemovalQueryKeys(
-        sessionUserIdRef.current,
+        pending.sessionUserId,
         pending.spaceId,
       );
       const originals = pending.entries.map((entry) => entry.item);
@@ -164,10 +184,11 @@ export function useDeferredInventoryItemRemoval() {
           queryClient.invalidateQueries({ queryKey: keys.shopping }),
           queryClient.invalidateQueries({ queryKey: keys.reorderPreview }),
         ]);
-        if (!options.silent) {
+        if (canShowFeedback()) {
           setLastCommittedRemoval({
             entries: pending.entries,
             spaceId: pending.spaceId,
+            feedbackEpoch: pending.feedbackEpoch,
           });
         }
       } catch (error) {
@@ -179,7 +200,7 @@ export function useDeferredInventoryItemRemoval() {
           queryClient.invalidateQueries({ queryKey: keys.shopping }),
           queryClient.invalidateQueries({ queryKey: keys.reorderPreview }),
         ]).catch(() => undefined);
-        if (!options.silent) {
+        if (canShowFeedback()) {
           setErrorMessage(
             error instanceof Error
               ? error.message
@@ -244,6 +265,10 @@ export function useDeferredInventoryItemRemoval() {
         return;
       }
 
+      if (pendingRef.current && pendingRef.current.sessionUserId !== sessionUserId) {
+        takePending();
+      }
+
       flushPendingIfSpaceChanged(activeSpaceId);
       setErrorMessage(null);
       setLastCommittedRemoval(null);
@@ -294,6 +319,8 @@ export function useDeferredInventoryItemRemoval() {
         entries: nextEntries,
         timeoutId,
         spaceId: activeSpaceId,
+        sessionUserId,
+        feedbackEpoch: feedbackContext.current.epoch,
       };
     },
     [
@@ -302,6 +329,7 @@ export function useDeferredInventoryItemRemoval() {
       flushPendingIfSpaceChanged,
       queryClient,
       sessionUserId,
+      takePending,
     ],
   );
 
@@ -315,7 +343,7 @@ export function useDeferredInventoryItemRemoval() {
 
     restoreItemsToCache(
       queryClient,
-      inventoryRemovalQueryKeys(sessionUserIdRef.current, pending.spaceId)
+      inventoryRemovalQueryKeys(pending.sessionUserId, pending.spaceId)
         .inventory,
       pending.entries.map((entry) => entry.item),
     );
@@ -333,6 +361,13 @@ export function useDeferredInventoryItemRemoval() {
     flushPendingIfSpaceChanged(activeSpaceId);
   }, [activeSpaceId, flushPendingIfSpaceChanged]);
 
+  useEffect(() => {
+    if (pendingRef.current && pendingRef.current.sessionUserId !== sessionUserId) {
+      takePending();
+    }
+    setErrorMessage(null);
+  }, [activeSpaceId, sessionUserId, takePending]);
+
   useEffect(
     () => () => {
       const pending = pendingRef.current;
@@ -348,9 +383,11 @@ export function useDeferredInventoryItemRemoval() {
   );
 
   return {
-    undoLabel,
+    undoLabel: pendingRef.current?.sessionUserId === sessionUserId &&
+      pendingRef.current?.spaceId === activeSpaceId ? undoLabel : null,
     errorMessage,
-    lastCommittedRemoval,
+    lastCommittedRemoval: lastCommittedRemoval?.feedbackEpoch === feedbackContext.current.epoch
+      ? lastCommittedRemoval : null,
     scheduleRemoval,
     undoRemoval,
     clearError,

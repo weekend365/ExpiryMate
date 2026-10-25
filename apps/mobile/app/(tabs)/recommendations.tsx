@@ -475,6 +475,7 @@ export default function RecommendationsScreen() {
         isGenerating,
         justGenerated,
         hasRecommendationResult,
+        recommendationCount: latestRecommendation?.recommendations.length ?? 0,
         errorMessage,
         isQuotaError,
         isCapacityError,
@@ -505,7 +506,11 @@ export default function RecommendationsScreen() {
       });
     }
 
-    notices.push(statusNotice);
+    if (isGenerating || errorMessage || justGenerated) {
+      notices.unshift(statusNotice);
+    } else {
+      notices.push(statusNotice);
+    }
     return notices;
   }, [
     canOfferRewardedAd,
@@ -516,6 +521,7 @@ export default function RecommendationsScreen() {
     isGenerating,
     isQuotaError,
     justGenerated,
+    latestRecommendation?.recommendations.length,
     needsIngredients,
     recommendationHeroIngredientNames,
     useExpiringFirst,
@@ -940,6 +946,8 @@ export default function RecommendationsScreen() {
               <View style={styles.heroCard}>
                 <JangoHeroNoticeCarousel
                   notices={recommendationHeroNotices}
+                  size="medium"
+                  layout="adaptive"
                 />
               </View>
               <View style={styles.optionsSummaryGroup}>
@@ -2140,7 +2148,7 @@ function RecipeCard({
 
           <View style={styles.recipeMetaRow}>
             <AppText
-              variant="caption"
+              variant="bodySmall"
               tone="subtext"
               style={styles.recipeMeta}
             >
@@ -2149,7 +2157,7 @@ function RecipeCard({
           </View>
 
           <AppText
-            variant="caption"
+            variant="bodySmallStrong"
             tone={decisionReasonTone}
             style={styles.recipeReason}
           >
@@ -2291,9 +2299,9 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   recipeViewOptionSelected: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.brandSoftStrong,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.focusRing,
   },
   recipeViewOptionPressed: {
     opacity: 0.8,

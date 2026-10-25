@@ -3,7 +3,7 @@ import { SettingsScreen } from "../../components/SettingsScreen";
 
 export function IapUnavailableState({ feature }: { feature: string }) {
   return (
-    <SettingsScreen>
+    <SettingsScreen backgroundTreatment="reading">
       <EmptyState
         kind="error"
         mood="idle"

@@ -30,7 +30,7 @@ import {
   useState,
 } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, BackHandler, Pressable, StyleSheet, View } from "react-native";
+import { Alert, BackHandler, Keyboard, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../src/components/AppText";
 import { HeaderBackButton } from "../src/components/HeaderBackButton";
 import { Button } from "../src/components/Button";
@@ -234,6 +234,12 @@ const getPrefillKey = (prefill: RegistrationPrefill | null) =>
     : "";
 
 export default function RegisterScreen() {
+  const [keyboardVisible, setKeyboardVisible] = useState(() => Keyboard.isVisible());
+  useEffect(() => {
+    const shown = Keyboard.addListener("keyboardDidShow", () => setKeyboardVisible(true));
+    const hidden = Keyboard.addListener("keyboardDidHide", () => setKeyboardVisible(false));
+    return () => { shown.remove(); hidden.remove(); };
+  }, []);
   const navigation = useNavigation();
   const params = useLocalSearchParams<RegistrationRouteParams>();
   const returnTo = parseRegistrationReturnTo(params.from, params.returnTo);
@@ -759,7 +765,7 @@ export default function RegisterScreen() {
     });
 
     return (
-      <Screen
+      <Screen background="ingredients"
         key="registration-complete"
         contentWidth="form"
         contentStyle={styles.screenSections}
@@ -800,6 +806,8 @@ export default function RegisterScreen() {
           >
             <JangoHeroNoticeCarousel
               notices={doneHeroNotices}
+              size="large"
+              layout="adaptive"
               density="compact"
               textVariant="bodyStrong"
               bubbleStyle={styles.doneBubble}
@@ -850,7 +858,7 @@ export default function RegisterScreen() {
   }
 
   return (
-    <Screen
+    <Screen background="ingredients"
       key="registration-form"
       contentWidth="form"
       contentStyle={styles.screenSections}
@@ -913,7 +921,10 @@ export default function RegisterScreen() {
             ? productGuideMessage
             : visibleSteps[Math.max(stepIndex, 0)]?.guideMessage
         }
-        guideMood="speak"
+        guideMood={step === "product" ? "encourage" : "check"}
+        guideSize={step === "product" && !keyboardVisible ? "large" : "small"}
+        guideLayout="adaptive"
+        guideAnimation="none"
       >
         {step === "product" && rewardNotice?.granted ? (
           <FeedbackBanner

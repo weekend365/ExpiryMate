@@ -34,7 +34,7 @@ export function getInventoryHeroNotice(input: {
   if (input.isSelectionMode) {
     return {
       show: true,
-      mood: "speak",
+      mood: "check",
       tone: "neutral",
       message: "정리할 재료를 골라 주세요.",
     };
@@ -80,9 +80,15 @@ export function getInventoryHeroNotice(input: {
   if (input.statusFilter !== "all" || input.visibleCount < input.totalCount) {
     return {
       show: true,
-      mood: "speak",
-      tone: "neutral",
-      message: `조건에 맞는 재료 ${input.visibleCount}개를 모아 뒀어요.`,
+      mood: input.statusFilter === "expired" ? "worry" : "point",
+      tone: input.statusFilter === "expired" ? "danger" : "neutral",
+      message: input.statusFilter === "within7"
+        ? `7일 안에 기한이 오는 재료 ${input.visibleCount}개를 모았어요.`
+        : input.statusFilter === "expired"
+          ? `기한 지난 재료 ${input.visibleCount}개예요. 상태부터 확인해 주세요.`
+          : input.statusFilter === "unknown"
+            ? `기한을 확인할 재료 ${input.visibleCount}개를 모았어요.`
+            : `조건에 맞는 재료 ${input.visibleCount}개를 모았어요.`,
     };
   }
 
@@ -99,7 +105,7 @@ export function getInventoryHeroNotice(input: {
   if (input.within7Count > 0) {
     return {
       show: true,
-      mood: "speak",
+      mood: "check",
       tone: "warning",
       message: `7일 안에 손볼 재료 ${input.within7Count}개를 확인할까요?`,
       action: "show_within7",

@@ -47,6 +47,8 @@ export type MascotMood = keyof typeof mascotMoodConfig;
 interface MascotProps {
   size?: "small" | "medium" | "large";
   mood?: MascotMood;
+  /** The surrounding live text already describes this artwork. */
+  decorative?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -88,12 +90,14 @@ const smallMascotSources: Record<MascotMood, ImageSourcePropType> = {
   shopping: jangoShoppingSmall,
 };
 
-export function Mascot({ size = "medium", mood = "idle", style }: MascotProps) {
+export function Mascot({ size = "medium", mood = "idle", decorative = false, style }: MascotProps) {
   const source = size === "small" ? smallMascotSources[mood] : mascotSources[mood];
 
   return (
     <View
       pointerEvents="none"
+      accessibilityElementsHidden={decorative}
+      importantForAccessibility={decorative ? "no-hide-descendants" : "auto"}
       style={[styles.frame, sizeStyles[size], style]}
     >
       <Image
@@ -101,7 +105,8 @@ export function Mascot({ size = "medium", mood = "idle", style }: MascotProps) {
         style={styles.image}
         resizeMode="contain"
         accessibilityIgnoresInvertColors
-        accessibilityLabel={`${appBrand.characterNameKo}, ${mascotMoodConfig[mood].label} 표정`}
+        accessible={!decorative}
+        accessibilityLabel={decorative ? undefined : `${appBrand.characterNameKo}, ${mascotMoodConfig[mood].label} 표정`}
       />
     </View>
   );

@@ -14,7 +14,7 @@ export function ShoppingHeroCard({
 }>) {
   return (
     <View style={styles.card}>
-      <JangoHeroNoticeCarousel notices={notices} />
+      <JangoHeroNoticeCarousel notices={notices} size="medium" layout="adaptive" />
       {children}
     </View>
   );
