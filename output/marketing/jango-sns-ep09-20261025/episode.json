@@ -1,0 +1,198 @@
+{
+  "id": "jango-sns-ep09-20261025",
+  "episode": 9,
+  "title": "준비성은 좋은 편",
+  "preparedAt": "2026-10-25T16:38:59.421593+09:00",
+  "status": "storyboard-confirmed-artwork-produced-pending-user-review",
+  "authorization": {
+    "quote": "해당 콘티를 기반으로 원화 생성해줘.",
+    "context": "User selected the seven-scene sashimi-picnic over-preparation comedy after rejecting the romantic tone of the previous proposal.",
+    "scope": "Produce seven text-free original-art candidates and review previews. Reel render, publication, commit and push are not requested in this turn."
+  },
+  "storyboard": [
+    {
+      "number": 1,
+      "seconds": [
+        0,
+        4
+      ],
+      "action": "현관 앞의 장고보다 큰 캠핑 카트. 접이식 의자, 테이블, 돗자리가 산처럼 쌓여 있다.",
+      "shot": "wide establishing shot",
+      "expression": "Jango confidently proud, woman incredulous",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "회 먹으러 가는데… 이사 가?"
+        },
+        {
+          "speaker": "장고",
+          "text": "이 정도는 기본이지."
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "seconds": [
+        4,
+        9
+      ],
+      "action": "장고가 체크리스트를 들고 물건을 확인한다. 여성은 접이식 테이블을 보며 질문한다.",
+      "shot": "medium two-shot with checklist",
+      "expression": "Jango confidently inspecting, woman practical skepticism",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "회 한 접시 먹는데 테이블도 필요해?"
+        },
+        {
+          "speaker": "장고",
+          "text": "준비는 과할수록 좋은 거야."
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "seconds": [
+        9,
+        14
+      ],
+      "action": "장고가 꽉 찬 카트에 스피커와 접힌 휴대전화 거치대를 넣는다. 여성은 문을 잡고 기다린다.",
+      "shot": "diagonal action medium-wide",
+      "expression": "Jango determined packing, woman patiently exasperated",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "이제 진짜 다 챙겼지?"
+        },
+        {
+          "speaker": "장고",
+          "text": "응. 빠진 게 있을 수가 없어."
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "seconds": [
+        14,
+        19
+      ],
+      "action": "한강공원의 완성된 작은 캠핑장. 주변 사람들은 돗자리만 폈고 장고는 큰 세팅을 자랑한다.",
+      "shot": "outdoor wide establishing shot",
+      "expression": "Jango proudly presenting, woman ready to eat",
+      "dialogue": [
+        {
+          "speaker": "장고",
+          "text": "봤지? 준비한 보람이 있잖아."
+        },
+        {
+          "speaker": "여성",
+          "text": "좋아. 이제 회 꺼내."
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "seconds": [
+        19,
+        24
+      ],
+      "action": "열린 보냉 가방에 얼음팩, 초장, 간장, 깻잎만 있다. 장고의 손이 멈춘다.",
+      "shot": "closer elevated reveal, faces and contents visible",
+      "expression": "Jango frozen surprise, woman searching for missing food",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "……회는?"
+        },
+        {
+          "speaker": "장고",
+          "text": "잠깐. 분명 냉장고에 넣어 놨는데."
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "seconds": [
+        24,
+        29
+      ],
+      "action": "텅 빈 접시 앞에서 장고가 기억을 되짚는다. 여성은 장고를 바라본다.",
+      "shot": "reaction two-shot",
+      "expression": "Jango sheepish realization, woman dry expectant stare",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "넣어 놓고?"
+        },
+        {
+          "speaker": "장고",
+          "text": "……꺼내지는 않았네."
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "seconds": [
+        29,
+        37
+      ],
+      "action": "완벽한 캠핑 세팅에 컵라면 두 개와 보온병. 장고는 다시 자신만만하다.",
+      "shot": "wider payoff with two noodle cups",
+      "expression": "Jango innocently self-satisfied, woman deadpan",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "비상식량은 챙겼네?"
+        },
+        {
+          "speaker": "장고",
+          "text": "내가 준비성은 좋잖아."
+        }
+      ]
+    }
+  ],
+  "plannedReel": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "durationSeconds": 37,
+    "sceneCount": 7,
+    "safeArea": [
+      96,
+      280,
+      900,
+      1420
+    ],
+    "motion": "gentle 100-to-103 percent zoom; hard cuts; fixed lettering",
+    "lettering": "Gaegu dialogue and brand; any checklist text separately typeset later",
+    "music": "Monkeys Spinning Monkeys — Kevin MacLeod; inherited default, modest volume dip at scene 5 planned",
+    "narration": false,
+    "closing": {
+      "seconds": [
+        34,
+        37
+      ],
+      "brand": "장고야 부탁해",
+      "cta": "내 재료로 오늘 메뉴 찾기"
+    },
+    "cover": "Separate later cover: 이 짐에서 딱 하나 빠짐"
+  },
+  "continuity": {
+    "relationship": "Platonic household companions, matter-of-fact bickering; no flirtation or affectionate posing",
+    "woman": "Same chestnut messy bun, youthful adult face, ivory cable-knit sweater, forest-green trousers, simple cream sneakers",
+    "jango": "Active v18 identity, compact torso, short legs, mint mittens and shoes; no body elongation",
+    "props": "Olive canvas four-wheel wagon, beige folded chairs, light wood folding table, rolled mint-check mat, mustard-yellow soft rectangular cooler, charcoal speaker, black folded phone stand, ivory thermos. Must remain recognizable when unpacked.",
+    "food": "No sashimi present at picnic; scenes 5-6 show only condiments/perilla/ice packs and empty plates; scene 7 has exactly two generic noodle cups."
+  },
+  "featureEvidence": "Fictional everyday comedy. No app screen or unverified app function is depicted.",
+  "trendSource": {
+    "title": "Trend A Word #641 — 회크닉",
+    "publishedDate": "2026-10-22",
+    "url": "https://maily.so/trendaword/posts/3jrklpv5z51"
+  },
+  "guide": {
+    "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+    "sha256": "33bd9c3e129e43c5417a2b1450a89b3977b0aa92d3f7b3001a8ba0645b8a2eed"
+  },
+  "artworkCompletionRecord": "production-record.json"
+}

@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-25T08:32:43.390152+00:00",
+  "authorization": {
+    "request": "내 장고 홍보용 인스타그램에 게시해줘.",
+    "scope": "Publish prepared episode 9 Reel to @jango_plz with separate cover, caption, BGM credit and AI label; no commit or push"
+  },
+  "account": "jango_plz",
+  "existingPostCount": 14,
+  "existingLatestReel": "https://www.instagram.com/jango_plz/reel/De5ySfnyC8u/",
+  "assets": [
+    {
+      "path": "reel/jango-ep09-music.mp4",
+      "bytes": 37951941,
+      "sha256": "8b8c305644c8d3b421bf91ba413bb6617236e7a782895020531cde1711e385a8"
+    },
+    {
+      "path": "cover.jpg",
+      "bytes": 1467311,
+      "sha256": "484a635abd7d8abda658176508bb7741944addb31d58b7d633880da88f1908e3"
+    },
+    {
+      "path": "caption.txt",
+      "bytes": 1341,
+      "sha256": "e202f0d41d5e5ecf2743533355f7032c5978d96c02e9848e419c62aafe5e0276"
+    },
+    {
+      "path": "reel-manifest.json",
+      "bytes": 15250,
+      "sha256": "2db9206e4346a5163358aad9501086bc5aed186eebb432f03ab6aaae4391ad94"
+    }
+  ],
+  "profileLinksVerified": [
+    "https://apps.apple.com/kr/app/id6793375883",
+    "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+  ],
+  "quality": {
+    "format": "1080x1920 H.264 30fps AAC stereo, 37 seconds",
+    "technicalAndVisualChecks": "See reel QA and preservation records",
+    "directListening": "Not completed; disclosed to user before publication request"
+  }
+}

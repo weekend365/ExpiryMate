@@ -1,0 +1,23 @@
+{
+  "candidate": "scene-07-r2",
+  "preparedAt": "2026-10-25T16:49:23.330627+09:00",
+  "method": "official built-in imagegen edit",
+  "prompt": "output/marketing/jango-sns-ep09-20261025/prompts/scene-07-r2.txt",
+  "promptSha256": "37bb81ebc4a24d534e9e1ff7d916f8aa14997ff0d98c28afd049b2d68159fcd6",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-07-r1.png",
+      "sha256": "de47fe78cd28349b40348084a38572978ec553edccdcb52a805c2f909302d7c8",
+      "role": "edit target"
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-04-r2.png",
+      "sha256": "46c0c32e2bd2bf6e1385a0f8ec4c0aa16a0688ccc9441baf98574ac398716c35",
+      "role": "exact continuity reference for contents or equipment"
+    }
+  ],
+  "changes": "Remove third empty chair and reduce plate stack to two only",
+  "status": "prepared-before-generation"
+}

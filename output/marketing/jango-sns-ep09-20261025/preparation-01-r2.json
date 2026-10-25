@@ -1,0 +1,38 @@
+{
+  "candidate": "scene-01-r2",
+  "preparedAt": "2026-10-25T16:41:10.981231+09:00",
+  "method": "official built-in imagegen edit",
+  "prompt": "output/marketing/jango-sns-ep09-20261025/prompts/scene-01-r2.txt",
+  "promptSha256": "c669012f1c5936ad9711e1cd39b0721e7a6fb2916a40107064a91de3ff179d1a",
+  "references": [
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-01-r1.png",
+      "sha256": "376460f52b8fd13c8c8301ed72111ecf59a2ab46db3294cdbb5afa0dde2bab92",
+      "role": "edit target: episode 9 entryway candidate, wider framing and remove two premature props",
+      "imageIndex": 1
+    },
+    {
+      "imageIndex": 2,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 MASTER: Jango identity, compact apron body, crayon texture; exclude plate and wink",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-04-r2.png",
+      "sha256": "d124a258dc97996cad9eaa9683946c4bc63debfbd6d077b217b0dbd64c74e235",
+      "role": "Published episode 7: continuing woman face, chestnut messy bun, ivory cable-knit sweater and forest-green trousers; exclude pasta, forks and affectionate pose.",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 4,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+      "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357",
+      "role": "User-corrected compact Jango torso and short legs; mitten-to-cuff connections. Exclude freezer and phone.",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "changes": "Wider centered full-body composition, margin for hat, speaker and phone stand deferred until scene 3.",
+  "status": "prepared-before-generation"
+}

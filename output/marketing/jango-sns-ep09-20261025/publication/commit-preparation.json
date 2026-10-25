@@ -1,0 +1,74 @@
+{
+  "preparedAt": "2026-10-25T17:48:29.350366+09:00",
+  "authorization": "변경사항 커밋해줘.",
+  "commitScope": [
+    ".gitattributes",
+    "output/marketing/jango-sns-ep09-20261025/"
+  ],
+  "summary": "Archive episode 9 original art, 37-second Reel with Investigations, cover, licenses, provenance, visual/technical QA and verified Instagram publication.",
+  "publication": "https://www.instagram.com/reel/De6TLwWyP_Q/",
+  "existingUnrelatedAppChanges": "Excluded from this commit; left in the working tree.",
+  "historicalRecords": "Artwork and Reel production-stage records remain unchanged. publication/published.json is the subsequent authoritative publication record.",
+  "preservedManifestHashes": {
+    "manifest.json": "b617d1d41b9f6f2400a2da132d70bc27ee5bafc3bf4a51b5048e3469c1f06b39",
+    "reel-manifest.json": "2db9206e4346a5163358aad9501086bc5aed186eebb432f03ab6aaae4391ad94",
+    "publication/manifest.json": "47bdfc4b13f65591db4742c8601d64db72c68271cf44575a6b5502d3d4047b22"
+  },
+  "checks": [
+    {
+      "check": "pnpm docs:check",
+      "result": "passed",
+      "details": "31 metadata entries, 77 links, canonical Expo/EAS entry"
+    },
+    {
+      "check": "Hash manifests",
+      "result": "passed",
+      "entries": {
+        "artwork": 61,
+        "reel": 154,
+        "publication": 12
+      }
+    },
+    {
+      "check": "Selected artwork, references, uploaded video/cover/caption hashes",
+      "result": "passed"
+    },
+    {
+      "check": "All JSON, Python AST, node --check build_review.cjs",
+      "result": "passed"
+    },
+    {
+      "check": "Private-key and common credential patterns in added text",
+      "result": "no matches"
+    },
+    {
+      "check": "pnpm lint and pnpm typecheck",
+      "result": "passed during Reel production",
+      "record": "../reel/repository-checks.json",
+      "rerun": false
+    },
+    {
+      "check": "pnpm test",
+      "result": "prior run failed: 39 passed, 2 failed, 41 total",
+      "rerun": false,
+      "record": "../reel/repository-checks.json",
+      "clarification": "The prior prose described interruption/incomplete verification, but its retained logTail contains the final TAP summary with two failures. This commit does not claim a whole-suite pass or alter unrelated runtime/test code."
+    },
+    {
+      "check": "git diff --cached --check",
+      "result": "required before commit; command will abort commit on failure"
+    }
+  ],
+  "verbatimEvidenceWhitespace": {
+    "reason": "Preserve recorded encoder logs, captured licensing source HTML and published UI text bytes; narrowly scoped attributes follow the existing repository convention. No content or hashes normalized.",
+    "attributes": [
+      "reel/*.log",
+      "review/reel/decode.log",
+      "music/source-page.html",
+      "publication/instagram-post-ax.txt"
+    ]
+  },
+  "marketingFilesBeforeThisRecord": 168,
+  "commitMessage": "chore(marketing): archive and publish Jango episode 9 Reel",
+  "pushRequested": false
+}

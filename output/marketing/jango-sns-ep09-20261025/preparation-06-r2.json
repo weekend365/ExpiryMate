@@ -1,0 +1,23 @@
+{
+  "candidate": "scene-06-r2",
+  "preparedAt": "2026-10-25T16:49:23.325430+09:00",
+  "method": "official built-in imagegen edit",
+  "prompt": "output/marketing/jango-sns-ep09-20261025/prompts/scene-06-r2.txt",
+  "promptSha256": "aabb4c27a5c1c3c9116604845a8b7aaea3721d01d30f60e5400b36319b174ffb",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-06-r1.png",
+      "sha256": "ba459c17e71d0d6ae3477bb6230087a8b935ecc261c61f280394191eac6e1cb2",
+      "role": "edit target"
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-05-r1.png",
+      "sha256": "be95509b771f4a04eedf54ef42c827d2ca04284fcaf35c03aaa6cdd2a155ae53",
+      "role": "exact continuity reference for contents or equipment"
+    }
+  ],
+  "changes": "Correct ice-pack/perilla continuity only",
+  "status": "prepared-before-generation"
+}

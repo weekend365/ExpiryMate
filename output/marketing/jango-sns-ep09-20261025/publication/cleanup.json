@@ -1,0 +1,20 @@
+{
+  "removedSupersededTemporaryEvidence": [
+    {
+      "path": "upload-handoff.png",
+      "sha256": "5d1b2dd7e7bd330a37cd20e3107fe8fc47d0ae1049e045ec96b4dab82044e169",
+      "reason": "Superseded by successful cover, final profile and published post evidence."
+    },
+    {
+      "path": "cover-handoff.png",
+      "sha256": "fa8a39cbd81dd11bf5aaee65bdb0bfa4bcd05ec4f56423c4ab4423b124637afa",
+      "reason": "Superseded by successful cover, final profile and published post evidence."
+    },
+    {
+      "path": "publish-review-ax.txt",
+      "sha256": "c33bad4a7f064b56d516edcade49cbd5f455bbc1b0a1cc45d209ee605875ab4c",
+      "reason": "Superseded by successful cover, final profile and published post evidence."
+    }
+  ],
+  "kept": "Final cover, pre-publish AI label, profile and post screenshots; original media unchanged."
+}

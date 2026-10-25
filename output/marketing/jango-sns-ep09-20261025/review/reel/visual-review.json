@@ -1,0 +1,56 @@
+{
+  "reviewedAt": "2026-10-25T17:10:11.626411+09:00",
+  "reviewer": "assistant visual inspection; not a human listening or publication approval",
+  "status": "reviewed-for-local-delivery",
+  "evidence": {
+    "timelineSheets": [
+      "review/reel/timeline-1.jpg",
+      "review/reel/timeline-2.jpg",
+      "review/reel/timeline-3.jpg",
+      "review/reel/timeline-4.jpg",
+      "review/reel/timeline-5.jpg",
+      "review/reel/timeline-6.jpg",
+      "review/reel/timeline-7.jpg"
+    ],
+    "allDialogueStates": [
+      "review/reel/dialogue-states-1.jpg",
+      "review/reel/dialogue-states-2.jpg"
+    ],
+    "cutEndpoints": [
+      "review/reel/cuts-and-zoom-1.jpg",
+      "review/reel/cuts-and-zoom-2.jpg"
+    ],
+    "nativeFramesInspected": [
+      "review/reel/native-4.0.jpg",
+      "review/reel/native-20.5.jpg",
+      "review/reel/native-34.0.jpg"
+    ],
+    "coverCrops": [
+      "review/reel/cover-360.jpg",
+      "review/reel/cover-profile-3x4.jpg",
+      "review/reel/cover-profile-square.jpg"
+    ],
+    "uiSimulation": [
+      "review/reel/ui-overlap-simulation-1.jpg",
+      "review/reel/ui-overlap-simulation-2.jpg"
+    ]
+  },
+  "observations": {
+    "story": "The loaded wagon, full campsite, missing sashimi, realization and instant-noodle payoff read in the confirmed order.",
+    "typography": "Gaegu at 72px for dialogue, fixed to the video frame; exact wording checked against the confirmed storyboard. No text spill found in all 15 displayed states.",
+    "bubbleTails": "Left/right speaker sides reverse when the scene moves outdoors. Tail direction was checked for each state. Some balloons overlap upper hair/background, while eyes, expressions, hands and required props remain readable.",
+    "motion": "Complete hats retained in entryway shots by right-edge zoom anchors. No newly exposed blank edge or face cropping was observed across the 0.5-second samples and cut endpoints.",
+    "uiOverlap": "Simulated right-side controls touch peripheral Jango hat/hinge edges in entryway scenes, while eyes/mouth/dialogue remain readable. This is not a live Instagram test.",
+    "cover": "The 3:4 and square center crops preserve the title and recognizable Jango. Actual Instagram crop remains a publication-stage check.",
+    "closing": "Brand and the single approved CTA are visible from 34 through 37 seconds.",
+    "readingTime": "All dialogue states stay for 1.5–3.5 seconds; measured Korean/alphanumeric reading rate is at most 5.19 characters/second. This metric supports, rather than replaces, the visual review.",
+    "audio": "Technical decode and waveform checks passed. The 19.00–19.71-second silence corresponds to the planned 0.7-second gag pause. A separate 7.06–7.58-second rest also exists in the official unedited music file.",
+    "integrity": "101 original-art, historical-record, MASTER and policy files matched the pre-render hashes."
+  },
+  "remainingChecks": [
+    "Human full playback/listening has not been performed; no audio-perception tool is available.",
+    "Actual Instagram controls, uploaded playback, profile crop, AI label and profile links are for a separately requested publication step."
+  ],
+  "realTimePlaybackClaim": false,
+  "videoSha256": "8b8c305644c8d3b421bf91ba413bb6617236e7a782895020531cde1711e385a8"
+}

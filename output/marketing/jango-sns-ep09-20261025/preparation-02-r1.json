@@ -1,0 +1,46 @@
+{
+  "candidate": "scene-02-r1",
+  "preparedAt": "2026-10-25T16:42:37.202004+09:00",
+  "method": "official built-in imagegen",
+  "intent": "new text-free scene from established references plus episode-specific continuity candidate",
+  "prompt": "output/marketing/jango-sns-ep09-20261025/prompts/scene-02-r1.txt",
+  "promptSha256": "dcd16bc3a9f8ce07f10adbc2030c5a9faa865392715ebf1463efbe00e17ddc18",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 MASTER: Jango identity, compact apron body, crayon texture; exclude plate and wink",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep07-20261024/source-art/scene-04-r2.png",
+      "sha256": "d124a258dc97996cad9eaa9683946c4bc63debfbd6d077b217b0dbd64c74e235",
+      "role": "Published episode 7: continuing woman face, chestnut messy bun, ivory cable-knit sweater and forest-green trousers; exclude pasta, forks and affectionate pose.",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+      "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357",
+      "role": "User-corrected compact Jango torso and short legs; mitten-to-cuff connections. Exclude freezer and phone.",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 4,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "role": "approved v6: integrated household storytelling, contact and warm scene; no old lettering, balloons or 4:5 framing",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 5,
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-01-r2.png",
+      "sha256": "c6e0401a31764bb5f2284e7892f43800ddbf54b6508bedaed6ad2eb8f07f2e02",
+      "role": "Episode 9 continuity candidate: exact entryway, character costumes and stable prop designs; inspected before reuse. Not user-adopted yet."
+    }
+  ],
+  "expressionIntent": "Confident compact Jango using closed small U smile; woman practical or impatient. No romantic acting.",
+  "status": "prepared-before-generation"
+}

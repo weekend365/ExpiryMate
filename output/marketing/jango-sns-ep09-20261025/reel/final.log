@@ -1,0 +1,53 @@
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/var/folders/v3/20z15jqd76nfvc9kmmtlxjkr0000gn/T/jango-ep09-render-c2iqott9/silent.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:37.00, start: 0.000000, bitrate: 8008 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1080x1920, 8005 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+[mp3 @ 0x151904d70] Estimating duration from bitrate, this may be inaccurate
+Input #1, mp3, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep09-20261025/music/Investigations.mp3':
+  Metadata:
+    TSS             : Logic Pro 8.0.2
+    iTunNORM        :  000000B5 000000D9 00001311 00000DED 00016382 00016382 00007A86 00006AC0 0001639C 00016382
+    iTunSMPB        :  00000000 00000210 00000A23 00000000003EE64D 00000000 0038F7AD 00000000 00000000 00000000 00000000 00000000 00000000
+    title           : Investigations
+    artist          : Kevin MacLeod
+    TCM             : Kevin MacLeod
+    album           : Royalty Free
+    genre           : Soundtrack
+    date            : 2009
+  Duration: 00:01:33.54, start: 0.000000, bitrate: 320 kb/s
+  Stream #1:0: Audio: mp3 (mp3float), 44100 Hz, stereo, fltp, 320 kb/s
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #1:0 -> #0:1 (mp3 (mp3float) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep09-20261025/reel/jango-ep09-music.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    comment         : Investigations — Kevin MacLeod (incompetech.com)
+                    : 출처: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100646
+                    : CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+                    : 원곡 일부 발췌, 음량 조정, 짧은 무음 및 페이드 적용.
+    title           : 장고랑 살아보니 09 — 준비성은 좋은 편
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1080x1920, q=2-31, 8005 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+  Stream #0:1: Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s
+      Metadata:
+        encoder         : Lavc61.19.100 aac
+frame=  478 fps=0.0 q=-1.0 size=   14080KiB time=00:00:15.74 bitrate=7326.2kbits/s speed=31.2x    frame=  964 fps=954 q=-1.0 size=   29696KiB time=00:00:31.93 bitrate=7617.4kbits/s speed=31.6x    [mp4 @ 0x151906130] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0x151906070] video:36159KiB audio:864KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.107145%
+frame= 1110 fps=944 q=-1.0 Lsize=   37062KiB time=00:00:36.93 bitrate=8220.6kbits/s speed=31.4x    
+[aac @ 0x15190a6d0] Qavg: 2165.132

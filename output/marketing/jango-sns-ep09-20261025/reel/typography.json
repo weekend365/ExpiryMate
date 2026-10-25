@@ -1,0 +1,452 @@
+{
+  "safeArea": [
+    96,
+    280,
+    900,
+    1420
+  ],
+  "textBoxes": [
+    {
+      "role": "01w 여성",
+      "text": "회 먹으러 가는데…",
+      "renderedText": "회 먹으러 가는데...",
+      "bbox": [
+        346,
+        312,
+        894,
+        370
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "01w 여성",
+      "text": "이사 가?",
+      "renderedText": "이사 가?",
+      "bbox": [
+        497,
+        382,
+        743,
+        428
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "01j 장고",
+      "text": "이 정도는 기본이지.",
+      "renderedText": "이 정도는 기본이지.",
+      "bbox": [
+        342,
+        340,
+        898,
+        400
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02w 여성",
+      "text": "회 한 접시 먹는데",
+      "renderedText": "회 한 접시 먹는데",
+      "bbox": [
+        396,
+        304,
+        900,
+        374
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02w 여성",
+      "text": "테이블도 필요해?",
+      "renderedText": "테이블도 필요해?",
+      "bbox": [
+        407,
+        387,
+        889,
+        460
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02j 장고",
+      "text": "준비는 과할수록",
+      "renderedText": "준비는 과할수록",
+      "bbox": [
+        426,
+        306,
+        870,
+        378
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "02j 장고",
+      "text": "좋은 거야.",
+      "renderedText": "좋은 거야.",
+      "bbox": [
+        502,
+        390,
+        794,
+        458
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "03w 여성",
+      "text": "이제 진짜",
+      "renderedText": "이제 진짜",
+      "bbox": [
+        514,
+        318,
+        782,
+        368
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "03w 여성",
+      "text": "다 챙겼지?",
+      "renderedText": "다 챙겼지?",
+      "bbox": [
+        496,
+        382,
+        800,
+        446
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "03j 장고",
+      "text": "응. 빠진 게",
+      "renderedText": "응. 빠진 게",
+      "bbox": [
+        488,
+        314,
+        808,
+        370
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "03j 장고",
+      "text": "있을 수가 없어.",
+      "renderedText": "있을 수가 없어.",
+      "bbox": [
+        428,
+        383,
+        868,
+        450
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04j 장고",
+      "text": "봤지? 준비한 보람이",
+      "renderedText": "봤지? 준비한 보람이",
+      "bbox": [
+        244,
+        340,
+        816,
+        406
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04j 장고",
+      "text": "있잖아.",
+      "renderedText": "있잖아.",
+      "bbox": [
+        429,
+        419,
+        631,
+        484
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "04w 여성",
+      "text": "좋아. 이제 회 꺼내.",
+      "renderedText": "좋아. 이제 회 꺼내.",
+      "bbox": [
+        254,
+        378,
+        806,
+        446
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05w 여성",
+      "text": "……회는?",
+      "renderedText": "......회는?",
+      "bbox": [
+        376,
+        384,
+        684,
+        440
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05j 장고",
+      "text": "잠깐. 분명 냉장고에",
+      "renderedText": "잠깐. 분명 냉장고에",
+      "bbox": [
+        252,
+        340,
+        808,
+        402
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "05j 장고",
+      "text": "넣어 놨는데.",
+      "renderedText": "넣어 놨는데.",
+      "bbox": [
+        355,
+        414,
+        705,
+        484
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "06w 여성",
+      "text": "넣어 놓고?",
+      "renderedText": "넣어 놓고?",
+      "bbox": [
+        378,
+        377,
+        682,
+        447
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "06j 장고",
+      "text": "……꺼내지는 않았네.",
+      "renderedText": "......꺼내지는 않았네.",
+      "bbox": [
+        221,
+        378,
+        839,
+        446
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07w 여성",
+      "text": "비상식량은 챙겼네?",
+      "renderedText": "비상식량은 챙겼네?",
+      "bbox": [
+        260,
+        378,
+        800,
+        446
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07j 장고",
+      "text": "내가 준비성은",
+      "renderedText": "내가 준비성은",
+      "bbox": [
+        338,
+        343,
+        722,
+        400
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07j 장고",
+      "text": "좋잖아.",
+      "renderedText": "좋잖아.",
+      "bbox": [
+        429,
+        413,
+        631,
+        481
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 72,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07end brand",
+      "text": "장고야 부탁해",
+      "renderedText": "장고야 부탁해",
+      "bbox": [
+        298,
+        351,
+        742,
+        415
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 83,
+      "fixedToFrame": true
+    },
+    {
+      "role": "07end single CTA",
+      "text": "내 재료로 오늘 메뉴 찾기",
+      "renderedText": "내 재료로 오늘 메뉴 찾기",
+      "bbox": [
+        254,
+        458,
+        786,
+        510
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 54,
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover series",
+      "text": "장고랑 살아보니 09",
+      "renderedText": "장고랑 살아보니 09",
+      "bbox": [
+        347,
+        456,
+        713,
+        500
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 48,
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover hook",
+      "text": "이 짐에서",
+      "renderedText": "이 짐에서",
+      "bbox": [
+        386,
+        518,
+        674,
+        576
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 78,
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover hook",
+      "text": "딱 하나 빠짐",
+      "renderedText": "딱 하나 빠짐",
+      "bbox": [
+        337,
+        576,
+        723,
+        634
+      ],
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sizePx": 78,
+      "fixedToFrame": true
+    }
+  ],
+  "dialogueSizePx": 72,
+  "ellipsisRendering": "One U+2026 is rendered as three Gaegu periods; spoken wording unchanged.",
+  "balloonSource": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+  "balloonSha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232",
+  "balloonPlacements": {
+    "1": [
+      250,
+      210,
+      770,
+      320,
+      620,
+      370
+    ],
+    "2": [
+      330,
+      220,
+      700,
+      330,
+      648,
+      382
+    ],
+    "3": [
+      330,
+      220,
+      700,
+      330,
+      648,
+      382
+    ],
+    "4": [
+      130,
+      246,
+      810,
+      405,
+      530,
+      412
+    ],
+    "5": [
+      130,
+      246,
+      810,
+      405,
+      530,
+      412
+    ],
+    "6": [
+      130,
+      246,
+      810,
+      405,
+      530,
+      412
+    ],
+    "7": [
+      130,
+      246,
+      810,
+      405,
+      530,
+      412
+    ]
+  },
+  "speakerSidesReverseAfterScene3": true,
+  "coverSha256": "484a635abd7d8abda658176508bb7741944addb31d58b7d633880da88f1908e3"
+}

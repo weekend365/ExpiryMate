@@ -1,0 +1,6 @@
+Use case: precise-object-edit.
+Image 1 is the EDIT TARGET, the episode 9 riverside picnic illustration. Image 2 is active v18 mascot identity. Keep the target image's entire scene and illustration, faces, body proportions, poses, clothing, expressions, foreground furniture, mustard cooler, speaker, thermos, plates and utensils exactly the same.
+
+Correct ONLY the gear continuity in the olive wagon behind the characters. The two beige chairs are already unfolded beside the table, and the mint-check mat is already spread under their picnic, so the wagon must NOT contain any extra folded chairs, rolled mat or spare wooden table. Remove those duplicated stacked objects from inside the wagon and show its empty olive canvas interior naturally instead. Preserve the wagon handle, frame, wheels, exterior and occlusion by the foreground characters. Do not add any extra object in the empty wagon.
+
+Retain one mint-check mat under the picnic, exactly the two unfolded beige chairs already visible in the target, one slatted wood table, closed mustard cooler, exactly two empty plates, speaker, folded black phone stand and ivory thermos. Preserve all other elements and placement, the quiet sky and the full-bleed 9:16 vertical crop. No text, logos, balloons, fish, seafood or food.

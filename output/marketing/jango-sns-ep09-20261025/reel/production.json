@@ -1,0 +1,162 @@
+{
+  "createdAt": "2026-10-25T17:07:57.975881+09:00",
+  "format": "MP4/H.264/yuv420p,1080x1920,30fps,1110 frames,AAC 48kHz stereo",
+  "seconds": 37,
+  "sceneDurations": [
+    4,
+    5,
+    5,
+    5,
+    5,
+    5,
+    8
+  ],
+  "sceneCuts": [
+    4,
+    9,
+    14,
+    19,
+    24,
+    29
+  ],
+  "stateChanges": {
+    "1": [
+      [
+        0,
+        "01w"
+      ],
+      [
+        2.3,
+        "01j"
+      ]
+    ],
+    "2": [
+      [
+        0,
+        "02w"
+      ],
+      [
+        2.7,
+        "02j"
+      ]
+    ],
+    "3": [
+      [
+        0,
+        "03w"
+      ],
+      [
+        2.1,
+        "03j"
+      ]
+    ],
+    "4": [
+      [
+        0,
+        "04j"
+      ],
+      [
+        2.8,
+        "04w"
+      ]
+    ],
+    "5": [
+      [
+        0,
+        "05w"
+      ],
+      [
+        1.5,
+        "05j"
+      ]
+    ],
+    "6": [
+      [
+        0,
+        "06w"
+      ],
+      [
+        1.8,
+        "06j"
+      ]
+    ],
+    "7": [
+      [
+        0,
+        "07w"
+      ],
+      [
+        2.2,
+        "07j"
+      ],
+      [
+        5,
+        "07end"
+      ]
+    ]
+  },
+  "closingBrandAndCTASeconds": [
+    34,
+    37
+  ],
+  "zoom": [
+    1,
+    1.03
+  ],
+  "zoomAnchors": {
+    "1": [
+      900,
+      1030
+    ],
+    "2": [
+      1080,
+      1030
+    ],
+    "3": [
+      1080,
+      1030
+    ],
+    "4": [
+      350,
+      1030
+    ],
+    "5": [
+      460,
+      1070
+    ],
+    "6": [
+      450,
+      1030
+    ],
+    "7": [
+      450,
+      1030
+    ]
+  },
+  "fixedDialogueLettering": true,
+  "narration": false,
+  "newArtworkGenerated": false,
+  "musicSource": "output/marketing/jango-sns-ep09-20261025/music/Investigations.mp3",
+  "musicSourceSha256": "699f7a3cd227dfe5c1e88099b45af57202bfe9d56f86b8b43e4252b65dd96768",
+  "musicLicenseRecord": "output/marketing/jango-sns-ep09-20261025/music/license.json",
+  "musicExcerptSeconds": [
+    0,
+    37
+  ],
+  "fadeInSeconds": 0.3,
+  "fadeOutSeconds": 1,
+  "audioTargetLufsBeforeGagEnvelope": -18,
+  "intentionalSilenceSeconds": [
+    19,
+    19.7
+  ],
+  "reducedMusicSeconds": [
+    19.8,
+    29
+  ],
+  "reducedMusicDb": -8,
+  "credit": "Investigations — Kevin MacLeod (incompetech.com)\n출처: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100646\nCC BY 4.0: https://creativecommons.org/licenses/by/4.0/\n원곡 일부 발췌, 음량 조정, 짧은 무음 및 페이드 적용.",
+  "videoSha256": "8b8c305644c8d3b421bf91ba413bb6617236e7a782895020531cde1711e385a8",
+  "coverSha256": "484a635abd7d8abda658176508bb7741944addb31d58b7d633880da88f1908e3",
+  "published": false
+}

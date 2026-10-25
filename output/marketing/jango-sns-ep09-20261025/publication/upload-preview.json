@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-25T08:38:50.836Z",
+  "userConfirmedVideoSelection": true,
+  "crop": "9:16 selected in Instagram UI",
+  "trimUi": "0–37 seconds",
+  "soundSwitch": true,
+  "video": [
+    {
+      "duration": 37,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "readyState": 4,
+      "videoHeight": 1920,
+      "videoWidth": 1080
+    },
+    {
+      "duration": 37,
+      "error": null,
+      "muted": true,
+      "paused": true,
+      "readyState": 4,
+      "videoHeight": 1920,
+      "videoWidth": 1080
+    }
+  ],
+  "coverStatus": "awaiting manual selection"
+}

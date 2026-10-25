@@ -1,0 +1,23 @@
+{
+  "candidate": "scene-04-r2",
+  "preparedAt": "2026-10-25T16:45:28.031813+09:00",
+  "method": "official built-in imagegen edit",
+  "prompt": "output/marketing/jango-sns-ep09-20261025/prompts/scene-04-r2.txt",
+  "promptSha256": "6e72cdc838c93d3b90cd0a971fd929c475c5431d8d812a18dba1239f69d56ce5",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-04-r1.png",
+      "sha256": "fd01f614bf59ce5d09090b34e316d561424462ed40740d07c238ce4ebffcbb1d",
+      "role": "edit target: remove duplicate unpacked equipment from wagon"
+    },
+    {
+      "imageIndex": 2,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 identity"
+    }
+  ],
+  "changes": "Remove duplicate rolled mat and folded chairs from wagon only; preserve full scene.",
+  "status": "prepared-before-generation"
+}

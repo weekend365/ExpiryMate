@@ -1,0 +1,12 @@
+{
+  "source": "music/Investigations.mp3",
+  "excerptSeconds": [
+    0,
+    37
+  ],
+  "detectedSilence": [
+    "silence_start: 7.061134",
+    "silence_end: 7.57873 | silence_duration: 0.517596"
+  ],
+  "purpose": "Compare the 7.05–7.58s rest against the official unedited source, separately from the intentional 19s gag pause."
+}

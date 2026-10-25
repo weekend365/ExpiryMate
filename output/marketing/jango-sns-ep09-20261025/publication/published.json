@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "episode": 9,
+  "title": "준비성은 좋은 편",
+  "status": "published-and-verified",
+  "verifiedAt": "2026-10-25T17:43:12.160977+09:00",
+  "account": "jango_plz",
+  "url": "https://www.instagram.com/reel/De6TLwWyP_Q/",
+  "observedProfileLink": "https://www.instagram.com/jango_plz/reel/De6TLwWyP_Q/",
+  "observedPostPage": "https://www.instagram.com/p/De6TLwWyP_Q/",
+  "authorization": {
+    "request": "내 장고 홍보용 인스타그램에 게시해줘.",
+    "userCompletedVideoSelection": true,
+    "userCompletedCoverSelection": true
+  },
+  "published": true,
+  "shareActions": 1,
+  "duplicateCreated": false,
+  "postCountBefore": 14,
+  "postCountAfter": 15,
+  "uploadedAssets": [
+    {
+      "path": "reel/jango-ep09-music.mp4",
+      "bytes": 37951941,
+      "sha256": "8b8c305644c8d3b421bf91ba413bb6617236e7a782895020531cde1711e385a8"
+    },
+    {
+      "path": "cover.jpg",
+      "bytes": 1467311,
+      "sha256": "484a635abd7d8abda658176508bb7741944addb31d58b7d633880da88f1908e3"
+    },
+    {
+      "path": "caption.txt",
+      "bytes": 1341,
+      "sha256": "e202f0d41d5e5ecf2743533355f7032c5978d96c02e9848e419c62aafe5e0276"
+    }
+  ],
+  "verification": {
+    "instagramConfirmation": "릴스가 공유되었습니다",
+    "captionExactMatchIgnoringWhitespace": true,
+    "captionCharacters": 677,
+    "cover": {
+      "customCoverVisibleBeforePublish": true,
+      "customCoverVisibleInProfileAfterPublish": true,
+      "title": "이 짐에서 딱 하나 빠짐",
+      "titleAndCharactersUncropped": true,
+      "evidence": "instagram-profile.png"
+    },
+    "aiLabelVisible": "AI 콘텐츠",
+    "accessibility": "Korean scene description included in caption; Reel composer offered automatic captions only, no image alt-text input. No narration, so automatic captions remained off.",
+    "playback": {
+      "sourceSeconds": 37,
+      "publishedSeconds": 37.013333,
+      "aspectRatio": "9:16",
+      "deliveredResolutionObserved": "720x1280",
+      "playingAcrossMultipleScenesAndLoop": true,
+      "mediaError": null,
+      "unmuted": true,
+      "details": "playback.json"
+    },
+    "audio": {
+      "track": "Investigations — Kevin MacLeod",
+      "embeddedInUploadedVideo": true,
+      "instagramAudioLabel": "오리지널 오디오",
+      "instagramAudioUrl": "https://www.instagram.com/reels/audio/27826852853657532/",
+      "creditAndSourceAndCcBy4LinkAndEditNoticePresent": true,
+      "directListeningCompleted": false,
+      "limitation": "Direct listening is not claimed. Local technical audio checks and Instagram playback/unmuted state were verified."
+    },
+    "profileDownloadLinks": [
+      "https://apps.apple.com/kr/app/id6793375883",
+      "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+    ]
+  },
+  "evidence": {
+    "post": "instagram-post.png",
+    "profile": "instagram-profile.png",
+    "coverApplied": "cover-applied.png",
+    "prePublishAiLabelAndCover": "publish-review.png",
+    "caption": "published-caption.txt",
+    "postAccessibilityTree": "instagram-post-ax.txt"
+  },
+  "historicalProductionRecord": {
+    "path": "../delivery.json",
+    "sha256": "87d1c30154b5476bca2341cf0f4a42590f919f21508f73125dfe61717b613cd4",
+    "note": "Reel-generation-stage record preserved byte-for-byte; publication status in this file supersedes its prior unposted status."
+  },
+  "sourceAssetsAndPriorManifestsPreserved": true,
+  "appCodeChanged": false,
+  "apiOrDatabaseChanged": false,
+  "masterChanged": false,
+  "commitOrPush": false
+}

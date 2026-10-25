@@ -1,0 +1,23 @@
+{
+  "title": "Investigations",
+  "creator": "Kevin MacLeod",
+  "isrc": "USUAN1100646",
+  "file": "output/marketing/jango-sns-ep09-20261025/music/Investigations.mp3",
+  "sha256": "699f7a3cd227dfe5c1e88099b45af57202bfe9d56f86b8b43e4252b65dd96768",
+  "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100646",
+  "downloadUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Investigations.mp3",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "checkedAt": "2026-10-25T17:05:52.611054+09:00",
+  "sourcePage": "music/source-page.html",
+  "catalogEntry": "music/source-track.json",
+  "licenseSnapshot": "music/cc-by-4.0.html",
+  "vocals": false,
+  "allowedUse": "Commercial promotional video use and editing with creator/source attribution, license link and modification notice.",
+  "requiredCredit": "Investigations — Kevin MacLeod (incompetech.com)\n출처: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100646\nCC BY 4.0: https://creativecommons.org/licenses/by/4.0/\n원곡 일부 발췌, 음량 조정, 짧은 무음 및 페이드 적용.",
+  "authority": {
+    "quote": "1번으로 적용해서 릴스 생성해줘.",
+    "selectedProposal": "Investigations — Kevin MacLeod",
+    "scope": "Episode 9 music override; series default remains unchanged."
+  }
+}

@@ -11,3 +11,7 @@ output/marketing/jango-sns-ep02-20261020/reel/*.log -whitespace
 output/marketing/jango-sns-ep04-20261020/reel/*.log -whitespace
 output/marketing/jango-sns-ep04-20261020/review/reel/technical-decode.log -whitespace
 output/marketing/jango-sns-ep04-20261020/publication/published-ui.txt -whitespace
+output/marketing/jango-sns-ep09-20261025/reel/*.log -whitespace
+output/marketing/jango-sns-ep09-20261025/review/reel/decode.log -whitespace
+output/marketing/jango-sns-ep09-20261025/music/source-page.html -whitespace
+output/marketing/jango-sns-ep09-20261025/publication/instagram-post-ax.txt -whitespace

@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-25T08:42:12.322Z",
+  "start": [
+    {
+      "currentTime": 29.796443,
+      "duration": 37.013333,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "readyState": 4,
+      "videoHeight": 1280,
+      "videoWidth": 720
+    }
+  ],
+  "end": [
+    {
+      "currentTime": 25.244979,
+      "duration": 37.013333,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "readyState": 4,
+      "videoHeight": 1280,
+      "videoWidth": 720
+    }
+  ],
+  "captionExactWhitespaceNormalizedMatch": true,
+  "aiLabelVisible": "AI 콘텐츠",
+  "audioLabelVisible": "오리지널 오디오",
+  "audioLink": "https://www.instagram.com/reels/audio/27826852853657532/",
+  "directListening": "Not independently completed; playback and unmuted state verified via UI, local audio technical QA completed before posting."
+}

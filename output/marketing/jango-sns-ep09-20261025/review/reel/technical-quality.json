@@ -1,0 +1,263 @@
+{
+  "checkedAt": "2026-10-25T17:08:19.729443+09:00",
+  "technicalStatus": "passed",
+  "fullVideoDecode": "passed",
+  "decodedFrames": 1110,
+  "proxyDecodedFrames": 1110,
+  "seconds": 37.0,
+  "metadata": {
+    "ffmpeg_version": "7.1 built with Apple clang version 13.1.6 (clang-1316.0.21.2.5)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(progressive)",
+    "audio_codec": "aac",
+    "fps": 30.0,
+    "source_size": [
+      1080,
+      1920
+    ],
+    "size": [
+      1080,
+      1920
+    ],
+    "rotate": 0,
+    "duration": 37.0
+  },
+  "sceneCuts": [
+    4,
+    9,
+    14,
+    19,
+    24,
+    29
+  ],
+  "dialogueStateTimes": [
+    [
+      0,
+      "01w"
+    ],
+    [
+      2.3,
+      "01j"
+    ],
+    [
+      4,
+      "02w"
+    ],
+    [
+      6.7,
+      "02j"
+    ],
+    [
+      9,
+      "03w"
+    ],
+    [
+      11.1,
+      "03j"
+    ],
+    [
+      14,
+      "04j"
+    ],
+    [
+      16.8,
+      "04w"
+    ],
+    [
+      19,
+      "05w"
+    ],
+    [
+      20.5,
+      "05j"
+    ],
+    [
+      24,
+      "06w"
+    ],
+    [
+      25.8,
+      "06j"
+    ],
+    [
+      29,
+      "07w"
+    ],
+    [
+      31.2,
+      "07j"
+    ],
+    [
+      34,
+      "07end"
+    ]
+  ],
+  "dialogueReadingTimes": [
+    {
+      "key": "01w",
+      "seconds": 2.3,
+      "lettersAndDigits": 10,
+      "charactersPerSecond": 4.35
+    },
+    {
+      "key": "01j",
+      "seconds": 1.7,
+      "lettersAndDigits": 8,
+      "charactersPerSecond": 4.71
+    },
+    {
+      "key": "02w",
+      "seconds": 2.7,
+      "lettersAndDigits": 14,
+      "charactersPerSecond": 5.19
+    },
+    {
+      "key": "02j",
+      "seconds": 2.3,
+      "lettersAndDigits": 11,
+      "charactersPerSecond": 4.78
+    },
+    {
+      "key": "03w",
+      "seconds": 2.1,
+      "lettersAndDigits": 8,
+      "charactersPerSecond": 3.81
+    },
+    {
+      "key": "03j",
+      "seconds": 2.9,
+      "lettersAndDigits": 10,
+      "charactersPerSecond": 3.45
+    },
+    {
+      "key": "04j",
+      "seconds": 2.8,
+      "lettersAndDigits": 11,
+      "charactersPerSecond": 3.93
+    },
+    {
+      "key": "04w",
+      "seconds": 2.2,
+      "lettersAndDigits": 7,
+      "charactersPerSecond": 3.18
+    },
+    {
+      "key": "05w",
+      "seconds": 1.5,
+      "lettersAndDigits": 2,
+      "charactersPerSecond": 1.33
+    },
+    {
+      "key": "05j",
+      "seconds": 3.5,
+      "lettersAndDigits": 13,
+      "charactersPerSecond": 3.71
+    },
+    {
+      "key": "06w",
+      "seconds": 1.8,
+      "lettersAndDigits": 4,
+      "charactersPerSecond": 2.22
+    },
+    {
+      "key": "06j",
+      "seconds": 3.2,
+      "lettersAndDigits": 7,
+      "charactersPerSecond": 2.19
+    },
+    {
+      "key": "07w",
+      "seconds": 2.2,
+      "lettersAndDigits": 8,
+      "charactersPerSecond": 3.64
+    },
+    {
+      "key": "07j",
+      "seconds": 2.8,
+      "lettersAndDigits": 9,
+      "charactersPerSecond": 3.21
+    }
+  ],
+  "dialogueMatchesApprovedStoryboard": true,
+  "closingBrandAndCTATimes": [
+    34,
+    37
+  ],
+  "blackFrameIntervals": [],
+  "detectedSilence": [
+    "silence_start: 7.054812",
+    "silence_end: 7.578771 | silence_duration: 0.523958",
+    "silence_start: 19",
+    "silence_end: 19.71 | silence_duration: 0.71"
+  ],
+  "intentionalSilenceSeconds": [
+    19,
+    19.7
+  ],
+  "measuredPauseCoreRmsDbfs": -240.0,
+  "audioDecodedSeconds": 37.013333333333335,
+  "audioChannelsMeasured": "stereo",
+  "audioPeakDbfs": -3.402,
+  "clippedSamples": 0,
+  "audioRmsPerSecondDbfs": [
+    -21.712,
+    -22.615,
+    -18.089,
+    -20.682,
+    -26.865,
+    -19.956,
+    -22.697,
+    -20.839,
+    -21.942,
+    -24.432,
+    -18.495,
+    -22.535,
+    -18.789,
+    -20.429,
+    -23.053,
+    -19.147,
+    -20.334,
+    -22.411,
+    -19.627,
+    -40.4,
+    -32.578,
+    -38.032,
+    -30.85,
+    -32.971,
+    -32.706,
+    -26.489,
+    -38.322,
+    -27.642,
+    -29.698,
+    -24.374,
+    -23.499,
+    -27.148,
+    -23.566,
+    -23.851,
+    -20.641,
+    -19.155,
+    -35.634
+  ],
+  "loudness": {
+    "input_i": "-19.47",
+    "input_tp": "-3.40",
+    "input_lra": "10.00",
+    "input_thresh": "-30.49",
+    "output_i": "-18.91",
+    "output_tp": "-2.00",
+    "output_lra": "9.10",
+    "output_thresh": "-29.69",
+    "normalization_type": "dynamic",
+    "target_offset": "0.91"
+  },
+  "protectedFilesPreserved": 101,
+  "productionInputsPreserved": 20,
+  "captionIncludesMusicCredit": true,
+  "captionIncludesAiDisclosureAndSceneDescription": true,
+  "humanListening": "Not performed: no audio-perception tool is available. Technical audio checks are not listening approval.",
+  "realTimePlaybackClaim": false,
+  "visualMethod": "Full decode plus every-0.5-second contact sheets, state starts, cut endpoints, 1080px key frames and cover crops for assistant visual inspection.",
+  "instagramOverlap": "Illustrative mobile controls/caption simulation only. Actual Instagram playback/profile crop remain for the separately authorized publication stage.",
+  "videoSha256": "8b8c305644c8d3b421bf91ba413bb6617236e7a782895020531cde1711e385a8",
+  "coverSha256": "484a635abd7d8abda658176508bb7741944addb31d58b7d633880da88f1908e3"
+}

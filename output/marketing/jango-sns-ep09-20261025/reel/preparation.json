@@ -1,0 +1,159 @@
+{
+  "preparedAt": "2026-10-25T17:05:52.611054+09:00",
+  "authority": {
+    "quote": "1번으로 적용해서 릴스 생성해줘.",
+    "context": "User selected Investigations and requested a Reel based on the seven reviewed original-art scenes.",
+    "scope": "Adopt selected artwork for this episode-9 Reel, add fixed lettering, selected music and cover. No publication, commit or push requested."
+  },
+  "sources": [
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-01-r2.png",
+      "sha256": "c6e0401a31764bb5f2284e7892f43800ddbf54b6508bedaed6ad2eb8f07f2e02",
+      "role": "selected scene 1"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-02-r1.png",
+      "sha256": "3e124ea6f35b625f998f0568ab6848bfbabd9a16fe80050f20f6d43f2deda355",
+      "role": "selected scene 2"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-03-r1.png",
+      "sha256": "826d2306b945ecc6913b0ffbb13d7eb20933d894b01fe4d2545e4966f0cf6a29",
+      "role": "selected scene 3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-04-r2.png",
+      "sha256": "46c0c32e2bd2bf6e1385a0f8ec4c0aa16a0688ccc9441baf98574ac398716c35",
+      "role": "selected scene 4"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-05-r1.png",
+      "sha256": "be95509b771f4a04eedf54ef42c827d2ca04284fcaf35c03aaa6cdd2a155ae53",
+      "role": "selected scene 5"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-06-r2.png",
+      "sha256": "e8f3f3156c6db2759644981c044fa31bc979350b3b3c4047951b3fc5e81d47ec",
+      "role": "selected scene 6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-07-r2.png",
+      "sha256": "f0540f3d235d80f769007d27832a9885908d5ab7d5bf984275edaca744bc5b1a",
+      "role": "selected scene 7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+      "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232",
+      "role": "approved prior speech balloon"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sha256": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+      "role": "dialogue font"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/fonts/OFL.txt",
+      "sha256": "53a9ce47085d9fef613c7ecb3730dc80d25962510bbea231b89564f58240f251",
+      "role": "Gaegu license"
+    },
+    {
+      "file": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sha256": "3ffbacde6ab8411f1d2db54bb9b1f0b3ee2a738932033722cf0388c06aed1c93",
+      "role": "review labels"
+    },
+    {
+      "file": "apps/mobile/assets/fonts/Pretendard-LICENSE.txt",
+      "sha256": "b04538c9abec39a3db75108cf0af0fd9c77032fe8aa2cf38345b4d250e98e38e",
+      "role": "Pretendard license"
+    },
+    {
+      "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+      "sha256": "33bd9c3e129e43c5417a2b1450a89b3977b0aa92d3f7b3001a8ba0645b8a2eed",
+      "role": "production guide"
+    },
+    {
+      "file": "docs/product/release-scope.md",
+      "sha256": "89e9d960d780307fc33e92158dbe8bdb07f4532581ab1dd5ca9f44d6f5251c61",
+      "role": "existing recommendation feature used in final CTA"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/music/Investigations.mp3",
+      "sha256": "699f7a3cd227dfe5c1e88099b45af57202bfe9d56f86b8b43e4252b65dd96768",
+      "role": "episode-specific music input/evidence"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/music/cc-by-4.0.html",
+      "sha256": "8dda1ccec4be91fc80821d4e4fd5c568072b9a3a74b2fdc07c249a27e920ef01",
+      "role": "episode-specific music input/evidence"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/music/credit.txt",
+      "sha256": "5f2fa88a3c7c840b0f249989383c949bbb61aedc4bb58216871db8bfa70761c8",
+      "role": "episode-specific music input/evidence"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/music/license.json",
+      "sha256": "fd2ac5eb7293e68db1a5a37d06e52d051be1a0501dbf81f1ab8c171709186193",
+      "role": "episode-specific music input/evidence"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/music/source-page.html",
+      "sha256": "0aaccc3d496fc4ae189e27e3fe2d4f5216266e3bcccf2e0ba77fb1b57a28fa94",
+      "role": "episode-specific music input/evidence"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep09-20261025/music/source-track.json",
+      "sha256": "3c0f4173579e5c8b6e2b96ac57daec1fe81050ae5a9f14562519c4f7783028f4",
+      "role": "episode-specific music input/evidence"
+    }
+  ],
+  "size": [
+    1080,
+    1920
+  ],
+  "fps": 30,
+  "durationSeconds": 37,
+  "sceneDurations": [
+    4,
+    5,
+    5,
+    5,
+    5,
+    5,
+    8
+  ],
+  "cutSeconds": [
+    4,
+    9,
+    14,
+    19,
+    24,
+    29
+  ],
+  "closingBrandAndActionSeconds": [
+    34,
+    37
+  ],
+  "musicExcerptSeconds": [
+    0,
+    37
+  ],
+  "intentionalMusicPauseSeconds": [
+    19,
+    19.7
+  ],
+  "duckingDb": -8,
+  "duckingSeconds": [
+    19.8,
+    29
+  ],
+  "fullMusicReturnSeconds": [
+    29,
+    29.2
+  ],
+  "fadeInSeconds": 0.3,
+  "fadeOutSeconds": 1,
+  "newArtworkGeneration": false,
+  "method": "Uniform aspect-preserving 9:16 fit of 941x1672 source art; 100-to-103 percent zoom with right-edge-protecting anchors for scenes 2/3; fixed separate Gaegu speech balloons; hard cuts; licensed music with gag envelope.",
+  "existingRecordPolicy": "Historical episode/artwork manifest stays byte-identical. This reel preparation and later delivery record document the new authorization/state."
+}

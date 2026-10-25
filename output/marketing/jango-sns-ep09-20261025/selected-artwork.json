@@ -1,0 +1,86 @@
+[
+  {
+    "scene": 1,
+    "candidate": "scene-01-r2",
+    "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-01-r2.png",
+    "sha256": "c6e0401a31764bb5f2284e7892f43800ddbf54b6508bedaed6ad2eb8f07f2e02",
+    "size": [
+      941,
+      1672
+    ],
+    "generationRecord": "generation-01-r2.json",
+    "status": "candidate-pending-user-artwork-review"
+  },
+  {
+    "scene": 2,
+    "candidate": "scene-02-r1",
+    "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-02-r1.png",
+    "sha256": "3e124ea6f35b625f998f0568ab6848bfbabd9a16fe80050f20f6d43f2deda355",
+    "size": [
+      941,
+      1672
+    ],
+    "generationRecord": "generation-02-r1.json",
+    "status": "candidate-pending-user-artwork-review"
+  },
+  {
+    "scene": 3,
+    "candidate": "scene-03-r1",
+    "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-03-r1.png",
+    "sha256": "826d2306b945ecc6913b0ffbb13d7eb20933d894b01fe4d2545e4966f0cf6a29",
+    "size": [
+      941,
+      1672
+    ],
+    "generationRecord": "generation-03-r1.json",
+    "status": "candidate-pending-user-artwork-review"
+  },
+  {
+    "scene": 4,
+    "candidate": "scene-04-r2",
+    "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-04-r2.png",
+    "sha256": "46c0c32e2bd2bf6e1385a0f8ec4c0aa16a0688ccc9441baf98574ac398716c35",
+    "size": [
+      941,
+      1672
+    ],
+    "generationRecord": "generation-04-r2.json",
+    "status": "candidate-pending-user-artwork-review"
+  },
+  {
+    "scene": 5,
+    "candidate": "scene-05-r1",
+    "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-05-r1.png",
+    "sha256": "be95509b771f4a04eedf54ef42c827d2ca04284fcaf35c03aaa6cdd2a155ae53",
+    "size": [
+      941,
+      1672
+    ],
+    "generationRecord": "generation-05-r1.json",
+    "status": "candidate-pending-user-artwork-review"
+  },
+  {
+    "scene": 6,
+    "candidate": "scene-06-r2",
+    "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-06-r2.png",
+    "sha256": "e8f3f3156c6db2759644981c044fa31bc979350b3b3c4047951b3fc5e81d47ec",
+    "size": [
+      941,
+      1672
+    ],
+    "generationRecord": "generation-06-r2.json",
+    "status": "candidate-pending-user-artwork-review"
+  },
+  {
+    "scene": 7,
+    "candidate": "scene-07-r2",
+    "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-07-r2.png",
+    "sha256": "f0540f3d235d80f769007d27832a9885908d5ab7d5bf984275edaca744bc5b1a",
+    "size": [
+      941,
+      1672
+    ],
+    "generationRecord": "generation-07-r2.json",
+    "status": "candidate-pending-user-artwork-review"
+  }
+]

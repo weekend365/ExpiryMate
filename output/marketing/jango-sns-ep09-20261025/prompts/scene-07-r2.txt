@@ -1,0 +1,8 @@
+Use case: precise-object-edit.
+Image 1 is the EDIT TARGET: episode 9 final scene with Jango and the woman eating two cups of noodles.
+Image 2 is equipment continuity reference only, the earlier picnic setup.
+
+Keep Image 1's characters, expressions, noodles, table, perspective, all lighting and illustrated texture exactly unchanged. Correct only two minor continuity details:
+1. Remove the EXTRA EMPTY beige camping chair cropped across the lower-right foreground. There are exactly two chairs in the story: Jango's occupied chair on the left and the woman's occupied chair behind her on the right. Keep both occupied chairs. Fill the removed extra chair area naturally with the existing mint-and-ivory picnic mat, grass and sparse fallen yellow leaves; keep the folding table's legs physically sensible and unchanged.
+2. The stack of cream plates on the tabletop should contain exactly TWO plates, not three. Preserve its position and overall scale.
+Keep exactly two noodle cups, one per character, the ivory thermos, closed mustard cooler, charcoal speaker, black phone stand and empty olive wagon. No extra equipment, lettering, speech balloons, logos, fish or other new food. Preserve the vertical 9:16 framing and quiet upper sky.

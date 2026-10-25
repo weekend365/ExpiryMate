@@ -1,0 +1,20 @@
+[
+  "/private/tmp/jango-ep08-venv/lib/python3.13/site-packages/imageio_ffmpeg/binaries/ffmpeg-macos-aarch64-v7.1",
+  "-hide_banner",
+  "-y",
+  "-i",
+  "/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep09-20261025/reel/jango-ep09-music.mp4",
+  "-vf",
+  "scale=360:640:flags=lanczos",
+  "-c:v",
+  "libx264",
+  "-crf",
+  "18",
+  "-preset",
+  "fast",
+  "-c:a",
+  "copy",
+  "-movflags",
+  "+faststart",
+  "/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep09-20261025/review/reel/jango-ep09-360.mp4"
+]

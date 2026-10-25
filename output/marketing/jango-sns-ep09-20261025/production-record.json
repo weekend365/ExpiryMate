@@ -1,0 +1,114 @@
+{
+  "episode": "jango-sns-ep09-20261025",
+  "completedAt": "2026-10-25T16:52:51.117917+09:00",
+  "stage": "seven text-free original-art candidates",
+  "method": "official built-in imagegen; separate generation per scene and targeted edits; no CLI fallback",
+  "originalGenerationCount": 7,
+  "editGenerationCount": 4,
+  "selectedArtwork": "selected-artwork.json",
+  "promptSet": "prompts/",
+  "referenceSources": "references.json",
+  "generationRecords": [
+    {
+      "candidate": "scene-01-r1",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-01-r1.png",
+      "sha256": "376460f52b8fd13c8c8301ed72111ecf59a2ab46db3294cdbb5afa0dde2bab92"
+    },
+    {
+      "candidate": "scene-01-r2",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-01-r2.png",
+      "sha256": "c6e0401a31764bb5f2284e7892f43800ddbf54b6508bedaed6ad2eb8f07f2e02"
+    },
+    {
+      "candidate": "scene-02-r1",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-02-r1.png",
+      "sha256": "3e124ea6f35b625f998f0568ab6848bfbabd9a16fe80050f20f6d43f2deda355"
+    },
+    {
+      "candidate": "scene-03-r1",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-03-r1.png",
+      "sha256": "826d2306b945ecc6913b0ffbb13d7eb20933d894b01fe4d2545e4966f0cf6a29"
+    },
+    {
+      "candidate": "scene-04-r1",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-04-r1.png",
+      "sha256": "fd01f614bf59ce5d09090b34e316d561424462ed40740d07c238ce4ebffcbb1d"
+    },
+    {
+      "candidate": "scene-04-r2",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-04-r2.png",
+      "sha256": "46c0c32e2bd2bf6e1385a0f8ec4c0aa16a0688ccc9441baf98574ac398716c35"
+    },
+    {
+      "candidate": "scene-05-r1",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-05-r1.png",
+      "sha256": "be95509b771f4a04eedf54ef42c827d2ca04284fcaf35c03aaa6cdd2a155ae53"
+    },
+    {
+      "candidate": "scene-06-r1",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-06-r1.png",
+      "sha256": "ba459c17e71d0d6ae3477bb6230087a8b935ecc261c61f280394191eac6e1cb2"
+    },
+    {
+      "candidate": "scene-06-r2",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-06-r2.png",
+      "sha256": "e8f3f3156c6db2759644981c044fa31bc979350b3b3c4047951b3fc5e81d47ec"
+    },
+    {
+      "candidate": "scene-07-r1",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-07-r1.png",
+      "sha256": "de47fe78cd28349b40348084a38572978ec553edccdcb52a805c2f909302d7c8"
+    },
+    {
+      "candidate": "scene-07-r2",
+      "file": "output/marketing/jango-sns-ep09-20261025/source-art/scene-07-r2.png",
+      "sha256": "f0540f3d235d80f769007d27832a9885908d5ab7d5bf984275edaca744bc5b1a"
+    }
+  ],
+  "originalBytePreservation": true,
+  "sourceDimensions": [
+    941,
+    1672
+  ],
+  "sourceAspectRatioNote": "Near-native 9:16; source bytes and dimensions unchanged. Final 1080x1920 export belongs to later Reel production.",
+  "reviewDerivatives": "Uniform contain downscales to 360x640 and numbered 4+3 overview using the existing episode 8 local sharp review builder, adapted only to the selection array shape. No illustrated content edits in code.",
+  "reviewBuilderSource": {
+    "file": "output/marketing/jango-sns-ep08-20261025/build_review.cjs",
+    "sha256": "d1ee350f1ec2b327f320fbbab21ad40d4dcd15df98c8cd6f0238e2006365aede"
+  },
+  "visualReview": "visual-review.json",
+  "preservation": "preservation-check.json",
+  "checks": [
+    {
+      "command": "node output/marketing/jango-sns-ep09-20261025/build_review.cjs",
+      "exitCode": 0,
+      "result": "Decoded seven selected PNGs and produced seven previews plus overview."
+    },
+    {
+      "command": "pnpm docs:check",
+      "exitCode": 0,
+      "result": "31 metadata entries, 76 indexed links and canonical Expo/EAS entry check passed."
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "check": "JSON and prompt/reference/source/selection/protected hashes",
+      "result": "all matched"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 1,
+      "result": "Unrelated mobile file apps/mobile/src/features/inventory/review-consumption.test.ts:87:10 violates react-hooks/rules-of-hooks in renderHook. No changes made to that file by this artwork task.",
+      "scope": "outside this artwork change"
+    },
+    {
+      "command": "pnpm typecheck / pnpm test",
+      "status": "not-run",
+      "reason": "Only new marketing artwork and production records were authored; no runtime code or shared contract changed. Relevant image, provenance, docs and lint checks were performed."
+    }
+  ],
+  "scope": "Original artwork only. No video, audio mix, cover production, Instagram publication, app/API/DB/MASTER edit, commit or push.",
+  "authorization": "episode.json"
+}

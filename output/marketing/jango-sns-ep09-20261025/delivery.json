@@ -1,0 +1,55 @@
+{
+  "createdAt": "2026-10-25T17:10:11.626411+09:00",
+  "episode": 9,
+  "title": "준비성은 좋은 편",
+  "status": "reel-generated-for-review",
+  "authority": {
+    "quote": "1번으로 적용해서 릴스 생성해줘.",
+    "interpretation": "Use Investigations for episode 9 and render a Reel from the seven selected original artworks."
+  },
+  "files": {
+    "video": "reel/jango-ep09-music.mp4",
+    "cover": "cover.jpg",
+    "mobileReview": "review/reel/jango-ep09-360.mp4",
+    "captionDraft": "caption.txt",
+    "musicRights": "music/license.json",
+    "technicalReview": "review/reel/technical-quality.json",
+    "visualReview": "review/reel/visual-review.json"
+  },
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "seconds": 37,
+    "fps": 30,
+    "scenes": 7,
+    "video": "H.264",
+    "audio": "AAC 48kHz stereo"
+  },
+  "music": "Investigations — Kevin MacLeod",
+  "audioEdits": {
+    "sourceExcerpt": [
+      0,
+      37
+    ],
+    "pause": [
+      19,
+      19.7
+    ],
+    "duckingDb": -8,
+    "duckingUntil": 29,
+    "fadeIn": 0.3,
+    "fadeOut": 1
+  },
+  "motion": "100–103% uniform zoom; fixed Korean lettering; hard cuts",
+  "narration": false,
+  "originalArtChanged": false,
+  "newArtworkGenerated": false,
+  "published": false,
+  "publicationUrl": null,
+  "commitOrPush": false,
+  "limitations": [
+    "Technical audio checks are complete; direct human listening is not claimed.",
+    "Instagram playback, UI and cover verification have not been performed for this unposted video."
+  ],
+  "historicalRecords": "episode.json, selected-artwork.json and manifest.json preserve the prior original-art-stage record; this delivery.json documents the subsequent Reel request and result."
+}
