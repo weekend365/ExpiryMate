@@ -1,0 +1,13 @@
+{
+  "id": "54f67f45-e483-4892-96fc-00d4bd6f09e1",
+  "status": "FINISHED",
+  "platform": "ANDROID",
+  "createdAt": null,
+  "completedAt": null,
+  "buildId": "6e4616b8-7dc8-482d-ab89-11fa56607cd1",
+  "version": "1.4.4",
+  "buildNumber": 46,
+  "track": "internal",
+  "releaseStatus": "completed",
+  "productionChanged": false
+}

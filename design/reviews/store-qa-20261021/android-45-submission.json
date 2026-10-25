@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-21T04:46:57.463879+00:00",
+  "easBuildId": "96076e78-42e8-446f-b4d3-f20bbd45ed56",
+  "easSubmissionId": "f3967935-d29d-422f-ad7e-9a0ebcedc3b9",
+  "submissionStatus": "FINISHED",
+  "track": "internal",
+  "version": "1.4.4",
+  "versionCode": 45,
+  "physicalInstallVerified": true,
+  "productionRelease": false,
+  "firstPhysicalUpdateAttempt": {
+    "at": "2026-10-21T04:48:35.463976+00:00",
+    "status": "Play generic update failure",
+    "installedVersionCode": 43,
+    "freeStorageGb": 93,
+    "dataCleared": false,
+    "retryPending": true
+  },
+  "verifiedAt": "2026-10-21T04:54:19.332513+00:00",
+  "installedVersionCode": 45,
+  "installedVersionName": "1.4.4",
+  "installerPackageName": "com.android.vending",
+  "appDataCleared": false,
+  "updateHistory": [
+    "First two Play attempts failed with generic dialog and Finsky status 1010.",
+    "Play cache-only command did not return a completion callback; its host command was stopped. Cache-cleanup success was not established.",
+    "Third official Play update completed; causal attribution to cache/propagation not established."
+  ]
+}

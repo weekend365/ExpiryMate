@@ -12,6 +12,7 @@ apps/api/prisma/dev.db-journal
 apps/api/.env
 apps/admin/.env.local
 apps/mobile/.env
+apps/mobile/google-services*.json
 apps/mobile/android/
 apps/mobile/e2e/results/
 apps/mobile/e2e/screenshots/current/

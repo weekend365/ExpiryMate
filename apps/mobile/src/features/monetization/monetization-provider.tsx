@@ -136,7 +136,7 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
         void queryClient
           .invalidateQueries({
             queryKey: withSessionUser(
-              sessionQueryKeys.subscription,
+              [...sessionQueryKeys.subscription, activeSpaceId ?? "no-space"],
               sessionUserId,
             ),
           })
@@ -144,7 +144,7 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
       }
     });
     return () => subscription.remove();
-  }, [queryClient, reconcilePendingReward, refresh, sessionUserId]);
+  }, [activeSpaceId, queryClient, reconcilePendingReward, refresh, sessionUserId]);
 
   const watchRewardedAd = useCallback(async () => {
     if (!sessionUserId) {

@@ -1,0 +1,34 @@
+{
+  "platform": "iOS",
+  "build": "1.4.4(61)",
+  "scenario": "real scheduled personal expiry push while shared space selected; notification tap",
+  "result": "passed",
+  "scheduledAtKst": "2026-10-25T11:47:00+09:00",
+  "receivedSurface": "iOS Notification Center",
+  "receiptObservedAt": "2026-10-25T02:53:18.402615+00:00",
+  "nativeRelativeAgeText": "5분 전",
+  "bannerObserved": false,
+  "bannerObservationNote": "No banner was observed during the initial window. Actual receipt was subsequently confirmed in Notification Center; exact transport arrival time is not claimed.",
+  "beforeSpace": "iOS 60 QA 공유 냉장고",
+  "afterSpace": "내 냉장고",
+  "tappedAt": "2026-10-25T02:53:19.897425+00:00",
+  "sameAppPid": true,
+  "checks": {
+    "inventoryTabSelected": true,
+    "personalSpaceSelected": true,
+    "expectedItemVisible": true
+  },
+  "normalSchedulerUsed": true,
+  "directSendUsed": false,
+  "remindersDisabledAfterObservation": true,
+  "evidence": [
+    {
+      "screenshot": "ios-61-push-received-notification.png",
+      "sha256": "adfbc33c103206a8ad7278ee6bc2273bff793c1ce40a9acf64d0c79afd80c985"
+    },
+    {
+      "screenshot": "ios-61-push-personal-inventory.png",
+      "sha256": "50c299056bf9c818d90621a505d75538ae58713a047d4918e2c35b4505e7de69"
+    }
+  ]
+}

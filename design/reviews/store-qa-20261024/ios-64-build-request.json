@@ -1,0 +1,56 @@
+{
+  "checkedAt": "2026-10-25T04:20:14.139245+00:00",
+  "buildId": "52253b08-f753-45ea-8297-bb7abfa91049",
+  "buildNumber": "64",
+  "expectedQaAppVersion": "1.4.4",
+  "status": "FINISHED",
+  "bundleIdentifier": "com.expirymate.mobile",
+  "profile": "store-qa",
+  "qaOrigin": "https://api-qa-c321.up.railway.app",
+  "purpose": "Retest canceled checkout and real StoreKit deferred-payment handling; read-only revocation metadata for existing Sandbox refund",
+  "sourceSha256": "648c9857fe645739f70f1fdadd645d2c4335ac356c11a62043c21ae2f612806c",
+  "preflight": {
+    "relatedTests": 21,
+    "fullTests": 1457,
+    "lint": "passed",
+    "typecheck": "passed",
+    "qaRouteTypecheck": "passed",
+    "archiveMonorepoFilesVerified": true,
+    "privateFilesInInspectedArchive": 0,
+    "productionProfileChanged": false,
+    "originalSdkBytesUnchanged": true
+  },
+  "qaOnlyNativeOption": {
+    "appleApi": "Product.PurchaseOption.simulatesAskToBuyInSandbox(true)",
+    "scope": "Private EAS QA source only, exact QA origin and native Info.plist guard, default off, only the two personal subscription SKUs",
+    "eventOrEntitlementSimulation": false,
+    "sdkResultAndEventMappingModified": false,
+    "restoreRequired": false,
+    "limitations": "Apple Sandbox can initiate deferred Ask to Buy; approve/reject resolution requires Xcode.",
+    "restoredOff": true
+  },
+  "deviceRetest": "passed actual build64 cancellation and native Sandbox deferred entry; approval/rejection resolution not tested",
+  "testFlightSubmissionId": "a7cd6fe1-c1bb-49a7-ad71-feedf650f9cf",
+  "testFlightSubmission": "FINISHED; Apple VALID and IN_BETA_TESTING",
+  "artifact": "ios-64-artifact.json",
+  "appStoreConnect": {
+    "id": "4d491fdd-4423-46e4-95e6-8f891531e051",
+    "buildNumber": "64",
+    "appVersion": "1.4.4",
+    "processingState": "VALID",
+    "internalBuildState": "IN_BETA_TESTING"
+  },
+  "deviceInstalled": true,
+  "deviceInstallVerifiedAt": "2026-10-25T04:53:43.335673+00:00",
+  "installedApp": {
+    "bundleIdentifier": "com.expirymate.mobile",
+    "bundleVersion": "64",
+    "version": "1.4.4",
+    "name": "장고야 부탁해"
+  },
+  "finalStateCheckedAt": "2026-10-25T05:22:48.592736+00:00",
+  "cancellationResult": "ios-64-cancellation-retest.json",
+  "pendingResult": "ios-64-pending-result.json",
+  "qaOriginRetired": true,
+  "cleanup": "qa-cleanup-result.json"
+}

@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-21T05:51:10.363016+00:00",
+  "device": "SM-A346N",
+  "os": "Android16/API36",
+  "package": "com.expirymate.mobile",
+  "versionCode": 46,
+  "versionName": "1.4.4",
+  "installer": "com.android.vending",
+  "dataCleared": false,
+  "appUninstalled": false,
+  "source": "physical device package manager after official Play update"
+}

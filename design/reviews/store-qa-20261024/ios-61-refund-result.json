@@ -1,0 +1,136 @@
+{
+  "platform": "ios",
+  "appVersion": "1.4.4",
+  "build": 61,
+  "checkedAt": "2026-10-25T04:25:44.101003+00:00",
+  "environment": "TestFlight / Apple Sandbox / isolated Railway QA",
+  "scenario": "annual purchase and native refund request",
+  "nativePurchase": {
+    "productId": "expirymate_premium_yearly",
+    "priceKrw": 39000,
+    "testOnlyNoChargeVerified": true,
+    "transactionTime": "2026-10-25T03:58:07Z",
+    "sdkState": "purchased",
+    "sdkEnvironment": "Sandbox",
+    "initialExpiresAt": "2026-10-25T04:58:07Z"
+  },
+  "refundRequest": {
+    "requestedAt": "2026-10-25T04:02:18.848421+00:00",
+    "reason": "기타",
+    "reasonText": "Sandbox QA 환불 검증을 위한 테스트 구매입니다.",
+    "nativeRequestSubmittedScreenObserved": true,
+    "sdkResponse": {
+      "refundRequestStatus": "success"
+    },
+    "sdkReturnedAt": "2026-10-25T04:03:20.297815+00:00",
+    "submittedOnce": true,
+    "requestAccepted": true,
+    "acceptanceIsNotRevocation": true
+  },
+  "latestServerObservation": {
+    "checkedAt": "2026-10-25T04:24:20.119531+00:00",
+    "hasActiveEntitlement": false,
+    "store": "apple_app_store",
+    "productId": "expirymate_premium_yearly",
+    "planCode": "jango_plus",
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": "yearly",
+    "basePlanId": null,
+    "status": "revoked",
+    "expiresAt": "2026-10-25T04:58:07.000Z",
+    "willRenew": false,
+    "environment": "Sandbox",
+    "verifiedAt": "2026-10-25T04:24:19.751Z"
+  },
+  "result": "passed_actual_refund_manual_apple_reverification_and_warm_resume",
+  "observed": "Native refund request accepted, StoreKit active and unfinished transactions empty before original annual expiry, actual Apple server re-verification returned revoked, same app process showed free plan.",
+  "webhookScope": "App Store global notification URLs preserved; no actual QA webhook delivery claimed. Natural expiry will not count as a refund pass.",
+  "sdkModification": "Build 61 used unchanged expo-iap 4.7.2 / OpenIAP 2.4.4. Later QA-only Ask to Buy option is a separate test.",
+  "evidence": [
+    {
+      "path": "ios-61-yearly-active-before-refund.png",
+      "sha256": "27c431319850bd216710ffb37d5b57a360a59114c6c4cc4bf153eec092de68f3",
+      "privacyReview": "QA data only; no account email, transaction ID, token or device identifier"
+    },
+    {
+      "path": "ios-61-native-refund-submit-response.png",
+      "sha256": "4a188c503ce0883bf055a322f15cc0534c3359a79fd8f62a4afeb898d8c9385e",
+      "privacyReview": "QA data only; no account email, transaction ID, token or device identifier"
+    },
+    {
+      "path": "ios-61-refund-reason-element.png",
+      "sha256": "6912577ff6a66ecb27664e2c2e2fdf9cf5cb4133dc771d4966b27b86ed0289f9",
+      "privacyReview": "QA data only; no account email, transaction ID, token or device identifier"
+    },
+    {
+      "path": "ios-61-refund-reverified-subscription-state.png",
+      "sha256": "4e213f078cb7dc6c88329010c658503867d27b847a2d8f1d16175c554aa8cc3d",
+      "privacyReview": "Original subscription UI, no account email, device identifier or transaction token"
+    }
+  ],
+  "storeKitBeforeExpiry": {
+    "at": "2026-10-25T04:22:37.784635+00:00",
+    "storefront": "KOR",
+    "activePurchases": 0,
+    "unfinishedTransactions": 0
+  },
+  "serverReverification": {
+    "method": "same-owner normal POST /subscriptions/verify using the existing real Sandbox transaction; actual Apple server verification, no webhook or DB simulation",
+    "noDbUpdateOrSyntheticWebhook": true,
+    "existingTransactionReadOnlySource": "Read-only SELECT scoped to fake QA owner, Sandbox and yearly SKU in isolated QA DB; actual ID retained only in private evidence",
+    "before": {
+      "status": "active",
+      "hasActiveEntitlement": true,
+      "willRenew": false,
+      "verifiedAt": "2026-10-25T04:07:35.796Z"
+    },
+    "after": {
+      "hasActiveEntitlement": false,
+      "store": "apple_app_store",
+      "productId": "expirymate_premium_yearly",
+      "planCode": "jango_plus",
+      "scope": "user",
+      "spaceId": null,
+      "billingPeriod": "yearly",
+      "basePlanId": null,
+      "status": "revoked",
+      "expiresAt": "2026-10-25T04:58:07.000Z",
+      "willRenew": false,
+      "environment": "Sandbox",
+      "verifiedAt": "2026-10-25T04:24:19.751Z"
+    }
+  },
+  "warmResume": {
+    "at": "2026-10-25T04:25:26.953770+00:00",
+    "sameProcessAsAnnualPurchase": true,
+    "freePlanObserved": true,
+    "serverStatus": "revoked",
+    "entitlementActive": false,
+    "method": "Normal same-owner verification with real Apple status, foreground resume and original subscription screen",
+    "latencyMeasured": false,
+    "observerNote": "Initial wait used shortened accessibility text; full current label verified as 무료 이용 중이에요. No app defect inferred from that observer timeout.",
+    "automaticQaWebhookDeliveryClaimed": false,
+    "screenshot": "ios-61-refund-reverified-subscription-state.png"
+  },
+  "remainingScope": "Automatic QA webhook delivery was not tested. Global production notification URLs and stale-resync policy were preserved. Before manual normal verification, QA server cached the active entitlement despite native StoreKit showing no active purchase.",
+  "revokedAccessBoundary": {
+    "checkedAt": "2026-10-25T04:32:15.959032+00:00",
+    "ownerMonetizationTier": "free",
+    "memberHasActiveEntitlement": false,
+    "plusInsightsHttpStatus": 403,
+    "aiProviderCalls": 0,
+    "scope": "Read-only normal QA endpoints after real Apple refund re-verification"
+  },
+  "nativeBuild64Crosscheck": {
+    "checkedAt": "2026-10-25T04:49:57.415113+00:00",
+    "method": "Unchanged SDK read-only transaction history, private QA route; Ask to Buy option off",
+    "transactionDateUtc": "2026-10-25T03:58:07+00:00",
+    "revocationDateUtc": "2026-10-25T04:11:29+00:00",
+    "originalExpiryUtc": "2026-10-25T04:58:07+00:00",
+    "revocationReason": "0",
+    "sameAnnualCaseMatchedByTransactionTime": true,
+    "currentActivePurchases": 0,
+    "unfinishedTransactions": 0
+  }
+}

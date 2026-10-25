@@ -1,0 +1,31 @@
+{
+  "projectId": "112c819c-0cdb-4990-8650-c2939b2932e5",
+  "projectName": "jango-qa-20261021",
+  "environmentId": "586313b8-e7c6-4fcb-b509-d0b6c3401425",
+  "environmentName": "qa",
+  "apiServiceId": "55d94833-6703-45ed-a12f-ddccadbb64d1",
+  "postgresServiceId": "3e17daa1-b9a4-4150-af9f-2f99c799fe33",
+  "origin": "https://api-qa-6b4f.up.railway.app",
+  "originalStartedAt": "2026-10-20T06:06:02.690Z",
+  "absoluteStopAt": "2026-10-23T06:06:02.690000+00:00",
+  "priorProjectIds": [
+    "bd429f46-fac8-4a5c-8873-31c07be85ce3"
+  ],
+  "stopAtUsd": 7,
+  "maxAuthorizedUsd": 10,
+  "limits": {
+    "memoryGB": 0.5,
+    "vCPUs": 1,
+    "replicas": 1
+  },
+  "smtpDelivery": "disabled",
+  "aiCallsEnabled": false,
+  "productionDataCopied": false,
+  "recordedAt": "2026-10-21T04:23:39.098962+00:00",
+  "previousQaCostUsd": 0.00605959,
+  "productionStoreNotificationRoutingChanged": false,
+  "workspaceSpendingLimitChanged": false,
+  "localWatchdog": "checks cumulative old+new QA project usage every 60 seconds; deletes this QA project at $7, the original deadline, or usage unavailable; requires this Mac session to remain running",
+  "runtimeRegionObserved": "sfo",
+  "notes": "Requested region string was not reflected in deployment metadata; API and PostgreSQL both deployed in sfo. Resource caps are separately verified from deployment metadata."
+}

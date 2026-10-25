@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-21T04:34:48.028531+00:00",
+  "easSubmissionId": "2a5d7f02-5da8-4666-af95-a0cc62b11843",
+  "easSubmissionStatus": "FINISHED",
+  "appleUploadId": "96b6ee6a-942a-4179-812a-99c25b05f9c5",
+  "appleLastObservedStatus": "COMPLETE",
+  "actualArtifactVersion": "1.4.4",
+  "build": "57",
+  "physicalDeviceTested": false,
+  "appleProcessingState": "VALID",
+  "internalBuildState": "IN_BETA_TESTING",
+  "externalBuildState": "READY_FOR_BETA_SUBMISSION"
+}

@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-10-24T08:21:22.735509+00:00",
+  "platform": "iOS",
+  "build": "1.4.4(61)",
+  "scenario": "explicit monthly Sandbox cancellation and owner restore",
+  "result": "pass",
+  "nativeText": "구독을 취소했습니다.",
+  "server": {
+    "hasActiveEntitlement": true,
+    "productId": "expirymate_premium_monthly",
+    "environment": "Sandbox",
+    "expiresAt": "2026-10-24T08:23:16.000Z",
+    "willRenew": false,
+    "verifiedAt": "2026-10-24T08:20:44.421Z"
+  },
+  "postCancelRestoreAlert": "장고 플러스가 시작됐어요",
+  "evidence": {
+    "file": "ios-61-monthly-canceled-native.png",
+    "sha256": "1bcc6fbf917bb5695d6acebdcaff6ffbe556ef6881f5368c3c947a5050bdb45d"
+  },
+  "limitation": "Store cancellation is observed directly and server was refreshed by explicit owner restore; QA webhook delivery is not inferred. Waiting for canceled term expiry separately."
+}

@@ -1,0 +1,28 @@
+{
+  "bundleIdentifier": "com.expirymate.mobile",
+  "appVersion": "1.4.4",
+  "buildNumber": "60",
+  "sha256": "88b62fdb0426b52b5b942399464346403501644c823f292a2127ed4c1cf64e2b",
+  "bytes": 75402814,
+  "qaOrigin": "https://api-qa-c321.up.railway.app",
+  "qaOriginFoundIn": [
+    "Payload/app.app/main.jsbundle"
+  ],
+  "qaDiagnosticsExtra": true,
+  "buildId": "d0a98612-209c-4597-b8ee-c55122dd250a",
+  "submissionId": "8de5b2c4-3227-4dc7-812b-ed4d230d7744",
+  "easBuildStatus": "FINISHED",
+  "easSubmissionStatus": "FINISHED",
+  "appleProcessingVerified": true,
+  "deviceInstalled": true,
+  "checkedAt": "2026-10-24T07:19:32.297638+00:00",
+  "appleBuildId": "b9beddbe-bb1a-496a-8a9f-817fac433ce7",
+  "appleProcessingState": "VALID",
+  "internalBuildState": "IN_BETA_TESTING",
+  "installedApp": {
+    "bundleIdentifier": "com.expirymate.mobile",
+    "bundleVersion": "60",
+    "name": "장고야 부탁해",
+    "version": "1.4.4"
+  }
+}

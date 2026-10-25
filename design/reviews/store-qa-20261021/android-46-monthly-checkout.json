@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-21T05:52:16.468443+00:00",
+  "build": 46,
+  "basePlanId": "monthly",
+  "testPaymentMethod": "테스트 카드, 항상 승인",
+  "noChargeNoticeVerified": true,
+  "displayPrice": "₩4,900/5 min",
+  "action": "confirmed actual Play license-test monthly purchase"
+}

@@ -1,0 +1,24 @@
+{
+  "buildId": "d0a98612-209c-4597-b8ee-c55122dd250a",
+  "buildNumber": "60",
+  "profile": "store-qa",
+  "qaSourceOnlyAdditionalRoute": "app/qa/store.tsx",
+  "qaDiagnosticsGuard": [
+    "QA build flag",
+    "preview app environment",
+    "exact QA API origin",
+    "fake QA owner/member session ID"
+  ],
+  "refundGuard": [
+    "server active Sandbox entitlement",
+    "native SDK Sandbox purchase for same SKU"
+  ],
+  "normalScreenSourceHashes": {
+    "apps/mobile/src/features/spaces/space-provider.tsx": "ab5c66d3ba22de81eadb574d8d40fafa46c31d49cc75617aa6fef821fd4789b3",
+    "apps/mobile/app/settings/subscription.tsx": "3f74baec198e5f438cd1b9df29027a05ea5628c3c86faf2ed00dc2d7dd028daf"
+  },
+  "coreScreensMatchRepository": true,
+  "diagnosticRouteSha256": "0fe0893c9116548951b7695e5268396133d133c744d45c9f6aea43522c899694",
+  "sourceTypecheckExitCode": 0,
+  "privateEnvAndKeysExcluded": true
+}

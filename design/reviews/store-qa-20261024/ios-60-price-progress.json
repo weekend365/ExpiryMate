@@ -1,0 +1,124 @@
+{
+  "platform": "iOS",
+  "appVersion": "1.4.4",
+  "build": 60,
+  "checkedAt": "2026-10-24T07:26:45.478734+00:00",
+  "beforeMediaSignout": {
+    "at": "2026-10-24T07:24:23.170374+00:00",
+    "data": {
+      "storefront": "USA",
+      "products": [
+        {
+          "id": "expirymate_premium_yearly",
+          "price": "$22.99",
+          "currency": "USD"
+        },
+        {
+          "id": "expirymate_premium_monthly",
+          "price": "$2.99",
+          "currency": "USD"
+        }
+      ],
+      "purchases": [],
+      "unfinishedTransactions": [],
+      "server": {
+        "active": false,
+        "product": null,
+        "environment": null,
+        "expiresAt": null,
+        "willRenew": null
+      }
+    }
+  },
+  "afterMediaSignoutAndAppRestart": {
+    "at": "2026-10-24T07:26:26.075512+00:00",
+    "data": {
+      "storefront": "KOR",
+      "products": [
+        {
+          "id": "expirymate_premium_monthly",
+          "price": "$2.99",
+          "currency": "USD"
+        },
+        {
+          "id": "expirymate_premium_yearly",
+          "price": "$22.99",
+          "currency": "USD"
+        }
+      ],
+      "purchases": [],
+      "unfinishedTransactions": [],
+      "server": {
+        "active": false,
+        "product": null,
+        "environment": null,
+        "expiresAt": null,
+        "willRenew": null
+      }
+    }
+  },
+  "checkoutPriceObserved": true,
+  "passed": false,
+  "note": "SDK storefront changed USA to KOR; products still USD. No price override or production policy change.",
+  "checkout": {
+    "at": "2026-10-24T07:27:46.599926+00:00",
+    "period": "monthly",
+    "displayPrice": "₩4,900/개월",
+    "sandboxNoChargeLabelObserved": true,
+    "purchaseApproved": false
+  },
+  "priceConsistency": "failed-in-current-mixed-account-transition",
+  "applePurchaseSheet": {
+    "qaAccountMatches": true,
+    "manualDeviceAuthenticationRequired": true,
+    "noChargeTextObserved": true,
+    "price": "KRW 4900 / month",
+    "purchaseNotYetVerified": true
+  },
+  "recheckedOn61AfterDeviceRestart": {
+    "checkedAt": "2026-10-25T02:45:42.653897+00:00",
+    "storefront": "KOR",
+    "products": [
+      {
+        "id": "expirymate_premium_monthly",
+        "price": "$2.99",
+        "currency": "USD"
+      },
+      {
+        "id": "expirymate_premium_yearly",
+        "price": "$22.99",
+        "currency": "USD"
+      }
+    ],
+    "result": "KOR storefront and USD product display prices still differ; no price conversion or policy override applied",
+    "evidence": "ios-61-canceled-term-expiry-storekit.png"
+  },
+  "yearlyNativeCheckoutOn61": {
+    "checkedAt": "2026-10-25T03:37:58.416492+00:00",
+    "sdkDisplayedPrice": "$22.99",
+    "sdkCurrency": "USD",
+    "storefront": "KOR",
+    "nativeCheckoutPrice": "₩39,000/년",
+    "testOnlyNoCharge": true,
+    "priceEvidence": "ios-61-yearly-native-price.png",
+    "noChargeEvidence": "ios-61-yearly-test-only.png",
+    "result": "mismatch reproduced; cause not determined"
+  },
+  "sandboxInvestigation": {
+    "checkedAt": "2026-10-25T03:40:28.070372+00:00",
+    "primarySources": [
+      {
+        "url": "https://hyochan.github.io/expo-iap/guides/faq/#sandbox-prices-showing-in-wrong-currencylocalization",
+        "finding": "SDK maintainer documents USD metadata followed by local-currency purchase confirmation in TestFlight/Sandbox."
+      },
+      {
+        "url": "https://developer.apple.com/forums/thread/845478",
+        "finding": "Reports reproduce mismatched StoreKit metadata and storefront; Apple DTS says the issue remains under investigation."
+      }
+    ],
+    "inference": "Our KOR metadata/USD price/KRW checkout symptom matches the documented Sandbox/TestFlight limitation. This does not establish the cause for this app or prove production pricing.",
+    "resolution": "retain StoreKit prices unchanged and preserve native checkout evidence; price consistency remains incomplete",
+    "productionPurchaseAttempted": false,
+    "manualCurrencyConversionAdded": false
+  }
+}

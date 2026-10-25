@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-21T05:17:33.738210+00:00",
+  "scenario": "physical restore after cancellation and renewal-default fix",
+  "platform": "Android 16 / Galaxy A34",
+  "appBuild": 45,
+  "qaBackendDeploymentId": "33ad451e-40fd-450f-9896-86593abb9b4f",
+  "entitlement": {
+    "hasActiveEntitlement": true,
+    "store": "google_play",
+    "productId": "jango_plus",
+    "planCode": "jango_plus",
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": "yearly",
+    "basePlanId": "yearly",
+    "status": "active",
+    "expiresAt": "2026-10-21T05:27:29.780Z",
+    "willRenew": false,
+    "environment": "sandbox",
+    "verifiedAt": "2026-10-21T05:17:29.970Z"
+  },
+  "benefitsPreservedUntilOriginalExpiry": true,
+  "passed": true,
+  "trigger": "physical app restore, not an RTDN test"
+}

@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-10-21T07:51:45.391419+00:00",
+  "scenario": "controlled cross-account yearly restore",
+  "finalDialog": "\uad6c\ub3c5\uc744 \uc5f0\uacb0\ud558\uc9c0 \ubabb\ud588\uc5b4\uc694",
+  "immediateFollowupAlerts": [],
+  "laterFollowupAlerts": [],
+  "secondsAfterDismiss": 7.054,
+  "passed": true
+}

@@ -1,0 +1,61 @@
+{
+  "platform": "iOS",
+  "appVersion": "1.4.4",
+  "build": 60,
+  "firstPurchase": {
+    "observedAt": "2026-10-24T07:28:35.935569+00:00",
+    "entitlement": {
+      "hasActiveEntitlement": true,
+      "store": "apple_app_store",
+      "productId": "expirymate_premium_monthly",
+      "planCode": "jango_plus",
+      "scope": "user",
+      "spaceId": null,
+      "billingPeriod": "monthly",
+      "basePlanId": null,
+      "status": "active",
+      "expiresAt": "2026-10-24T07:33:19.000Z",
+      "willRenew": true,
+      "environment": "Sandbox",
+      "verifiedAt": "2026-10-24T07:28:28.325Z"
+    }
+  },
+  "laterOwnerLoginRecovery": {
+    "owner": {
+      "hasActiveEntitlement": true,
+      "store": "apple_app_store",
+      "productId": "expirymate_premium_monthly",
+      "planCode": "jango_plus",
+      "scope": "user",
+      "spaceId": null,
+      "billingPeriod": "monthly",
+      "basePlanId": null,
+      "status": "active",
+      "expiresAt": "2026-10-24T07:44:41.000Z",
+      "willRenew": true,
+      "environment": "Sandbox",
+      "verifiedAt": "2026-10-24T07:43:06.752Z"
+    },
+    "member": {
+      "hasActiveEntitlement": false,
+      "store": null,
+      "productId": null,
+      "planCode": null,
+      "scope": "user",
+      "spaceId": null,
+      "billingPeriod": null,
+      "basePlanId": null,
+      "status": "unknown",
+      "expiresAt": null,
+      "willRenew": null,
+      "environment": null,
+      "verifiedAt": null
+    },
+    "observedAt": "2026-10-24T07:43:42.923863+00:00"
+  },
+  "expiryAdvanced": true,
+  "recoveryPath": "root IAP provider after QA owner relogin; real store verification",
+  "newPurchaseRequestedBetweenObservations": false,
+  "qaWebhookDeliveryVerified": false,
+  "passedRenewalObservation": true
+}

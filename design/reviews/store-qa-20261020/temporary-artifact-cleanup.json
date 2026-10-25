@@ -1,0 +1,323 @@
+{
+  "at": "2026-10-20T08:31:39.118883+00:00",
+  "localFcmPrivateKeyCopiesRemoved": true,
+  "expoFcmRegistrationRetained": true,
+  "removed": [
+    {
+      "name": "jango-plz-f59fbf7c5fe8.json",
+      "sha256": "a07ac522cb740639063de08fee6b6cda1ba9849fc9e95b42ab3023fea72d0f62"
+    },
+    {
+      "name": "fcm-service-account.json",
+      "sha256": "a07ac522cb740639063de08fee6b6cda1ba9849fc9e95b42ab3023fea72d0f62"
+    },
+    {
+      "name": "google-services.json",
+      "sha256": "9773523b7b426eb20b14b35aeabd4dc431cbff87703e0d810e74a0e31545925d"
+    },
+    {
+      "name": "google-services.json",
+      "sha256": "9773523b7b426eb20b14b35aeabd4dc431cbff87703e0d810e74a0e31545925d"
+    },
+    {
+      "name": "android-ui.xml",
+      "sha256": "b41ee450efc26b11cf961c1ebbfc8f0a037eb51f56048f6536c65faad9d14f7f",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-notification-shade.xml",
+      "sha256": "494e0da99131ec1cfbea483e0773a5739901c2be16f9ac3ef8ec2a1608d85987",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-member-home.png",
+      "sha256": "80649c5456a68ecf1cd2ab8c8d8ed12b8c6b9b8505ee7b6f92c751f5b0938598",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-home-authenticated.png",
+      "sha256": "9b64c913185285ef1506261c59591aaa44c02c150ec24339caf4c68dece7a45b",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-settings-current.png",
+      "sha256": "d1140e41798883f32df0c5e33d93e628083cbe2a4abd99c39f460b2515b510ae",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-play-43-progress.png",
+      "sha256": "8685f821a471e76446152c929f10364688952f3ab1c334e5396948ca15eb0f65",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-monthly-active.png",
+      "sha256": "515d5fe318ee5ed976664f7b4a21762b85613b3ca425c58b1889be5a6c055190",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-monthly-restore.png",
+      "sha256": "8a15eff7f6e329b67c4786d3aed7dea25668883eac46770941d10e29b2b8c80f",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-logout-confirm.png",
+      "sha256": "7779383798432968abef37f862ada93b72da8f4d544c22865b859e99f61303c5",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-43-yearly-test-payment-options.png",
+      "sha256": "34a68f35d5c942409b2c56c81fd5c012b51f4b1796096f4d308708a8dc59c250",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-play-subscription-management.png",
+      "sha256": "f0e44a9f235057072ddc2e6d18fe555476d1ba53d65dea1580d148a49ea86f22",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-login-entry.png",
+      "sha256": "3f1dfa5f742c120a824f0342b4903bea1824993ae84d61d06f8da6ae6f6e66cd",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-login-form-restored.png",
+      "sha256": "748d1cbd78db98a8ec8458b0a473fd90c97139d557af5745c05a104fd0e3b088",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-notification-permission-prompt.png",
+      "sha256": "c14a01366270f39788bfdca44d9119dd8f9e9fdbf2fdb577146402699e3c0112",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-play-43-update.png",
+      "sha256": "e0d37e7b081fac4a72fdf9b952cb2daecf3fc89de72a54f81ecba3cecba50459",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-play-43-updating.png",
+      "sha256": "d9ea5f462088ac1c6dbaba1bead6e17e4a55573abcf99211f6cbe2e91805616c",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-monthly-cancelled-play.png",
+      "sha256": "bf53b643e77c186681894eb613bd8fe47eed896f4999422ff6144d5ed9d9573d",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-notifications-before.png",
+      "sha256": "d740cbf7f76ace9afcaebc9b2d9201a51cc1d0ea4c57a4c4c473fed08ab1a0e3",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-shared-left.png",
+      "sha256": "4979ea0413a9e436004f0152e94b3f519f64ec7ba00958f921cf76ff9d70d6ad",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-play-management-current.png",
+      "sha256": "574915bac59c001da9589c610006110eadb2d116b3665173c9f2023041d5b6df",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-cross-account-restore.png",
+      "sha256": "a9b6174dabd42036f4f97c8c55ee5bafa980eb7d291e36c0c2ce2843bb797eb2",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-43-monthly-expired.png",
+      "sha256": "742927e96e85684cd4ca8b5fba602550aa4d2feac6ab5498ee8f27162577559e",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-notification-denied.png",
+      "sha256": "43ef516e3b2d83b1686b5c154ec8975443e9ac79c070c4591095bf38e800c74b",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-owner-member-actions.png",
+      "sha256": "812c3ffd853ce6f8f80d05680ccdda8e626fda78e5fed4c2ba4ffda761b0d687",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-monthly-current.png",
+      "sha256": "f4b05c4a78736d9638e42de7e44dd49bd7062e9f72875272cb827cba2f5f0b16",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-space-switcher.png",
+      "sha256": "4fdb8733e82c365e130c57fd47e5823458ad895ebf09dd46994d3c9c22b1a3fc",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-keyboard-dismissed.png",
+      "sha256": "e8ce181cfd0976498e0f4ee4040cb7b03c9bcebbbacaa6310558d564fcd4833f",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-member-spaces-before.png",
+      "sha256": "d33847e9af53ba61289ce2a8d7f9964c854e225c564e2126aa798056a4fbc7f0",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-43-after-play-update.png",
+      "sha256": "c4ee7816126fc8d0d207b53047d7c4394ad77187167ad61c16685fc3192d3f70",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-notification-allowed.png",
+      "sha256": "b32af2962792b71d58327fa28122e93041dff1223a222f2948c89abec77b9d51",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-account-menu.png",
+      "sha256": "d36dcf90fcd16dfa31fc9867525e5d69f21c09a0766010368d2f9d0d7b8abd92",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-switched-personal.png",
+      "sha256": "669593a0d62c4ae9a8a8430f048f86ea5ef79605d92dff66612272b1ac5ebf52",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-owner-revoke-confirm.png",
+      "sha256": "dcfeeb80015741246fdc881ff7e2aa7feba554e151af6cd4ec2ae0158850d36c",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-shared-joined.png",
+      "sha256": "1027d634c300d67de7e627f1b5ed80ad2991cef4ff9aa869914aa84ce101ca32",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-authenticated.png",
+      "sha256": "fc8bb98720758bf70ca2bb37c971ddc450e2bac5ef1af2c5bc29b916efa00692",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-invitation-revoke-confirm.png",
+      "sha256": "4b511cd823616d349c848b4a8476db0daa8c1d2db7b6ad56a146b605f8ee6003",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-invitation-preview.png",
+      "sha256": "63c59a365ae252a214e858d02acb492d6537080a07bfeb42c568151d9378fec2",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-monthly-verified.png",
+      "sha256": "3943d76daba9f60cf4ea91e3245e144c6ecf0f7e672aa5a69056b5f20698c27c",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-member-login-result.png",
+      "sha256": "71e181481e4192e55ca42efdde921d70afdff3c7939c83f3454fd2f9c6ac9091",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-43-yearly-refund-card-selected.png",
+      "sha256": "81290bd1369b54b78748f7897addeec0911a8c450b26edadfd36c63701619690",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-43-notification-status.png",
+      "sha256": "91f8b0b120771f059fa6a47fabb051344aee64bc611b0f033fb14416f7fc0bea",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-subscription.png",
+      "sha256": "6b3683efe0694e4d75473caabd70a3f852c0747f1f93c1b0a7a0ad025e11b54a",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-43-yearly-checkout.png",
+      "sha256": "b6917ec11b415c691ae7df02bd19099a0b37154e4acc7113d26ba514b79a09b0",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-43-yearly-checkout-closed.png",
+      "sha256": "3401f8ea057f5215cf21e3bea4f769274205b58bc0106cc627979f6ec7dc3437",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-43-yearly-selected.png",
+      "sha256": "636d4a2195484a6f0fe8880055ab0d9ae7f9eb7004e0033da8f1685e754846bc",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-monthly-checkout.png",
+      "sha256": "f665945b2276ed5246f3fed8a78f2d4ef6a4fffb70602ef2f2c25ed49eff78a7",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-monthly-purchase-result.png",
+      "sha256": "39ef126b59556595e306e06820aa7ab568650c6072c1d4dd9b94d0dcc7bf738a",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-settings.png",
+      "sha256": "e09131943050befafc675c096ea59fb75db6a8db1a5c3e557e98af9e474b5010",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-test-payment-methods.png",
+      "sha256": "1535c58f4513e1f97b072f1fc0e6155732c3bcc236d208f6495ca56712b4159e",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-login-result.png",
+      "sha256": "7646412636e0782b6059d114f196654cb7c904ee4b0ee0ef101bf5153f5802e9",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-form-empty.png",
+      "sha256": "222abf8c31015ee6d46c9d565191b2da2d544f363f9605a82f5e8a8fac91cf2d",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-cancel-test-monthly.png",
+      "sha256": "b374979b5941f72d2de38f3ed745909a94688206b3dc673965dedc83105199d9",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-subscription-options.png",
+      "sha256": "3396626c9208d17529b132aae2fff8b7aa32a4bcd82e17a3c5c7feba5f4e6280",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-test-monthly-confirm.png",
+      "sha256": "dee2e31c6534f6153d70a4e5d4dba93b0e5019f1b916f9673f8c5af5ec84c90d",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-43-yearly-checkout-cancelled.png",
+      "sha256": "3dd22d5d52e8c3617bff4bbd14388c81ec6cbbb9ab702404154480d2897d12ed",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-shared-leave-confirm.png",
+      "sha256": "485f3807e37ba01dc8488f8ef572990a090f1c5f7e9da5425ad873742ebe7f63",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-monthly-active-final.png",
+      "sha256": "f0680cf5044e62bd18e88009aa487364792dd8feac1dffb61b46ece96dd31a83",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-43-push-tap-inventory.png",
+      "sha256": "ff8ebbec6cb9c619ac81a8eb1a67d4988f28c2deaa13b01161e43e9b51b08329",
+      "preservedInEvidence": true
+    },
+    {
+      "name": "android-42-owner-space-management.png",
+      "sha256": "5c15b61be18b44c797dbb8d1cbded41aaa401f05c214c8fbecf41bb1eb4ed89b",
+      "preservedInEvidence": false
+    },
+    {
+      "name": "android-42-home.png",
+      "sha256": "b7c311e60225fcddb859b195e5934b5dad6799b0a3de3b53fdc0ba8472bb989d",
+      "preservedInEvidence": false
+    }
+  ]
+}

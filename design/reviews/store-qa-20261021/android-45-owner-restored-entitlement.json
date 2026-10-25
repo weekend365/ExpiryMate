@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-21T04:59:14.907035+00:00",
+  "scenario": "same-account annual purchase restore",
+  "source": "physical app restore action followed by authenticated QA API read",
+  "entitlement": {
+    "hasActiveEntitlement": true,
+    "store": "google_play",
+    "productId": "jango_plus",
+    "planCode": "jango_plus",
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": "yearly",
+    "basePlanId": "yearly",
+    "status": "active",
+    "expiresAt": "2026-10-21T05:27:29.780Z",
+    "willRenew": true,
+    "environment": "sandbox",
+    "verifiedAt": "2026-10-21T04:58:57.936Z"
+  }
+}

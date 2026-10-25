@@ -1,0 +1,106 @@
+{
+  "at": "2026-10-25T04:52:19.106888+00:00",
+  "askToBuyOriginal": false,
+  "askToBuyEnabled": false,
+  "usesActualStoreKitSandboxOption": true,
+  "syntheticCallbackOrTransactionUsed": false,
+  "restoreRequired": false,
+  "deviceConfirmationRequestedAt": "2026-10-25T04:53:43.335673+00:00",
+  "qaMonthlyNativePriceKrw": 4900,
+  "nativeTestOnlyNoChargeVisuallyVerified": true,
+  "qaTesterEmailVisuallyMatched": true,
+  "pendingObserved": true,
+  "deviceConfirmationCompleted": true,
+  "nativeAskToBuyDialogObserved": true,
+  "nativeAskToBuyRequestTransitionObserved": true,
+  "requestButtonPressedByAgent": false,
+  "appPendingNoticeTitle": "결제가 확인 중이에요",
+  "initialNoticeDismissedOnce": true,
+  "additionalAlertsAfterDismissal": [],
+  "observationSeconds": 8.697,
+  "observations": [
+    {
+      "afterSeconds": 0.861,
+      "visibleAlerts": [],
+      "purchaseButtonEnabled": true
+    },
+    {
+      "afterSeconds": 2.319,
+      "visibleAlerts": [],
+      "purchaseButtonEnabled": true
+    },
+    {
+      "afterSeconds": 3.785,
+      "visibleAlerts": [],
+      "purchaseButtonEnabled": true
+    },
+    {
+      "afterSeconds": 5.257,
+      "visibleAlerts": [],
+      "purchaseButtonEnabled": true
+    },
+    {
+      "afterSeconds": 6.746,
+      "visibleAlerts": [],
+      "purchaseButtonEnabled": true
+    },
+    {
+      "afterSeconds": 8.19,
+      "visibleAlerts": [],
+      "purchaseButtonEnabled": true
+    }
+  ],
+  "purchaseButtonReleased": true,
+  "observedAt": "2026-10-25T04:59:15.728537+00:00",
+  "postPendingStoreCheck": {
+    "at": "2026-10-25T05:01:20.361413+00:00",
+    "activeTransactions": 0,
+    "unfinishedCurrentMonthlyPurchases": 0,
+    "earlierRefundedAnnualUnfinished": [
+      {
+        "product": "expirymate_premium_yearly",
+        "state": "purchased",
+        "transactionDate": 1792900687000,
+        "environment": "Sandbox",
+        "expirationDate": 1792904287000,
+        "revocationDate": 1792901489000,
+        "revocationReason": "0",
+        "isUpgraded": false
+      }
+    ],
+    "serverActive": false,
+    "serverProduct": "expirymate_premium_yearly",
+    "serverWillRenew": false
+  },
+  "localOptionRestoredAt": "2026-10-25T05:01:20.362189+00:00",
+  "result": "passed_actual_storekit_deferred_entry_single_notice_no_entitlement_grant",
+  "approvalResolution": "Apple Sandbox cannot approve/reject deferred Ask to Buy; Xcode-only, not tested here",
+  "revokedAnnualObservation": "The earlier refunded annual transaction was re-delivered as unfinished with revocationDate. It is unrelated to this monthly deferred request and was not counted as an active purchase.",
+  "platform": "ios",
+  "appVersion": "1.4.4",
+  "build": 64,
+  "sdk": "expo-iap 4.7.2 / OpenIAP 2.4.4",
+  "sdkNativePendingMapping": "StoreKit .pending -> deferred-payment; mapping reviewed, not modified",
+  "rawSdkErrorCodeCaptured": false,
+  "uiAndServerEntitlementSimulated": false,
+  "qaOnlyInstrumentation": "Apple Product.PurchaseOption.simulatesAskToBuyInSandbox(true) plus guarded option setter; exists only in isolated QA build source",
+  "publicApiOrDbSchemaChanged": false,
+  "screenLayoutAndExistingPendingCopyPreserved": true,
+  "evidence": [
+    {
+      "path": "ios-64-native-ask-to-buy.png",
+      "sha256": "79ee2981c7d975d1b6b5e21518f39a680cab1fd30e69622f0d3da0613e88e323",
+      "privacyReview": "Reviewed: QA subscription UI only; no email, device ID or transaction token"
+    },
+    {
+      "path": "ios-64-pending-notice.png",
+      "sha256": "e6e59c2002a361946b7de0fbb17404edc5cfddb067ca4b84505523d50630a8ad",
+      "privacyReview": "Reviewed: QA subscription UI only; no email, device ID or transaction token"
+    },
+    {
+      "path": "ios-64-ask-to-buy-restored-off.png",
+      "sha256": "8a3b79af364cde92c320a2d957be076312874b1e107c5fb278961a9790e82e32",
+      "privacyReview": "Reviewed: QA subscription UI only; no email, device ID or transaction token"
+    }
+  ]
+}

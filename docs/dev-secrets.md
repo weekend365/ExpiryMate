@@ -1,7 +1,7 @@
 ---
 status: active
 owner: platform
-last_reviewed: 2026-08-28
+last_reviewed: 2026-10-20
 source_of_truth: true
 ---
 
@@ -331,6 +331,42 @@ cp apps/mobile/.env.example apps/mobile/.env
 노출했다면 해당 프로바이더에서 **즉시 로테이션**.
 
 ---
+
+## Android 푸시 설정 — 2026-10-20 QA
+
+Android 42의 실제 Play 설치본에서 권한 거부 동작은 정상이며, 허용 뒤에는 기기 연결
+오류를 확인했다. 바이너리에 Firebase client 리소스가 없고 EAS 앱에도 FCM V1 서버키가
+등록돼 있지 않았다. 기존 Google 프로젝트의 Firebase Management 읽기 요청은
+`SERVICE_DISABLED`로 거부됐다. [실기기 증거](../design/reviews/store-qa-20261020/android-42-notification-allowed.png)와
+[EAS 설정 상태](../design/reviews/store-qa-20261020/android-push-credential-status.json)를 구분해 보존한다.
+
+클라이언트 설정은 EAS `preview`의 **file 변수 `GOOGLE_SERVICES_JSON`**에 넣는다.
+값은 현재 Android package용 `google-services.json`의 경로다. 앱 설정이 이 파일을 Expo의
+`android.googleServicesFile`로 연결하고 Prebuild가 native 리소스를 만든다.
+`apps/mobile/google-services*.json`은 git에서 제외한다. 로컬 development 식별자는 별도
+Firebase client 설정을 사용해야 하며 production package 설정을 그대로 쓰지 않는다.
+
+검사기는 package·project number·Android app ID·client API key의 존재를 확인하고,
+서비스 계정 private key가 섞인 파일을 거부한다. Android store QA 워커는 이 파일이
+없으면 빌드를 중단한다. 기존 일반 production 빌드의 설정 필수값은 변경하지 않는다.
+
+FCM 전송용 **서버 서비스 계정 JSON**은 클라이언트 file 변수에 넣지 않는다. 별도 EAS
+FCM V1 credentials에 등록한다. 사용자 승인 후 기존 `jango-plz` 프로젝트에 Firebase와
+`com.expirymate.mobile` Android client를 등록했다. Spark 무료 요금제를 유지하고
+Google Analytics는 켜지 않았다. 전송 전용 `jango-mobile-push` 서비스 계정에
+`roles/firebasecloudmessaging.admin`만 부여하고 기존 EAS 앱의 FCM V1 키로 등록했다.
+기존 Play 구매 검증용 서비스 계정의 권한은 늘리지 않았다.
+
+[등록 후 설정 상태](../design/reviews/store-qa-20261020/android-push-credential-status-after.json)와
+[Android 43 바이너리 확인](../design/reviews/store-qa-20261020/android-43-artifact-verification.json)을
+보존한다. 실제 Play 설치본 43에서 연결 확인·백그라운드 알림 수신·탭 후 해당 개인
+보관함 이동을 확인했다. [검증과 중단 기록](../design/reviews/store-qa-20261020/README.md)을 따른다.
+client 파일 검사나 토큰 등록만으로 수신 성공을 판정하지 않는다.
+
+이번 client file 변수는 QA용 `preview` 환경에 등록했다. 향후 production Android 빌드에는
+해당 EAS 환경의 client file 등록과 재검증이 필요하며, 이번 작업은 공개 배포를 포함하지
+않는다. private server key 원본은 저장소에 넣지 않고 EAS 등록 후 로컬 임시 사본을 정리한다.
+[Expo 공식 FCM 안내](https://docs.expo.dev/push-notifications/fcm-credentials/)를 따른다.
 
 ## 관련 파일
 

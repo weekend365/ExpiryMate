@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-24T06:44:08.187083+00:00",
+  "buildId": "55a863ec-86c8-475a-92e1-3bcd12c31ca7",
+  "bundleId": "com.expirymate.mobile",
+  "appVersion": "1.4.4",
+  "buildNumber": "59",
+  "qaOriginPresent": true,
+  "sha256": "6db1f13b0336cf5d2f83cdea7f972fdb79b0e84d888474f00ef9f5610aedd51e",
+  "submittedToTestFlight": false,
+  "installedOnDevice": false,
+  "physicalRetest": false
+}

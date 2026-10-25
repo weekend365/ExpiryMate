@@ -1,0 +1,53 @@
+{
+  "checkedAt": "2026-10-21T07:11:28.829937+00:00",
+  "desktopClientRestartConfirmedByUser": true,
+  "freshClientAndServiceProcessObserved": true,
+  "afterRestartAndReplReset": "Sky Computer Use native pipe startup failed",
+  "uiInventory": {
+    "apps": 0,
+    "browsers": 0
+  },
+  "installedServiceSignature": {
+    "sandboxedCheck": "invalid signature",
+    "unsandboxedCheck": "valid on disk; satisfies Designated Requirement",
+    "sameExecutableAsOfficialBundledCopy": true,
+    "version": "26.1015.1001540",
+    "executableSha256": "ef4f4dc20e64ee29027bf178f553c0c39b9cfa517a4cd39734510259f23c058a",
+    "conclusion": "The sandboxed signature error was not reproduced outside the sandbox. It is not evidence that the installed binary was modified."
+  },
+  "toolProcessOrigin": "existing VS Code Codex extension process",
+  "desktopLogObservation": {
+    "at": "2026-10-21T06:34:16.768Z",
+    "component": "browser-use-native-pipe-server",
+    "reason": "untrusted-process-ancestry"
+  },
+  "causalLimit": "The observed browser-pipe rejection and IDE-origin process are consistent with a session execution-path issue, but do not prove the sole cause of the native startup failure.",
+  "nextRecoveryAttempt": "Apple Developer authentication pending to create a separate Sandbox tester; native mirroring touch remains intermittent. No further desktop restart requested.",
+  "officialReferences": [
+    "https://learn.chatgpt.com/docs/plugins",
+    "https://learn.chatgpt.com/docs/developer-settings",
+    "https://learn.chatgpt.com/docs/computer-use"
+  ],
+  "securityChecksBypassed": false,
+  "permissionsChanged": false,
+  "softwareReinstalled": false,
+  "iosPhysicalScenariosExecutedAfterRestart": true,
+  "latestRecovery": {
+    "at": "2026-10-21T07:11:28.829937+00:00",
+    "vscodeRestartConfirmedByUser": true,
+    "nativePipeStartupRecovered": true,
+    "appAndBrowserInventoryRecovered": true,
+    "physicalScreenReadable": true,
+    "mirroringHomeAndSearchShortcutsWork": true,
+    "annualPlanSelectionAndScrollObserved": true,
+    "remainingInputError": "Computer Use server error -10005: noWindowsAvailable",
+    "directTypeAndPaste": "returned without a typed search query appearing",
+    "windowActivationRequested": false,
+    "noFurtherDesktopRestartRequested": true,
+    "windowActivationConfirmedByUser": true,
+    "annualStartClickObserved": true,
+    "purchaseVerificationHttpStatus": 409,
+    "subsequentBackButtonClick": "noWindowsAvailable",
+    "latestScreenReadable": true
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "requests": [
+    {
+      "timestamp": "2026-10-21T06:16:36.556015796Z",
+      "method": "POST",
+      "path": "/auth/login",
+      "httpStatus": 201,
+      "client": "native app"
+    }
+  ],
+  "requestBodyAndCredentialsRecorded": false
+}

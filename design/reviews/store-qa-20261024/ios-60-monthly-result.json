@@ -1,0 +1,33 @@
+{
+  "observedAt": "2026-10-24T07:28:35.935569+00:00",
+  "entitlement": {
+    "hasActiveEntitlement": true,
+    "store": "apple_app_store",
+    "productId": "expirymate_premium_monthly",
+    "planCode": "jango_plus",
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": "monthly",
+    "basePlanId": null,
+    "status": "active",
+    "expiresAt": "2026-10-24T07:33:19.000Z",
+    "willRenew": true,
+    "environment": "Sandbox",
+    "verifiedAt": "2026-10-24T07:28:28.325Z"
+  },
+  "platform": "iOS",
+  "appVersion": "1.4.4",
+  "build": 60,
+  "scenario": "monthly Sandbox purchase",
+  "userPhysicalApprovalConfirmed": true,
+  "storeNoChargeLabelObserved": true,
+  "purchaseVerified": true,
+  "naturalRenewalObserved": true,
+  "naturalExpiryObserved": false,
+  "appCompletionAlertObserved": true,
+  "evidenceScreenshot": {
+    "path": "ios60-monthly-plus-complete.png",
+    "sha256": "ceaa421cdc1dcf2b7cb521ddf1d541af4bef7494060f6870ee16db4e58d71198"
+  },
+  "renewalEvidence": "ios-60-monthly-renewal.json"
+}

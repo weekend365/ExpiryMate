@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-21T04:28:47.840529+00:00",
+  "applicationIdentifier": "com.expirymate.mobile",
+  "version": "1.4.4",
+  "build": "57",
+  "qaApiPresent": true,
+  "deletedQaApiPresent": false,
+  "sha256": "4139dca5fc02cc3632cfda10291a7885ee0c73ace2250ce56b9a22be16f71671"
+}

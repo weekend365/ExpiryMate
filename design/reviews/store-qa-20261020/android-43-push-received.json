@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-20T08:16:33.894180+00:00",
+  "applicationIdentifier": "com.expirymate.mobile",
+  "notificationCount": 1,
+  "notifications": [
+    {
+      "key": "0|com.expirymate.mobile|0|FCM-Notification:136299514|10348",
+      "fields": [
+        "contentIntent=PendingIntent{2dde5cd: PendingIntentRecord{af50a37 com.expirymate.mobile startActivity (allowlist: 480891f:+30s0ms/0/NOTIFICATION_SERVICE/NotificationManagerService)}}",
+        "android.title=String (오늘 확인할 재료 1개가 있어요)",
+        "android.text=String (QA 푸시 확인용 우유의 기한과 개봉 후 상태를 확인해 주세요.)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-10-24T07:16:56.693062+00:00",
+  "ready": {
+    "/health": {
+      "status": 200,
+      "body": {
+        "success": true,
+        "data": {
+          "status": "ok",
+          "version": "1.4.4-qa.20261024",
+          "gitSha": "qa-0f911ebafb6968f7",
+          "env": "production"
+        }
+      }
+    },
+    "/ready": {
+      "status": 200,
+      "body": {
+        "success": true,
+        "data": {
+          "status": "ready"
+        }
+      }
+    }
+  },
+  "resourceLimits": {
+    "apiServiceId": {
+      "serviceInstanceLimits": {
+        "containers": {
+          "cpu": 1,
+          "memoryBytes": 500000000,
+          "pidLimit": 1000
+        }
+      },
+      "serviceInstance": {
+        "restartPolicyType": "NEVER",
+        "numReplicas": 1
+      }
+    },
+    "postgresServiceId": {
+      "serviceInstanceLimits": {
+        "containers": {
+          "cpu": 1,
+          "memoryBytes": 500000000,
+          "pidLimit": 1000
+        }
+      },
+      "serviceInstance": {
+        "restartPolicyType": "NEVER",
+        "numReplicas": 1
+      }
+    }
+  },
+  "freshMigrations": {
+    "found": 45,
+    "applied": 45,
+    "source": "initial deployment logs",
+    "successMessageObserved": true
+  }
+}

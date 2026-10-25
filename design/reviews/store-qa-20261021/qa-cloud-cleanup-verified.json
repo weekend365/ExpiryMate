@@ -1,0 +1,17 @@
+{
+  "verifiedAt": "2026-10-24T06:48:51.879280+00:00",
+  "projectId": "112c819c-0cdb-4990-8650-c2939b2932e5",
+  "deletedAt": "2026-10-24T06:47:38.022118+00:00",
+  "originalDeadline": "2026-10-23T06:06:02.690Z",
+  "deadlineCleanupMet": false,
+  "deletionResponse": true,
+  "absenceVerified": true,
+  "qaRouteHttpStatus": 404,
+  "productionProjectPreserved": true,
+  "workspaceCommonLimitsChanged": false,
+  "lastMeasuredUsageAt": "2026-10-24T06:47:38.022118+00:00",
+  "cumulativeQaUsageCostUsd": 0.24882127,
+  "invoiceFinal": false,
+  "measurementIncludesPriorDeletedQa": true,
+  "failureAndRecovery": "Original local monitor could not refresh expired Railway OAuth credentials; usage and delete retries failed. User authenticated October 24; existing monitor deleted only allowlisted QA project after authentication restored."
+}

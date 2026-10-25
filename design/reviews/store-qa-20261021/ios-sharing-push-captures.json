@@ -1,0 +1,26 @@
+{
+  "reviewedAt": "2026-10-24T06:44:03.519361+00:00",
+  "scope": "iOS sharing and notification permission evidence; reviewed for unrelated notifications and personal account data",
+  "screenshots": [
+    {
+      "path": "ios-58-sharing-shared.png",
+      "sha256": "9904441ced208656b022449e1b8ad3523f116dbd23131d41f8f72aa05bb9bed9",
+      "containsOnlyQaApplicationAndSystemChrome": true
+    },
+    {
+      "path": "ios-58-sharing-personal.png",
+      "sha256": "9d97fbfd8aea4e91848526c41b95e41a07c930570936b8f1c83f464b7fb7dacc",
+      "containsOnlyQaApplicationAndSystemChrome": true
+    },
+    {
+      "path": "ios-58-sharing-revoked-loading.png",
+      "sha256": "96496ddacfa963cfc5c59edb25dedc6ce2245a801af3ffefca46fc74c40ecb82",
+      "containsOnlyQaApplicationAndSystemChrome": true
+    },
+    {
+      "path": "ios-58-push-denied.png",
+      "sha256": "911857759994d7a4d88f3f7dec7efdec61877fa15ec9de58c1e91fce80d17964",
+      "containsOnlyQaApplicationAndSystemChrome": true
+    }
+  ]
+}

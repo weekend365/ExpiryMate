@@ -64,16 +64,17 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: expirymate
+          POSTGRES_DB: jango_feature_test_ci
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d expirymate"
+          --health-cmd "pg_isready -U postgres -d jango_feature_test_ci"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/expirymate?schema=public
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/jango_feature_test_ci?schema=public
+      JANGO_WORKFLOW_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/jango_feature_test_ci?schema=public
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -97,6 +98,12 @@ jobs:
 
       - name: Generate Prisma client
         run: pnpm --filter @expirymate/api exec prisma generate
+
+      - name: Build shared contracts
+        run: pnpm --filter @expirymate/shared build
+
+      - name: PostgreSQL integration tests (no skipped cases)
+        run: pnpm --filter @expirymate/api test:integration
 
   build:
     runs-on: ubuntu-latest

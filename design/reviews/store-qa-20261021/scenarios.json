@@ -1,0 +1,184 @@
+{
+  "updatedAt": "2026-10-24T06:42:38.260402+00:00",
+  "platform": "Android",
+  "device": "Galaxy A34 / Android 16",
+  "appVersion": "1.4.4",
+  "appBuild": 45,
+  "installer": "Google Play internal test",
+  "results": [
+    {
+      "scenario": "yearly purchase",
+      "status": "passed",
+      "evidence": [
+        "android-45-yearly-test-checkout.png",
+        "android-45-yearly-purchase-result.png",
+        "android-45-yearly-after-purchase.json",
+        "android-45-yearly-store-purchase-status.json"
+      ],
+      "actual": "Physical Play test-card purchase; server active, yearly base plan, sandbox; authoritative store query ACKNOWLEDGED; no real charge."
+    },
+    {
+      "scenario": "same-account yearly restore",
+      "status": "passed",
+      "evidence": [
+        "android-45-owner-restored-entitlement.json",
+        "android-45-owner-restore.png"
+      ],
+      "actual": "Physical app restore succeeded with one success notice; same owner remains active with unchanged expiry."
+    },
+    {
+      "scenario": "cross-account restore and single rejection dialog",
+      "status": "passed",
+      "actual": "One final ownership rejection dialog observed; no subsequent dialog in two UI checks over 5.855 seconds after dismissal. Member inactive, original owner yearly active.",
+      "evidence": [
+        "android-45-single-restore-dialog-verification.json",
+        "android-45-member-restore-rejection-final.png",
+        "android-45-member-after-dismiss.png",
+        "android-45-cross-account-entitlements.json"
+      ]
+    },
+    {
+      "scenario": "cancel then fresh server willRenew=false",
+      "status": "passed_after_fix",
+      "actual": "Physical Play cancellation and actual store CANCELED state. A canceled response omitting false scalar reproduced null; minimal QA API fix and physical restore now persist false while keeping original active expiry. Automatic QA RTDN not tested.",
+      "evidence": [
+        "android-45-yearly-store-canceled-fields.json",
+        "android-45-cancel-mapping-before-fix.json",
+        "android-45-cancel-mapping-after-fix.json",
+        "canceled-renewal-fix-validation.json",
+        "android-45-play-yearly-canceled-final.png"
+      ]
+    },
+    {
+      "scenario": "refund/revoke",
+      "status": "passed_across_android45_and46",
+      "actual": "Actual annual test order refund on 45 and monthly test order refund on 46; each store REFUNDED/EXPIRED and QA entitlement automatically revoked via existing resync, no manual verify and no QA RTDN routing. Warm foreground UI passed on fixed 46.",
+      "evidence": [
+        "android-45-refund-request.json",
+        "android-45-refund-automatic-observation.json",
+        "android-46-refund-request.json",
+        "android-46-monthly-store-refunded-status.json",
+        "android-46-warm-resume-process.json"
+      ]
+    },
+    {
+      "scenario": "push on new API and build",
+      "status": "passed",
+      "actual": "Physical Android 45; permission denied banner, allow this app, registration 201, regular QA scheduler push received, exact notification tap opened personal inventory with fixture visible.",
+      "evidence": [
+        "android-45-push-result.json",
+        "android-45-push-tap-inventory.png"
+      ]
+    },
+    {
+      "scenario": "pending purchase",
+      "status": "not_applicable_to_current_plans",
+      "actual": "Current auto-renew plans are outside Google prepaid pending support; no real pending test passed."
+    },
+    {
+      "scenario": "app foreground after automatic refund",
+      "status": "passed_after_fix_android46",
+      "actual": "Actual monthly test purchase/refund on Android 46. Same PID 31886 throughout background and foreground, native entitlement GET 439 ms after foreground, revoked server -> free UI. Pending purchase completion notice dismissed with no callback and status scrolled into view; no restore, manual verify, route navigation, or restart.",
+      "evidence": [
+        "app-resume-refresh-before-fix.json",
+        "app-resume-fix-builds.json",
+        "android-46-warm-resume-process.json",
+        "android-46-warm-resume-http.json",
+        "android-46-after-refund-warm-resume.png"
+      ]
+    },
+    {
+      "scenario": "monthly purchase on fixed current build",
+      "status": "passed_android46",
+      "actual": "Play test card always approves, explicit no-charge 5-minute subscription; server active monthly Sandbox and Google store ACKNOWLEDGED, then refunded as part of the resume regression.",
+      "evidence": [
+        "android-46-monthly-checkout.json",
+        "android-46-after-monthly-purchase-entitlement.json",
+        "android-46-monthly-store-refunded-status.json"
+      ]
+    }
+  ],
+  "iosPhysicalTests": "58: yearly purchase/owner restore/member409 and native member share/leave passed. Permission denial passed. Revocation foreground loading failed; minimal fix and build59 prepared, no physical retest. Expired QA cleanup pending authentication.",
+  "appBuilds": [
+    45,
+    46
+  ],
+  "androidCleanupEvidence": "android-restored-settings.json",
+  "iosResults": [
+    {
+      "scenario": "yearly purchase attempt",
+      "status": "blocked_store_account_conflict",
+      "actual": "Start reached API; no Apple confirmation sheet or verified entitlement observed. Existing transaction source unknown, so not a controlled cross-account pass.",
+      "evidence": [
+        "ios-58-first-purchase-attempt.json",
+        "ios-58-purchase-account-conflict.jpg"
+      ]
+    },
+    {
+      "scenario": "yearly sandbox purchase",
+      "status": "passed",
+      "evidence": [
+        "ios-58-yearly-purchase-result.json",
+        "ios-58-yearly-app-success.png"
+      ],
+      "actual": "Native checkout explicitly no-charge, user physical confirmation, store and app success, API yearly active Sandbox, member inactive."
+    },
+    {
+      "scenario": "same-owner yearly restore",
+      "status": "passed",
+      "evidence": [
+        "ios-58-yearly-owner-restored.json"
+      ],
+      "actual": "Success notice, verifiedAt advanced, same expiry; no follow-up alert in two checks."
+    },
+    {
+      "scenario": "controlled cross-account yearly restore",
+      "status": "passed",
+      "evidence": [
+        "ios-58-cross-account-entitlements.json",
+        "ios-58-single-restore-dialog-verification.json",
+        "ios-58-member-restore-rejection.png"
+      ],
+      "actual": "Final rejection once; two follow-up checks over 7.054 seconds no additional alerts. Original owner active, member inactive."
+    },
+    {
+      "scenario": "annual native cancellation",
+      "status": "store_ui_passed_server_refresh_failed",
+      "actual": "Native Sandbox subscription canceled; scheduled expiry 2026-10-21T08:43:18Z. Later owner restore HTTP502; willRenew refresh and natural expiry not verified.",
+      "evidence": [
+        "ios-58-yearly-store-canceled.png",
+        "ios-58-verify-http-results.json"
+      ]
+    },
+    {
+      "scenario": "member join, space switching and leave",
+      "status": "passed_member_native_owner_fixture_api",
+      "actual": "Owner fixture and invitation via authenticated HTTP API; native member preview/join without notifications, personal/shared separation, native leave; member inventory404 and owner marker retained.",
+      "evidence": [
+        "ios-58-sharing-joined.json",
+        "ios-58-sharing-left.json",
+        "ios-58-sharing-shared.png",
+        "ios-58-sharing-personal.png"
+      ]
+    },
+    {
+      "scenario": "membership revocation on same-process foreground",
+      "status": "failed_fixed_in_source_retest_required",
+      "actual": "Owner revocation via API; member access404; same PID65970 native foreground stuck loading. Reproduction failed before minimal fix and passed afterward; build59 completed only.",
+      "evidence": [
+        "ios-58-sharing-revocation-failure.json",
+        "ios-58-sharing-revoked-loading.png",
+        "ios-sharing-restore-fixes.json"
+      ]
+    },
+    {
+      "scenario": "iOS push permission denial",
+      "status": "passed_permission_only",
+      "actual": "Native prompt denied; blocked banner and app-specific settings correct. No grant, token, delivery or tap verified.",
+      "evidence": [
+        "ios-58-push-progress.json",
+        "ios-58-push-denied.png"
+      ]
+    }
+  ]
+}

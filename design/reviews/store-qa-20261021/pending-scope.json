@@ -1,0 +1,10 @@
+{
+  "reviewedAt": "2026-10-21T04:23:39.099920+00:00",
+  "currentPlans": "existing monthly/yearly auto-renewing subscriptions",
+  "actualStorePendingTestPassed": false,
+  "classification": "not applicable to existing auto-renewing plan configuration; no pending purchase observed",
+  "officialScope": "Subscription pending transactions are supported for prepaid plans with Play Billing Library 7 or newer and explicit enablement.",
+  "source": "https://developer.android.com/google/play/billing/subscriptions#pending",
+  "productConfigurationChanged": false,
+  "automatedPendingTestsAreRealStoreEvidence": false
+}

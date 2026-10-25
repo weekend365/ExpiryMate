@@ -36,6 +36,7 @@ import {
   GOOGLE_SUBSCRIPTION_ID,
   clearPendingSubscriptionPurchaseIntent,
   isPersonalSubscriptionProduct,
+  purchaseKey,
   readPendingSubscriptionPurchaseIntent,
   savePendingSubscriptionPurchaseIntent,
 } from "../../src/features/monetization/iap-products";
@@ -55,6 +56,7 @@ import { publicWebUrl } from "../../src/shared/public-web-url";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { colors, radius, spacing } from "../../src/shared/theme";
 import {
+  ApiError,
   createSubscriptionPurchaseIntent,
   trackMonetizationEvent,
 } from "../../src/services/api";
@@ -86,9 +88,19 @@ function SubscriptionStoreScreen() {
   const [busyAction, setBusyAction] = useState<"purchase" | "restore" | null>(
     null,
   );
+  const busyActionRef = useRef<"purchase" | "restore" | null>(null);
+  const restoreEventsRef = useRef(new Map<string, Purchase>());
+  const restoreStoreErrorsRef = useRef<unknown[]>([]);
+  const processingPurchasesRef = useRef(new Set<string>());
   const trackedPaywallRef = useRef(false);
   const purchaseCompletedRef = useRef(false);
+  const purchasePendingNoticeShownRef = useRef(false);
   const purchaseIntentRef = useRef<SubscriptionPurchaseIntent | null>(null);
+
+  function updateBusyAction(action: "purchase" | "restore" | null) {
+    busyActionRef.current = action;
+    setBusyAction(action);
+  }
 
   async function readPurchaseIntent(productId: string) {
     if (purchaseIntentRef.current?.productId === productId) {
@@ -102,19 +114,27 @@ function SubscriptionStoreScreen() {
     await clearPendingSubscriptionPurchaseIntent();
   }
 
+  function showPendingPurchaseNoticeOnce() {
+    if (purchasePendingNoticeShownRef.current) return;
+    purchasePendingNoticeShownRef.current = true;
+    showPendingNotice();
+  }
+
   async function handleStorePurchase(
     purchase: Purchase,
-    options?: { restore?: boolean },
+    options?: { restore?: boolean; onVerificationError?: (error: unknown) => void },
   ) {
     if (purchase.purchaseState === "pending") {
-      setBusyAction(null);
-      Alert.alert(
-        "결제가 확인 중이에요",
-        "스토어 승인이 끝나면 앱을 다시 열었을 때 장고 플러스가 반영돼요.",
-      );
+      if (!options?.restore) {
+        updateBusyAction(null);
+        showPendingPurchaseNoticeOnce();
+      }
       return false;
     }
 
+    const key = subscriptionTransactionKey(purchase);
+    if (processingPurchasesRef.current.has(key)) return false;
+    processingPurchasesRef.current.add(key);
     try {
       const purchaseIntent = options?.restore
         ? null
@@ -133,20 +153,25 @@ function SubscriptionStoreScreen() {
         product_id: purchase.productId,
         billing_period: verified.entitlement.billingPeriod ?? "unknown",
       });
-      setBusyAction(null);
-      Alert.alert(
-        "장고 플러스가 시작됐어요",
-        "주간 브리핑과 30·90일 리포트를 보고, 광고 없이 요리와 사진 기능을 이용할 수 있어요.",
-      );
+      if (!options?.restore) {
+        updateBusyAction(null);
+        showPurchaseSuccessNotice();
+      }
       return true;
     } catch (error) {
-      setBusyAction(null);
+      options?.onVerificationError?.(error);
       trackFunnelEvent("checkout_failed", {
         stage: "verification",
         reason: error instanceof Error ? error.name : "unknown",
       });
-      Alert.alert("구독을 확인하지 못했어요", getErrorMessage(error));
+      // The restore action reports failed verification once after its batch.
+      if (!options?.restore) {
+        updateBusyAction(null);
+        Alert.alert("구독을 확인하지 못했어요", getErrorMessage(error));
+      }
       return false;
+    } finally {
+      processingPurchasesRef.current.delete(key);
     }
   }
 
@@ -156,15 +181,28 @@ function SubscriptionStoreScreen() {
     requestPurchase,
     finishTransaction,
   } = useIapStore({
-    handlesPurchase: isPersonalSubscriptionProduct,
+    // Unsolicited replay belongs to the root provider's silent recovery.
+    handlesPurchase: (productId) =>
+      isPersonalSubscriptionProduct(productId) && busyActionRef.current !== null,
     onPurchaseSuccess: (purchase) => {
-      if (isPersonalSubscriptionProduct(purchase.productId)) {
+      if (!isPersonalSubscriptionProduct(purchase.productId)) return;
+      if (busyActionRef.current === "restore") {
+        restoreEventsRef.current.set(subscriptionTransactionKey(purchase), purchase);
+      } else if (busyActionRef.current === "purchase") {
         void handleStorePurchase(purchase);
       }
     },
     onPurchaseError: (error) => {
-      setBusyAction(null);
-      const cancelled = String(error.code).toLowerCase().includes("cancel");
+      if (busyActionRef.current === "restore") {
+        restoreStoreErrorsRef.current.push(new Error(error.message));
+        return;
+      }
+      updateBusyAction(null);
+      if (getPurchasePendingCode(error)) {
+        showPendingPurchaseNoticeOnce();
+        return;
+      }
+      const cancelled = getPurchaseCancellationCode(error) !== null;
       trackFunnelEvent(cancelled ? "checkout_cancelled" : "checkout_failed", {
         reason: String(error.code),
       });
@@ -172,7 +210,11 @@ function SubscriptionStoreScreen() {
       Alert.alert("결제를 완료하지 못했어요", error.message);
     },
     onError: (error) => {
-      setBusyAction(null);
+      if (busyActionRef.current === "restore") {
+        restoreStoreErrorsRef.current.push(error);
+        return;
+      }
+      updateBusyAction(null);
       trackFunnelEvent("checkout_failed", {
         stage: "store_connection",
         reason: error.name,
@@ -215,6 +257,7 @@ function SubscriptionStoreScreen() {
   const annualSavings = getAnnualSavings(plans);
 
   const startPurchase = async () => {
+    if (busyActionRef.current !== null) return;
     if (!connected || productsQuery.isFetching || !selectedPlan) {
       Alert.alert(
         "가격을 불러오는 중이에요",
@@ -222,7 +265,8 @@ function SubscriptionStoreScreen() {
       );
       return;
     }
-    setBusyAction("purchase");
+    purchasePendingNoticeShownRef.current = false;
+    updateBusyAction("purchase");
     trackFunnelEvent("checkout_started", {
       billing_period: selectedPlan.period,
       product_id: selectedPlan.productId,
@@ -261,35 +305,71 @@ function SubscriptionStoreScreen() {
               },
       });
     } catch (error) {
-      setBusyAction(null);
-      trackFunnelEvent("checkout_failed", {
+      updateBusyAction(null);
+      if (getPurchasePendingCode(error)) {
+        showPendingPurchaseNoticeOnce();
+        return;
+      }
+      const cancellationCode = getPurchaseCancellationCode(error);
+      trackFunnelEvent(cancellationCode ? "checkout_cancelled" : "checkout_failed", {
         stage: "request_purchase",
-        reason: error instanceof Error ? error.name : "unknown",
+        reason: cancellationCode ?? (error instanceof Error ? error.name : "unknown"),
       });
+      if (cancellationCode) return;
       Alert.alert("결제를 시작하지 못했어요", getErrorMessage(error));
     }
   };
 
   const restore = async () => {
-    setBusyAction("restore");
+    if (busyActionRef.current !== null) return;
+    updateBusyAction("restore");
+    restoreEventsRef.current.clear();
+    restoreStoreErrorsRef.current = [];
     trackFunnelEvent("restore_started");
     try {
-      const purchases = (await getAvailablePurchases()).filter((purchase) =>
-        isPersonalSubscriptionProduct(purchase.productId),
-      );
-      if (!purchases.length) {
-        setBusyAction(null);
+      const restoreErrors: unknown[] = [];
+      try {
+        const purchases = await getAvailablePurchases({
+          onlyIncludeActiveItemsIOS: true,
+          alsoPublishToEventListenerIOS: false,
+        });
+        for (const purchase of purchases) {
+          if (isPersonalSubscriptionProduct(purchase.productId)) {
+            restoreEventsRef.current.set(subscriptionTransactionKey(purchase), purchase);
+          }
+        }
+      } catch (error) {
+        if (!restoreEventsRef.current.size) throw error;
+        restoreErrors.push(error);
+      }
+      let restoredCount = 0;
+      let hasPendingPurchase = false;
+      const processedKeys = new Set<string>();
+      // StoreKit updates can overlap both the query and server verification.
+      // Drain them into the same batch, with one verification per transaction.
+      for (;;) {
+        const next = [...restoreEventsRef.current].find(([key]) => !processedKeys.has(key));
+        if (!next) break;
+        const [key, purchase] = next;
+        processedKeys.add(key);
+        if (purchase.purchaseState === "pending") {
+          hasPendingPurchase = true;
+          continue;
+        }
+        if (await handleStorePurchase(purchase, {
+          restore: true,
+          onVerificationError: (error) => restoreErrors.push(error),
+        })) {
+          restoredCount += 1;
+        }
+      }
+      restoreErrors.push(...restoreStoreErrorsRef.current);
+      if (!processedKeys.size && !restoreErrors.length) {
         Alert.alert(
           "복원할 개인 구독이 없어요",
           "현재 스토어 계정을 확인해 주세요.",
         );
         return;
-      }
-      let restoredCount = 0;
-      for (const purchase of purchases) {
-        if (await handleStorePurchase(purchase, { restore: true })) {
-          restoredCount += 1;
-        }
       }
       trackFunnelEvent(
         restoredCount > 0 ? "restore_completed" : "restore_failed",
@@ -297,18 +377,34 @@ function SubscriptionStoreScreen() {
           ? { purchase_count: String(restoredCount) }
           : { reason: "no_verified_purchase" },
       );
-      if (restoredCount === 0) {
-        Alert.alert(
-          "구독을 연결하지 못했어요",
-          "다른 장고 계정에 연결된 구매는 자동으로 옮기지 않아요. 도움이 필요하면 설정의 고객지원으로 문의해 주세요.",
-        );
+      if (restoredCount > 0) {
+        showPurchaseSuccessNotice();
+      } else if (hasPendingPurchase && !restoreErrors.length) {
+        showPendingNotice();
+      } else {
+        const isOwnershipRejection = (error: unknown) =>
+          error instanceof ApiError && error.status === 409;
+        if (restoreErrors.length > 0 && restoreErrors.every(isOwnershipRejection)) {
+          Alert.alert(
+            "구독을 연결하지 못했어요",
+            "다른 장고 계정에 연결된 구매는 자동으로 옮기지 않아요. 도움이 필요하면 설정의 고객지원으로 문의해 주세요.",
+          );
+        } else {
+          Alert.alert(
+            "구매를 복원하지 못했어요",
+            getErrorMessage(restoreErrors.find(error => !isOwnershipRejection(error))),
+          );
+        }
       }
     } catch (error) {
-      setBusyAction(null);
       trackFunnelEvent("restore_failed", {
         reason: error instanceof Error ? error.name : "unknown",
       });
       Alert.alert("구매를 복원하지 못했어요", getErrorMessage(error));
+    } finally {
+      restoreEventsRef.current.clear();
+      restoreStoreErrorsRef.current = [];
+      updateBusyAction(null);
     }
   };
 
@@ -463,6 +559,40 @@ function getErrorMessage(error: unknown) {
   return error instanceof Error
     ? error.message
     : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
+}
+
+function getPurchaseCancellationCode(error: unknown): string | null {
+  if (!error || typeof error !== "object" || !("code" in error)) return null;
+  return typeof error.code === "string" && error.code.toLowerCase().includes("cancel")
+    ? error.code
+    : null;
+}
+
+function getPurchasePendingCode(error: unknown): string | null {
+  if (!error || typeof error !== "object" || !("code" in error) || typeof error.code !== "string") return null;
+  const code = error.code.toLowerCase().replace(/^e_/, "").replaceAll("_", "-");
+  return code === "deferred-payment" || code === "pending" ? error.code : null;
+}
+
+function subscriptionTransactionKey(purchase: Purchase) {
+  const transactionId = Platform.OS === "ios" ? purchase.transactionId ?? purchase.id : null;
+  return transactionId
+    ? [purchase.store, purchase.productId, transactionId].join(":")
+    : purchaseKey(purchase);
+}
+
+function showPurchaseSuccessNotice() {
+  Alert.alert(
+    "장고 플러스가 시작됐어요",
+    "주간 브리핑과 30·90일 리포트를 보고, 광고 없이 요리와 사진 기능을 이용할 수 있어요.",
+  );
+}
+
+function showPendingNotice() {
+  Alert.alert(
+    "결제가 확인 중이에요",
+    "스토어 승인이 끝나면 앱을 다시 열었을 때 장고 플러스가 반영돼요.",
+  );
 }
 
 function BenefitLine({ text }: { text: string }) {

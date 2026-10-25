@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-21T05:08:48.465Z",
+  "orderIdSha256": "e0bcd32556f0ca415e14e406ff76fb8077e084ee04a6124e9c2c6f84a99fdb8f",
+  "purchaseTokenSha256": "9468c3379235c1ec7ff0e2f5f81739bbc125e00d3ff8e72d2777585d3ae7c747",
+  "orderState": "PROCESSED",
+  "orderCreatedAt": "2026-10-21T04:57:29.780Z",
+  "lastEventTime": "2026-10-21T04:57:30.425Z",
+  "testPurchase": true,
+  "subscriptionState": "SUBSCRIPTION_STATE_CANCELED",
+  "acknowledgementState": "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED",
+  "lineItems": [
+    {
+      "productId": "jango_plus",
+      "basePlanId": "yearly",
+      "expiryTime": "2026-10-21T05:27:29.780Z"
+    }
+  ]
+}

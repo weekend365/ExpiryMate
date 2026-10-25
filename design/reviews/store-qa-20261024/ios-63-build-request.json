@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-25T03:47:45.721001+00:00",
+  "buildId": "7f4c83e6-179c-4d66-a840-a909d0d7562b",
+  "buildNumber": "63",
+  "expectedQaAppVersion": "1.4.4",
+  "status": "FINISHED",
+  "bundleIdentifier": "com.expirymate.mobile",
+  "profile": "store-qa",
+  "qaOrigin": "https://api-qa-c321.up.railway.app",
+  "purpose": "Retest actual checkout cancellation without a raw English failure alert",
+  "sourceSha256": "0c25ac1b7019485adbda0d142df5c4739c1263c0fbfc75f17b44fb179c380164",
+  "preflight": {
+    "relatedTests": 17,
+    "fullTests": 1453,
+    "lint": "passed",
+    "typecheck": "passed",
+    "archiveMonorepoFilesVerified": true,
+    "privateFilesInInspectedArchive": 0,
+    "productionProfileChanged": false,
+    "nativeSdkChanged": false
+  },
+  "failedAttempt62": {
+    "id": "e39f3559-c38d-4730-ac2a-61a715973400",
+    "phase": "INSTALL_DEPENDENCIES",
+    "reason": "EAS_PROJECT_ROOT was omitted for no-VCS curated source; archive contained only mobile app and selected Yarn, missing workspace shared package",
+    "remedy": "Explicit EAS_PROJECT_ROOT and local archive verification"
+  },
+  "localRetryPathCorrection": "Use canonical /private/tmp for both EAS_PROJECT_ROOT and cwd; /tmp alias mismatch failed locally before creating a cloud build",
+  "testFlightSubmission": "FINISHED; Apple VALID and IN_BETA_TESTING",
+  "deviceRetest": "incomplete",
+  "artifact": "ios-63-artifact.json"
+}

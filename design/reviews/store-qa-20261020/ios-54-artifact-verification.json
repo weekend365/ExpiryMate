@@ -1,0 +1,12 @@
+{
+  "platform": "ios",
+  "buildId": "67d4dc68-eee7-41b9-988f-0850083b1138",
+  "bundleIdentifier": "com.expirymate.mobile",
+  "version": "1.4.3",
+  "build": "54",
+  "sha256": "9f295cf2af4a17db8a65df0decdc4c8efc27a3add8daede7c578d8e54e598188",
+  "qaApiInBundle": true,
+  "mainBundleFiles": [
+    "Payload/app.app/main.jsbundle"
+  ]
+}

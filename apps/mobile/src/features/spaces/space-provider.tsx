@@ -189,7 +189,10 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     ) {
       pendingExplicitSpaceIdRef.current = null;
     }
-  }, [spaces]);
+  // A switch can select a space already present in the cached list. In that
+  // case structural sharing preserves `spaces`, so selection changes must also
+  // settle the explicit-pick guard before a later membership revocation.
+  }, [requestedSpaceId, spaces]);
 
   const missingSpaces =
     spacesListSettled &&

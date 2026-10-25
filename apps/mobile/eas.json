@@ -58,6 +58,24 @@
         "APP_VARIANT": "production"
       }
     },
+    "store-qa": {
+      "extends": "production",
+      "environment": "preview",
+      "env": {
+        "EXPO_PUBLIC_APP_ENV": "preview",
+        "APP_VARIANT": "production",
+        "EXPO_IOS_PERSONAL_TEAM": "0",
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
+        "JANGO_STORE_QA": "true",
+        "JANGO_STORE_QA_APP_VERSION": "1.4.4",
+        "JANGO_STORE_QA_API_ORIGIN": "https://api-qa-c321.up.railway.app",
+        "EXPO_PUBLIC_OAUTH_REDIRECT_URI": "https://api-qa-c321.up.railway.app/oauth/callback",
+        "EXPO_PUBLIC_API_BASE_URL": "https://api-qa-c321.up.railway.app"
+      },
+      "ios": {
+        "image": "macos-sequoia-15.6-xcode-26.0"
+      }
+    },
     "production": {
       "distribution": "store",
       "autoIncrement": true,
@@ -80,6 +98,15 @@
   },
   "submit": {
     "production": {
+      "ios": {
+        "bundleIdentifier": "com.expirymate.mobile",
+        "ascAppId": "6793375883"
+      },
+      "android": {
+        "track": "internal"
+      }
+    },
+    "store-qa": {
       "ios": {
         "bundleIdentifier": "com.expirymate.mobile",
         "ascAppId": "6793375883"

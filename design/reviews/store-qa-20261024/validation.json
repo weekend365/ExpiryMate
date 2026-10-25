@@ -1,0 +1,140 @@
+{
+  "checkedAt": "2026-10-25T05:24:07.882685+00:00",
+  "docsCheck": "passed final pnpm docs:check after cleanup documentation",
+  "typecheck": "passed latest full pnpm typecheck",
+  "rootLint": {
+    "status": "passed",
+    "note": "Latest full pnpm lint passed; prior concurrent marketing failure retained as history, no unrelated file edited by this QA work.",
+    "checkedAt": "2026-10-25T04:26:22.300915+00:00"
+  },
+  "scopedCodeLint": {
+    "status": "passed",
+    "scope": "apps packages scripts; existing ESLint config unchanged"
+  },
+  "fullTests": {
+    "status": "passed",
+    "command": "pnpm test",
+    "isolation": "independent APFS source copy, existing user test fixtures excluded from copy only; original user asset hash unchanged",
+    "root": 41,
+    "shared": 162,
+    "api": 618,
+    "mobile": 636,
+    "passed": 1457,
+    "defaultIntegrationSkipped": 6,
+    "strictIntegration": "six passed with zero skips on final source in a fresh local PostgreSQL database after 45 migrations; separate from default full tests",
+    "testLogSha256": "c4b33cf297811ac49fb1e9c9b973e638b1a44845b9c1e46c5f12f9b2a09ae43b",
+    "checkedAt": "2026-10-25T04:26:22.300915+00:00",
+    "nodeVersion": "21.4.0",
+    "runnerAttemptBeforeSuccess": {
+      "exitCode": 9,
+      "reason": "Default Node runner did not support --test-concurrency; no tests ran in that attempt",
+      "remedy": "Use existing Node 21.4.0; no project config or dependency changed"
+    }
+  },
+  "designSystemCheck": "passed",
+  "restoreRaceBeforeFix": {
+    "failed": 7,
+    "passed": 6
+  },
+  "restoreTestsAfterFix": 14,
+  "relatedTestsAfterFix": 27,
+  "mobileFullAfterFix": {
+    "passed": 629,
+    "files": 107,
+    "durationSeconds": 45.73
+  },
+  "mobileTypecheckAfterFix": "passed",
+  "isolatedQaMobileTypecheckAfterFix": "passed",
+  "restoreFilesLint": "passed",
+  "rootLintPreviousFailure": {
+    "status": "failed",
+    "unrelatedFile": "output/marketing/jango-sns-ep06-20261024/build_review.cjs",
+    "errorCount": 9,
+    "action": "preserved concurrent user work; no ignore/config changes"
+  },
+  "docsCheckedAt": "2026-10-25T05:24:07.882685+00:00",
+  "typecheckCheckedAt": "2026-10-25T04:26:22.300915+00:00",
+  "sourceSinceFullTests": {
+    "checkedAt": "2026-10-25T05:25:03.680160+00:00",
+    "scope": [
+      "apps",
+      "packages",
+      "scripts",
+      ".github"
+    ],
+    "comparedFiles": 747,
+    "changed": [],
+    "added": [],
+    "removed": [],
+    "generatedSharedDistExcluded": true,
+    "method": "Bidirectional SHA-256 inventory of source/config file extensions; dependency/build/test-output/cache directories excluded",
+    "extensions": [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".jsx",
+      ".mjs",
+      ".cjs",
+      ".json",
+      ".yaml",
+      ".yml"
+    ],
+    "includesNativeJsonAndJavascript": true
+  },
+  "cancellationRegression": {
+    "observedOnDeviceBuild": 61,
+    "beforeFix": {
+      "failed": 2,
+      "passed": 15
+    },
+    "afterFix": {
+      "passed": 17
+    },
+    "deviceRetest": "passed actual TestFlight 64; no failure alert for 8.682 seconds, button released, native active/unfinished empty and server inactive",
+    "uiScope": "Preserve screen layout, navigation and purchase verification. Canceled request no longer shows a failure alert; busy state releases and retry works."
+  },
+  "qaEvidenceAudit": {
+    "checkedAt": "2026-10-25T05:24:07.882685+00:00",
+    "privateAccountDeviceAndRefundIdentifiersAbsentFromPublicText": true,
+    "publicTextFilesScanned": 170,
+    "reviewedScreenshotHashesVerified": 30,
+    "localReadmeLinksResolved": 29,
+    "hashMethod": "Verify existing PNG references and SHA-256 in scenario/cleanup records; visual privacy review retained in original records"
+  },
+  "pendingRegression": {
+    "observedSdkVersion": "expo-iap 4.7.2 / OpenIAP 2.4.4",
+    "beforeFix": {
+      "failed": 4,
+      "passed": 17
+    },
+    "afterFix": {
+      "passed": 21
+    },
+    "scenarios": [
+      "deferred-payment / E_DEFERRED_PAYMENT / pending request rejection",
+      "listener and request rejection overlap: one notice per checkout",
+      "no entitlement verification, finishTransaction or intent deletion before approval",
+      "retry releases busy state and resets one-notice guard"
+    ],
+    "nativeRetest": "passed actual TestFlight64: native Ask to Buy dialog, one pending notice, no additional alert, no active monthly purchase/entitlement; QA option restored off"
+  },
+  "strictIntegrationFinal": {
+    "status": "passed",
+    "detail": "strict-integration-final-result.json",
+    "passed": 6,
+    "skipped": 0,
+    "migrationsApplied": 45,
+    "localClusterStoppedAndRemoved": true
+  },
+  "deviceAndResourceCleanup": {
+    "status": "completed",
+    "detail": "qa-cleanup-result.json",
+    "mediaRestorationConfirmedBy": "user"
+  },
+  "docsFinalLogSha256": "bd8fca01e61e084e5f8df6599914f3a257739668cffdb71f993cfea55c3f223d",
+  "nativeSdkAndOriginalUserFixtureAudit": {
+    "checkedAt": "2026-10-25T05:24:07.882685+00:00",
+    "originalSdkSourcesUnchanged": true,
+    "originalUserFixturePreserved": true
+  }
+}

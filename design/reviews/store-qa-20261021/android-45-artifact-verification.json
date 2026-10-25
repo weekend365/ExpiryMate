@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-10-21T04:43:49.471984+00:00",
+  "applicationIdentifier": "com.expirymate.mobile",
+  "packageInManifest": true,
+  "versionInManifest": true,
+  "build": 45,
+  "qaApiPresent": true,
+  "deletedQaApiPresent": false,
+  "firebaseResources": {
+    "google_app_id": true,
+    "gcm_defaultSenderId": true,
+    "google_api_key": true,
+    "project_id": true
+  },
+  "sha256": "812c116250125ac8b1491f7d09dcd16dfd48a1b739cf9b2ea7ff856bf6b5ba29"
+}

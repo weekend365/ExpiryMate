@@ -1,0 +1,63 @@
+{
+  "joinedAt": "2026-10-24T07:31:18.214767+00:00",
+  "joinMethod": "native invitation preview and join without notifications",
+  "ownerSetupMethod": "authenticated QA owner HTTP API",
+  "events": [
+    {
+      "at": "2026-10-24T07:31:39.015141+00:00",
+      "phase": "joined shared inventory",
+      "markerVisible": true,
+      "pid": 78042
+    },
+    {
+      "at": "2026-10-24T07:32:27.483087+00:00",
+      "phase": "native switch to personal",
+      "sharedMarkerVisible": false
+    },
+    {
+      "at": "2026-10-24T07:32:34.592897+00:00",
+      "phase": "native switch back to cached shared",
+      "sharedMarkerVisible": true,
+      "pid": 78042
+    }
+  ],
+  "beforeRevocationPid": 78042,
+  "revocation": {
+    "at": "2026-10-24T07:33:32.144105+00:00",
+    "method": "authenticated QA owner HTTP API",
+    "memberInventoryHttpStatus": 404,
+    "ownerMarkerRetained": true,
+    "appBackgroundState": 2
+  },
+  "warmResume": {
+    "at": "2026-10-24T07:33:36.212408+00:00",
+    "beforePid": 78042,
+    "afterPid": 78042,
+    "samePid": true,
+    "personalFallbackVisible": true,
+    "sharedMarkerVisible": false,
+    "stuckLoadingVisible": false,
+    "elapsedUntilObservedSeconds": 4.018
+  },
+  "platform": "iOS",
+  "appVersion": "1.4.4",
+  "build": 60,
+  "revocationFallbackPassed": true,
+  "tabBarAfterResumeNeedsFollowup": true,
+  "captures": [
+    {
+      "path": "ios60-before-sharing-revocation.png",
+      "sha256": "9e17ce02f00bb751d27881c77404e5d3f6465607c079d820ac83cb272bf2a97e"
+    },
+    {
+      "path": "ios60-sharing-revocation-personal.png",
+      "sha256": "6220c69449f64535c0cbed0cef1a45155389750db6e41c9576ee1dac82525770"
+    }
+  ],
+  "followupOn61": {
+    "result": "passed",
+    "detail": "ios-61-sharing-result.json",
+    "allFiveTabsVisible": true,
+    "settingsAndHomeTabsResponded": true
+  }
+}

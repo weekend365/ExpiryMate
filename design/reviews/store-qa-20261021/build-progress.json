@@ -1,0 +1,26 @@
+{
+  "recordedAt": "2026-10-21T04:44:00.102678+00:00",
+  "builds": [
+    {
+      "id": "96076e78-42e8-446f-b4d3-f20bbd45ed56",
+      "status": "FINISHED",
+      "platform": "ANDROID",
+      "appVersion": "1.4.4",
+      "appBuildVersion": "45",
+      "createdAt": "2026-10-21T04:20:13.984Z",
+      "completedAt": "2026-10-21T04:43:10.850Z",
+      "distribution": "STORE"
+    },
+    {
+      "id": "554c9c34-643b-4506-8b9e-7553062e11c1",
+      "status": "FINISHED",
+      "platform": "IOS",
+      "appVersion": "1.4.3",
+      "appBuildVersion": "57",
+      "createdAt": "2026-10-21T04:20:47.470Z",
+      "completedAt": "2026-10-21T04:27:56.538Z",
+      "distribution": "STORE"
+    }
+  ],
+  "note": "EAS iOS appVersion metadata 1.4.3 differs from verified actual IPA 1.4.4. Artifact verification is authoritative."
+}

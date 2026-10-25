@@ -20,6 +20,10 @@ const GOOGLE_SAMPLE_ADMOB_IDS = new Set([
 ]);
 
 function validateExpoPublicEnv(env = process.env) {
+  if (env.JANGO_STORE_QA === "true" || env.EAS_BUILD_PROFILE === "store-qa") {
+    validateStoreQaEnv(env);
+    require("./android-push-config.cjs").resolveAndroidGoogleServicesFile(env, require("../app.json").expo.android.package);
+  }
   if (env.EXPO_PUBLIC_APP_ENV !== "production") {
     return;
   }
@@ -86,6 +90,46 @@ function validateExpoPublicEnv(env = process.env) {
       ].join("\n"),
     );
   }
+}
+
+function validateStoreQaEnv(env) {
+  const errors = [];
+  try { getStoreQaAppVersion(env); } catch (error) { errors.push(error.message); }
+  if (env.EXPO_PUBLIC_APP_ENV !== "preview" || env.APP_VARIANT !== "production"
+    || env.EXPO_IOS_PERSONAL_TEAM !== "0") {
+    errors.push("Store QA requires preview env, the registered production app ID, and a paid Apple team.");
+  }
+  for (const key of ["JANGO_STORE_QA_API_ORIGIN", "EXPO_PUBLIC_API_BASE_URL", "EXPO_PUBLIC_OAUTH_REDIRECT_URI"]) {
+    if (!env[key]?.trim()) errors.push(`${key} is required for store QA.`);
+    validatePublicHttpsUrl(env[key], key, errors);
+  }
+  try {
+    const expected = new URL(env.JANGO_STORE_QA_API_ORIGIN);
+    const api = new URL(env.EXPO_PUBLIC_API_BASE_URL);
+    if (api.origin !== expected.origin || expected.pathname !== "/" || expected.search || expected.hash
+      || expected.username || expected.password || api.username || api.password
+      || ["api-production-1504.up.railway.app", "api.expirymate.app"].includes(api.hostname)) {
+      errors.push("Store QA must target the explicit isolated QA origin.");
+    }
+  } catch {
+    errors.push("Store QA origins are invalid.");
+  }
+  validateOAuthRedirectMatchesApi(env.EXPO_PUBLIC_API_BASE_URL, env.EXPO_PUBLIC_OAUTH_REDIRECT_URI, errors);
+  if (errors.length) throw new Error(["Invalid store QA environment.", ...errors].join("\n"));
+}
+
+function getStoreQaAppVersion(env = process.env) {
+  if (env.JANGO_STORE_QA !== "true" && env.EAS_BUILD_PROFILE !== "store-qa") return undefined;
+  const version = env.JANGO_STORE_QA_APP_VERSION?.trim();
+  const current = require("../app.json").expo.version;
+  const parts = value => /^\d+\.\d+\.\d+$/.test(value || "") ? value.split(".").map(Number) : null;
+  const next = parts(version);
+  const previous = parts(current);
+  const difference = next && previous && next.map((value, index) => value - previous[index]).find(value => value !== 0);
+  if (!next || !previous || !next.every(Number.isSafeInteger) || !difference || difference < 0) {
+    throw new Error("JANGO_STORE_QA_APP_VERSION must be a numeric version higher than the published app.json version.");
+  }
+  return version;
 }
 
 function validatePublicHttpsUrl(value, key, errors) {
@@ -179,4 +223,5 @@ if (require.main === module) {
 
 module.exports = {
   validateExpoPublicEnv,
+  getStoreQaAppVersion,
 };

@@ -1,0 +1,22 @@
+{
+  "recordedAt": "2026-10-20T06:52:41.654093+00:00",
+  "recordedBeforePhotoCalls": true,
+  "originalFrozenManifestPreserved": true,
+  "corrections": [
+    {
+      "caseId": "fridge-13",
+      "originalReference": "오이 / 페스토",
+      "visibleHighConfidenceObject": "아보카도",
+      "uncertainObject": "초록색 용기 내용물의 정확한 종류는 미검수",
+      "disposition": "Original exact-name F1 is diagnostic only; use visual review for quality and do not treat this reference as exhaustive ground truth"
+    }
+  ],
+  "followUp": {
+    "recordedAt": "2026-10-20T07:01:24.995820+00:00",
+    "recordedBeforePhotoCalls": false,
+    "caseId": "fridge-13",
+    "priorAvocadoClaimWithdrawn": true,
+    "identity": "Ambiguous small green round produce; the original source provides no object labels. Neither cucumber, avocado nor watermelon is verified ground truth.",
+    "disposition": "Keep the frozen inputs and the prior note as provenance; exclude this item from confirmed identity-error counts until expert annotation."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "manualVerificationCalled": false,
+  "qaRtdnRouteConfigured": false,
+  "samples": [
+    {
+      "at": "2026-10-21T05:53:35.557001+00:00",
+      "entitlement": {
+        "hasActiveEntitlement": false,
+        "store": "google_play",
+        "productId": "jango_plus",
+        "planCode": "jango_plus",
+        "scope": "user",
+        "spaceId": null,
+        "billingPeriod": "monthly",
+        "basePlanId": "monthly",
+        "status": "revoked",
+        "expiresAt": "2026-10-21T05:57:17.352Z",
+        "willRenew": false,
+        "environment": "sandbox",
+        "verifiedAt": "2026-10-21T05:53:30.090Z"
+      }
+    }
+  ]
+}

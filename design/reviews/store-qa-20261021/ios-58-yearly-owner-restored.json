@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-10-21T07:47:07.140050+00:00",
+  "owner": {
+    "hasActiveEntitlement": true,
+    "store": "apple_app_store",
+    "productId": "expirymate_premium_yearly",
+    "planCode": "jango_plus",
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": "yearly",
+    "basePlanId": null,
+    "status": "active",
+    "expiresAt": "2026-10-21T08:43:18.000Z",
+    "willRenew": true,
+    "environment": "Sandbox",
+    "verifiedAt": "2026-10-21T07:44:56.264Z"
+  },
+  "member": {
+    "hasActiveEntitlement": false,
+    "store": null,
+    "productId": null,
+    "planCode": null,
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": null,
+    "basePlanId": null,
+    "status": "unknown",
+    "expiresAt": null,
+    "willRenew": null,
+    "environment": null,
+    "verifiedAt": null
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-10-24T06:50:29.489876+00:00",
+  "qaProjectId": "112c819c-0cdb-4990-8650-c2939b2932e5",
+  "qaResourcesActive": false,
+  "cleanupCompleted": true,
+  "lastUsageAt": "2026-10-24T06:47:38.022118+00:00",
+  "cumulativeQaUsageCostUsd": 0.24882127,
+  "invoiceFinal": false,
+  "aiEvaluationCostUsd": 0.884803,
+  "monitorRunning": false,
+  "originalAbsoluteStopAt": "2026-10-23T06:06:02.690Z",
+  "stopAtCumulativeQaUsd": 7,
+  "mobileBuilds": {
+    "android": 46,
+    "ios": 58,
+    "iosLatestBuilt": 59
+  },
+  "iosStatus": "QA cleanup complete: project, helper, signing resources and control processes removed; original media account restored and QA Sandbox signed out by user confirmation. No further QA authorized. Unverified scenarios remain incomplete.",
+  "lastKnownCumulativeQaUsageCostUsd": 0.24882127,
+  "cloudCleanupCompleted": true,
+  "updatedAt": "2026-10-24T06:54:12.703816+00:00",
+  "furtherQaAuthorized": false,
+  "userDecision": "No new QA; finish cleanup and original account restoration only.",
+  "mediaAccountRestoreVerified": true,
+  "mediaAccountVerificationSource": "explicit user confirmation",
+  "qaSandboxSignedOut": true,
+  "qaSandboxSignOutVerificationSource": "explicit user confirmation",
+  "laterUserReopenedQa": {
+    "at": "2026-10-24T07:07:14.366497+00:00",
+    "record": "../store-qa-20261024/environment.json",
+    "historicalCleanupUnchanged": true
+  }
+}

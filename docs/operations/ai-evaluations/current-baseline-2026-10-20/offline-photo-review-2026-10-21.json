@@ -1,0 +1,327 @@
+{
+  "reviewedAt": "2026-10-21T04:22:38.167236+00:00",
+  "reviewer": "coding agent; no additional provider calls; not independent human or blind review",
+  "frozenInputsAndPaidOutputsModified": false,
+  "photoGenerationRerun": false,
+  "receiptReviews": [
+    {
+      "caseId": "receipt-01",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 5,
+      "outputRows": 5,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "Five source menu lines are present in output; all five identities are changed from dishes/rice into ingredients, sauces or noodles. Counts agree.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-02",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 2,
+      "outputRows": 2,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "Two cake lines and count 2 on each agree with the dataset text. No exhaustive product/composition verification.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-03",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 2,
+      "outputRows": 2,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "One beverage and one topping line are present. JASMINE becomes OSMINE; topping quantity is not printed and cannot be scored.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-04",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 1,
+      "outputRows": 1,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "DONAT GULA is retained phonetically, quantity 1 agrees. Translation quality is not independently graded.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-05",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 3,
+      "outputRows": 3,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "Three lines present. ICE BLACKCOFFE count 2 becomes 1; CHIKEN KATSU FF becomes an incomplete different name.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-06",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 1,
+      "outputRows": 1,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "One toast line present with reduced detail. Source count absent; default 1 is not a verified count.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-07",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 3,
+      "outputRows": 3,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "Three bakery lines and printed counts agree at the broad item level.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-08",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 2,
+      "outputRows": 2,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "Two lines present; SFD TLR qualifiers become special. Treat the seafood/egg translation as unresolved without bilingual review.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-09",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 3,
+      "outputRows": 3,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "Main item plus both topping lines are present with printed counts. Broad name correspondence, no ingredient/composition claim.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-10",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 1,
+      "outputRows": 1,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "One line preserved as source-language text. Korean-name instruction is not met by this output. Count is not a separate printed field.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-11",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 1,
+      "outputRows": 1,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "One cinnamon-sugar line and count agree. Receipt does not establish whether this is a packaged ingredient or prepared menu item.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-12",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 1,
+      "outputRows": 1,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "One cake line and count agree at broad item level.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-13",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 2,
+      "outputRows": 2,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "Two food lines present; plastic bag correctly excluded by prompt. Chokoreto becomes chocolate-chip: subtype is unsupported; no definitive subtype grade.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-14",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 2,
+      "outputRows": 2,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "Both source lines present but BASO KUAH and A.MINERAL GELAS become unrelated phonetic item names.",
+      "exhaustiveIdentityGrade": false
+    },
+    {
+      "caseId": "receipt-15",
+      "basis": "CORD frozen source annotation paired with model output, not a blind bilingual human review",
+      "sourceFoodLinesIncludingToppings": 6,
+      "outputRows": 6,
+      "rowCoverage": "all source food/menu lines have a corresponding output row; identity correctness separate",
+      "finding": "Six lines and counts present. Baked rice becomes fried rice, and Fish n Chips loses/changes preparation and side detail; not counted in the conservative identity-error lower bound.",
+      "exhaustiveIdentityGrade": false
+    }
+  ],
+  "fridgeReviews": [
+    {
+      "caseId": "fridge-01",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Fruit, chicken and containers are visible. Thermometer is a visible household product allowed by the current prompt; it is not counted as a hallucination or food identity error. Occluded fruit/container contents prevent exhaustive identity counts.",
+      "confirmedFindings": [],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-02",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Three coconuts and four bottles visible. Bottle labels read LAGER BEER, while output names ginger beer. One confirmed identity mismatch for the grouped bottle output.",
+      "confirmedFindings": [
+        {
+          "type": "identity_mismatch",
+          "output": "생강맥주",
+          "visible": "LAGER BEER on four bottles",
+          "minimumIncorrectOutputRows": 1
+        }
+      ],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-03",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Egg carton, headless fish section, wrapped item and Matjes package are visible. Whole-fish wording and egg quantity do not establish reliable object counts; no species, freshness or concealed egg count is assigned.",
+      "confirmedFindings": [],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-04",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "More than six eggs are visible, including partially visible eggs. Output quantity 6 undercounts the visible group. Exact count/species is left unresolved.",
+      "confirmedFindings": [
+        {
+          "type": "quantity_undercount",
+          "output": "달걀",
+          "reportedQuantity": 6,
+          "minimumVisibleQuantity": 7
+        }
+      ],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-05",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Door shows four beverage bottles and bottom compartment at least three more; output has four beverage rows each quantity 1. At least three visible beverage bottles are omitted/undercounted. No assignment of each hidden label.",
+      "confirmedFindings": [
+        {
+          "type": "visible_object_undercount",
+          "group": "beverage bottles",
+          "minimumVisibleQuantity": 7,
+          "totalReportedQuantity": 4,
+          "minimumMissingObjects": 3
+        }
+      ],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-06",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Upper shelf shows at least four bottle necks/caps and lower shelf four more. Output represents three bottles total, so at least five visible bottles are omitted/undercounted. Blurry labels are not assigned identities.",
+      "confirmedFindings": [
+        {
+          "type": "visible_object_undercount",
+          "group": "beverage bottles",
+          "minimumVisibleQuantity": 8,
+          "totalReportedQuantity": 3,
+          "minimumMissingObjects": 5
+        }
+      ],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-07",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Three can tops are visible; generic can beverages quantity 3 agrees. Beverage contents are not identifiable.",
+      "confirmedFindings": [],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-08",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Mayonnaise label, wrapped meat and peppers visible. Other tub/bag contents cannot be reliably classified; zucchini/yogurt claims remain unresolved rather than confirmed errors.",
+      "confirmedFindings": [],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-09",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Milk, labeled fresh cheese, cheddar, chicken, salmon and peppers visible. Other opaque/partially covered containers and produce prevent exhaustive omission or quantity grading.",
+      "confirmedFindings": [],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-10",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Many labels/containers are occluded. Door egg tray is visibly stocked, while no egg output exists: at least one visible food group omitted. Tomato and container quantities need separate instance annotation.",
+      "confirmedFindings": [
+        {
+          "type": "food_group_omitted",
+          "visible": "eggs in upper door tray",
+          "minimumMissingFoodGroups": 1
+        }
+      ],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-11",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Eggs, fruit, produce and packaged foods visible. At least four oranges are visible in the fruit drawer versus output 2. Hidden produce and packaged meat quantities are not assigned.",
+      "confirmedFindings": [
+        {
+          "type": "quantity_undercount",
+          "output": "오렌지",
+          "reportedQuantity": 2,
+          "minimumVisibleQuantity": 4
+        }
+      ],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-12",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Half lemon and food containers visible. Ingredients/preparation of the covered foods are not established by appearance; chicken/fermentation guesses remain unresolved.",
+      "confirmedFindings": [],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-13",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Retains previous uncertainty: round green produce identity is unverified; frozen cucumber reference and prior avocado claim are not treated as truth. Three green dip containers visible; red jar content unknown.",
+      "confirmedFindings": [],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-14",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "At least six yogurt cups are visible on shelf versus output quantity 4. Orange juice unit 1 ml has no readable volume support. Closed egg-carton count is not the number of eggs.",
+      "confirmedFindings": [
+        {
+          "type": "quantity_undercount",
+          "output": "요구르트",
+          "reportedQuantity": 4,
+          "minimumVisibleQuantity": 6
+        },
+        {
+          "type": "unsupported_quantity_unit",
+          "output": "오렌지 주스",
+          "reportedQuantity": 1,
+          "unitCode": "ml",
+          "visibleVolumeVerified": false
+        }
+      ],
+      "exhaustiveIdentityAndOmissionGrade": false
+    },
+    {
+      "caseId": "fridge-15",
+      "basis": "direct local source-image inspection against frozen output",
+      "finding": "Crushed-garlic jar label visible, but no garlic output exists: one confirmed food-group omission. Several sauce bottles omitted/merged; exact matching unresolved. Yogurt/hummus/tinned-food identities are not supported sufficiently to score them confidently.",
+      "confirmedFindings": [
+        {
+          "type": "food_group_omitted",
+          "visible": "CRUSHED GARLIC jar",
+          "minimumMissingFoodGroups": 1
+        }
+      ],
+      "exhaustiveIdentityAndOmissionGrade": false
+    }
+  ],
+  "coverage": {
+    "receiptCasesPaired": 15,
+    "receiptSourceFoodLinesIncludingToppings": 35,
+    "receiptOutputRows": 35,
+    "fridgeSourceImagesInspected": 15
+  },
+  "interpretation": "Diagnostic lower bounds only. Overlapping object omissions and quantity errors must not be summed as independent accuracy errors. Foreign restaurant receipts are outside the Korean grocery prompt scope. Thermometer is allowed by current household-product wording. Ambiguous identities and hidden counts remain ungraded.",
+  "completeGoldQualityEvaluation": false,
+  "remaining": [
+    "exhaustive instance and identity annotation",
+    "independent bilingual receipt review",
+    "representative Korean grocery and household samples",
+    "human recipe cooking, taste and safety review"
+  ]
+}

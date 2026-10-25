@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-10-21T05:54:48.995Z",
+  "orderIdSha256": "cb24c8c72254d153b21fd61e115e9c3cf96b5420342a32a797d23e8c060e5aa7",
+  "purchaseTokenSha256": "8577807cebbdd1eecf5ef7b43aaa806452718ac04ca8cd23ec8b6330792ef06f",
+  "orderState": "REFUNDED",
+  "orderCreatedAt": "2026-10-21T05:52:17.352Z",
+  "lastEventTime": "2026-10-21T05:53:19.862Z",
+  "testPurchase": true,
+  "subscriptionState": "SUBSCRIPTION_STATE_EXPIRED",
+  "acknowledgementState": "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED",
+  "lineItems": [
+    {
+      "productId": "jango_plus",
+      "basePlanId": "monthly",
+      "expiryTime": "2026-10-21T05:53:20.099Z",
+      "autoRenewingPlanPresent": true,
+      "autoRenewEnabledPresent": false,
+      "prepaidPlanPresent": false
+    }
+  ]
+}

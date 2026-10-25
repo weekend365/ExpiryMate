@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-21T04:57:20.956754+00:00",
+  "platform": "Android 16, Galaxy A34",
+  "appBuild": 45,
+  "scenario": "yearly purchase checkout",
+  "storeProduct": "\uc7a5\uace0 \uac1c\uc778 \ud50c\ub7ec\uc2a4",
+  "selectedBasePlan": "yearly",
+  "displayedPriceKrw": 39000,
+  "testRenewalInterval": "30 minutes",
+  "paymentMethod": "test card, always approves",
+  "explicitNoChargeTestSubscriptionNotice": true,
+  "purchaseConfirmed": false
+}

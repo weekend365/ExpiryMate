@@ -975,7 +975,10 @@ export class SubscriptionsService {
       acknowledgementState: payload.acknowledgementState ?? null,
       status,
       isActive,
-      willRenew: lineItem.autoRenewingPlan?.autoRenewEnabled ?? null,
+      // Google ProtoJSON omits false scalars inside a present auto-renewing plan.
+      willRenew: lineItem.autoRenewingPlan
+        ? lineItem.autoRenewingPlan.autoRenewEnabled ?? false
+        : null,
       expiresAt,
       environment: payload.testPurchase ? "sandbox" : "production",
       accountIdentifier:

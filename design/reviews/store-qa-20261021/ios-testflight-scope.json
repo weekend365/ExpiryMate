@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-21T06:02:14.520300+00:00",
+  "officialSources": [
+    "https://developer.apple.com/help/app-store-connect/test-a-beta-version/testing-subscriptions-and-in-app-purchases-in-testflight/",
+    "https://developer.apple.com/documentation/storekit/testing-at-all-stages-of-development-with-xcode-and-the-sandbox"
+  ],
+  "testflightUsesSandbox": true,
+  "noActualChargeInSandbox": true,
+  "defaultRenewalPeriod": "1 day for all durations; up to 6 renewals in a week",
+  "acceleratedScenariosRequire": "Sandbox Apple Account controls; production Media & Purchases sign-out described by Apple",
+  "accountOrRenewalSettingsChanged": false,
+  "limitations": "Default daily renewal and special scenarios are not marked tested unless actually observed; no unapproved store-account changes."
+}

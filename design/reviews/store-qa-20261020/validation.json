@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-20T08:34:18.708894+00:00",
+  "checks": {
+    "lint": {
+      "status": "passed",
+      "logSha256": "c6d195ddd82878bc652ab5da9a8ab79d18683944b5eddeb07fb531bab75e11ae"
+    },
+    "typecheck": {
+      "status": "passed",
+      "logSha256": "8a837db9fcbfae95a3d4ee80033db3faf1f42d1176bf8b3e34be033f1e996cea"
+    },
+    "docs:check": {
+      "status": "passed",
+      "logSha256": "010a60642e26b475789cec793626f9e02d4e9f12e464e34a49a7fe8c5879f1c1"
+    },
+    "tests": {
+      "status": "passed",
+      "execution": "latest per package; mobile rerun after restore-notice fix",
+      "shared": 162,
+      "api": 621,
+      "mobile": 615,
+      "databaseIntegrationPassed": 6,
+      "databaseIntegrationSkipped": 0,
+      "restoreRegressionPassed": 4,
+      "restoreRegressionBeforeFix": "one failure: expected one notice, observed two",
+      "rootJangoPreviouslyPassed": 41
+    }
+  }
+}

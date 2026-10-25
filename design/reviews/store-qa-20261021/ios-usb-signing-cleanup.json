@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-24T06:41:46.679Z",
+  "actions": [
+    {
+      "type": "profiles",
+      "id": "GA9PJKFL94",
+      "deleted": true,
+      "absenceVerified": true
+    },
+    {
+      "type": "bundleIds",
+      "id": "3Y5RLN93A3",
+      "deleted": true,
+      "absenceVerified": true
+    }
+  ],
+  "existingCertificateTouched": false,
+  "registeredDeviceTouched": false,
+  "profileAndAppIdOnly": true
+}

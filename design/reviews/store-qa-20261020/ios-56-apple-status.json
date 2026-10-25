@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-20T08:27:18.121Z",
+  "version": "1.4.4",
+  "build": "56",
+  "uploads": [
+    {
+      "id": "38b255c9-07aa-4a68-91b7-453d8566764c",
+      "state": {
+        "errors": [],
+        "warnings": [],
+        "infos": [],
+        "state": "COMPLETE"
+      },
+      "version": "1.4.4",
+      "build": "56"
+    }
+  ],
+  "builds": [
+    {
+      "id": "38b255c9-07aa-4a68-91b7-453d8566764c",
+      "processingState": "VALID"
+    }
+  ],
+  "betaState": [
+    {
+      "autoNotifyEnabled": true,
+      "internalBuildState": "IN_BETA_TESTING",
+      "externalBuildState": "READY_FOR_BETA_SUBMISSION"
+    }
+  ],
+  "physicalDeviceTested": false
+}

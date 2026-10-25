@@ -1,0 +1,90 @@
+[
+  {
+    "file": "native-320-font1-after.png",
+    "sha256": "5b1c416742bfd5fbf781435b2fcb701f7fc77d0d30a0ea380e50d408d89a65ee"
+  },
+  {
+    "file": "native-320-font1-before.png",
+    "sha256": "5b1c416742bfd5fbf781435b2fcb701f7fc77d0d30a0ea380e50d408d89a65ee"
+  },
+  {
+    "file": "native-320-font1.3-after.png",
+    "sha256": "52693802aa582f69a4605d9c337d5cbc63497c3128b16fbb3b509ff92e05f0d7"
+  },
+  {
+    "file": "native-320-font1.3-before.png",
+    "sha256": "c8bc3066ccd1b1d9dc4e50544ec3660791004db905b560e678f74f53f4e34630"
+  },
+  {
+    "file": "native-320-font2-after.png",
+    "sha256": "5a7f7713a2d884a0326296587786c58c6d85a4b4850bd88446ec1d58968614a3"
+  },
+  {
+    "file": "native-320-font2-before.png",
+    "sha256": "12b7f3229a106adec510cdc097cd5938810cce11412775039f5e86927952d96e"
+  },
+  {
+    "file": "native-360-font1-after.png",
+    "sha256": "499c268111e26e91e7ef3bb1d81db1e589dedbf569cfb12498abe69e3f8a5225"
+  },
+  {
+    "file": "native-360-font1-before.png",
+    "sha256": "499c268111e26e91e7ef3bb1d81db1e589dedbf569cfb12498abe69e3f8a5225"
+  },
+  {
+    "file": "native-360-font1.3-after.png",
+    "sha256": "00f12870edcd78712cde3edd86f08f7f76ed306c8ec780bbaff95141da35f633"
+  },
+  {
+    "file": "native-360-font1.3-before.png",
+    "sha256": "67c3f63c5d0018a75c2ee6f4d9d8e031b9f1a928be106112bde4ea87e931fe5c"
+  },
+  {
+    "file": "native-360-font2-after.png",
+    "sha256": "e190acfcf2c57c649bfa5fe2e510d904a63df143a3660fde30aa7a6b7f55098f"
+  },
+  {
+    "file": "native-360-font2-before.png",
+    "sha256": "070b55d1dab488244c467fd4e0964f30390ccee15ff1698528463b08670039b1"
+  },
+  {
+    "file": "warning-320-font1-after.png",
+    "sha256": "e32177832f7c2b93863815412a7480966ae74829e193a76fdf0d30dfe1b63b54"
+  },
+  {
+    "file": "warning-320-font1-before.png",
+    "sha256": "e32177832f7c2b93863815412a7480966ae74829e193a76fdf0d30dfe1b63b54"
+  },
+  {
+    "file": "warning-320-font2-after.png",
+    "sha256": "902a7c8d892c701184c4d50d4abe022156780602f60c219ab57ecb7103033b48"
+  },
+  {
+    "file": "warning-320-font2-before.png",
+    "sha256": "80b1d87e67dca2632eb70328f26c0f6c20adbe0344c18fa45f6b5d23d203da80"
+  },
+  {
+    "file": "warning-360-font2-after.png",
+    "sha256": "98c77b8498d48e339eba389be8874de553d23c9f2aa16fc76263f344c563a3c3"
+  },
+  {
+    "file": "warning-360-font2-before.png",
+    "sha256": "150f5d15caacb5b4539c12d7b22c4e39ce553c9468b1b55ef109686b88d39168"
+  },
+  {
+    "file": "warning-768-font2-after.png",
+    "sha256": "5f47c64727015de244aee88466687ddf48cf6c2a8ce6c79e36ad9720f7bf6e67"
+  },
+  {
+    "file": "warning-768-font2-before.png",
+    "sha256": "5f47c64727015de244aee88466687ddf48cf6c2a8ce6c79e36ad9720f7bf6e67"
+  },
+  {
+    "file": "warning-780-font2-after.png",
+    "sha256": "d10ae7f9afa178dd18aa6563e2fa28b4365b9e73124f906df7d536dffd456b0e"
+  },
+  {
+    "file": "warning-780-font2-before.png",
+    "sha256": "7c7f2158ff9b86da54a966bed0b89ceb38f07150a7ef9ec5c3b644e0238c3515"
+  }
+]

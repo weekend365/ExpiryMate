@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-21T05:03:37.965908+00:00",
+  "platform": "Android 16 / Galaxy A34",
+  "appBuild": 45,
+  "scenario": "cross-account restore single rejection dialog",
+  "rejectionTitle": "구독을 연결하지 못했어요",
+  "observedRejectionDialogs": 1,
+  "followUpAlertTitles": [
+    [],
+    []
+  ],
+  "secondsObservedAfterDismissal": 5.855,
+  "memberRemainsInactive": true,
+  "ownerRemainsActive": true,
+  "memberEntitlement": {
+    "hasActiveEntitlement": false,
+    "store": null,
+    "productId": null,
+    "planCode": null,
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": null,
+    "basePlanId": null,
+    "status": "unknown",
+    "expiresAt": null,
+    "willRenew": null,
+    "environment": null,
+    "verifiedAt": null
+  },
+  "ownerEntitlement": {
+    "hasActiveEntitlement": true,
+    "store": "google_play",
+    "productId": "jango_plus",
+    "planCode": "jango_plus",
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": "yearly",
+    "basePlanId": "yearly",
+    "status": "active",
+    "expiresAt": "2026-10-21T05:27:29.780Z",
+    "willRenew": true,
+    "environment": "sandbox",
+    "verifiedAt": "2026-10-21T04:58:57.936Z"
+  },
+  "passed": true
+}

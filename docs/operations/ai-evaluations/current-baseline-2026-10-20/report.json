@@ -1,0 +1,191 @@
+{
+  "mode": "current-model-baseline",
+  "complete": false,
+  "issues": [
+    "generation_failures",
+    "missing_quality_grades",
+    "missing_photo_review",
+    "missing_recipe_constraint_review"
+  ],
+  "runtimeSource": "railway-production-settings@2026-10-20T06:43:57.888692+00:00",
+  "createdAt": "2026-10-20T06:44:00.660Z",
+  "budgetUsd": 5,
+  "models": {
+    "recipe": "gpt-5.4-mini",
+    "photo": "gpt-5.6-luna"
+  },
+  "total": {
+    "requests": 80,
+    "successes": 65,
+    "successRate": 0.8125,
+    "usageCounts": {
+      "reported": 80,
+      "estimated": 0,
+      "partial": 0,
+      "unavailable": 0,
+      "legacy": 0
+    },
+    "knownCostUsd": 0.884803,
+    "accountingComplete": true,
+    "costPerSuccessUsd": 0.013612353846153846,
+    "p50CostUsd": 0.008509,
+    "p95CostUsd": 0.027528,
+    "p50DurationMs": 9677,
+    "p95DurationMs": 23908,
+    "gradedSuccesses": 0,
+    "safetyFailures": 0,
+    "quality": null,
+    "photoExactNameF1": 0.15476190476190477,
+    "photoReview": {
+      "reviewedRequests": 0,
+      "counts": null
+    },
+    "recipeConstraintReview": {
+      "reviewedRequests": 0,
+      "constraintChecks": null,
+      "constraintViolations": null
+    }
+  },
+  "recipe": {
+    "requests": 50,
+    "successes": 35,
+    "successRate": 0.7,
+    "usageCounts": {
+      "reported": 50,
+      "estimated": 0,
+      "partial": 0,
+      "unavailable": 0,
+      "legacy": 0
+    },
+    "knownCostUsd": 0.855678,
+    "accountingComplete": true,
+    "costPerSuccessUsd": 0.024447942857142857,
+    "p50CostUsd": 0.017674000000000002,
+    "p95CostUsd": 0.028063,
+    "p50DurationMs": 15839,
+    "p95DurationMs": 25142,
+    "gradedSuccesses": 0,
+    "safetyFailures": 0,
+    "quality": null,
+    "photoExactNameF1": null,
+    "photoReview": {
+      "reviewedRequests": 0,
+      "counts": null
+    },
+    "recipeConstraintReview": {
+      "reviewedRequests": 0,
+      "constraintChecks": null,
+      "constraintViolations": null
+    }
+  },
+  "photo": {
+    "requests": 30,
+    "successes": 30,
+    "successRate": 1,
+    "usageCounts": {
+      "reported": 30,
+      "estimated": 0,
+      "partial": 0,
+      "unavailable": 0,
+      "legacy": 0
+    },
+    "knownCostUsd": 0.029125,
+    "accountingComplete": true,
+    "costPerSuccessUsd": 0.0009708333333333334,
+    "p50CostUsd": 0.000895,
+    "p95CostUsd": 0.001778,
+    "p50DurationMs": 3426,
+    "p95DurationMs": 7992,
+    "gradedSuccesses": 0,
+    "safetyFailures": 0,
+    "quality": null,
+    "photoExactNameF1": 0.15476190476190477,
+    "photoReview": {
+      "reviewedRequests": 0,
+      "counts": null
+    },
+    "recipeConstraintReview": {
+      "reviewedRequests": 0,
+      "constraintChecks": null,
+      "constraintViolations": null
+    }
+  },
+  "scenes": {
+    "receipt": {
+      "requests": 15,
+      "successes": 15,
+      "successRate": 1,
+      "usageCounts": {
+        "reported": 15,
+        "estimated": 0,
+        "partial": 0,
+        "unavailable": 0,
+        "legacy": 0
+      },
+      "knownCostUsd": 0.0094,
+      "accountingComplete": true,
+      "costPerSuccessUsd": 0.0006266666666666666,
+      "p50CostUsd": 0.000637,
+      "p95CostUsd": 0.001273,
+      "p50DurationMs": 2681,
+      "p95DurationMs": 4826,
+      "gradedSuccesses": 0,
+      "safetyFailures": 0,
+      "quality": null,
+      "photoExactNameF1": 0,
+      "photoReview": {
+        "reviewedRequests": 0,
+        "counts": null
+      },
+      "recipeConstraintReview": {
+        "reviewedRequests": 0,
+        "constraintChecks": null,
+        "constraintViolations": null
+      }
+    },
+    "fridge": {
+      "requests": 15,
+      "successes": 15,
+      "successRate": 1,
+      "usageCounts": {
+        "reported": 15,
+        "estimated": 0,
+        "partial": 0,
+        "unavailable": 0,
+        "legacy": 0
+      },
+      "knownCostUsd": 0.019725,
+      "accountingComplete": true,
+      "costPerSuccessUsd": 0.001315,
+      "p50CostUsd": 0.001241,
+      "p95CostUsd": 0.002034,
+      "p50DurationMs": 5693,
+      "p95DurationMs": 9903,
+      "gradedSuccesses": 0,
+      "safetyFailures": 0,
+      "quality": null,
+      "photoExactNameF1": 0.16666666666666666,
+      "photoReview": {
+        "reviewedRequests": 0,
+        "counts": null
+      },
+      "recipeConstraintReview": {
+        "reviewedRequests": 0,
+        "constraintChecks": null,
+        "constraintViolations": null
+      }
+    }
+  },
+  "policy": {
+    "formula": "60 * recipe p95 + 30 * photo p95",
+    "population": "successful requests, including their repair costs",
+    "recipeP95CostUsd": 0.026895,
+    "photoP95CostUsd": 0.001778,
+    "usdKrw": 1500,
+    "budgetKrw": 858,
+    "projectedMonthlyCostKrw": 2500.56,
+    "status": "incomplete"
+  },
+  "adoptionEvaluated": false,
+  "salesPolicyChanged": false
+}

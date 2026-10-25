@@ -1,0 +1,152 @@
+{
+  "checkedAt": "2026-10-25T05:22:48.592736+00:00",
+  "phase": "completed_with_documented_limits_resources_cleaned",
+  "deviceQueryExitCode": 0,
+  "installedQaBuild": "1.4.4(64)",
+  "completedThisRun": [
+    "monthly Sandbox purchase",
+    "renewal observed through native recovery",
+    "sharing revocation recovery on 60",
+    "same-account restore and other-account rejection with one final alert on 61",
+    "explicit monthly cancellation plus server willRenew=false",
+    "real iOS scheduled push receipt and tap from shared context to personal inventory on 61",
+    "canceled monthly term expiry confirmed with same native Sandbox tester, StoreKit and app free on 61",
+    "native owner code generation, member join and cached switch, owner API revoke and same-process personal fallback with five visible functional tabs on 61",
+    "actual annual Sandbox purchase on 61",
+    "actual Apple refund revocation, normal manual verification and same-process free state with paid report HTTP 403",
+    "actual build64 canceled checkout: no failure alert and retry available",
+    "actual build64 native Ask to Buy deferred entry: one pending notice, no active monthly transaction or entitlement",
+    "device/account restoration and removal of temporary cloud, USB helper and signing resources"
+  ],
+  "canceledTermExpiry": {
+    "result": "passed: same native QA Sandbox tester, StoreKit no active purchase, server expired and app free",
+    "checkedAt": "2026-10-25T03:00:49.582056+00:00",
+    "hasActiveEntitlement": false,
+    "willRenew": false,
+    "expiresAt": "2026-10-24T08:23:16.000Z",
+    "detail": "ios-61-canceled-term-expiry.json",
+    "storeKitReadAt": "2026-10-25T02:45:42.653897+00:00"
+  },
+  "push": {
+    "osPermission": "restored to original denied after real receipt/tap QA",
+    "registrationHttpStatus": 201,
+    "registrationAt": "2026-10-24T08:23:36.560682478Z",
+    "deliveryResult": "passed: actual Notification Center receipt and tap to personal inventory",
+    "plannedDeliveryAtKst": "2026-10-25T11:47:00+09:00",
+    "monitorAbortedAt": "2026-10-24T08:28:33.459060+00:00",
+    "remindersEnabled": false,
+    "detail": "ios-61-push-result.json",
+    "bannerObserved": false
+  },
+  "remaining": [
+    "SDK displayed USD while native Sandbox sheet displayed KRW; consistency not passed",
+    "automatic QA webhook delivery untested; normal Apple re-verification and isolated webhook tests recorded separately",
+    "Ask to Buy approve/reject resolution unsupported by Apple Sandbox; not tested in Xcode",
+    "push exact arrival time and initial banner not observed",
+    "independent AI photo ground truth and human cooking/safety review incomplete"
+  ],
+  "restoreRequired": [],
+  "railway": {
+    "cumulativeMeteredCostUsd": 0.32423899,
+    "measuredAt": "2026-10-25T05:14:48.510492+00:00",
+    "invoiceFinal": false,
+    "stopAtUsd": 7,
+    "absoluteStopAt": "2026-10-25T06:59:24.877147+00:00",
+    "cleanupConfirmed": true,
+    "cleanupDetail": "cleanup.json",
+    "deletedAt": "2026-10-25T05:12:06.403083+00:00"
+  },
+  "additionalPaidAiCalls": 0,
+  "automationIssue": {
+    "at": "2026-10-25T01:11:36.252222+00:00",
+    "thirdRestartExecuted": true,
+    "result": "XCTest runner failed to initialize UI automation",
+    "reason": "Timed out while enabling automation mode",
+    "mirroringReadState": "connected after tool session reset",
+    "mirroringActivationReview": "prior transition restriction resolved by explicit user approval and screen lock",
+    "mirroringTransitionApproved": true,
+    "deviceLockConfirmed": true,
+    "mirroringTouchResult": "noWindowsAvailable",
+    "mirroringWindowRecovery": "cgWindowNotFound and timeoutReached; session reset restored read and keyboard only",
+    "orphanedQaRunnerCount": 0,
+    "fullKeyboardAccess": {
+      "approvalRequested": true,
+      "approved": true,
+      "changed": true,
+      "originalValue": false,
+      "currentValue": false,
+      "confirmedBy": "user",
+      "confirmedAt": "2026-10-25T02:13:50.115054+00:00",
+      "result": "Tab entered text instead of moving focus; no native QA scenario completed through this path",
+      "restoreRequested": true,
+      "restored": true,
+      "restoredBy": "user",
+      "restoredAt": "2026-10-25T02:36:49.943748+00:00",
+      "nativeSwitchValue": "0",
+      "nativeRestorationVerified": true
+    },
+    "mirroringStopped": true,
+    "usbRestartPreparation": {
+      "prepared": true,
+      "existingSigningReused": true,
+      "launched": true,
+      "requires": "user restart confirmation and read-only unlocked-device check",
+      "absoluteStopAt": "2026-10-25T06:59:24.877147+00:00",
+      "userRestartConfirmed": true,
+      "launchDelayAfterUserSignalSeconds": 1.262,
+      "result": "wda-ready",
+      "readyAt": "2026-10-25T02:37:23.580393+00:00"
+    }
+  },
+  "qaReadOnlyCheck": {
+    "checkedAt": "2026-10-25T01:55:52.952129+00:00",
+    "readinessHttpStatus": 200,
+    "ownerEntitlement": "expired",
+    "ownerWillRenew": false,
+    "memberHasActiveEntitlement": false,
+    "remindersEnabled": false,
+    "nativeCrossCheckComplete": false,
+    "historicalSnapshotBeforeFinalDeviceCrossCheck": true
+  },
+  "interruptedPurchase": {
+    "detail": "ios-61-interrupted-purchase.json",
+    "interruptionObserved": true,
+    "unapprovedPurchaseGranted": false,
+    "pendingDeferredObserved": false,
+    "interruptionSwitchRestoredOff": true
+  },
+  "cancellationFix": {
+    "relatedTestsPassed": 17,
+    "fullTestsPassed": 1457,
+    "buildRequest": "ios-64-build-request.json",
+    "nativeRetest": "passed actual build64"
+  },
+  "refund": {
+    "detail": "ios-61-refund-result.json",
+    "requestAccepted": true,
+    "revocationObserved": true,
+    "verificationPath": "normal same-owner API actual Apple re-verification; automatic QA webhook untested",
+    "serverStatus": "revoked",
+    "deviceFreePlan": true,
+    "sameAppProcess": true
+  },
+  "pendingFix": {
+    "relatedTestsPassed": 21,
+    "deviceRetest": "passed actual TestFlight64: native Ask to Buy and one pending notice; no active monthly purchase/entitlement",
+    "qaOnlyNativeOption": "Apple simulatesAskToBuyInSandbox(true), confined to private QA source; original SDK unchanged",
+    "fullTestsPassed": 1457,
+    "localNativeOptionOriginal": false,
+    "localNativeOptionCurrentlyEnabled": false,
+    "optionRestoreRequired": false,
+    "detail": "ios-64-pending-result.json"
+  },
+  "testFlightAuthentication": {
+    "requested": true,
+    "completed": true,
+    "existingPersonalAppleAccountRequired": true,
+    "passwordOrOtpRequestedInChat": false
+  },
+  "deviceControlRemoved": true,
+  "cleanup": "qa-cleanup-result.json",
+  "deviceUnlockedAtLastControl": true
+}

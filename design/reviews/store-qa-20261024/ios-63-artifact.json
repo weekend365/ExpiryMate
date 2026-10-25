@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-10-25T03:53:48.258783+00:00",
+  "buildId": "7f4c83e6-179c-4d66-a840-a909d0d7562b",
+  "status": "FINISHED",
+  "version": "1.4.4",
+  "build": "63",
+  "bundleIdentifier": "com.expirymate.mobile",
+  "ipaBytes": 75403648,
+  "ipaSha256": "dbbc30e3b03e5590609a2cdac61a311cc367b322de0c6aa40e26d9ea001b62b7",
+  "qaOriginInBundle": true,
+  "signingTeamUnchanged": true,
+  "signingAppIdentifierMatches": true,
+  "getTaskAllow": false,
+  "testFlightSubmission": {
+    "id": "292a93a8-a907-47a4-a8f2-787b9dcfcd3c",
+    "status": "FINISHED"
+  },
+  "deviceInstalled": false,
+  "appStoreConnect": {
+    "buildId": "569b603c-5d09-4eae-8c94-8bffcd8a0796",
+    "processingState": "VALID",
+    "internalBuildState": "IN_BETA_TESTING",
+    "checkedAt": "2026-10-25T03:56:52.853Z"
+  }
+}

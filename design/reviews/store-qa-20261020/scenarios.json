@@ -1,0 +1,189 @@
+{
+  "at": "2026-10-20T08:30:22.409056+00:00",
+  "status": "paused_by_user",
+  "scenarios": [
+    {
+      "scenario": "monthly-purchase",
+      "platform": "android",
+      "build": 42,
+      "status": "passed",
+      "testType": "physical-google-play-and-qa-api",
+      "evidence": [
+        "android-42-monthly-current.png",
+        "android-monthly-entitlement-restored.json"
+      ],
+      "notes": "License test card; no actual charge; server environment sandbox."
+    },
+    {
+      "scenario": "owned-purchase-restore",
+      "platform": "android",
+      "build": 42,
+      "status": "passed",
+      "testType": "physical-google-play-and-qa-api",
+      "evidence": [
+        "android-monthly-entitlement-restored.json"
+      ],
+      "notes": "Same QA owner restored the purchase; expiry advanced."
+    },
+    {
+      "scenario": "cross-app-account-restore",
+      "platform": "android",
+      "build": 42,
+      "status": "passed-with-ui-defect",
+      "testType": "physical-google-play-and-qa-api",
+      "evidence": [
+        "android-42-cross-account-restore.png",
+        "android-member-entitlement-after-conflict.json"
+      ],
+      "notes": "Ownership transfer rejected. Two notices reproduced; code fix and four regression tests pass; physical retest pending."
+    },
+    {
+      "scenario": "renewal",
+      "platform": "android",
+      "build": 42,
+      "status": "partially-verified",
+      "testType": "physical-store-restore",
+      "evidence": [
+        "android-monthly-entitlement-first.json",
+        "android-monthly-entitlement-restored.json"
+      ],
+      "notes": "Google Play period advanced on restore. Real RTDN delivery to QA was not configured or verified."
+    },
+    {
+      "scenario": "cancel",
+      "platform": "android",
+      "build": 42,
+      "status": "store-verified-api-flag-unverified",
+      "testType": "physical-google-play",
+      "evidence": [
+        "android-42-monthly-cancelled-play.png"
+      ],
+      "notes": "Play showed canceled. Fresh willRenew=false verification was not captured before expiry."
+    },
+    {
+      "scenario": "expiry",
+      "platform": "android",
+      "build": 43,
+      "status": "passed-with-scope-limit",
+      "testType": "physical-app-and-qa-api",
+      "evidence": [
+        "android-43-monthly-expired.png",
+        "android-monthly-after-expiry.json"
+      ],
+      "notes": "App and API returned free after the test period ended. Stored expiry/verifiedAt predate the final Play period; no automatic RTDN lifecycle claim."
+    },
+    {
+      "scenario": "annual-purchase",
+      "platform": "android",
+      "build": 43,
+      "status": "not-completed",
+      "testType": "physical-checkout-only",
+      "evidence": [
+        "android-43-yearly-checkout.png",
+        "android-43-yearly-checkout-closed.png"
+      ],
+      "notes": "Annual price and no-charge test card shown; user paused before purchase; checkout closed."
+    },
+    {
+      "scenario": "pending",
+      "platform": "android",
+      "build": 43,
+      "status": "not-tested",
+      "testType": "physical-card-list-observation",
+      "evidence": [],
+      "notes": "Provided card list had approve, decline, approve-then-refund; no slow/pending option. Automated tests do not substitute for actual pending."
+    },
+    {
+      "scenario": "refund",
+      "platform": "android",
+      "build": 43,
+      "status": "not-tested",
+      "testType": "none",
+      "evidence": [],
+      "notes": "Refund test card was selected but purchase was not completed."
+    },
+    {
+      "scenario": "shared-invite-join-switch-leave",
+      "platform": "android",
+      "build": 42,
+      "status": "passed",
+      "testType": "physical-two-qa-app-accounts-and-api",
+      "evidence": [
+        "android-42-shared-joined.png",
+        "android-42-switched-personal.png",
+        "android-42-shared-left.png",
+        "android-physical-leave-api-confirmation.json"
+      ],
+      "notes": "Owner API fixture issued initial code; member accepted, switched and left on device. Owner later generated/revoked another code through UI."
+    },
+    {
+      "scenario": "shared-access-revocation",
+      "platform": "android",
+      "build": 42,
+      "status": "passed",
+      "testType": "physical-owner-ui-and-member-api",
+      "evidence": [
+        "android-42-owner-revoke-confirm.png",
+        "android-physical-revoke-api-confirmation.json"
+      ],
+      "notes": "Member rejoined through disposable API fixture; owner removed membership on device; member inventory access denied."
+    },
+    {
+      "scenario": "invitation-code-revocation",
+      "platform": "android",
+      "build": 42,
+      "status": "passed",
+      "testType": "physical-owner-ui-and-member-api",
+      "evidence": [
+        "android-physical-invitation-revoked.json"
+      ],
+      "notes": "Owner generated and revoked a one-use code on device; member preview returned 400."
+    },
+    {
+      "scenario": "notification-permission-denied",
+      "platform": "android",
+      "build": 42,
+      "status": "passed",
+      "testType": "physical-android-permission",
+      "evidence": [
+        "android-42-notification-denied.png"
+      ],
+      "notes": "Deny kept permission-required state and did not falsely report a connected device."
+    },
+    {
+      "scenario": "push-delivery-and-tap",
+      "platform": "android",
+      "build": 43,
+      "status": "passed",
+      "testType": "physical-scheduler-expo-fcm-android",
+      "evidence": [
+        "android-43-notification-status.png",
+        "android-43-push-received.json",
+        "android-43-push-tap-inventory.png"
+      ],
+      "notes": "Actual background expiry reminder arrived and tapping opened the matching personal inventory. QA scheduler temporarily ran every minute."
+    },
+    {
+      "scenario": "ios-physical-qa",
+      "platform": "ios",
+      "build": 56,
+      "status": "not-tested",
+      "testType": "none",
+      "evidence": [
+        "ios-56-apple-status.json"
+      ],
+      "notes": "iPhone not connected; Apple acceptance and internal testing availability only."
+    },
+    {
+      "scenario": "webhook-auth-duplicate-ordering",
+      "platform": "server",
+      "build": null,
+      "status": "passed",
+      "testType": "isolated-http-and-mocked-unit",
+      "evidence": [
+        "api-checks.json"
+      ],
+      "notes": "Authentication rejection tested over QA HTTP; duplicate/out-of-order Apple and Google events tested in isolated unit tests, not real store webhook delivery."
+    }
+  ]
+}

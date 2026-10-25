@@ -1,0 +1,122 @@
+[
+  {
+    "requestedWidth": 320,
+    "requestedFont": 1,
+    "version": "after",
+    "width": 320,
+    "fontScale": 1,
+    "heroHeight": 128,
+    "count": 0,
+    "screenshot": "native-320-font1-after.png"
+  },
+  {
+    "requestedWidth": 320,
+    "requestedFont": 1,
+    "version": "before",
+    "width": 320,
+    "fontScale": 1,
+    "heroHeight": 128,
+    "count": 0,
+    "screenshot": "native-320-font1-before.png"
+  },
+  {
+    "requestedWidth": 320,
+    "requestedFont": 1.3,
+    "version": "after",
+    "width": 320,
+    "fontScale": 1.2999999523162842,
+    "heroHeight": 172,
+    "count": 0,
+    "screenshot": "native-320-font1.3-after.png"
+  },
+  {
+    "requestedWidth": 320,
+    "requestedFont": 1.3,
+    "version": "before",
+    "width": 320,
+    "fontScale": 1.2999999523162842,
+    "heroHeight": 188,
+    "count": 0,
+    "screenshot": "native-320-font1.3-before.png"
+  },
+  {
+    "requestedWidth": 320,
+    "requestedFont": 2,
+    "version": "after",
+    "width": 320,
+    "fontScale": 2,
+    "heroHeight": 222,
+    "count": 0,
+    "screenshot": "native-320-font2-after.png"
+  },
+  {
+    "requestedWidth": 320,
+    "requestedFont": 2,
+    "version": "before",
+    "width": 320,
+    "fontScale": 2,
+    "heroHeight": 340,
+    "count": 0,
+    "screenshot": "native-320-font2-before.png"
+  },
+  {
+    "requestedWidth": 360,
+    "requestedFont": 1,
+    "version": "after",
+    "width": 360,
+    "fontScale": 1,
+    "heroHeight": 128,
+    "count": 0,
+    "screenshot": "native-360-font1-after.png"
+  },
+  {
+    "requestedWidth": 360,
+    "requestedFont": 1,
+    "version": "before",
+    "width": 360,
+    "fontScale": 1,
+    "heroHeight": 128,
+    "count": 0,
+    "screenshot": "native-360-font1-before.png"
+  },
+  {
+    "requestedWidth": 360,
+    "requestedFont": 1.3,
+    "version": "after",
+    "width": 360,
+    "fontScale": 1.2999999523162842,
+    "heroHeight": 124,
+    "count": 0,
+    "screenshot": "native-360-font1.3-after.png"
+  },
+  {
+    "requestedWidth": 360,
+    "requestedFont": 1.3,
+    "version": "before",
+    "width": 360,
+    "fontScale": 1.2999999523162842,
+    "heroHeight": 140,
+    "count": 0,
+    "screenshot": "native-360-font1.3-before.png"
+  },
+  {
+    "requestedWidth": 360,
+    "requestedFont": 2,
+    "version": "after",
+    "width": 360,
+    "fontScale": 2,
+    "heroHeight": 222,
+    "count": 0,
+    "screenshot": "native-360-font2-after.png"
+  },
+  {
+    "requestedWidth": 360,
+    "requestedFont": 2,
+    "version": "before",
+    "width": 360,
+    "fontScale": 2,
+    "heroHeight": 238,
+    "count": 0,
+    "screenshot": "native-360-font2-before.png"
+  }
+]

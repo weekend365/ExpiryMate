@@ -1,0 +1,121 @@
+{
+  "at": "2026-10-25T05:14:48.510492+00:00",
+  "qaProjectIds": [
+    "112c819c-0cdb-4990-8650-c2939b2932e5",
+    "bd429f46-fac8-4a5c-8873-31c07be85ce3",
+    "e30f3274-2103-49a3-b130-f4bf63238a8c"
+  ],
+  "usage": [
+    {
+      "measurement": "MEMORY_USAGE_GB",
+      "value": 24.234454766933332,
+      "tags": {
+        "projectId": "bd429f46-fac8-4a5c-8873-31c07be85ce3"
+      }
+    },
+    {
+      "measurement": "CPU_USAGE",
+      "value": 0.7472073,
+      "tags": {
+        "projectId": "bd429f46-fac8-4a5c-8873-31c07be85ce3"
+      }
+    },
+    {
+      "measurement": "NETWORK_TX_GB",
+      "value": 0.000654042,
+      "tags": {
+        "projectId": "bd429f46-fac8-4a5c-8873-31c07be85ce3"
+      }
+    },
+    {
+      "measurement": "DISK_USAGE_GB",
+      "value": 20.48569344,
+      "tags": {
+        "projectId": "bd429f46-fac8-4a5c-8873-31c07be85ce3"
+      }
+    },
+    {
+      "measurement": "BACKUP_USAGE_GB",
+      "value": 0,
+      "tags": {
+        "projectId": "bd429f46-fac8-4a5c-8873-31c07be85ce3"
+      }
+    },
+    {
+      "measurement": "MEMORY_USAGE_GB",
+      "value": 303.2622292992,
+      "tags": {
+        "projectId": "e30f3274-2103-49a3-b130-f4bf63238a8c"
+      }
+    },
+    {
+      "measurement": "CPU_USAGE",
+      "value": 7.39018945,
+      "tags": {
+        "projectId": "e30f3274-2103-49a3-b130-f4bf63238a8c"
+      }
+    },
+    {
+      "measurement": "NETWORK_TX_GB",
+      "value": 0.017429715,
+      "tags": {
+        "projectId": "e30f3274-2103-49a3-b130-f4bf63238a8c"
+      }
+    },
+    {
+      "measurement": "DISK_USAGE_GB",
+      "value": 266.4751104,
+      "tags": {
+        "projectId": "e30f3274-2103-49a3-b130-f4bf63238a8c"
+      }
+    },
+    {
+      "measurement": "BACKUP_USAGE_GB",
+      "value": 0,
+      "tags": {
+        "projectId": "e30f3274-2103-49a3-b130-f4bf63238a8c"
+      }
+    },
+    {
+      "measurement": "MEMORY_USAGE_GB",
+      "value": 1011.4265824597334,
+      "tags": {
+        "projectId": "112c819c-0cdb-4990-8650-c2939b2932e5"
+      }
+    },
+    {
+      "measurement": "CPU_USAGE",
+      "value": 5.3220796833333335,
+      "tags": {
+        "projectId": "112c819c-0cdb-4990-8650-c2939b2932e5"
+      }
+    },
+    {
+      "measurement": "NETWORK_TX_GB",
+      "value": 0.05584165,
+      "tags": {
+        "projectId": "112c819c-0cdb-4990-8650-c2939b2932e5"
+      }
+    },
+    {
+      "measurement": "DISK_USAGE_GB",
+      "value": 973.19571456,
+      "tags": {
+        "projectId": "112c819c-0cdb-4990-8650-c2939b2932e5"
+      }
+    },
+    {
+      "measurement": "BACKUP_USAGE_GB",
+      "value": 0,
+      "tags": {
+        "projectId": "112c819c-0cdb-4990-8650-c2939b2932e5"
+      }
+    }
+  ],
+  "cumulativeQaUsageCostUsd": 0.32423899,
+  "invoiceFinal": false,
+  "includesPriorDeletedQaProjects": true,
+  "afterNewProjectDeletion": true,
+  "aiCallsAdded": 0,
+  "easBuildInvoiceReconciled": false
+}

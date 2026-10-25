@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-21T04:27:59.930754+00:00",
+  "migrationCount": 45,
+  "productionDataCopied": false,
+  "qaUsersSeeded": 2,
+  "migrationCreatedAnonymousFixturePreserved": "demo-user with null email",
+  "initialSeedFailures": [
+    "Temporary source template replaced part of RAILWAY_PROJECT_ID; corrected and syntax checked.",
+    "Fresh migration includes demo-user; guard now allows only this exact null-email fixture plus the two named QA users."
+  ],
+  "httpCheckExpectationCorrection": {
+    "initialIncorrectExpectation": "missing Google OIDC expected 401",
+    "actualExistingBehavior": "400 missing auth data; invalid bearer JWT returns 401",
+    "productCodeChanged": false,
+    "finalChecksPassed": 24
+  },
+  "storeValidationType": "HTTP authentication and ownership checks; not an actual store notification"
+}

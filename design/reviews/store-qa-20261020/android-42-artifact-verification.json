@@ -1,0 +1,9 @@
+{
+  "platform": "android",
+  "buildId": "556e43de-2957-446b-8b9f-d15e6efb0028",
+  "versionCode": 42,
+  "sha256": "7f3fbbb11e604272089f035c83b20462381df868df56a7493df41fe0bbf8f665",
+  "qaApiInBundle": true,
+  "googleAppIdResourcePresent": false,
+  "gcmDefaultSenderIdResourcePresent": false
+}

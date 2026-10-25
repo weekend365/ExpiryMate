@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-21T08:11:06.709098+00:00",
+  "ownerActionSource": "authenticated QA owner HTTP API, simulating second device",
+  "memberInventoryAfterRevokeHttpStatus": 404,
+  "nativeMemberRejoinedBeforeRevoke": true,
+  "nativeMemberSharedMarkerVisibleBeforeRevoke": true,
+  "nativeUiAfterRevokeVerified": true,
+  "nativeResult": "failed: loading remained after foreground and 20-second expected-control wait",
+  "sameProcessIdBeforeAndAfter": 65970,
+  "nativeFallbackToPersonal": false,
+  "sharedMarkerVisibleAfterRevoke": false,
+  "serverSpacesResponse": "personal only; HTTP 200",
+  "nativeCheckedAt": "2026-10-21T08:15:48.578731+00:00"
+}

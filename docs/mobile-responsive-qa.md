@@ -374,3 +374,9 @@ the historical license block is resolved.
 Validation also passed: 1,170 general tests, four opt-in PostgreSQL integration
 tests, authenticated HTTP workflow checks, and 50 related tests after the layout
 fixes. Lint/design-token checks and type checking passed after the final UI changes.
+
+## 2026-10-20 홈 안내 밀도 검증
+
+사용자 승인에 따라 폭 400 미만·글자 배율 1.3 이상인 홈 안내에만 기존 compact 밀도를
+적용했다. [전후 캡처·108조건 비교](../design/reviews/home-compact-20261020/README.md)에
+보존 요소·측정값·fixture 한계·실기기 미검증 범위를 기록한다.

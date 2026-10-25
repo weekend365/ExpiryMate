@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-10-24T08:07:20.693694+00:00",
+  "platform": "iOS",
+  "build": "1.4.4(61)",
+  "scenario": "monthly Sandbox subscription natural expiry",
+  "earlierActiveEvidence": "ios-60-monthly-renewal.json",
+  "previousServerExpiry": "2026-10-24T07:49:41.000Z",
+  "nativeAvailablePurchases": [],
+  "nativeUnfinishedTransactions": [],
+  "serverHasActiveEntitlement": false,
+  "screenText": "무료 이용 중이에요",
+  "result": "incomplete",
+  "limitation": "Server cached entitlement was expired and UI showed free, but native storefront was USA after normal Media/TestFlight login. Returning to the QA Sandbox account recovered a later active renewal. This observation does not establish natural expiry of the same Sandbox subscription.",
+  "evidence": {
+    "screenshot": "ios-61-monthly-expired.png",
+    "sha256": "8e13345946633fa638cd6e13d7af0cf6b110e060756cb8562e52dfd3f00e0815"
+  },
+  "subsequentObservation": {
+    "serverActiveAfterSandboxReturn": true,
+    "expiresAt": "2026-10-24T08:16:57.000Z",
+    "verifiedAt": "2026-10-24T08:12:37.710Z"
+  }
+}

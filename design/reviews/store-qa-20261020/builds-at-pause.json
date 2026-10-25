@@ -1,0 +1,32 @@
+{
+  "android42": {
+    "id": "556e43de-2957-446b-8b9f-d15e6efb0028",
+    "version": "1.4.3",
+    "status": "finished",
+    "distribution": "Google Play internal",
+    "physicalDeviceTested": true
+  },
+  "android43": {
+    "id": "636e9ba8-707a-4149-936b-4c821b9deaf7",
+    "version": "1.4.4",
+    "status": "finished",
+    "distribution": "Google Play internal",
+    "physicalDeviceTested": true
+  },
+  "android44": {
+    "id": "9c6254d7-8d07-455b-bfbf-e559b89e8272",
+    "version": "1.4.4",
+    "status": "canceled_on_user_pause",
+    "containsRestoreNoticeFix": true,
+    "physicalDeviceTested": false
+  },
+  "ios56": {
+    "id": "54621936-e66a-45a6-b0f6-2685c8935b6f",
+    "version": "1.4.4",
+    "status": "finished",
+    "distribution": "TestFlight internal",
+    "containsRestoreNoticeFix": true,
+    "physicalDeviceTested": false
+  },
+  "publicReleasePerformed": false
+}

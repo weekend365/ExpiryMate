@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-21T05:51:32.460057+00:00",
+  "entitlement": {
+    "hasActiveEntitlement": false,
+    "store": "google_play",
+    "productId": "jango_plus",
+    "planCode": "jango_plus",
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": "yearly",
+    "basePlanId": "yearly",
+    "status": "revoked",
+    "expiresAt": "2026-10-21T05:27:29.780Z",
+    "willRenew": false,
+    "environment": "sandbox",
+    "verifiedAt": "2026-10-21T05:18:29.410Z"
+  },
+  "purpose": "Android46 fresh monthly purchase baseline"
+}

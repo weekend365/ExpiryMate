@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-21T08:00:54.401186+00:00",
+  "store": "Apple Sandbox",
+  "productId": "expirymate_premium_yearly",
+  "cancelUiConfirmed": true,
+  "observed": [
+    "[Sandbox]",
+    "구독을 취소했습니다.",
+    "구독이 10월 21일에 만료됩니다."
+  ],
+  "knownExpiresAt": "2026-10-21T08:43:18.000Z",
+  "entitlementUpdateAfterCancelVerified": false,
+  "nativeExpiryObserved": false,
+  "evidence": [
+    "ios-58-yearly-store-canceled.png"
+  ]
+}

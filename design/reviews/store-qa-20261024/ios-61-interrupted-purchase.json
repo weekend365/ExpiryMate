@@ -1,0 +1,104 @@
+{
+  "checkedAt": "2026-10-25T03:37:58.416492+00:00",
+  "platform": "ios",
+  "build": "1.4.4(61)",
+  "scenario": "Actual Sandbox interrupted annual purchase, then cancel",
+  "result": "interruption and no-entitlement checks passed; cancellation notice defect found",
+  "startedAt": "2026-10-25T03:30:57.432971+00:00",
+  "testerIdentityConfirmed": true,
+  "nativeInterruption": "Sandbox simulated updated Apple Media Services terms",
+  "physicalPurchaseConfirmationReportedAt": "2026-10-25T03:32:11.566060+00:00",
+  "checkout": {
+    "product": "개인 플러스 연간",
+    "price": "₩39,000/년",
+    "testOnlyNoChargeNotice": true
+  },
+  "afterCancel": {
+    "storefront": "KOR",
+    "products": [
+      {
+        "id": "expirymate_premium_monthly",
+        "price": "$2.99",
+        "currency": "USD"
+      },
+      {
+        "id": "expirymate_premium_yearly",
+        "price": "$22.99",
+        "currency": "USD"
+      }
+    ],
+    "purchases": [],
+    "unfinishedTransactions": [],
+    "server": {
+      "active": false,
+      "product": "expirymate_premium_monthly",
+      "environment": "Sandbox",
+      "expiresAt": "2026-10-24T08:23:16.000Z",
+      "willRenew": false
+    }
+  },
+  "purchaseButtonRecovered": true,
+  "interruptedPurchaseSettingRestored": {
+    "original": "0",
+    "current": "0",
+    "nativeVerifiedAt": "2026-10-25T03:34:13.321673+00:00",
+    "serverCrossCheck": {
+      "checkedAt": "2026-10-25T03:55:57.741Z",
+      "matchedQaTester": true,
+      "territory": "KOR",
+      "interruptPurchases": false,
+      "subscriptionRenewalRate": "MONTHLY_RENEWAL_EVERY_FIVE_MINUTES"
+    }
+  },
+  "pendingDeferred": {
+    "actualStateObserved": false,
+    "result": "incomplete",
+    "reason": "The SDK returned cancellation after the native interruption was canceled; no pending transaction was reported. Interrupted purchase is not proof of Ask to Buy/deferred approval.",
+    "currentSdk": "expo-iap 4.7.2 unchanged; simulatesAskToBuyInSandbox option is not exposed"
+  },
+  "defect": {
+    "observed": "A canceled request shows an English user-cancelled error as checkout failure.",
+    "minimalFix": "Use the same cancellation classification for rejected requests and purchase-error events, release busy state and allow retry without a failure alert.",
+    "testsBeforeFix": {
+      "failed": 2,
+      "passed": 15
+    },
+    "testsAfterFix": {
+      "passed": 17
+    },
+    "deviceRetest": "pending build 63; ios-63-build-request.json"
+  },
+  "evidence": [
+    {
+      "file": "ios-61-interrupted-native-terms.png",
+      "sha256": "afb6eb32383c53a454a1ead1f1f8ea4221186d266c0f912d0fda7257782dc451",
+      "reviewed": true,
+      "privateIdentityExcluded": true
+    },
+    {
+      "file": "ios-61-interrupted-cancel-alert.png",
+      "sha256": "3a5bec77d7013651bbff7dd63a920e7867558e5f980679c053be517ccc93ae7c",
+      "reviewed": true,
+      "privateIdentityExcluded": true
+    },
+    {
+      "file": "ios-61-interrupted-no-entitlement.png",
+      "sha256": "b693ae972731eed8a62fb3ac13003f0684c39df5b26812320962bc2341cf7540",
+      "reviewed": true,
+      "privateIdentityExcluded": true
+    },
+    {
+      "file": "ios-61-yearly-native-price.png",
+      "sha256": "195917938a1672510dde06ec4cecaed98416c8e3a8321573e77c77f81d93496b",
+      "reviewed": true,
+      "privateIdentityExcluded": true
+    },
+    {
+      "file": "ios-61-yearly-test-only.png",
+      "sha256": "8ba076362ca18f50c5e04b4f9ca142560d9485b47ed34647146c886ce5a95a07",
+      "reviewed": true,
+      "privateIdentityExcluded": true
+    }
+  ],
+  "source": "https://developer.apple.com/help/app-store-connect/test-in-app-purchases/manage-sandbox-apple-account-settings/"
+}

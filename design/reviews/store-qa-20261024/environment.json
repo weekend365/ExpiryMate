@@ -1,0 +1,29 @@
+{
+  "projectId": "e30f3274-2103-49a3-b130-f4bf63238a8c",
+  "projectName": "jango-qa-20261024",
+  "environmentId": "645ce2de-9e88-4c5f-897b-0f45293367c6",
+  "environmentName": "qa",
+  "apiServiceId": "045b2760-2884-4278-bedd-599bf2f71970",
+  "postgresServiceId": "170fec1c-8c68-4da5-aa95-69d21acb0bac",
+  "origin": "https://api-qa-c321.up.railway.app",
+  "startedAt": "2026-10-24T07:01:05.446482+00:00",
+  "absoluteStopAt": "2026-10-25T06:59:24.877147+00:00",
+  "limits": {
+    "memoryGB": 0.5,
+    "vCPUs": 1,
+    "replicas": 1
+  },
+  "aiCallsEnabled": false,
+  "productionDataCopied": false,
+  "renewedByUser": true,
+  "renewedAuthorization": "User explicitly requested all unfinished iOS QA after cleanup. Conservative maximum 24-hour run, existing cumulative budget unchanged.",
+  "maxAuthorizedRailwayUsd": 10,
+  "stopAtCumulativeQaUsd": 7,
+  "cloudDeadlineSupervisor": {
+    "scriptSha256": "7c92a8d1677cd43f25777cd7ed092f08fe838c55130b0cc0c0167695d2ef18b9",
+    "startupAndRunningDeadlineTestsPassed": true,
+    "restartPolicy": "NEVER",
+    "scope": "API and PostgreSQL; project deletion still requires authenticated control plane, disk charges persist until deletion"
+  },
+  "priorCostUsdLastMeasured": 0.24882127
+}

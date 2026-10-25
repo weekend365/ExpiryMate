@@ -1,0 +1,44 @@
+{
+  "checkedAt": "2026-10-25T04:27:18.731230+00:00",
+  "buildId": "52253b08-f753-45ea-8297-bb7abfa91049",
+  "ipaBytes": 75408113,
+  "ipaSha256": "e4cdb9de1bf5d918545b107362e151deec0033b790f7da949fca8539f8b617a7",
+  "info": {
+    "CFBundleIdentifier": "com.expirymate.mobile",
+    "CFBundleShortVersionString": "1.4.4",
+    "CFBundleVersion": "64",
+    "JangoStoreQaDiagnostics": true,
+    "JangoStoreQaApiOrigin": "https://api-qa-c321.up.railway.app"
+  },
+  "qaOriginPresentInJavascriptBundle": true,
+  "qaAskToBuyNativeMethodAndStoreKitOptionSymbolPresent": true,
+  "symbolsAbsentFromBuilds61And63": true,
+  "team": "92RS8PY7SX",
+  "applicationIdentifier": "92RS8PY7SX.com.expirymate.mobile",
+  "getTaskAllow": false,
+  "sameExistingAppIdentifierAndSigningTeam": true,
+  "nativePurchaseOptionOnlyInQaBuild": true,
+  "productionSourceSdkUnchanged": true,
+  "appStoreConnect": {
+    "id": "4d491fdd-4423-46e4-95e6-8f891531e051",
+    "buildNumber": "64",
+    "appVersion": "1.4.4",
+    "processingState": "VALID",
+    "internalBuildState": "IN_BETA_TESTING"
+  },
+  "testFlightSubmission": "FINISHED",
+  "deviceInstalled": true,
+  "deviceInstallVerifiedAt": "2026-10-25T04:53:43.335673+00:00",
+  "installedApp": {
+    "bundleIdentifier": "com.expirymate.mobile",
+    "bundleVersion": "64",
+    "version": "1.4.4",
+    "name": "장고야 부탁해"
+  },
+  "deviceRetest": "passed actual build64 cancellation and native Sandbox deferred entry; approval/rejection resolution not tested",
+  "finalStateCheckedAt": "2026-10-25T05:22:48.592736+00:00",
+  "cancellationResult": "ios-64-cancellation-retest.json",
+  "pendingResult": "ios-64-pending-result.json",
+  "qaOriginRetired": true,
+  "cleanup": "qa-cleanup-result.json"
+}

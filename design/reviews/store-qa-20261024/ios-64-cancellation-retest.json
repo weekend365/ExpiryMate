@@ -1,0 +1,65 @@
+{
+  "platform": "ios",
+  "appVersion": "1.4.4",
+  "build": 64,
+  "at": "2026-10-25T04:51:54.588792+00:00",
+  "scenario": "cancel actual monthly StoreKit purchase sheet before device authentication",
+  "qaTesterEmailMatched": true,
+  "nativeTestOnlyNoChargeVerified": true,
+  "nativeMonthlyPriceKrw": 4900,
+  "askToBuyOptionEnabled": false,
+  "nativeDismissPressed": true,
+  "observedAlerts": [],
+  "observations": [
+    {
+      "afterSeconds": 1.066,
+      "buttonEnabled": false,
+      "alertCount": 0
+    },
+    {
+      "afterSeconds": 2.497,
+      "buttonEnabled": true,
+      "alertCount": 0
+    },
+    {
+      "afterSeconds": 3.882,
+      "buttonEnabled": true,
+      "alertCount": 0
+    },
+    {
+      "afterSeconds": 5.278,
+      "buttonEnabled": true,
+      "alertCount": 0
+    },
+    {
+      "afterSeconds": 6.725,
+      "buttonEnabled": true,
+      "alertCount": 0
+    },
+    {
+      "afterSeconds": 8.17,
+      "buttonEnabled": true,
+      "alertCount": 0
+    }
+  ],
+  "failureAlertObserved": false,
+  "purchaseButtonReleased": true,
+  "observationSeconds": 8.682,
+  "newTransactionCreated": false,
+  "result": "passed",
+  "storeKitAfterCancel": {
+    "activePurchases": 0,
+    "unfinishedTransactions": 0,
+    "serverActive": false
+  },
+  "evidence": [
+    {
+      "path": "ios-64-cancel-no-failure-alert.png",
+      "sha256": "d28e4f3c46c84528e8e1f0f0775ecdb4fb560005dfb157a327dbb7f8b6c024b9",
+      "privacyReview": "Original subscription screen only, no account identifier or token"
+    }
+  ],
+  "relatedUnitTestsPassed": 21,
+  "retryStartedAfterCancel": true,
+  "retryScope": "Next genuine monthly purchase sheet opened for the pending test, QA native option enabled separately"
+}

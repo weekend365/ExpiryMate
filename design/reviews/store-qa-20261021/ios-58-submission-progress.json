@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-21T05:41:53.828Z",
+  "buildId": "86ee9673-e20c-45db-8e66-b54d4d8d218b",
+  "version": "1.4.4",
+  "buildNumber": "58",
+  "easSubmissionId": "ded88087-ecef-4859-bc82-6cd2d726a2f8",
+  "easSubmissionStatus": "FINISHED",
+  "appleUploads": [
+    {
+      "id": "bf08ec54-fc50-4419-ab91-29dc70b84635",
+      "version": "1.4.4",
+      "build": "58",
+      "state": {
+        "errors": [],
+        "warnings": [],
+        "infos": [],
+        "state": "COMPLETE"
+      }
+    }
+  ],
+  "physicalTests": "not started",
+  "appleBuilds": [
+    {
+      "id": "bf08ec54-fc50-4419-ab91-29dc70b84635",
+      "build": "58",
+      "processingState": "VALID"
+    }
+  ],
+  "betaState": [
+    {
+      "autoNotifyEnabled": true,
+      "internalBuildState": "IN_BETA_TESTING",
+      "externalBuildState": "READY_FOR_BETA_SUBMISSION"
+    }
+  ]
+}

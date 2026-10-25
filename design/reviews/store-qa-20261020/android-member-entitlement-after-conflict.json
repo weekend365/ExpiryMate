@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "data": {
+    "hasActiveEntitlement": false,
+    "store": null,
+    "productId": null,
+    "planCode": null,
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": null,
+    "basePlanId": null,
+    "status": "unknown",
+    "expiresAt": null,
+    "willRenew": null,
+    "environment": null,
+    "verifiedAt": null
+  }
+}

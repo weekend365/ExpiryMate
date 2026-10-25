@@ -1,0 +1,69 @@
+{
+  "reviewedAt": "2026-10-20T07:05:18.172743+00:00",
+  "reviewer": "coding agent; source annotations and direct image inspection, not a blind human evaluation",
+  "scope": "Confirmed examples only. Selection is diagnostic after the run and is not an unbiased accuracy estimate.",
+  "cases": [
+    {
+      "caseId": "receipt-01",
+      "basis": "CORD five menu lines vs output five lines",
+      "confirmedMisidentifiedItems": 5,
+      "confirmedQuantityErrors": 0,
+      "finding": "Chicken/beef dishes become nuts/flakes/curry paste/Pad Thai sauce; steamed rice becomes rice noodles."
+    },
+    {
+      "caseId": "receipt-03",
+      "basis": "CORD JASMINE MT vs output OSMINE MT",
+      "confirmedMisidentifiedItems": 1,
+      "confirmedQuantityErrors": null,
+      "finding": "Menu identity corrupted by OCR; topping quantity has no explicit ground-truth count."
+    },
+    {
+      "caseId": "receipt-05",
+      "basis": "CORD ICE BLACKCOFFE x2 and CHIKEN KATSU FF",
+      "confirmedMisidentifiedItems": 1,
+      "confirmedQuantityErrors": 1,
+      "finding": "Coffee quantity 2 becomes 1; chicken katsu menu becomes 치킨 파사…."
+    },
+    {
+      "caseId": "receipt-14",
+      "basis": "CORD BASO KUAH and A.MINERAL GELAS",
+      "confirmedMisidentifiedItems": 2,
+      "confirmedQuantityErrors": 0,
+      "finding": "Meatball soup and mineral water become 팟 카이 and 아메리칸 글라스."
+    },
+    {
+      "caseId": "receipt-15",
+      "basis": "CORD Chicken Baked Rice / Fish n Chips",
+      "confirmedMisidentifiedItems": null,
+      "confirmedQuantityErrors": 0,
+      "finding": "Preparation/side descriptions are lost or changed; retain as underspecified identity pending bilingual grading."
+    },
+    {
+      "caseId": "fridge-07",
+      "basis": "Direct image review: three can tops",
+      "confirmedMisidentifiedItems": 0,
+      "confirmedQuantityErrors": 0,
+      "finding": "Generic 캔 음료 x3 matches visible objects; beverage subtype is not inferred."
+    },
+    {
+      "caseId": "fridge-13",
+      "basis": "Direct image and original source metadata",
+      "confirmedMisidentifiedItems": null,
+      "confirmedQuantityErrors": null,
+      "finding": "Small green round produce identity is ambiguous. Frozen cucumber label and earlier avocado note are not verified truth; do not score watermelon against them."
+    }
+  ],
+  "confirmedLowerBounds": {
+    "misidentifiedItems": 9,
+    "quantityErrors": 1
+  },
+  "complete": false,
+  "notMeasured": [
+    "complete image-by-image omission counts",
+    "exhaustive fridge identities and quantities",
+    "bilingual independent receipt grades",
+    "taste and real cooking feasibility",
+    "medical food safety"
+  ],
+  "qualityGradesAssigned": false
+}

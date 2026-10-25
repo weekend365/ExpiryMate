@@ -1,0 +1,72 @@
+{
+  "recordedAt": "2026-10-21T07:11:28.829937+00:00",
+  "platform": "iOS",
+  "appVersion": "1.4.4",
+  "build": 58,
+  "distribution": "TestFlight",
+  "scenario": "yearly purchase attempt by fresh QA owner",
+  "purchaseInitiated": true,
+  "purchaseVerified": false,
+  "status": "blocked_store_account_conflict",
+  "httpEvents": [
+    {
+      "timestamp": "2026-10-21T06:48:28.914738935Z",
+      "method": "POST",
+      "path": "/subscriptions/purchase-intents",
+      "httpStatus": 201
+    },
+    {
+      "timestamp": "2026-10-21T06:48:31.161145131Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409
+    }
+  ],
+  "observedDialog": {
+    "title": "구독을 확인하지 못했어요",
+    "message": "스토어 구매 계정과 현재 로그인 계정이 일치하지 않습니다."
+  },
+  "applePurchaseConfirmationSheetObserved": false,
+  "controlledCrossAccountScenarioPassed": false,
+  "limitation": "The source and ownership of the returned store transaction are unconfirmed. Do not count this as a controlled owner/member restore test.",
+  "ownershipPolicyChanged": false,
+  "entitlementsAfterConflict": {
+    "checkedAt": "2026-10-21T07:10:41.155180+00:00",
+    "owner": {
+      "hasActiveEntitlement": false,
+      "store": "google_play",
+      "productId": "jango_plus",
+      "planCode": "jango_plus",
+      "scope": "user",
+      "spaceId": null,
+      "billingPeriod": "monthly",
+      "basePlanId": "monthly",
+      "status": "revoked",
+      "expiresAt": "2026-10-21T05:57:17.352Z",
+      "willRenew": false,
+      "environment": "sandbox",
+      "verifiedAt": "2026-10-21T05:53:30.090Z"
+    },
+    "member": {
+      "hasActiveEntitlement": false,
+      "store": null,
+      "productId": null,
+      "planCode": null,
+      "scope": "user",
+      "spaceId": null,
+      "billingPeriod": null,
+      "basePlanId": null,
+      "status": "unknown",
+      "expiresAt": null,
+      "willRenew": null,
+      "environment": null,
+      "verifiedAt": null
+    }
+  },
+  "evidence": [
+    "ios-58-annual-ready.jpg",
+    "ios-58-purchase-account-conflict.jpg"
+  ],
+  "chargeScope": "Installed official TestFlight 58; Apple documents that beta in-app purchases are not charged. No successful purchase or entitlement was verified.",
+  "appleReference": "https://www.apple.com/legal/internet-services/itunes/testflight/"
+}

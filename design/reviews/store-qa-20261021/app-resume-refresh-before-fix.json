@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-21T05:23:08.831163+00:00",
+  "appBuild": 45,
+  "actualStoreStatus": "REFUNDED / SUBSCRIPTION_STATE_EXPIRED",
+  "actualQaEntitlementStatus": "revoked, hasActiveEntitlement=false",
+  "actualUiAfterBackgroundAndResume": "장고 플러스를 이용 중이에요",
+  "cause": "resume invalidation key [subscription-entitlement, user] does not match actual hook key [subscription-entitlement, space, user]",
+  "passed": false,
+  "evidence": "android-45-refund-stale-status-before-fix.png"
+}

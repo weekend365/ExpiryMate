@@ -1,0 +1,51 @@
+{
+  "checkedAt": "2026-10-21T06:40:58.752323+00:00",
+  "owner": {
+    "hasActiveEntitlement": false,
+    "store": "google_play",
+    "productId": "jango_plus",
+    "planCode": "jango_plus",
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": "monthly",
+    "basePlanId": "monthly",
+    "status": "revoked",
+    "expiresAt": "2026-10-21T05:57:17.352Z",
+    "willRenew": false,
+    "environment": "sandbox",
+    "verifiedAt": "2026-10-21T05:53:30.090Z"
+  },
+  "member": {
+    "hasActiveEntitlement": false,
+    "store": null,
+    "productId": null,
+    "planCode": null,
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": null,
+    "basePlanId": null,
+    "status": "unknown",
+    "expiresAt": null,
+    "willRenew": null,
+    "environment": null,
+    "verifiedAt": null
+  },
+  "installedVersionRecheckedAt": "2026-10-21T06:42:21.451336+00:00",
+  "installedVersion": "1.4.4(58)",
+  "initialPurchaseClickReview": "rejected because it could initiate a consequential financial action; no click executed",
+  "followupChecks": [
+    "current physical app version 58",
+    "official TestFlight installation evidence",
+    "Apple TestFlight automatic Sandbox documentation",
+    "Apple TestFlight terms: no charge for beta in-app purchases"
+  ],
+  "followupClickResult": "native noWindowsAvailable; no purchase confirmation sheet or completed purchase observed",
+  "actualChargeUsd": 0,
+  "purchaseInitiated": false,
+  "appleReferences": [
+    "https://developer.apple.com/help/app-store-connect/test-a-beta-version/testing-subscriptions-and-in-app-purchases-in-testflight/",
+    "https://www.apple.com/legal/internet-services/itunes/testflight/"
+  ],
+  "iosPushRegistrationEventsAfterLoginObserved": 0,
+  "pushDeliveryTested": false
+}

@@ -1,0 +1,7 @@
+{
+  "at": "2026-10-20T08:32:54.629484+00:00",
+  "testPostgresPort": 55439,
+  "testPostgresStopped": true,
+  "databaseDirectoryRetainedForReproduction": true,
+  "productionDatabaseTouched": false
+}

@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-24T06:53:03.999444+00:00",
+  "removedCapturedFiles": 121,
+  "removedBytes": 19114151,
+  "extensionCounts": {
+    ".xml": 101,
+    ".png": 20
+  },
+  "executionReferencesChecked": true,
+  "hashesRecordedBeforeRemoval": true,
+  "canonicalPublicEvidencePreserved": true,
+  "credentialsAndAccountFilesRemoved": false,
+  "originalJangoAssetsTouched": false
+}

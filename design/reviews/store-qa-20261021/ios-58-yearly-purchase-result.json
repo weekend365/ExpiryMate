@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-21T07:48:48.597446+00:00",
+  "app": "TestFlight 1.4.4(58)",
+  "status": "passed",
+  "storeProduct": "expirymate_premium_yearly",
+  "checkoutPrice": "KRW 39,000 / year",
+  "checkoutExplicitlyTestOnlyNoCharge": true,
+  "newQaSandboxAccountVerified": true,
+  "physicalConfirmationByUser": true,
+  "nativeStoreCompletionObserved": "설정 완료 / 성공적으로 구입이 완료되었습니다.",
+  "appCompletionObserved": "장고 플러스가 시작됐어요",
+  "ownerYearlySandboxActive": true,
+  "memberInactive": true,
+  "sameOwnerRestore": "passed; verifiedAt advanced, original expiry unchanged",
+  "storeWebhookRoutingTested": false,
+  "mediaAndPurchasesLogoutApprovedByUser": true,
+  "mediaAndPurchasesLogoutPerformed": true,
+  "mediaAccountRestorationRequiredAfterQa": true,
+  "iCloudLogoutActionPerformed": false,
+  "priceDisplayObservation": "App retained USD 22.99 after switching store accounts; checkout used new KR Sandbox price KRW 39,000. Recheck after store metadata refresh before treating price consistency as passed.",
+  "rawCheckoutProofKeptPrivate": true,
+  "evidence": [
+    "ios-58-yearly-store-complete.png",
+    "ios-58-yearly-app-success.png",
+    "ios-58-yearly-after-purchase.json",
+    "ios-58-yearly-owner-restored.json"
+  ]
+}

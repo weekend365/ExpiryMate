@@ -1,0 +1,44 @@
+{
+  "backendDeploymentId": "33ad451e-40fd-450f-9896-86593abb9b4f",
+  "backendDeploymentStatus": "SUCCESS",
+  "productionDeployment": false,
+  "unitBeforeFix": {
+    "passed": 38,
+    "failed": 1,
+    "expected": "willRenew=false",
+    "actual": "willRenew=null"
+  },
+  "unitAfterFix": {
+    "passed": 39,
+    "failed": 0
+  },
+  "integration": {
+    "postgresMajor": "14",
+    "databaseName": "jango_feature_test_20261021_051544",
+    "host": "127.0.0.1",
+    "port": 55439,
+    "productionDatabaseUsed": false,
+    "migrationAndIntegrationExitCodes": [
+      0,
+      0
+    ]
+  },
+  "staticChecks": [
+    {
+      "check": "docs",
+      "exitCode": 0
+    },
+    {
+      "check": "lint",
+      "exitCode": 0
+    },
+    {
+      "check": "typecheck",
+      "exitCode": 0
+    }
+  ],
+  "sources": [
+    "https://developers.google.com/android-publisher/api-ref/rest/v3/purchases.subscriptionsv2#AutoRenewingPlan",
+    "https://protobuf.dev/programming-guides/json/#presence-and-default-values"
+  ]
+}

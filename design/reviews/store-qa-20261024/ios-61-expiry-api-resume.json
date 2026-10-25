@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-10-25T01:10:54.602679+00:00",
+  "build": "1.4.4(61)",
+  "source": "read-only authenticated isolated QA API",
+  "owner": {
+    "hasActiveEntitlement": false,
+    "status": "expired",
+    "productId": "expirymate_premium_monthly",
+    "environment": "Sandbox",
+    "expiresAt": "2026-10-24T08:23:16.000Z",
+    "willRenew": false,
+    "verifiedAt": "2026-10-24T20:21:17.511Z"
+  },
+  "member": {
+    "hasActiveEntitlement": false,
+    "status": "unknown",
+    "productId": null,
+    "environment": null,
+    "expiresAt": null,
+    "willRenew": null,
+    "verifiedAt": null
+  },
+  "scope": "Server-only confirmation after cancellation; native and app screen cross-check remains pending."
+}

@@ -1,0 +1,70 @@
+{
+  "recordedAt": "2026-10-20T07:10:14.129329+00:00",
+  "files": [
+    {
+      "file": "annotation-review-notes.json",
+      "sha256": "f7d6acd7d7b11d12ec07d8ea7d51a6b305fc1089594643b870b154c26027fae6",
+      "bytes": 1052
+    },
+    {
+      "file": "constraint-and-safety-field-audit.json",
+      "sha256": "a299925801c834447b16f21eea7b8f156703567d3304f194841527fa92b1365e",
+      "bytes": 2262
+    },
+    {
+      "file": "manifest.json",
+      "sha256": "5cc107825e69c5f8dc5c266b57fbb816ed803fb9e0067666e0263e1633f8f41e",
+      "bytes": 9747
+    },
+    {
+      "file": "manual-review-findings.json",
+      "sha256": "cf5ab746749923d6ad57c0a66fca3311172a7ba8f39751d99fec6c881df9787e",
+      "bytes": 2738
+    },
+    {
+      "file": "photo-cases.jsonl",
+      "sha256": "7226da09ad8cfca76736b81ea2b8c7e6eba9d01018487dbcdb41b648e8b6774b",
+      "bytes": 4927
+    },
+    {
+      "file": "photo-provenance.json",
+      "sha256": "40526f1c17305bf9eaf7c8acc63334a025eac619a10f2f4da188068606d844ff",
+      "bytes": 21680
+    },
+    {
+      "file": "photo-results.jsonl",
+      "sha256": "e48a8d5034e2fe9e43b53dbc754106c25e1f3f97c0d81b91b901a738ac2cfdaf",
+      "bytes": 44169
+    },
+    {
+      "file": "receipt-reference-menu.json",
+      "sha256": "47535661993fa308b94d25641a1a56b1c0a2a283ab6e35d77330bb1d4824f1be",
+      "bytes": 3617
+    },
+    {
+      "file": "recipe-cases.jsonl",
+      "sha256": "589314b7ce70ff04de6179a9692a882aa46c5d823abd3bcc9ac246b0c08be699",
+      "bytes": 88981
+    },
+    {
+      "file": "recipe-results.jsonl",
+      "sha256": "b763c9d83781a42cce14bb5ae63402b9935ea38aac934269c71447fd4281fbab",
+      "bytes": 214784
+    },
+    {
+      "file": "report.json",
+      "sha256": "c8e9aeed4a08de675b609a9518eda2f92c768b650f91d52515d94f7831c72632",
+      "bytes": 4744
+    },
+    {
+      "file": "runtime-source.json",
+      "sha256": "db4c6a7ea2f1ce3c9e3be0a0e07a59ad7028ce877a4cffad3be2d7a087cba946",
+      "bytes": 618
+    },
+    {
+      "file": "state.json",
+      "sha256": "dc8696d4e4be1f4b8c48617892b59a1b733fc8b217d07b936d430db6a0d23b37",
+      "bytes": 88
+    }
+  ]
+}

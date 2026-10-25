@@ -1,0 +1,12 @@
+{
+  "recordedAt": "2026-10-21T04:28:55.685819+00:00",
+  "originalEvidenceManifestUnchanged": true,
+  "originalEvidenceHashesVerified": true,
+  "files": [
+    {
+      "file": "offline-photo-review-2026-10-21.json",
+      "sha256": "c42f4aad692ad5840f10bd17b26548b14cbbcd913c7f6eb24283c41c5c836094",
+      "bytes": 16605
+    }
+  ]
+}

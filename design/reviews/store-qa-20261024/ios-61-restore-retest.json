@@ -1,0 +1,67 @@
+{
+  "checkedAt": "2026-10-24T08:15:34.383715+00:00",
+  "platform": "iOS",
+  "build": "1.4.4(61)",
+  "result": "pass",
+  "sameAccountRestore": {
+    "at": "2026-10-24T08:14:03.237733+00:00",
+    "initialAlert": "장고 플러스가 시작됐어요",
+    "extraAlertsAfterDismissal": [],
+    "observationSeconds": 7.123
+  },
+  "otherAccountRestore": {
+    "at": "2026-10-24T08:15:02.568440+00:00",
+    "initialAlert": "구독을 연결하지 못했어요",
+    "unsolicitedAlertsBeforeRestore": [],
+    "extraAlertsAfterDismissal": [],
+    "observationSeconds": 7.855
+  },
+  "postRestoreEntitlements": {
+    "owner": {
+      "hasActiveEntitlement": true,
+      "productId": "expirymate_premium_monthly",
+      "environment": "Sandbox",
+      "expiresAt": "2026-10-24T08:16:57.000Z"
+    },
+    "member": {
+      "hasActiveEntitlement": false,
+      "productId": null,
+      "environment": null,
+      "expiresAt": null
+    }
+  },
+  "http": [
+    {
+      "timestamp": "2026-10-24T08:13:52.185496975Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 201,
+      "totalDuration": 746
+    },
+    {
+      "timestamp": "2026-10-24T08:14:28.662016552Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409,
+      "totalDuration": 847
+    },
+    {
+      "timestamp": "2026-10-24T08:14:50.814080537Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409,
+      "totalDuration": 693
+    }
+  ],
+  "evidence": [
+    {
+      "file": "ios-61-owner-restore-result.png",
+      "sha256": "f084298cc162af072481863595cc9fd8b0152d828bade7f55fd01ff96c9c7610"
+    },
+    {
+      "file": "ios-61-member-restore-result.png",
+      "sha256": "b6a0bba9852242c321c8bb6a67067ba8810bd04b18825e974bf00eb9cead8ea3"
+    }
+  ],
+  "scope": "Actual Sandbox monthly purchase restore, ownership rejection, and no additional alert for over seven seconds; unit tests cover overlapping callbacks and refreshed iOS JWS deduplication."
+}

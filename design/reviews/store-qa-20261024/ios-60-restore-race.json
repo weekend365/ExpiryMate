@@ -1,0 +1,85 @@
+{
+  "at": "2026-10-24T07:36:17.406448+00:00",
+  "platform": "iOS",
+  "build": 60,
+  "nativeAction": "Restore purchases as QA member, same Sandbox store account",
+  "finalAlertTitle": "구독을 확인하지 못했어요",
+  "finalAlertMessage": "이미 다른 계정에 연결된 구독입니다.",
+  "monitoredAfterDismissalSeconds": 7.158,
+  "serverOwnershipRejectionVerified": true,
+  "scenarioStatus": "failed on build 60; fix build 61 pending retest",
+  "memberEntitlementInactive": true,
+  "httpEvidence": [
+    {
+      "timestamp": "2026-10-24T07:30:43.366036279Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409,
+      "totalDuration": 771
+    },
+    {
+      "timestamp": "2026-10-24T07:31:24.327850787Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409,
+      "totalDuration": 664
+    },
+    {
+      "timestamp": "2026-10-24T07:32:27.513693914Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409,
+      "totalDuration": 678
+    },
+    {
+      "timestamp": "2026-10-24T07:32:34.340720869Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409,
+      "totalDuration": 701
+    },
+    {
+      "timestamp": "2026-10-24T07:33:38.173882234Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409,
+      "totalDuration": 841
+    },
+    {
+      "timestamp": "2026-10-24T07:35:05.972252351Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409,
+      "totalDuration": 768
+    }
+  ],
+  "additionalAlertTitlesObservedByXCTest": [
+    "복원할 개인 구독이 없어요"
+  ],
+  "screenshots": [
+    {
+      "path": "ios60-member-restore-alert.png",
+      "sha256": "409095235209e49bd891cc8a9ac286288efb2726709fbb0d38c82cdb6a7e1dcf"
+    },
+    {
+      "path": "ios60-member-extra-restore-alert.png",
+      "sha256": "ad22ba0594e30e355cf885f522093ec05e4452c28c68c9b8bc820ca17f7fc1a4"
+    }
+  ],
+  "screenshotNote": "Both reviewed images show the ownership popup; XCTest separately reported an empty-restore alert after dismissing a queued alert. Do not treat screenshot 2 as visual proof of the empty-restore title.",
+  "fix": {
+    "build": 61,
+    "beforeFixRaceTests": {
+      "failed": 7,
+      "passed": 6
+    },
+    "iOsTransactionIdentityAdditionalBeforeFix": {
+      "failed": 1,
+      "passed": 13
+    },
+    "afterFixRestoreTests": 14,
+    "afterFixMobileTests": 629,
+    "serverOwnershipPolicyChanged": false,
+    "physicalRetest": "pending"
+  }
+}

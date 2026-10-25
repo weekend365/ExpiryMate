@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-21T05:18:26.584Z",
+  "orderIdSha256": "e0bcd32556f0ca415e14e406ff76fb8077e084ee04a6124e9c2c6f84a99fdb8f",
+  "qaOwner": "qa-owner-20261021",
+  "testPurchaseVerifiedImmediatelyBeforeRequest": true,
+  "productId": "jango_plus",
+  "basePlanId": "yearly",
+  "requestMethod": "POST orders.refund",
+  "revoke": true,
+  "httpStatus": 204,
+  "accepted": true,
+  "realPaymentMethodUsed": false,
+  "source": "Official Google Play Developer API; actual known QA license-test order only"
+}

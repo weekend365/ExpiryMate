@@ -1,0 +1,49 @@
+{
+  "at": "2026-10-20T07:16:45.074Z",
+  "appId": "6793375883",
+  "build": 54,
+  "upload": [
+    {
+      "type": "buildUploads",
+      "id": "0b33ee2f-3364-4c3f-8624-a319bf9e39ce",
+      "attributes": {
+        "cfBundleVersion": "54",
+        "createdDate": "2026-10-19T23:55:20-07:00",
+        "state": {
+          "errors": [
+            {
+              "code": "90062",
+              "description": "This bundle is invalid. The value for key CFBundleShortVersionString [1.4.3] in the Info.plist file must contain a higher version than that of the previously approved version [1.4.3]. Please find more information about CFBundleShortVersionString at https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring"
+            },
+            {
+              "code": "90186",
+              "description": "Invalid Pre-Release Train. The train version '1.4.3' is closed for new build submissions"
+            }
+          ],
+          "warnings": [],
+          "infos": [],
+          "state": "FAILED"
+        },
+        "cfBundleShortVersionString": "1.4.3",
+        "uploadedDate": "2026-10-19T23:55:22-07:00",
+        "platform": "IOS"
+      },
+      "relationships": {
+        "buildUploadFiles": {
+          "links": {
+            "self": "https://api.appstoreconnect.apple.com/v1/buildUploads/0b33ee2f-3364-4c3f-8624-a319bf9e39ce/relationships/buildUploadFiles",
+            "related": "https://api.appstoreconnect.apple.com/v1/buildUploads/0b33ee2f-3364-4c3f-8624-a319bf9e39ce/buildUploadFiles"
+          }
+        },
+        "build": {
+          "data": null
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/buildUploads/0b33ee2f-3364-4c3f-8624-a319bf9e39ce"
+      }
+    }
+  ],
+  "easSubmissionStatus": "FINISHED",
+  "appleAccepted": false
+}

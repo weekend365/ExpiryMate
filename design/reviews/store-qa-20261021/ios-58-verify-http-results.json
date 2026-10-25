@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-10-24T06:42:38.260402+00:00",
+  "source": "Railway QA HTTP logs; sanitized fields only",
+  "requests": [
+    {
+      "timestamp": "2026-10-21T07:43:30.023680362Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 201
+    },
+    {
+      "timestamp": "2026-10-21T07:44:56.277632003Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 201
+    },
+    {
+      "timestamp": "2026-10-21T07:49:36.338236399Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409
+    },
+    {
+      "timestamp": "2026-10-21T07:51:04.565895791Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 409
+    },
+    {
+      "timestamp": "2026-10-21T08:17:18.310809646Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 502
+    },
+    {
+      "timestamp": "2026-10-21T08:18:17.086237448Z",
+      "method": "POST",
+      "path": "/subscriptions/verify",
+      "httpStatus": 502
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{"id":"receipt-01","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-01.jpg","expectedNames":["캐슈넛 치킨","마늘 후추 소고기","소고기 레드커리","팟타이","쌀밥"]}
+{"id":"receipt-02","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-02.jpg","expectedNames":["치즈케이크","초콜릿 케이크"]}
+{"id":"receipt-03","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-03.jpg","expectedNames":["자스민 밀크티"]}
+{"id":"receipt-04","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-04.jpg","expectedNames":["설탕 도넛"]}
+{"id":"receipt-05","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-05.jpg","expectedNames":["아이스 블랙커피","아보카도 커피","치킨 가츠"]}
+{"id":"receipt-06","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-06.jpg","expectedNames":["카야 토스트"]}
+{"id":"receipt-07","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-07.jpg","expectedNames":["에그타르트","초콜릿 커스터드 페이스트리","팥빵"]}
+{"id":"receipt-08","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-08.jpg","expectedNames":["해산물 계란 볶음밥","무가당 아이스티"]}
+{"id":"receipt-09","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-09.jpg","expectedNames":["블랙 사쿠라"]}
+{"id":"receipt-10","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-10.jpg","expectedNames":["치킨 스톡"]}
+{"id":"receipt-11","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-11.jpg","expectedNames":["시나몬 슈거"]}
+{"id":"receipt-12","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-12.jpg","expectedNames":["바나베리 생크림 케이크"]}
+{"id":"receipt-13","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-13.jpg","expectedNames":["콘플레이크 쿠키","초콜릿 쿠키"]}
+{"id":"receipt-14","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-14.jpg","expectedNames":["박소 수프","생수"]}
+{"id":"receipt-15","dataPolicy":"approved","feature":"photo","scene":"receipt","imagePath":"receipt-15.jpg","expectedNames":["레드벨벳 치즈 케이크","치킨 베이크드 라이스","피시 앤 칩스","버섯 수프","캐모마일 차","아이스티"]}
+{"id":"fridge-01","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-01.jpg","expectedNames":["사과","배","포도","오렌지","생닭","살사 소스"]}
+{"id":"fridge-02","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-02.jpg","expectedNames":["코코넛","맥주"]}
+{"id":"fridge-03","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-03.jpg","expectedNames":["생선"]}
+{"id":"fridge-04","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-04.jpg","expectedNames":["달걀"]}
+{"id":"fridge-05","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-05.jpg","expectedNames":["달걀","오렌지 주스","버터"]}
+{"id":"fridge-06","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-06.jpg","expectedNames":["콜라"]}
+{"id":"fridge-07","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-07.jpg","expectedNames":["음료 캔"]}
+{"id":"fridge-08","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-08.jpg","expectedNames":["요구르트","고기"]}
+{"id":"fridge-09","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-09.jpg","expectedNames":["우유","오렌지 주스","생닭","파프리카"]}
+{"id":"fridge-10","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-10.jpg","expectedNames":["상추","당근"]}
+{"id":"fridge-11","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-11.jpg","expectedNames":["오렌지 주스","우유","버터","달걀","상추","파인애플","완두콩","빵","오렌지","레몬","옥수수","적양파"]}
+{"id":"fridge-12","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-12.jpg","expectedNames":["레몬","당근","피클"]}
+{"id":"fridge-13","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-13.jpg","expectedNames":["오이","페스토"]}
+{"id":"fridge-14","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-14.jpg","expectedNames":["달걀"]}
+{"id":"fridge-15","dataPolicy":"approved","feature":"photo","scene":"fridge","imagePath":"fridge-15.jpg","expectedNames":["치즈","케첩","머스타드","마요네즈","잼"]}

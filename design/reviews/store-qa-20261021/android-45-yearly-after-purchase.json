@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-21T04:57:43.281135+00:00",
+  "account": "QA owner 20261021",
+  "source": "authenticated QA API after physical Play purchase",
+  "entitlement": {
+    "hasActiveEntitlement": true,
+    "store": "google_play",
+    "productId": "jango_plus",
+    "planCode": "jango_plus",
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": "yearly",
+    "basePlanId": "yearly",
+    "status": "active",
+    "expiresAt": "2026-10-21T05:27:29.780Z",
+    "willRenew": true,
+    "environment": "sandbox",
+    "verifiedAt": "2026-10-21T04:57:32.575Z"
+  }
+}

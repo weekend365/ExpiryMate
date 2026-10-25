@@ -1,0 +1,15 @@
+{
+  "testedAt": "2026-10-21T08:22:00Z",
+  "build": 58,
+  "permissionInitialState": "permission_required; native prompt shown on connect",
+  "nativePermissionDenied": true,
+  "blockedBannerShown": true,
+  "appSpecificSettingsOpened": true,
+  "permissionGranted": false,
+  "tokenRegistrationVerified": false,
+  "realDeliveryVerified": false,
+  "tapRoutingVerified": false,
+  "finalPermissionLastObserved": "denied; ALLOW_NOTIFICATIONS_ID=0",
+  "originalUndeterminedStateRestored": false,
+  "note": "iOS original not-yet-requested state cannot be restored through the normal app toggle; no uninstall/reset performed"
+}

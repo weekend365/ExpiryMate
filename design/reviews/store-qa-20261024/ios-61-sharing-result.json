@@ -1,0 +1,59 @@
+{
+  "joinedAt": "2026-10-25T03:13:49.851012+00:00",
+  "platform": "iOS",
+  "build": "1.4.4(61)",
+  "invitationCreatedVia": "native owner UI",
+  "joinVia": "native code entry, keyboard Return, preview, join without notifications",
+  "markerVisible": true,
+  "switches": [
+    {
+      "phase": "native personal switch",
+      "at": "2026-10-25T03:16:31.370275+00:00",
+      "sharedMarkerVisible": false
+    },
+    {
+      "phase": "native cached shared switch",
+      "at": "2026-10-25T03:16:35.766970+00:00",
+      "sharedMarkerVisible": true
+    }
+  ],
+  "revocation": {
+    "at": "2026-10-25T03:18:10.908054+00:00",
+    "method": "authenticated owner HTTP API as second-account action",
+    "memberInventoryStatus": 404,
+    "ownerMarkerRetained": true,
+    "backgroundState": 3
+  },
+  "warmResume": {
+    "at": "2026-10-25T03:18:16.386260+00:00",
+    "sameAppPid": true,
+    "personalFallbackVisible": true,
+    "sharedMarkerVisible": false,
+    "observedElapsedSeconds": 4.091,
+    "visibleTabs": [
+      "tab-home",
+      "tab-recommendations",
+      "tab-inventory",
+      "tab-shopping",
+      "tab-settings"
+    ]
+  },
+  "settingsTabResponded": true,
+  "homeTabResponded": true,
+  "result": "passed",
+  "evidence": [
+    {
+      "screenshot": "ios-61-sharing-cached-before.png",
+      "sha256": "4664cc2df77fe593a208f35e92d3de57162efb32d9ae5a6fb37494f7f0766396"
+    },
+    {
+      "screenshot": "ios-61-sharing-revoked-personal.png",
+      "sha256": "796c653ace3395a8ac01418e4261c2e0711f2be7c4c74fad0063dcfd6e21ce7b"
+    },
+    {
+      "screenshot": "ios-61-sharing-revoked-home.png",
+      "sha256": "47e6a466cf62df8fd3045aead59287edf46cfbd73211fcf112c4e9572e5e3b9a"
+    }
+  ],
+  "closesEarlierFollowup": "ios-60-sharing-result.json: tabBarAfterResumeNeedsFollowup"
+}

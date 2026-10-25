@@ -1,0 +1,27 @@
+{
+  "scenario": "automatic QA entitlement update after actual Play test refund/revoke",
+  "manualVerificationCalled": false,
+  "qaRtdnRouteConfigured": false,
+  "expectedPath": "existing Google voided-purchase resync scheduler, QA interval 1 minute",
+  "samples": [
+    {
+      "at": "2026-10-21T05:19:07.124329+00:00",
+      "entitlement": {
+        "hasActiveEntitlement": false,
+        "store": "google_play",
+        "productId": "jango_plus",
+        "planCode": "jango_plus",
+        "scope": "user",
+        "spaceId": null,
+        "billingPeriod": "yearly",
+        "basePlanId": "yearly",
+        "status": "revoked",
+        "expiresAt": "2026-10-21T05:27:29.780Z",
+        "willRenew": false,
+        "environment": "sandbox",
+        "verifiedAt": "2026-10-21T05:18:29.410Z"
+      }
+    }
+  ],
+  "passed": true
+}

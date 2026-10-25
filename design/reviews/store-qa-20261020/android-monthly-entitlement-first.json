@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-10-20T07:41:49.379230+00:00",
+  "response": {
+    "success": true,
+    "data": {
+      "hasActiveEntitlement": false,
+      "store": "google_play",
+      "productId": "jango_plus",
+      "planCode": "jango_plus",
+      "scope": "user",
+      "spaceId": null,
+      "billingPeriod": "monthly",
+      "basePlanId": "monthly",
+      "status": "expired",
+      "expiresAt": "2026-10-20T07:36:58.985Z",
+      "willRenew": true,
+      "environment": "sandbox",
+      "verifiedAt": "2026-10-20T07:35:22.865Z"
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "at": "2026-10-20T06:31:22.956454+00:00",
+  "projectId": "bd429f46-fac8-4a5c-8873-31c07be85ce3",
+  "results": [
+    {
+      "scenario": "owner personal space",
+      "httpStatus": 200,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "member personal space",
+      "httpStatus": 200,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "create shared space",
+      "httpStatus": 201,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "unauthenticated space access denied",
+      "httpStatus": 401,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "other account personal space denied",
+      "httpStatus": 404,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "create invitation code",
+      "httpStatus": 201,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "preview invitation",
+      "httpStatus": 201,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "accept invitation",
+      "httpStatus": 201,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "member switches to joined space",
+      "httpStatus": 200,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "joined member inventory access",
+      "httpStatus": 200,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "member cannot rename shared space",
+      "httpStatus": 403,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "member leaves shared space",
+      "httpStatus": 200,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "access denied after leaving",
+      "httpStatus": 404,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "create second invitation",
+      "httpStatus": 201,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "rejoin shared space",
+      "httpStatus": 201,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "owner revokes membership",
+      "httpStatus": 200,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "access denied after revocation",
+      "httpStatus": 404,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "create revocable invitation",
+      "httpStatus": 201,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "revoke invitation code",
+      "httpStatus": 200,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "revoked invitation denied",
+      "httpStatus": 400,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "Apple invalid signature denied",
+      "httpStatus": 400,
+      "passed": true,
+      "testType": "isolated-qa-http"
+    },
+    {
+      "scenario": "Google missing OIDC denied",
+      "httpStatus": 400,
+      "passed": true,
+      "testType": "isolated-qa-http",
+      "expectedHttpStatus": 400,
+      "reason": "Existing service rejects missing OIDC with BadRequestException; no entitlement write",
+      "rechecked": true
+    }
+  ]
+}

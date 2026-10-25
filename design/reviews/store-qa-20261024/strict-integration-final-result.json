@@ -1,0 +1,19 @@
+{
+  "startedAt": "2026-10-25T05:22:05.315726+00:00",
+  "target": "new disposable local PostgreSQL cluster; loopback only",
+  "databaseName": "jango_feature_test_final_20261025",
+  "productionOrDevelopmentDatabaseUsed": false,
+  "command": "pnpm --filter @expirymate/api test:integration",
+  "paidAiCallsAdded": 0,
+  "cloudResourcesAdded": 0,
+  "postgresVersion": "pg_ctl (PostgreSQL) 14.20 (Homebrew)",
+  "migrationsApplied": 45,
+  "status": "passed",
+  "passed": 6,
+  "skipped": 0,
+  "strictNoSkipAssertionPassed": true,
+  "localPostgresStopped": true,
+  "temporaryClusterAndCredentialsRemoved": true,
+  "finishedAt": "2026-10-25T05:22:10.200259+00:00",
+  "logSha256": "af34be1891a2f064d0065a5d498757b9fe04287d78babee32764a1ae8a0d73f5"
+}

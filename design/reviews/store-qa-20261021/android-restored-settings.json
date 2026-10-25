@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-21T05:55:33.291587+00:00",
+  "notifications": "android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+  "stayOnWhilePluggedIn": "0",
+  "fontScale": "1.15",
+  "size": "Physical size: 1080x2340",
+  "density": "Physical density: 450",
+  "appStoppedAfterTests": true,
+  "remoteTemporaryXmlRemoved": true,
+  "dataCleared": false,
+  "appUninstalled": false,
+  "installedBuildRetained": 46,
+  "restoredToOriginalSettings": true
+}

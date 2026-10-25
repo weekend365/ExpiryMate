@@ -37,8 +37,13 @@ async function main() {
     imageDigests.set(item.id, createHash("sha256").update(new Uint8Array(bytes)).digest("hex"));
   }
   const datasetHash = createHash("sha256").update(JSON.stringify([selected, [...imageDigests]])).digest("hex");
+  if (arg("--expected-dataset-hash") && arg("--expected-dataset-hash") !== datasetHash) {
+    throw new Error("Evaluation inputs changed after baseline preflight.");
+  }
   if (arg("--write-cases")) writeFileSync(arg("--write-cases")!, selected.map(item => JSON.stringify(item)).join("\n") + "\n");
-  process.stdout.write(JSON.stringify({ mode: process.argv.includes("--run") ? "run" : "plan", feature, cases: selected.length, repetitions, models, requests: selected.length * repetitions * models.length, concurrency, datasetHash, pricingVersion: OPENAI_PRICING_VERSION }) + "\n");
+  process.stdout.write(JSON.stringify({ mode: process.argv.includes("--run") ? "run" : "plan", feature, cases: selected.length, repetitions, models, requests: selected.length * repetitions * models.length, concurrency, datasetHash, pricingVersion: OPENAI_PRICING_VERSION,
+    promptVersion: feature === "photo" ? PHOTO_AI_PROMPT_VERSION : RECIPE_AI_PROMPT_VERSION,
+    imageDigests: Object.fromEntries(imageDigests) }) + "\n");
   if (!process.argv.includes("--run")) return;
   // Deliberate CLI execution only. No database, quota, production env, or image retention.
   if (!process.env.OPENAI_API_KEY?.trim()) throw new Error("OPENAI_API_KEY is required; no environment file is loaded by this runner.");
@@ -64,7 +69,7 @@ async function main() {
     try {
       if (item.feature === "recipe") {
         const generation = await recipes.generateRecommendations(`eval:${item.id}`, item.request, item.inventory, item.preference,
-          { positiveDishTitles: [], dismissedDishTitles: [], recentDishTitles: [] }, { model, variant: "candidate" });
+          { positiveDishTitles: [], dismissedDishTitles: [], recentDishTitles: [] }, { model, variant: process.argv.includes("--baseline") ? "control" : "candidate" });
         result = { status: "succeeded", ...generation };
       } else {
         const imagePath = resolve(manifest ? dirname(manifest) : process.cwd(), item.imagePath);

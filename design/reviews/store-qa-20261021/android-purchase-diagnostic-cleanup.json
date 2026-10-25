@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-10-21T06:06:45.092046+00:00",
+  "removedLocalRawTestPurchaseTokenFiles": [
+    "qa-known-test-purchase.json",
+    "qa-known-test-purchase-46.json"
+  ],
+  "storePrivateKeysPersistedLocallyByThisDiagnostic": false,
+  "sanitizedHashesAndStoreResultsRetained": true
+}

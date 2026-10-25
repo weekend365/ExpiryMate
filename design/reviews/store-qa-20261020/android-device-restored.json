@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-20T08:27:20.728346+00:00",
+  "applicationIdentifier": "com.expirymate.mobile",
+  "appDataCleared": false,
+  "installedPackage": [
+    "versionCode=43 minSdk=24 targetSdk=36",
+    "versionName=1.4.4",
+    "installerPackageName=com.android.vending"
+  ],
+  "notificationPermission": [
+    "android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+  ],
+  "stayAwake": "0",
+  "fontScale": "1.15",
+  "displaySize": "Physical size: 1080x2340",
+  "displayDensity": "Physical density: 450",
+  "temporaryAdbReversePortsRemoved": [
+    8096,
+    8097
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-21T05:26:55.267920+00:00",
+  "reason": "actual refund followed by app resume left the subscription screen active; query invalidation prefix omitted space ID",
+  "runtimeSourceFile": "apps/mobile/src/features/monetization/monetization-provider.tsx",
+  "visualLayoutChanged": false,
+  "existingQueryKeyShapeChanged": false,
+  "regressionBeforeFix": {
+    "passed": 1,
+    "failed": 1
+  },
+  "regressionAndRelatedAfterFix": {
+    "passed": 34,
+    "failed": 0
+  },
+  "builds": [
+    {
+      "id": "6e4616b8-7dc8-482d-ab89-11fa56607cd1",
+      "platform": "ANDROID",
+      "appBuildVersion": "46",
+      "status": "NEW"
+    },
+    {
+      "id": "86ee9673-e20c-45db-8e66-b54d4d8d218b",
+      "platform": "IOS",
+      "appBuildVersion": "58",
+      "status": "NEW"
+    }
+  ],
+  "physicalRetestComplete": false,
+  "runtimeSource": {
+    "path": "apps/mobile/src/features/monetization/monetization-provider.tsx",
+    "sha256": "2379ffe05e29c3bfbd5104117d32038e2b5cea299ce1010daf275619c653b04e",
+    "changes": "Include existing active space segment in the AppState subscription invalidation key and effect dependencies; existing query keys unchanged."
+  },
+  "testSource": {
+    "path": "apps/mobile/src/features/monetization/monetization-resume.test.tsx",
+    "sha256": "d6b45255705dc6f2cd31d228591dbc227a12b28041d0749e1f0912d830cf5839",
+    "testCases": 2,
+    "beforeFix": "1 fail, 1 pass",
+    "afterFix": "2 pass; included in 34 related mobile checks and full 617 mobile serial pass"
+  },
+  "android46ArtifactVerification": "android-46-artifact-verification.json",
+  "ios58ArtifactVerification": "ios-58-artifact-verification.json",
+  "ios58Availability": "Apple COMPLETE / VALID / internal IN_BETA_TESTING",
+  "android46SubmissionId": "54f67f45-e483-4892-96fc-00d4bd6f09e1"
+}

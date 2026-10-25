@@ -1,0 +1,147 @@
+{
+  "checkedAt": "2026-10-25T05:22:48.592736+00:00",
+  "status": "completed_with_documented_test_limits",
+  "cloud": {
+    "detail": "cleanup.json",
+    "qaProjectDeleted": true,
+    "projectAbsenceVerified": true,
+    "bothServicesAbsenceVerified": true,
+    "volumeInstanceAbsenceVerified": true,
+    "qaApiHttpStatus": 404,
+    "productionProjectPreserved": true,
+    "globalWorkspaceSpendingLimitModified": false,
+    "deletedAt": "2026-10-25T05:12:06.403083+00:00",
+    "absoluteDeadlineUtc": "2026-10-25T06:59:24.877147+00:00",
+    "deletedBeforeDeadline": true
+  },
+  "deviceRestoration": {
+    "checkedAt": "2026-10-25T05:02:41.257176+00:00",
+    "app": "com.expirymate.mobile",
+    "notificationPermissionOriginal": "denied",
+    "nativeAllowNotificationsBefore": "1",
+    "nativeAllowNotificationsAfter": "0",
+    "notificationPermissionRestored": true,
+    "qaAskToBuyOptionRestored": true,
+    "fullKeyboardAccessRestoredPreviously": true,
+    "fullKeyboardAccessOriginal": false,
+    "notificationEvidence": {
+      "path": "ios-64-notifications-restored-denied.png",
+      "sha256": "827bdde1c90e7c63bf683843486fa407ead31ef557d1adde0de1334075c3f6f3",
+      "context": "Main com.expirymate.mobile Settings page -> NOTIFICATIONS -> ALLOW_NOTIFICATIONS_ID=0"
+    },
+    "qaAppAccountSignedOut": true,
+    "qaAppAccountSignedOutAt": "2026-10-25T05:04:27.549207+00:00",
+    "sandboxIdentityMatchedBeforeSignout": true,
+    "sandboxSignoutPressedAt": "2026-10-25T05:05:47.562458+00:00",
+    "qaSandboxEmailAbsentAfterSignout": true,
+    "sandboxSignedOut": true,
+    "mediaRestoreUiPreparedAt": "2026-10-25T05:07:28.522300+00:00",
+    "mediaAccountRestored": true,
+    "mediaAccountRequiresUserAuthentication": false,
+    "mediaRestorationConfirmedBy": "user",
+    "mediaRestorationConfirmationRecordedAt": "2026-10-25T05:22:48.592736+00:00"
+  },
+  "usbHelper": {
+    "checkedAt": "2026-10-25T05:09:00.753051+00:00",
+    "helperBundleIdentifier": "com.expirymate.qa.webdriveragent.xctrunner",
+    "helperUninstallRequested": true,
+    "helperAbsenceVerified": true,
+    "mainAppPreserved": true,
+    "mainAppBuild": "64",
+    "preexistingDevelopmentClientPreserved": true,
+    "ownedControlProcesses": [
+      {
+        "role": "wda-xcode",
+        "pid": 63973,
+        "commandMatchedQaScope": true,
+        "terminated": true
+      },
+      {
+        "role": "wda-usb-forward",
+        "pid": 16141,
+        "commandMatchedQaScope": true,
+        "terminated": true
+      },
+      {
+        "role": "ios-push-observer",
+        "pid": 65776,
+        "alreadyExited": true
+      }
+    ],
+    "personalSettingsUiNotControlledAfterRestoreHandoff": true
+  },
+  "qaSigning": {
+    "checkedAt": "2026-10-25T05:09:39.780Z",
+    "execute": true,
+    "results": [
+      {
+        "type": "profiles",
+        "id": "83KK32LK8G",
+        "identityMatched": true,
+        "exists": true,
+        "deleted": true,
+        "absenceVerified": true
+      },
+      {
+        "type": "bundleIds",
+        "id": "YPQ32N2NCH",
+        "identityMatched": true,
+        "exists": true,
+        "deleted": true,
+        "absenceVerified": true
+      }
+    ],
+    "certificatesModified": false,
+    "registeredDeviceModified": false,
+    "sandboxTesterDeleted": false,
+    "existingAppStoreProfilePreserved": true,
+    "existingAppStoreProfileActive": true
+  },
+  "localQaProfileRemoved": true,
+  "localProfileCleanupCheckedAt": "2026-10-25T05:13:35.598058+00:00",
+  "qaWatchdogStopped": true,
+  "otherProfilesAndCertificatesPreserved": true,
+  "temporaryArtifacts": {
+    "completedAt": "2026-10-25T05:18:20.794257+00:00",
+    "privateScreenshotsRemoved": 114,
+    "privateXmlRemoved": 90,
+    "temporaryDirectoriesRemoved": 10,
+    "removedBytes": 482395604,
+    "manifestSha256": "4996c3562b7b3681717fbf63a20fe634a7fcec8b255116850f2aa89b8a5aa08d",
+    "caseEvidenceAndLatestTestedBuildsPreserved": true,
+    "curatedQaSourceAndPassingTestCopyPreserved": true,
+    "originalWorkspaceFilesRemoved": 0
+  },
+  "retainedMainApp": {
+    "bundleIdentifier": "com.expirymate.mobile",
+    "version": "1.4.4(64)",
+    "qaAppAccountSignedOut": true,
+    "qaApiOriginRetired": true,
+    "productionAppReplacementPerformed": false,
+    "note": "Installed QA app is preserved; its retired QA API is unavailable. No production deployment performed."
+  },
+  "cost": {
+    "detail": "final-cost.json",
+    "railwayCumulativeMeteredUsd": 0.32423899,
+    "railwayInvoiceFinal": false,
+    "includesThreeQaProjects": true,
+    "aiBaselineAccountedUsd": 0.884803,
+    "aiAdditionalCallsThisRun": 0,
+    "aiInvoiceFinal": false,
+    "easBuildInvoiceReconciled": false
+  },
+  "preserved": [
+    "existing main app and preexisting development client",
+    "existing App Store signing profile, certificates and registered device",
+    "Sandbox tester and actual purchase history",
+    "curated public case evidence, tested IPAs and private reproducible source",
+    "original user workspace fixtures and unrelated work"
+  ],
+  "remainingTestLimits": [
+    "SDK displayed USD while native Sandbox sheet displayed KRW; consistency not passed",
+    "automatic QA webhook delivery untested; normal Apple re-verification and isolated webhook tests recorded separately",
+    "Ask to Buy approve/reject resolution unsupported by Apple Sandbox; not tested in Xcode",
+    "push exact arrival time and initial banner not observed",
+    "independent AI photo ground truth and human cooking/safety review incomplete"
+  ]
+}

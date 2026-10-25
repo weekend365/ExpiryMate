@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-21T05:53:12.658435+00:00",
+  "pidBeforeBackground": "31886",
+  "action": "HOME only; no force-stop, no manual verification",
+  "pidImmediatelyBeforeResume": "31886",
+  "foregroundedAt": "2026-10-21T05:53:49.898518+00:00",
+  "purchaseCompletionAlertWasPending": true,
+  "checkedAt": "2026-10-21T05:54:20.408634+00:00",
+  "pidAfterResume": "31886",
+  "sameProcess": true,
+  "observedStatus": "무료 이용 중이에요",
+  "actionsAfterResume": [
+    "Dismiss pending purchase-success notice (no callback)",
+    "Scroll existing screen to top"
+  ],
+  "manualRestoreCalled": false,
+  "manualVerificationCalled": false,
+  "appRestarted": false,
+  "navigationTriggered": false,
+  "passed": true
+}

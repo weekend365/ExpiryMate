@@ -12,8 +12,11 @@
     "lint": "eslint src prisma scripts --ext .ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:integration": "node --import tsx scripts/run-integration-tests.ts",
     "ai:evaluate": "node --import tsx scripts/ai-evaluation.ts",
     "ai:evaluate:report": "node --import tsx scripts/ai-evaluation-report.ts",
+    "ai:evaluate:baseline": "node --import tsx scripts/ai-baseline.ts",
+    "ai:evaluate:baseline:report": "node --import tsx scripts/ai-baseline.ts --report",
     "db:generate": "node ./scripts/prisma-generate.mjs",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
@@ -45,7 +48,8 @@
     "nodemailer": "^8.0.10",
     "openai": "7.30.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "zod": "^4.1.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.5",

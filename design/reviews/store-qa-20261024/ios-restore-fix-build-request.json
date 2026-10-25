@@ -1,0 +1,19 @@
+{
+  "parentBuild": 60,
+  "reason": "coalesce overlapping restore/listener feedback and duplicate transaction handling",
+  "subscriptionSourceSha256": "d96fffeae35902c86cca9ac1c41ff7906904d9bbc563e2ff74e33c09efe31081",
+  "mobileTestsPassed": 629,
+  "restoreTestsPassed": 14,
+  "typecheckPassed": true,
+  "secretFileScanPassed": true,
+  "productionProfileChanged": false,
+  "id": "5b81a006-e6da-41f2-af42-53cead99a759",
+  "status": "NEW",
+  "platform": "IOS",
+  "appBuildVersion": "61",
+  "appVersion": "1.4.3",
+  "buildProfile": "store-qa",
+  "requestedAt": "2026-10-24T07:47:16.163290+00:00",
+  "qaOrigin": "https://api-qa-c321.up.railway.app",
+  "physicalRetestPending": true
+}

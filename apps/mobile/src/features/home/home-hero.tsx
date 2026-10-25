@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { JangoHeroNoticeCarousel } from "../../components/JangoHeroNoticeCarousel";
 import { SurfaceCard } from "../../components/SurfaceCard";
+import { useResponsiveLayout } from "../../shared/responsive-layout";
+import { getHomeHeroDensity } from "./home-hero-density";
 import {
   getHeroTone,
   type HomeNotice,
@@ -16,6 +18,7 @@ export function HomeHero({
   onNoticeAction: (action: HomeNoticeAction) => void;
 }) {
   const [noticeIndex, setNoticeIndex] = useState(0);
+  const { width, fontScale } = useResponsiveLayout();
   const activeNotice = notices[noticeIndex] ?? notices[0] ?? null;
   const heroTone = getHeroTone(activeNotice);
 
@@ -26,6 +29,7 @@ export function HomeHero({
   return (
     <SurfaceCard variant="hero" tone={heroTone} style={styles.heroCard}>
       <JangoHeroNoticeCarousel
+        density={getHomeHeroDensity(width, fontScale)}
         notices={notices.map((notice) => ({
           id: notice.id,
           message: notice.message,

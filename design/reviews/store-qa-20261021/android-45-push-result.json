@@ -1,0 +1,41 @@
+{
+  "platform": "Android",
+  "device": "Samsung Galaxy A34 SM-A346N",
+  "os": "Android 16 API 36",
+  "version": "1.4.4",
+  "build": 45,
+  "apiOrigin": "https://api-qa-6b4f.up.railway.app",
+  "source": "real device; regular QA API scheduler; Expo/FCM",
+  "deniedPermissionBannerVerified": true,
+  "permissionGrant": "Android settings for this app only",
+  "connectionStatus": "기기 권한 허용 · 알림 연결 확인됨",
+  "registrationRequests": [
+    {
+      "at": "2026-10-21T05:31:35.641551238Z",
+      "httpStatus": 201
+    },
+    {
+      "at": "2026-10-21T05:31:52.262372455Z",
+      "httpStatus": 201
+    }
+  ],
+  "receivedAt": "2026-10-21T05:33:51.890140+00:00",
+  "notificationTitle": "오늘 확인할 재료 1개가 있어요",
+  "notificationBody": "QA 45 푸시 확인용 우유의 기한과 개봉 후 상태를 확인해 주세요.",
+  "tap": {
+    "at": "2026-10-21T05:34:08.292396+00:00",
+    "action": "tap exact Jango QA notification title",
+    "title": "오늘 확인할 재료 1개가 있어요",
+    "bounds": "[233,321][731,382]",
+    "otherNotificationContentRecorded": false
+  },
+  "destination": {
+    "tab": "보관함",
+    "space": "내 냉장고",
+    "fixtureVisible": "QA 45 푸시 확인용 우유"
+  },
+  "result": "passed",
+  "screenshot": "android-45-push-tap-inventory.png",
+  "permissionRestoreStatus": "restored to original denied permission and flags at Android completion",
+  "restorationEvidence": "android-restored-settings.json"
+}

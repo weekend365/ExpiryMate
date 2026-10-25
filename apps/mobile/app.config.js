@@ -1,7 +1,12 @@
 const appJson = require("./app.json");
 const { QA, resolveAppVariant } = require("./scripts/app-variant.cjs");
 const variant = resolveAppVariant();
-const { validateExpoPublicEnv } = require("./scripts/validate-public-env.cjs");
+const { validateExpoPublicEnv, getStoreQaAppVersion } = require("./scripts/validate-public-env.cjs");
+const storeQaAppVersion = getStoreQaAppVersion(process.env);
+const { resolveAndroidGoogleServicesFile } = require("./scripts/android-push-config.cjs");
+const androidGoogleServicesFile = resolveAndroidGoogleServicesFile(
+  process.env, variant === "development" ? QA.id : appJson.expo.android.package,
+);
 const {
   assertIosTeamCompatibleWithAppEnv,
   isPersonalTeamBuild,
@@ -99,11 +104,13 @@ const personalTeamIosCapabilities = {
 /** @type {(context: import('expo/config').ConfigContext) => import('expo/config').ExpoConfig} */
 module.exports = ({ config }) => ({
   ...config,
+  ...(storeQaAppVersion ? { version: storeQaAppVersion } : {}),
   ...(variant === "development" ? { name: QA.name, scheme: QA.scheme } : {}),
   plugins,
   android: {
     ...config.android,
     ...(variant === "development" ? { package: QA.id } : {}),
+    ...(androidGoogleServicesFile ? { googleServicesFile: androidGoogleServicesFile } : {}),
   },
   ios: {
     ...config.ios,

@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-21T06:26:34.103354+00:00",
+  "qaProjectId": "112c819c-0cdb-4990-8650-c2939b2932e5",
+  "detachedMonitorRunning": false,
+  "survivesClientSessionRestart": true,
+  "sameOriginalDeadline": "2026-10-23T06:06:02.690000+00:00",
+  "stopAtCumulativeUsd": 7,
+  "projectScopeOnly": true,
+  "workspaceCommonLimitsChanged": false,
+  "monitorScriptSha256": "4aaa8edb61984d546ee0de8c64beefe5a7b82dc79245612fd418393ff6b2397d",
+  "limitation": "Local Mac process with expiring interactive credentials did not ensure deadline cleanup. Manual authenticated cleanup required.",
+  "lastAuditedAt": "2026-10-24T06:50:29.489876+00:00",
+  "health": "exited after deleting QA project on restored authentication",
+  "deadlineCleanupVerified": false,
+  "eventualCleanupVerified": true,
+  "cleanupEvidence": "qa-cloud-cleanup-verified.json"
+}

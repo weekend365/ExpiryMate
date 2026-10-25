@@ -1,0 +1,68 @@
+{
+  "reviewedAt": "2026-10-20T07:04:18.636292+00:00",
+  "method": "Independent local field audit of returned JSON, without new model calls. These checks do not establish culinary feasibility, hidden ingredients or medical safety.",
+  "recipe": {
+    "requests": 50,
+    "successfulRequestsAudited": 35,
+    "dishesAudited": 105,
+    "checksByKind": {
+      "three_dishes": 35,
+      "unique_titles": 35,
+      "requested_strategies": 35,
+      "declared_servings": 105,
+      "declared_time": 105,
+      "declared_equipment": 105,
+      "step_count_4_to_8": 105,
+      "inventory_reference": 359,
+      "declared_unit_and_quantity": 359,
+      "declared_spice_level": 9
+    },
+    "checksTotal": 1252,
+    "violations": [],
+    "constraintGroups": {
+      "vegan": {
+        "requests": 5,
+        "successes": 0
+      },
+      "egg_allergen": {
+        "requests": 10,
+        "successes": 7
+      },
+      "excluded_milk": {
+        "requests": 8,
+        "successes": 6
+      },
+      "microwave_only": {
+        "requests": 3,
+        "successes": 2
+      }
+    },
+    "manualFindings": [
+      {
+        "caseId": "synthetic-recipe-003",
+        "dish": "당근양파전",
+        "finding": "Binding flour is optional; steps use carrot/onion/water alone. Whether the pancake holds together was not cook-tested.",
+        "status": "unverified_culinary_feasibility"
+      },
+      {
+        "caseId": "synthetic-recipe-004",
+        "dish": "애호박 당근 볶음밥",
+        "finding": "Raw-rice inventory is described as pre-cooked rice in step 1; the preparation time is not represented in the 7-minute declaration.",
+        "status": "confirmed_undeclared_preparation_assumption"
+      }
+    ]
+  },
+  "photo": {
+    "requestsAuditedForDateAndReviewFlags": 30,
+    "returnedItems": 145,
+    "explicitExpiryDateValues": 0,
+    "needsReviewFalse": 0,
+    "identityAndQuantityQualityComplete": false,
+    "notes": [
+      "Date/needsReview inspection is a field audit, not an image recognition accuracy grade.",
+      "CORD references are foreign restaurant receipts; fridge labels are partial and include an ambiguous label, so exact-name F1 is not a gold-standard score."
+    ]
+  },
+  "qualityGradingComplete": false,
+  "cookingTestPerformed": false
+}

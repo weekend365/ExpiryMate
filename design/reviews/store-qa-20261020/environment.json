@@ -1,0 +1,32 @@
+{
+  "projectId": "bd429f46-fac8-4a5c-8873-31c07be85ce3",
+  "environmentId": "c0f58d05-eb03-4596-aa2d-343a59978f24",
+  "apiServiceId": "ce6baf75-f394-4ecf-bd63-ec94fa26f4e4",
+  "postgresServiceId": "3b21c208-e606-4e23-ad36-7d9c6982b6d7",
+  "origin": "https://api-production-4af4a.up.railway.app",
+  "startedAt": "2026-10-20T06:06:02.690Z",
+  "stopAfterHours": 72,
+  "stopAtUsd": 7,
+  "maxAuthorizedUsd": 10,
+  "limits": {
+    "memoryGB": 0.5,
+    "vCPUs": 1,
+    "replicas": 1
+  },
+  "smtpDelivery": "disabled",
+  "productionDataCopied": false,
+  "volume": {
+    "edges": [
+      {
+        "node": {
+          "id": "c37bd809-8e20-41a3-a5c0-764bf10c868e",
+          "volumeId": "ba23c5f7-3c6c-4038-8d4b-559f72417dbb",
+          "mountPath": "/var/lib/postgresql/data"
+        }
+      }
+    ]
+  },
+  "stateAtPause": "deleted",
+  "closedAt": "2026-10-20T08:26:07.769911+00:00",
+  "cleanupEvidence": "cleanup.json"
+}

@@ -1,0 +1,24 @@
+{
+  "bundleIdentifier": "com.expirymate.mobile",
+  "appVersion": "1.4.4",
+  "buildNumber": "61",
+  "sha256": "a04a4b9871fbf8d08fb7cf7f06a45062c7cb2c351eef729e0e492ab47bebf6ea",
+  "bytes": 75402619,
+  "qaOriginVerified": true,
+  "qaDiagnosticGuardEnabled": true,
+  "easBuildId": "5b81a006-e6da-41f2-af42-53cead99a759",
+  "submissionId": "92e702d2-fcd4-478f-bca8-26c2565316aa",
+  "easBuildStatus": "FINISHED",
+  "easSubmissionStatus": "FINISHED",
+  "appleProcessingVerified": true,
+  "deviceInstalled": {
+    "version": "1.4.4",
+    "build": "61",
+    "verifiedAt": "2026-10-24T08:06:57.950547+00:00",
+    "method": "devicectl device info apps plus TestFlight UI"
+  },
+  "appleBuildId": "53cb70e1-2ef5-4cfd-8958-c58b07ea496c",
+  "appleProcessingState": "VALID",
+  "internalBuildState": "IN_BETA_TESTING",
+  "checkedAt": "2026-10-24T08:03:50.344705+00:00"
+}

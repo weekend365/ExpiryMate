@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-21T04:34:02.883776+00:00",
+  "projectId": "112c819c-0cdb-4990-8650-c2939b2932e5",
+  "deploymentIds": {
+    "first": "52f9780d-5faa-4653-848d-843c103ae056",
+    "templateFix": "61e96607-ad36-40dd-808f-a7e5985410af",
+    "ready": "7b210d00-7d64-4908-b114-378f5ced0314"
+  },
+  "sourceChangesInRepository": false,
+  "temporaryQaSeedScript": true,
+  "seedingGuards": [
+    "exact QA project ID",
+    "database name jango_qa",
+    "two named 20261021 test users with example.test addresses",
+    "only expected migration demo-user null-email fixture allowed"
+  ],
+  "runtimeReadinessVerified": true,
+  "fakeAccountLoginsVerified": 2
+}

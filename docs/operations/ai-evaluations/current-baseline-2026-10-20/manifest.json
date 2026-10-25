@@ -1,0 +1,386 @@
+{
+  "version": 1,
+  "createdAt": "2026-10-20T06:44:00.660Z",
+  "runtimeSource": "railway-production-settings@2026-10-20T06:43:57.888692+00:00",
+  "usdKrw": 1500,
+  "budgetUsd": 5,
+  "runtime": {
+    "RECIPE_AI_MODEL": "gpt-5.4-mini",
+    "INVENTORY_PHOTO_PARSE_MODEL": "gpt-5.6-luna",
+    "RECIPE_AI_MAX_OUTPUT_TOKENS": "3500",
+    "INVENTORY_PHOTO_PARSE_MAX_OUTPUT_TOKENS": "1800",
+    "RECIPE_AI_REQUEST_TIMEOUT_MS": "45000",
+    "RECIPE_AI_DEADLINE_MS": "60000",
+    "INVENTORY_PHOTO_PARSE_REQUEST_TIMEOUT_MS": "30000",
+    "INVENTORY_PHOTO_PARSE_DEADLINE_MS": "45000"
+  },
+  "recipe": {
+    "datasetHash": "448442de144369b6d86ccef1832ee7198f2f289f01e27067978290c6f886558d",
+    "pricingVersion": "openai-standard-2026-10-08",
+    "promptVersion": "recipe-recommendation-v12",
+    "cases": [
+      {
+        "id": "synthetic-recipe-001",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-002",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-003",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-004",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-005",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-006",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-007",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-008",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-009",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-010",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-011",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-012",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-013",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-014",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-015",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-016",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-017",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-018",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-019",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-020",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-021",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-022",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-023",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-024",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-025",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-026",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-027",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-028",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-029",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-030",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-031",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-032",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-033",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-034",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-035",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-036",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-037",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-038",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-039",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-040",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-041",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-042",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-043",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-044",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-045",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-046",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-047",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-048",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-049",
+        "scene": null
+      },
+      {
+        "id": "synthetic-recipe-050",
+        "scene": null
+      }
+    ],
+    "imageDigests": {},
+    "model": "gpt-5.4-mini"
+  },
+  "photo": {
+    "datasetHash": "f2acb087a60d23ce0a68c02bf5d00081498e666da12b500923e98f752b64586f",
+    "pricingVersion": "openai-standard-2026-10-08",
+    "promptVersion": "inventory-photo-parse-v1",
+    "cases": [
+      {
+        "id": "receipt-01",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-02",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-03",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-04",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-05",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-06",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-07",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-08",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-09",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-10",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-11",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-12",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-13",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-14",
+        "scene": "receipt"
+      },
+      {
+        "id": "receipt-15",
+        "scene": "receipt"
+      },
+      {
+        "id": "fridge-01",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-02",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-03",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-04",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-05",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-06",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-07",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-08",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-09",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-10",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-11",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-12",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-13",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-14",
+        "scene": "fridge"
+      },
+      {
+        "id": "fridge-15",
+        "scene": "fridge"
+      }
+    ],
+    "imageDigests": {
+      "receipt-01": "c35dfc79a6ff233070e07661258375f86458708f22698d37edeab834e44e78e4",
+      "receipt-02": "2352eb39d37eb36bdd3028ada3c275c6389aa1e36ecce21b7c70e8c2b8f3788f",
+      "receipt-03": "bcf0c175181bfc6b2352ab8f452704b8f18e27fa51f2278bc5c41f6765179edb",
+      "receipt-04": "175fdc716afc51e67bcb79954c3dad4b54633299ec124780e5af04a8e8305333",
+      "receipt-05": "b4261949b52af19e53c27526fc8c4230b10eed207101bf51741c428b4c055c01",
+      "receipt-06": "02032d7f74a5b74b2a85bd868b433fa57fe77bb997186a0cf33d182cce42fb84",
+      "receipt-07": "330d2b8d6c44c26f0812f4633cf9429ba17d9f0ea77983d4f954cfeff1b9ea90",
+      "receipt-08": "6291c25b08505ad91ae51c39eab33fbb50233c26e38fd6435b9ed857bd817fea",
+      "receipt-09": "910372079a2bbafc0857931d252608876e3ba6e3ab1b99947f159192f42c9676",
+      "receipt-10": "f1922943a5c2a4627fbd93ca2551bb7a79038ee9a760e63239b0036482b0238c",
+      "receipt-11": "b815404532dc13595b3722cff86a4c3e76155187f5b289040ca4f9a59d44a546",
+      "receipt-12": "e7865926c68a5282fb28040144000ca796a600887eae5e0c30b1827334408bb1",
+      "receipt-13": "d65e1061625a27c8819d540dcff3868536d923f2f9b69ed0903b6ce1f827964a",
+      "receipt-14": "2f43f90f4470e7a64904c9429c208b73db32e3703bc2660da5eec35eefadd2ac",
+      "receipt-15": "ea8f1c932350e1e2d5182a9dad4ed0fdadf2fe4d88703ee1d4ce20ecf9933067",
+      "fridge-01": "19e3e3b8285184f27e09b163e3b8eb74417dc4be5f960ecdee35925efa8e5f46",
+      "fridge-02": "34e3f32cf005e75b434f6ffe29597754a40d87e079a23d6016b70caee99efb02",
+      "fridge-03": "77946503f3aa20b67cf651c326f150fe3a04a0fa57bb3314b24a9d8f4ef7b3c8",
+      "fridge-04": "fb6c6d805980044b9cc1d3545bf026533157b4093d15884903da248470af1fa8",
+      "fridge-05": "c41db27a2f582e0e431c486c3961ac36b7246d7b411e9ecc4ad001efc6275032",
+      "fridge-06": "a42108f75c8b4d90d92d4833a1a7483442fbd09ecfdfb6278d1bd1af565dba8f",
+      "fridge-07": "e4e25e7035b02b87f75cf8442d9fbdb0e65f32e18af787aeb0fbaa299a284ea1",
+      "fridge-08": "79e09d2ec82dc5b072e48a5f62c059446dfc3c844cdeacf0e47567673c420cbc",
+      "fridge-09": "966766c9c34645f18efcd86de8af2e34edaf90d663b445d09db2d3d4760689f3",
+      "fridge-10": "a263137b772ab7c0e21c2a866383ac68f587021e755b3adaa4fce781d49093db",
+      "fridge-11": "fba6c48f3824d35f44f2465f82433b69d19d1da00de696652f0e5c4d004932eb",
+      "fridge-12": "d709b9f7b1b7ffa56f8d1b07f03c0db0c23c66d2b5b0789f7369f39b4872da56",
+      "fridge-13": "0ba198d32022d404f70815667188daf254e6c56a1619657e95511e1c74848a4c",
+      "fridge-14": "19d6449b16d01655b38231f67b6f751615410ac918fb01178f9134773709b152",
+      "fridge-15": "d02630c2772b5b1d61fff695372c599a27f5a63331bc65b2542c7cd6cecb9da3"
+    },
+    "model": "gpt-5.6-luna"
+  }
+}

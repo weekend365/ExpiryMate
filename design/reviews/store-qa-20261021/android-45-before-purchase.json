@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-21T04:55:26.108842+00:00",
+  "account": "QA owner 20261021",
+  "source": "authenticated QA API",
+  "entitlement": {
+    "hasActiveEntitlement": false,
+    "store": null,
+    "productId": null,
+    "planCode": null,
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": null,
+    "basePlanId": null,
+    "status": "unknown",
+    "expiresAt": null,
+    "willRenew": null,
+    "environment": null,
+    "verifiedAt": null
+  }
+}

@@ -4,6 +4,7 @@ import { LoginTicket, OAuth2Client } from "google-auth-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SubscriptionsService } from "./subscriptions.service";
 import * as unitEconomics from "../monetization/unit-economics-guardrail";
+import * as appleStoreApi from "../../common/store-billing/apple-store-api";
 
 const managedEnvKeys = [
   "NODE_ENV",
@@ -129,6 +130,82 @@ describe("SubscriptionsService", () => {
     await expect(service.processGoogleNotification("Bearer test-token", googleNotification()))
       .rejects.toThrow("Google RTDN 발신 서비스 계정이 설정되지 않았습니다.");
     expect(verify).not.toHaveBeenCalled();
+  });
+
+  it.each(["duplicate", "out-of-order"] as const)("re-fetches authoritative Play state for %s RTDN without recreating an entitlement", async (delivery) => {
+    configureGooglePush();
+    mockGooglePushIdentity("rtdn-push@example.iam.gserviceaccount.com");
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL = "play-service@example.iam.gserviceaccount.com";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY = createRsaPrivateKey();
+    const { prisma, service } = createService();
+    prisma.subscriptionEntitlement.findUnique.mockResolvedValue({
+      id: "entitlement-1", ownerKey: "owner-a", spaceId: null,
+    });
+    const state = delivery === "duplicate" ? "SUBSCRIPTION_STATE_ACTIVE" : "SUBSCRIPTION_STATE_EXPIRED";
+    const fetch = vi.fn().mockImplementation(async (url: string) => {
+      if (url === "https://oauth2.googleapis.com/token") return jsonResponse({ access_token: "test-access" });
+      return jsonResponse({
+        subscriptionState: state, acknowledgementState: "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED",
+        lineItems: [{
+          productId: "expirymate_premium_monthly",
+          expiryTime: delivery === "duplicate" ? "2099-07-07T00:00:00Z" : "2099-06-06T00:00:00Z",
+          autoRenewingPlan: { autoRenewEnabled: delivery === "duplicate" },
+        }],
+      });
+    });
+    vi.stubGlobal("fetch", fetch);
+    for (const index of [0, 1]) {
+      const payload = Buffer.from(JSON.stringify({
+        packageName: "com.expirymate.mobile",
+        eventTimeMillis: delivery === "out-of-order" && index === 1 ? "100" : "200",
+        subscriptionNotification: { purchaseToken: "qa-token", notificationType: index === 0 ? 13 : 2 },
+      })).toString("base64");
+      await expect(service.processGoogleNotification("Bearer test-token", payload)).resolves.toEqual({ ok: true });
+    }
+    expect(fetch.mock.calls.filter(([url]) => String(url).includes("/subscriptionsv2/tokens/"))).toHaveLength(2);
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.update).toHaveBeenCalledTimes(2);
+    for (const [input] of prisma.subscriptionEntitlement.update.mock.calls) {
+      expect(input.where).toEqual({ id: "entitlement-1" });
+      expect(input.data.status).toBe(delivery === "duplicate" ? "active" : "expired");
+      expect(input.data.ownerKey).toBe("owner-a");
+    }
+  });
+
+  it.each(["duplicate", "out-of-order"] as const)("re-fetches authoritative Apple state for %s notifications", async (delivery) => {
+    process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
+    process.env.APPLE_APP_STORE_KEY_ID = "key-id";
+    process.env.APPLE_BUNDLE_ID = "com.expirymate.mobile";
+    process.env.APPLE_APP_STORE_PRIVATE_KEY = createEcPrivateKey();
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "sandbox";
+    // Signature validation is covered separately; these cases isolate event ordering.
+    const transaction = vi.fn()
+      .mockResolvedValueOnce({ originalTransactionId: "original-1", transactionId: "current-2" })
+      .mockResolvedValueOnce({ originalTransactionId: "original-1", transactionId: delivery === "duplicate" ? "current-2" : "old-1" });
+    vi.spyOn(appleStoreApi, "createAppleSignedDataVerifier").mockReturnValue({
+      verifyAndDecodeNotification: vi.fn().mockResolvedValue({ data: { signedTransactionInfo: "verified-transaction" } }),
+      verifyAndDecodeTransaction: transaction,
+    } as never);
+    const { prisma, service } = createService();
+    prisma.subscriptionEntitlement.findUnique.mockResolvedValue({ id: "entitlement-1", ownerKey: "owner-a", spaceId: null });
+    const expiresDate = now.getTime() + (delivery === "duplicate" ? 1 : -1) * 86400_000;
+    const fetch = vi.fn().mockResolvedValue(jsonResponse({ data: [{ lastTransactions: [{
+      originalTransactionId: "original-1", status: delivery === "duplicate" ? 1 : 2,
+      signedTransactionInfo: jws({ transactionId: "current-2", originalTransactionId: "original-1",
+        productId: "expirymate_premium_monthly", bundleId: "com.expirymate.mobile", environment: "Sandbox", expiresDate }),
+      signedRenewalInfo: jws({ autoRenewStatus: delivery === "duplicate" ? 1 : 0 }),
+    }] }] }));
+    vi.stubGlobal("fetch", fetch);
+    for (let deliveryIndex = 0; deliveryIndex < 2; deliveryIndex += 1) {
+      await expect(service.processAppleNotification(jws({ data: { environment: "Sandbox" } }))).resolves.toEqual({ ok: true });
+    }
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.update).toHaveBeenCalledTimes(2);
+    for (const [input] of prisma.subscriptionEntitlement.update.mock.calls) {
+      expect(input.where).toEqual({ id: "entitlement-1" });
+      expect(input.data).toMatchObject({ ownerKey: "owner-a", transactionId: "current-2", status: delivery === "duplicate" ? "active" : "expired" });
+    }
   });
 
   it("keeps RTDN package validation after push identity verification", async () => {
@@ -487,6 +564,53 @@ describe("SubscriptionsService", () => {
     });
     expect(prisma.subscriptionEntitlement.create.mock.calls[0]?.[0].data)
       .toMatchObject({ billingPeriod: "yearly", basePlanId: "yearly" });
+  });
+
+  it.each([
+    { name: "omitted false scalar", plan: {}, willRenew: false },
+    { name: "explicit false scalar", plan: { autoRenewEnabled: false }, willRenew: false },
+    { name: "absent auto-renewing plan", plan: undefined, willRenew: null },
+  ])("preserves canceled access and renewal state for $name", async ({ plan, willRenew }) => {
+    process.env.IAP_ALLOWED_PRODUCT_IDS = "jango_plus";
+    process.env.IAP_ALLOW_SANDBOX_PURCHASES = "true";
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "operator_override";
+    mockUnqualifiedEconomics();
+    process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
+      "play-service@expirymate.iam.gserviceaccount.com";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY = createRsaPrivateKey();
+    const { prisma, service } = createService();
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
+      if (url === "https://oauth2.googleapis.com/token") {
+        return jsonResponse({ access_token: "google-access-token" });
+      }
+      return jsonResponse({
+        subscriptionState: "SUBSCRIPTION_STATE_CANCELED",
+        acknowledgementState: "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED",
+        testPurchase: {},
+        lineItems: [{
+          productId: "jango_plus",
+          expiryTime: "2100-06-07T00:00:00Z",
+          offerDetails: { basePlanId: "yearly" },
+          ...(plan === undefined ? {} : { autoRenewingPlan: plan }),
+        }],
+      });
+    }));
+
+    const response = await service.verifySubscription("owner-a", {
+      store: "google_play",
+      productId: "jango_plus",
+      purchaseToken: "canceled-annual-store-token",
+    });
+
+    expect(response.entitlement).toMatchObject({
+      hasActiveEntitlement: true,
+      status: "active",
+      expiresAt: "2100-06-07T00:00:00.000Z",
+      willRenew,
+    });
+    expect(prisma.subscriptionEntitlement.create.mock.calls[0]?.[0].data)
+      .toMatchObject({ isActive: true, willRenew });
   });
 
   it("rejects a Google purchase whose obfuscated account id does not match the intent", async () => {

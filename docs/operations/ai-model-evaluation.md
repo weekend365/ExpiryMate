@@ -1,7 +1,7 @@
 ---
 status: active
 owner: engineering
-last_reviewed: 2026-10-08
+last_reviewed: 2026-10-20
 source_of_truth: false
 ---
 
@@ -121,7 +121,58 @@ scene별 100장×2회 이상을 요구합니다. 성공당 총비용 30% 이상 
 품질 하락 2%p 이하, P95 지연 악화 10% 이하를 모두 충족해야 합니다. 도구 통과는 운영 전환
 승인이 아니며 운영 단계 5→25→50→100%의 관찰 기준은 개선안을 따릅니다.
 
-## 현재 검증 상태
+## 현재 모델 기준선 실행
+
+모델 채택 비교와 별도로 `ai:evaluate:baseline`을 사용한다. 현재 운영 환경의 유효 모델·
+출력 한도·시간 제한과 출처를 먼저 확인해 서버 프로세스 환경에 전달한다. 이 명령도 `.env`와
+운영 DB를 읽지 않는다. 저장된 레시피 조건의 앞 50건과 승인된 영수증 15장·냉장고 15장을
+고정하고, 각 1회·동시성 1로 실행한다.
+
+```sh
+# 유료 호출 없는 manifest·이미지·실행 설정 확인
+pnpm --filter @expirymate/api ai:evaluate:baseline \
+  --runtime-source railway-production-settings-2026-10-20 \
+  --usd-krw 1500 --photo-cases /tmp/photo-cases.jsonl \
+  --max-cost-usd 5 --output-dir /tmp/jango-current-baseline
+
+# 같은 인수에 --run을 추가해야 실제 호출한다. OPENAI_API_KEY는 서버 환경으로만 전달한다.
+# 검수 후에는 추가 호출 없이 다시 보고한다.
+pnpm --filter @expirymate/api ai:evaluate:baseline:report \
+  --output-dir /tmp/jango-current-baseline --grades /tmp/baseline-grades.jsonl
+```
+
+두 기능은 총 $5 이하의 하나의 예산을 공유한다. 레시피 실패·의미 보정 비용을 먼저 정산하고
+남은 금액만 사진 실행기에 넘긴다. 잔액 부족·공급자 usage 미확인·입력 해시 변경 시 후속
+호출을 중단한다. 중단된 실행의 자동 재시도·재개·같은 출력 폴더 덮어쓰기는 허용하지 않는다.
+manifest에는 모델, promptVersion, pricingVersion, 실효 출력 한도, 조건·이미지 해시를 기록한다.
+조건 목록은 해시에 사용한 경로 문자열 그대로 보존하고 원래 manifest 위치는 로컬
+`input-locations.json`에 남긴다. 사진 원본을 새 출력 폴더에 중복 복사하지 않는다.
+온라인 사진은 저자·라이선스·원본 URL·수집일·원본 해시와 선정 기준을 함께 보존한다.
+
+보고서는 성공률, 실패와 보정 비용을 포함한 성공당 비용, 비용·시간 중앙값과 p95를 제공한다.
+공급자 사용량과 버전 단가로 계산한 비용이며 최종 청구서 금액과 구분한다. 원가 공식은 기존
+성공 요청 모집단으로 `60 × 레시피 p95 + 30 × 사진 p95 ≤ 858원`을 계산한다. 성공 표본이
+50·30보다 적거나 비용이 미확인이면 `incomplete`다. 모델 교체 기준·판매 정책은 변경하지 않는다.
+
+검수 JSONL은 기존 grade 식별자·safetyPassed·quality에 다음 항목을 더할 수 있다.
+사진은 `photoReview`에 expectedItems, omittedItems, misidentifiedItems, falsePositiveItems,
+quantityErrors, inventedDates를 기록한다. 누락과 오인식은 서로 중복 집계하지 않는다.
+레시피는 `recipeReview`의 constraintChecks·constraintViolations에 검수한 제한 조건 수와
+위반 수를 남긴다. `notes`에는 구체적인 발견을 적는다. 미검수 값을 0 또는 통과로 채우지
+않으며 항목별 검수 표본 수를 보고한다. 검수·표본·비용이 부족하면 완료로 표시하지 않는다.
+
+## 2026-10-20 현재 모델 실측 결과
+
+레시피 50건·공개 온라인 사진 30장을 각 1회 순차 평가했고 공급자 usage가 모두 보고됐다.
+실패·의미 보정을 포함한 계산 비용은 **$0.884803**이다. 레시피는 35/50, 사진은 30/30
+생성 성공이었다. 현재 성공 표본의 원가식 추정치는 2,500.56원으로 858원을 초과하며,
+성공 레시피 표본 부족·품질 검수 미완료로 최종 원가 판정은 `incomplete`다.
+사진 생성 성공과 인식 정확도는 구분한다. 모델·후보 비율·판매 정책은 유지했다.
+
+[입력·출처·결과·품질 한계와 비용 기록](ai-evaluations/current-baseline-2026-10-20/README.md)을
+보존한다. 검수하지 않은 항목은 점수나 통과로 채우지 않았다.
+
+## 기존 모델 비교 검증 상태
 
 사용자가 전체 평가 비용 상한 $30을 허용한 뒤 추가로 “다 쓰지 말고 적당히 끝내”라고
 요청해 소규모 비교로 마무리했습니다. 1,800건 계획 중 레시피 80건(27조건, 1회 반복 일부)을

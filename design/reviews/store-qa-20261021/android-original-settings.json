@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-21T04:20:14.551881+00:00",
+  "applicationIdentifier": "com.expirymate.mobile",
+  "notificationPermission": [
+    "android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+  ],
+  "installedPackage": [
+    "versionCode=43 minSdk=24 targetSdk=36",
+    "versionName=1.4.4",
+    "installerPackageName=com.android.vending"
+  ],
+  "stayAwake": "0",
+  "fontScale": "1.15",
+  "displaySize": "Physical size: 1080x2340",
+  "displayDensity": "Physical density: 450"
+}

@@ -1,0 +1,10 @@
+{
+  "confirmedAt": "2026-10-24T06:54:12.703816+00:00",
+  "source": "explicit user confirmation in this conversation",
+  "originalMediaAndPurchasesAccountRestored": true,
+  "qaSandboxDeviceSignedOut": true,
+  "agentReadPersonalAccountDetails": false,
+  "credentialsRequestedOrReceivedInChat": false,
+  "sandboxTesterAccountDeleted": false,
+  "furtherQaAuthorized": false
+}

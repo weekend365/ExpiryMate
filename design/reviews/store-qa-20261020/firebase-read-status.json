@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-20T07:15:33.634Z",
+  "projectId": "jango-plz",
+  "httpStatus": 403,
+  "apps": [],
+  "errorStatus": "PERMISSION_DENIED",
+  "errorReasons": [
+    "SERVICE_DISABLED"
+  ]
+}

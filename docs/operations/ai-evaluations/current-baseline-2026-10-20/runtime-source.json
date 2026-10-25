@@ -1,0 +1,20 @@
+{
+  "source": "Railway production API variables, read-only",
+  "observedAt": "2026-10-20T06:43:57.888692+00:00",
+  "explicitRuntime": {
+    "RECIPE_AI_MODEL": "gpt-5.4-mini",
+    "INVENTORY_PHOTO_PARSE_MODEL": "gpt-5.6-luna",
+    "INVENTORY_PHOTO_PARSE_MAX_OUTPUT_TOKENS": "1800"
+  },
+  "usdKrw": 1500.0,
+  "defaultOutputTokens": {
+    "recipe": 3500,
+    "photo": 1800
+  },
+  "pricingVersion": "openai-standard-2026-10-08",
+  "priceVerifiedAt": "2026-10-20",
+  "pricingSources": [
+    "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
+    "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
+  ]
+}

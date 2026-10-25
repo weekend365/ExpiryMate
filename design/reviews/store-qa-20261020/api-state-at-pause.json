@@ -1,0 +1,109 @@
+{
+  "at": "2026-10-20T08:26:05.195977+00:00",
+  "reason": "user_requested_pause",
+  "platform": "android",
+  "installedBuild": 43,
+  "annualCheckoutPurchased": false,
+  "owner": {
+    "entitlement": {
+      "hasActiveEntitlement": false,
+      "store": "google_play",
+      "productId": "jango_plus",
+      "planCode": "jango_plus",
+      "scope": "user",
+      "spaceId": null,
+      "billingPeriod": "monthly",
+      "basePlanId": "monthly",
+      "status": "expired",
+      "expiresAt": "2026-10-20T07:44:00.030Z",
+      "willRenew": true,
+      "environment": "sandbox",
+      "verifiedAt": "2026-10-20T07:42:00.140Z"
+    },
+    "spaces": [
+      {
+        "id": "personal_qa-owner-20261020",
+        "name": "내 냉장고",
+        "type": "personal",
+        "myRole": "owner",
+        "notificationsEnabled": true,
+        "memberCount": 1,
+        "createdAt": "2026-10-20T06:27:52.977Z",
+        "updatedAt": "2026-10-20T06:27:52.977Z"
+      },
+      {
+        "id": "cmvgb1qc10005pf014rpuernr",
+        "name": "QA 공유 냉장고",
+        "type": "household",
+        "myRole": "owner",
+        "notificationsEnabled": true,
+        "memberCount": 1,
+        "createdAt": "2026-10-20T06:31:17.905Z",
+        "updatedAt": "2026-10-20T06:31:17.905Z"
+      }
+    ],
+    "inventory": {
+      "items": [
+        {
+          "id": "cmvgerdbr001wnz01wpnlgqzm",
+          "productId": null,
+          "productMasterId": null,
+          "ownerKey": "qa-owner-20261020",
+          "spaceId": "personal_qa-owner-20261020",
+          "createdByUserId": "qa-owner-20261020",
+          "updatedByUserId": "qa-owner-20261020",
+          "version": 1,
+          "displayName": "QA 푸시 확인용 우유",
+          "brand": null,
+          "category": "dairy",
+          "quantity": 1,
+          "unit": "개",
+          "quantityBase": 1,
+          "unitCode": "ea",
+          "storageLocation": "fridge",
+          "expiryDate": "2026-10-21",
+          "openedDate": null,
+          "openedCheckDate": null,
+          "expirySource": "manual",
+          "status": "active",
+          "notes": "격리 QA 실기기 푸시 수신·탭 이동 검증용 가상 데이터",
+          "createdAt": "2026-10-20T08:15:12.951Z",
+          "updatedAt": "2026-10-20T08:15:12.951Z"
+        }
+      ],
+      "page": 1,
+      "limit": 100,
+      "totalCount": 1,
+      "hasMore": false
+    }
+  },
+  "member": {
+    "entitlement": {
+      "hasActiveEntitlement": false,
+      "store": null,
+      "productId": null,
+      "planCode": null,
+      "scope": "user",
+      "spaceId": null,
+      "billingPeriod": null,
+      "basePlanId": null,
+      "status": "unknown",
+      "expiresAt": null,
+      "willRenew": null,
+      "environment": null,
+      "verifiedAt": null
+    },
+    "spaces": [
+      {
+        "id": "personal_qa-member-20261020",
+        "name": "내 냉장고",
+        "type": "personal",
+        "myRole": "owner",
+        "notificationsEnabled": true,
+        "memberCount": 1,
+        "createdAt": "2026-10-20T06:27:53.427Z",
+        "updatedAt": "2026-10-20T06:27:53.427Z"
+      }
+    ]
+  }
+}

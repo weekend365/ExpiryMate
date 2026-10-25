@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-21T05:11:00.266234+00:00",
+  "scenario": "physical restore of unexpired canceled annual subscription",
+  "expectedWillRenew": false,
+  "actualEntitlement": {
+    "hasActiveEntitlement": true,
+    "store": "google_play",
+    "productId": "jango_plus",
+    "planCode": "jango_plus",
+    "scope": "user",
+    "spaceId": null,
+    "billingPeriod": "yearly",
+    "basePlanId": "yearly",
+    "status": "active",
+    "expiresAt": "2026-10-21T05:27:29.780Z",
+    "willRenew": null,
+    "environment": "sandbox",
+    "verifiedAt": "2026-10-21T05:10:51.431Z"
+  },
+  "passed": false,
+  "source": "Actual Google omitted autoRenewEnabled inside present autoRenewingPlan object; physical Android restore then QA API read"
+}

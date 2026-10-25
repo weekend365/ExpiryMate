@@ -1,0 +1,56 @@
+{
+  "updatedAt": "2026-10-24T06:42:38.260402+00:00",
+  "deviceFailureBuild": 58,
+  "fixBuild": {
+    "id": "55a863ec-86c8-475a-92e1-3bcd12c31ca7",
+    "status": "FINISHED",
+    "buildNumber": 59,
+    "submittedToTestFlight": false,
+    "installed": false,
+    "versionMetadata": "EAS reports 1.4.3, actual IPA independently verified as 1.4.4(59)",
+    "actualAppVersion": "1.4.4",
+    "artifactEvidence": "ios-59-artifact-verification.json",
+    "submissionHeldReason": "original QA period expired; backend resource cleanup takes priority"
+  },
+  "fixes": [
+    {
+      "failure": "cached shared-space explicit selection guard survived later membership revocation; same-process foreground remained loading",
+      "change": "settle the guard when requestedSpaceId changes as well as when spaces changes",
+      "regressionBeforeFix": "one failing fallback case; pending invitation case passed",
+      "regressionAfterFix": "both passed",
+      "physicalRetest": "not_run"
+    },
+    {
+      "failure": "HTTP 502 on owner restore incorrectly displayed another-account ownership notice",
+      "change": "ownership notice only when all batch failures are HTTP 409; otherwise show actual verification error once",
+      "regressionAfterFix": "six restore tests passed including outage and mixed batch",
+      "physicalRetest": "not_run",
+      "upstreamApple502Resolved": false
+    }
+  ],
+  "relatedTests": {
+    "passed": 73,
+    "files": 14
+  },
+  "mobileFull": {
+    "passed": 621,
+    "files": 107,
+    "durationSeconds": 42.62,
+    "command": "pnpm --filter @expirymate/mobile exec vitest run --no-file-parallelism --maxWorkers=2"
+  },
+  "checks": {
+    "docs": 0,
+    "lint": 0,
+    "mobileTypecheck": 0
+  },
+  "sourceSha256": {
+    "apps/mobile/src/features/spaces/space-provider.tsx": "ab5c66d3ba22de81eadb574d8d40fafa46c31d49cc75617aa6fef821fd4789b3",
+    "apps/mobile/app/settings/subscription.tsx": "3f74baec198e5f438cd1b9df29027a05ea5628c3c86faf2ed00dc2d7dd028daf"
+  },
+  "preserved": [
+    "navigation, layout, assets and typography",
+    "server ownership policy",
+    "app identifiers and signing",
+    "production API and database"
+  ]
+}

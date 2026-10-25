@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-25T02:45:42.653897+00:00",
+  "platform": "iOS",
+  "build": "1.4.4(61)",
+  "scenario": "expiry of explicitly canceled monthly Sandbox subscription",
+  "result": "passed",
+  "nativeStorefront": "KOR",
+  "nativeActivePurchases": [],
+  "nativeUnfinishedTransactions": [],
+  "server": {
+    "active": false,
+    "product": "expirymate_premium_monthly",
+    "environment": "Sandbox",
+    "expiresAt": "2026-10-24T08:23:16.000Z",
+    "willRenew": false
+  },
+  "screenText": "무료 이용 중이에요",
+  "earlierCancellation": "ios-61-monthly-cancellation.json",
+  "scope": "Unmodified expo-iap StoreKit read plus normal application screen. No entitlement grant, database edit, or synthetic callback. Native subscription-management screen is not claimed.",
+  "evidence": [
+    {
+      "screenshot": "ios-61-canceled-term-expiry-storekit.png",
+      "sha256": "f8938ce9b39ae030aca5df43d1130ddc159f321375996b1ffb18835f8d546cde"
+    },
+    {
+      "screenshot": "ios-61-canceled-term-expiry-app.png",
+      "sha256": "16d8ec190d89f77e1cc9caf5d7166aa89886eaa19541ea43d734e0910636feab"
+    }
+  ],
+  "nativeSandboxAccountIdentityCheck": {
+    "checkedAt": "2026-10-25T03:00:49.582056+00:00",
+    "qaSandboxTesterMatched": true,
+    "matchedAccountVisible": true,
+    "storefrontPreviouslyRead": "KOR",
+    "identityDataPublished": false
+  }
+}
