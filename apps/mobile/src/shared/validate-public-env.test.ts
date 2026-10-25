@@ -7,7 +7,7 @@ const { validateExpoPublicEnv, getStoreQaAppVersion } = require("../../scripts/v
 describe("store QA build isolation", () => {
   const qa = {
     EAS_BUILD_PROFILE: "store-qa",
-    JANGO_STORE_QA_APP_VERSION: "1.4.4",
+    JANGO_STORE_QA_APP_VERSION: "1.4.5",
     EXPO_PUBLIC_APP_ENV: "preview",
     APP_VARIANT: "production",
     EXPO_IOS_PERSONAL_TEAM: "0",
@@ -39,14 +39,15 @@ describe("store QA build isolation", () => {
     { APP_VARIANT: "development" },
     { EXPO_PUBLIC_APP_ENV: "production" },
     { JANGO_STORE_QA_APP_VERSION: "1.4.3" },
+    { JANGO_STORE_QA_APP_VERSION: "1.4.4" },
     { JANGO_STORE_QA_APP_VERSION: "" },
   ])("rejects incomplete or mixed QA configuration: %j", (changes) => {
     expect(() => validateExpoPublicEnv({ ...qa, ...changes })).toThrow("Invalid store QA");
   });
   it("overrides only QA marketing versions and rejects closed or malformed trains", () => {
-    expect(getStoreQaAppVersion(qa)).toBe("1.4.4");
-    expect(getStoreQaAppVersion({ JANGO_STORE_QA_APP_VERSION: "1.4.4" })).toBeUndefined();
-    for (const version of ["1.4.2", "1.4.3", "1.4.4-beta", "bad"]) {
+    expect(getStoreQaAppVersion(qa)).toBe("1.4.5");
+    expect(getStoreQaAppVersion({ JANGO_STORE_QA_APP_VERSION: "1.4.5" })).toBeUndefined();
+    for (const version of ["1.4.2", "1.4.3", "1.4.4", "1.4.5-beta", "bad"]) {
       expect(() => getStoreQaAppVersion({ ...qa, JANGO_STORE_QA_APP_VERSION: version })).toThrow("higher");
     }
   });
