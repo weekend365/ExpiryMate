@@ -1,0 +1,96 @@
+{
+  "id": "gate-test-44135",
+  "policyVersion": 7,
+  "attachmentVersion": 4,
+  "styleProfile": "handdrawn-crayon",
+  "kind": "emoticon",
+  "composition": null,
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "scope": "active v18 character identity, structure and pose",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "scope": "active v18 line/color/texture; use the selected original pose",
+      "imageIndex": 1
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "mouth-reference",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+      "imageIndex": 2
+    }
+  ],
+  "diagnosticReferences": [
+    {
+      "role": "mouth-detail",
+      "file": "design/jango/quality/jobs/gate-test-44135/master-mouth.png"
+    }
+  ],
+  "diagnosticHashes": {
+    "design/jango/quality/jobs/gate-test-44135/master-mouth.png": "ed012fc1e7a588a6da38a4811105527fa7fad3f47a66ba6db4e2b1c53e781d26"
+  },
+  "request": "표정 유지",
+  "mouthMode": "idle-u",
+  "mouthReason": "모드 유지",
+  "expression": {
+    "family": "인사",
+    "intensity": 2,
+    "eyes": "타원",
+    "brows": "없음",
+    "pose": "손인사"
+  },
+  "input": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+  "inputSHA256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+  "context": {
+    "masterSet": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+    "rules": "dfc9aff4ff798a2242dea7209babb25b58628b3a650c7b098d6740a3954295a9",
+    "master": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "implementation": "d30167ac06a54af43c89e289f4f06765d75a34fce3408133d0d978a3867791a6",
+    "historyResolver": "28591f08a858f8031d17db1a282c5f0cbcead755b84065d856982fcb4f4dbc68",
+    "historyIndex": "aa08214f69d2b5447614f70c4f972706a687eb6db2fdd1a57171589a1ad25785",
+    "masterSetImplementation": "2d035e95020e6bc85e7719560ce005787b684d5f08fd492b7020585bdb662301",
+    "activeStyleMaster": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0",
+    "activeMasterVersion": "v18",
+    "activeMasterRecord": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83",
+    "styleMasterImplementation": "cd17cd0478d9cda016f10151ef8c8d4fadc249c5c8335053721e468b676f8b07",
+    "lineMouthImplementation": "5b1e66f4bd3b6411a09328a829a8b931435a72d5553f178556eb86394ec2afc6",
+    "openMouthImplementation": "008b8d0347acaf994934d830a2ecc8c98af43ed89ef2beb1168fb0f355bd4325",
+    "openMouthReference": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+    "mouthReferences": {
+      "idle-u": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "speak-open": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "neutral-line": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "sad-arc": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+    },
+    "styleProfile": "handdrawn-crayon",
+    "styleResources": {
+      "design/jango/reference/styles/crayon-palette.json": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9",
+      "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "design/jango/style-master.json": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
+    },
+    "documents": {
+      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "70c393a59470556073c95d3844df61e25921c703696be6d9e1f27cd824787e84",
+      "design/jango/reference/JANGO-STYLE-GUIDE.md": "ce89cd43092e3404296be9e32f5c7f4331d8c30c28e87b8e548868b1ee4ddc1a",
+      "design/jango/reference/STYLE-MASTER-ADOPTION.md": "3db1683e8697835c413e765a49d23679a16d08ab7649aaf3c58fad0c31d99e48"
+    }
+  },
+  "references": [
+    "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+    "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png"
+  ],
+  "referenceHashes": {
+    "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+  },
+  "prompt": "design/jango/quality/jobs/gate-test-44135/prompt.txt",
+  "promptSHA256": "6485ac1a6c26c3a5fb77f822f46d7f5dc45bbde36e3e6b765403f2bfd29fd0e3"
+}

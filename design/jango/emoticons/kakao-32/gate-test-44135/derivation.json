@@ -1,0 +1,20 @@
+{
+  "id": "gate-test-44135",
+  "tool": "deterministic-layout",
+  "operation": "layout-lettering-only",
+  "imageGeneration": false,
+  "source": "design/jango/emoticons/kakao-32/gate-test-44135/source.png",
+  "sourceSHA256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+  "origin": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+  "originSHA256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+  "preflight": "design/jango/quality/jobs/gate-test-44135/preflight.json",
+  "preflightSHA256": "fa44972a7b052b5f0f0b8e0a5bf7ec9b0be0f29bffe7788a0462d14f2556a006",
+  "promptSHA256": "6485ac1a6c26c3a5fb77f822f46d7f5dc45bbde36e3e6b765403f2bfd29fd0e3",
+  "inputs": [
+    {
+      "role": "source-original",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+      "sha256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+    }
+  ]
+}
