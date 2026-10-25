@@ -69,6 +69,7 @@ import {
 import { returnFromRegistration } from "../src/features/registration/registration-navigation";
 import { usePhotoParseAccess } from "../src/features/photo-intake/use-photo-parse-access";
 import { resolvePhotoParseAccessUi } from "../src/features/photo-intake/photo-parse-access-ui";
+import { checkPhotoSelectionAccess } from "../src/features/photo-intake/photo-selection-access";
 import { QuickExpiryPills } from "../src/features/inventory/inventory-form-ui";
 import { QuantityUnitPills } from "../src/features/inventory/QuantityUnitPills";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
@@ -140,6 +141,7 @@ export default function RegisterPhotoScreen() {
   const [selectedScene, setSelectedScene] =
     useState<InventoryPhotoParseScene>("receipt");
   const [awaitingConsent, setAwaitingConsent] = useState(false);
+  const [interruption, setInterruption] = useState<"consent" | "access" | null>(null);
   const [flowIssue, setFlowIssue] = useState<FlowIssue | null>(null);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [isAcquiringPhoto, setIsAcquiringPhoto] = useState(false);
@@ -151,6 +153,28 @@ export default function RegisterPhotoScreen() {
   const [confirmedDuplicateIds, setConfirmedDuplicateIds] = useState<string[]>(
     [],
   );
+  const selectionContext = useMemo(
+    () => ({ sessionUserId, activeSpaceId }),
+    [sessionUserId, activeSpaceId],
+  );
+  const currentSelectionContext = useRef(selectionContext);
+  currentSelectionContext.current = selectionContext;
+  const selectionBusy = useRef(false);
+
+  useEffect(() => {
+    currentSelectionContext.current = selectionContext;
+    setPendingSelection(null);
+    setAwaitingConsent(false);
+    setInterruption(null);
+    setAccessGateVisible(false);
+    setFlowIssue(null);
+    return () => {
+      currentSelectionContext.current = {
+        sessionUserId: undefined,
+        activeSpaceId: undefined,
+      };
+    };
+  }, [selectionContext]);
 
   const duplicateMatches = useMemo(() => {
     return findPhotoIntakeDuplicateMatches(items, existingInventory);
@@ -234,16 +258,19 @@ export default function RegisterPhotoScreen() {
     mutationFn: async ({
       photo,
       scene,
+      context,
     }: {
       photo: { uri: string; mimeType?: string; fileName?: string };
       scene: InventoryPhotoParseScene;
+      context: typeof selectionContext;
     }) => {
-      if (!activeSpaceId) {
+      if (!context.activeSpaceId || currentSelectionContext.current !== context) {
         throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
       }
-      return parseInventoryPhoto({ scene, ...photo }, activeSpaceId);
+      return parseInventoryPhoto({ scene, ...photo }, context.activeSpaceId);
     },
-    onSuccess: (result) => {
+    onSuccess: (result, { context }) => {
+      if (currentSelectionContext.current !== context) return;
       batchSubmissionRef.current = null;
       setConfirmedDuplicateIds([]);
       setItems(
@@ -255,11 +282,13 @@ export default function RegisterPhotoScreen() {
       setFlowIssue(null);
       void photoAccess.refresh();
     },
-    onError: (error) => {
+    onError: (error, { context }) => {
+      if (currentSelectionContext.current !== context) return;
       setIsCameraReady(false);
       setStep("choose");
       void photoAccess.refresh();
       if (error instanceof ApiError && error.status === 412) {
+        setInterruption("consent");
         setAwaitingConsent(true);
         router.push("/privacy/ai-data-notice?from=register-photo");
         return;
@@ -491,6 +520,7 @@ export default function RegisterPhotoScreen() {
 
   const acquirePhoto = useCallback(
     async (selection: PhotoIntakeSelection) => {
+      const isCurrent = () => currentSelectionContext.current === selectionContext;
       setFlowIssue(null);
       setIsAcquiringPhoto(true);
       try {
@@ -501,6 +531,8 @@ export default function RegisterPhotoScreen() {
               shutterSound: true,
             })
           : null;
+
+        if (!isCurrent()) return;
 
         if (selection.source === "camera") {
           if (!photo?.uri) {
@@ -522,11 +554,13 @@ export default function RegisterPhotoScreen() {
               fileName: "inventory-photo.jpg",
             },
             scene: selection.scene,
+            context: selectionContext,
           });
           return;
         }
 
         const result = await pickInventoryPhoto("library");
+        if (!isCurrent()) return;
         if (result.status === "cancelled") return;
         if (result.status === "permission-denied") {
           setFlowIssue({
@@ -543,8 +577,9 @@ export default function RegisterPhotoScreen() {
         }
         setIsCameraReady(false);
         setStep("loading");
-        parsePhoto({ photo: result.photo, scene: selection.scene });
+        parsePhoto({ photo: result.photo, scene: selection.scene, context: selectionContext });
       } catch (error) {
+        if (!isCurrent()) return;
         setFlowIssue({
           title:
             selection.source === "camera"
@@ -559,24 +594,57 @@ export default function RegisterPhotoScreen() {
         setIsAcquiringPhoto(false);
       }
     },
-    [parsePhoto, sessionUserId],
+    [parsePhoto, sessionUserId, selectionContext],
   );
 
   const choosePhoto = async (selection: PhotoIntakeSelection) => {
+    if (selectionBusy.current || !sessionUserId || !activeSpaceId) return;
+    selectionBusy.current = true;
+    setIsAcquiringPhoto(true);
     setPendingSelection(selection);
     setFlowIssue(null);
-    const privacyStatus =
-      privacyStatusQuery.data ?? (await refetchPrivacyStatus()).data;
-    if (!privacyStatus?.hasAcceptedCurrentAiDataNotice) {
-      setAwaitingConsent(true);
-      router.push("/privacy/ai-data-notice?from=register-photo");
-      return;
+    const isCurrent = () => currentSelectionContext.current === selectionContext;
+    try {
+      const decision = await checkPhotoSelectionAccess({
+        isCurrent,
+        readConsent: async () => {
+          const result = await refetchPrivacyStatus();
+          if (result.isError || !result.data) {
+            throw new Error("AI 데이터 동의 상태를 확인하지 못했어요. 다시 시도해 주세요.");
+          }
+          return result.data.hasAcceptedCurrentAiDataNotice;
+        },
+        readAccess: async () =>
+          resolvePhotoParseAccessUi(
+            await photoAccess.refresh(),
+            photoAccess.adState,
+            false,
+          ).canSelectPhoto,
+      });
+      if (decision === "cancelled") return;
+      if (decision === "consent") {
+        setInterruption("consent");
+        setAwaitingConsent(true);
+        router.push("/privacy/ai-data-notice?from=register-photo");
+      } else if (decision === "access") {
+        setInterruption("access");
+        setAccessGateVisible(true);
+      } else {
+        setInterruption(null);
+        setAccessGateVisible(false);
+        await acquirePhoto(selection);
+      }
+    } catch (error) {
+      if (isCurrent()) {
+        setFlowIssue({
+          title: "사진 분석 준비를 확인하지 못했어요",
+          description: error instanceof Error ? error.message : "잠시 후 다시 시도해 주세요.",
+        });
+      }
+    } finally {
+      selectionBusy.current = false;
+      setIsAcquiringPhoto(false);
     }
-    if (!accessUi.canSelectPhoto) {
-      setAccessGateVisible(true);
-      return;
-    }
-    void acquirePhoto(selection);
   };
 
   useFocusEffect(
@@ -584,24 +652,28 @@ export default function RegisterPhotoScreen() {
       if (!awaitingConsent || !pendingSelection) return undefined;
       let active = true;
       void refetchPrivacyStatus().then((result) => {
-        if (!active) return;
+        if (!active || currentSelectionContext.current !== selectionContext) return;
+        setAwaitingConsent(false);
+        if (result.isError) {
+          setFlowIssue({
+            title: "동의 상태를 확인하지 못했어요",
+            description: "이어서 진행을 누르면 다시 확인해요.",
+          });
+          return;
+        }
         if (!result.data?.hasAcceptedCurrentAiDataNotice) {
           setFlowIssue({
             tone: "warning",
             title: "AI 데이터 안내 동의가 필요해요",
             description:
-              "선택한 사진 방법은 그대로 두었어요. 다시 눌러 안내를 확인하거나 직접 등록해 주세요.",
+              "선택한 사진 방법은 그대로 두었어요. 이어서 진행하면 동의 안내를 다시 확인해요.",
           });
           return;
         }
-        setAwaitingConsent(false);
         setFlowIssue({
           tone: "success",
           title: "AI 데이터 안내에 동의했어요",
-          description:
-            pendingSelection.source === "camera"
-              ? "촬영 버튼을 누르면 지금 고른 사진 종류로 이어갈게요."
-              : "앨범 버튼을 다시 누르면 지금 고른 사진 종류로 이어갈게요.",
+          description: "아래 버튼으로 선택한 사진 방법을 이어갈 수 있어요.",
         });
       });
       return () => {
@@ -611,22 +683,22 @@ export default function RegisterPhotoScreen() {
       awaitingConsent,
       pendingSelection,
       refetchPrivacyStatus,
+      selectionContext,
     ]),
   );
 
   const watchPhotoAd = async () => {
+    const isCurrent = () => currentSelectionContext.current === selectionContext;
     try {
       const result = await photoAccess.watchRewardedAd();
+      if (!isCurrent()) return;
       if (result === "verified") {
         await photoAccess.refresh();
-        setAccessGateVisible(false);
+        if (!isCurrent()) return;
         setFlowIssue({
           tone: "success",
           title: "사진 분석 1회가 준비됐어요",
-          description:
-            pendingSelection?.source === "library"
-              ? "앨범 버튼을 다시 누르면 선택한 종류로 이어갈게요."
-              : "촬영 버튼을 누르면 선택한 종류로 이어갈게요.",
+          description: "아래 버튼을 누르면 선택한 방법으로 이어갈게요.",
         });
       } else {
         setFlowIssue({
@@ -637,6 +709,7 @@ export default function RegisterPhotoScreen() {
         });
       }
     } catch (error) {
+      if (!isCurrent()) return;
       setFlowIssue({
         title: "광고를 완료하지 못했어요",
         description: error instanceof Error
@@ -673,6 +746,16 @@ export default function RegisterPhotoScreen() {
     photoAccess.access,
     photoAccess.adState,
   );
+  const continuation = interruption && pendingSelection ? {
+    label: pendingSelection.source === "camera" ? "이어서 촬영" : "이어서 사진 선택",
+    onPress: () => { void choosePhoto(pendingSelection); },
+    disabled: isAcquiringPhoto || awaitingConsent || photoAccess.adState !== "idle" ||
+      (pendingSelection.source === "camera" && !isCameraReady),
+  } : undefined;
+  const captureIssue = interruption === "access" && accessUi.canSelectPhoto &&
+    (!flowIssue || flowIssue.tone === "info" || flowIssue.tone === "success")
+    ? gateIssue
+    : flowIssue;
 
   return (
     <>
@@ -684,7 +767,8 @@ export default function RegisterPhotoScreen() {
             photoAccess.access,
             photoAccess.isLoading,
           )}
-          issue={flowIssue}
+          issue={captureIssue}
+          continuation={continuation}
           isBusy={isAcquiringPhoto}
           isActive={!awaitingConsent}
           isCameraReady={isCameraReady}
@@ -693,6 +777,7 @@ export default function RegisterPhotoScreen() {
           onSceneChange={(nextScene) => {
             setSelectedScene(nextScene);
             setPendingSelection(null);
+            setInterruption(null);
             setFlowIssue(null);
           }}
           onCapture={() => {
@@ -1054,7 +1139,11 @@ export default function RegisterPhotoScreen() {
         description={gateIssue.description}
         footer={
           <View style={styles.sheetStack}>
-            {accessUi.showVerifying ? (
+            {accessUi.canSelectPhoto && continuation ? (
+              <Button onPress={continuation.onPress} disabled={continuation.disabled} loading={isAcquiringPhoto} fullWidth>
+                {continuation.label}
+              </Button>
+            ) : accessUi.showVerifying ? (
               <Button onPress={() => undefined} disabled fullWidth>
                 광고 보상 확인 중
               </Button>
@@ -1082,7 +1171,7 @@ export default function RegisterPhotoScreen() {
         }
       >
         <AppText variant="bodySmall" tone="subtext">
-          고른 사진 종류는 유지돼요. 준비가 끝나면 촬영 또는 앨범 버튼을 다시 눌러 주세요.
+          고른 사진 종류는 유지돼요. 준비가 끝나면 이어가기 버튼을 눌러 주세요.
         </AppText>
       </BottomSheet>
 
@@ -1125,20 +1214,30 @@ export default function RegisterPhotoScreen() {
                 description="이름·단위·자리·기한이 같아요. 수량을 합치거나 별도 묶음으로 둘 수 있어요."
               />
             ) : null}
-            <AppTextInput
-              value={editingItem.displayName}
-              onChangeText={(displayName) =>
-                updateItem(editingItem.localId, { displayName })
-              }
-              placeholder="재료 이름"
-            />
-            <AppTextInput
-              value={editingItem.brand ?? ""}
-              onChangeText={(brand) =>
-                updateItem(editingItem.localId, { brand })
-              }
-              placeholder="브랜드 (선택)"
-            />
+            <View style={styles.editFieldGroup}>
+              <AppText variant="bodySmallStrong">재료 이름</AppText>
+              <AppTextInput
+                value={editingItem.displayName}
+                onChangeText={(displayName) =>
+                  updateItem(editingItem.localId, { displayName })
+                }
+                placeholder="재료 이름"
+                accessibilityLabel="재료 이름"
+                style={styles.editTextInput}
+              />
+            </View>
+            <View style={styles.editFieldGroup}>
+              <AppText variant="bodySmallStrong">브랜드 (선택)</AppText>
+              <AppTextInput
+                value={editingItem.brand ?? ""}
+                onChangeText={(brand) =>
+                  updateItem(editingItem.localId, { brand })
+                }
+                placeholder="브랜드 (선택)"
+                accessibilityLabel="브랜드 (선택)"
+                style={styles.editTextInput}
+              />
+            </View>
             <QuantityStepper
               label="수량"
               value={editingItem.quantity}
@@ -1409,6 +1508,13 @@ function photoAccessIssue(
       description: "잠시 후 같은 선택을 다시 눌러 주세요.",
     };
   }
+  if (access.canParse && adState === "idle") {
+    return {
+      tone: "success",
+      title: "사진 분석이 준비됐어요",
+      description: "선택해 둔 방법으로 이어갈 수 있어요. 버튼을 누르기 전에는 사진을 가져오지 않아요.",
+    };
+  }
   if (access.requiredAction === "watch_ad") {
     return {
       tone: "warning",
@@ -1597,5 +1703,14 @@ const styles = StyleSheet.create({
   },
   editFieldGroup: {
     gap: spacing.xs,
+  },
+  editTextInput: {
+    minHeight: controlSize.cta,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.borderControl,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
   },
 });

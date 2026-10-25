@@ -33,6 +33,8 @@ interface MascotSpeechBubbleProps {
    * that sit above a list, not as the page title.
    */
   density?: "default" | "compact";
+  /** Opt-in full-width copy for narrow home screens with large text. */
+  layout?: "inline" | "stacked";
   /** Adds a close affordance for transient, event-driven notices only. */
   onDismiss?: () => void;
   /** Optional link appended to the message in the same text line. */
@@ -59,6 +61,7 @@ export function MascotSpeechBubble({
   textVariant = "bodySmall",
   supportingMessage,
   density = "default",
+  layout = "inline",
   onDismiss,
   inlineActionLabel,
   onInlineAction,
@@ -66,6 +69,7 @@ export function MascotSpeechBubble({
   const opacity = useSharedValue(0);
   const offset = useSharedValue(0);
   const isCompact = density === "compact";
+  const isStacked = layout === "stacked";
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -90,6 +94,7 @@ export function MascotSpeechBubble({
       style={[
         styles.root,
         isCompact && styles.rootCompact,
+        isStacked && styles.rootStacked,
         animatedStyle,
         style,
       ]}
@@ -106,7 +111,7 @@ export function MascotSpeechBubble({
       }
     >
       <Mascot size={size} mood={mood} style={styles.mascot} />
-      <View style={styles.bubbleColumn}>
+      <View style={[styles.bubbleColumn, isStacked && styles.bubbleColumnStacked]}>
         <View
           style={[
             styles.bubble,
@@ -155,8 +160,14 @@ export function MascotSpeechBubble({
             </Pressable>
           ) : null}
         </View>
-        {/* Tail points toward the mascot (left). */}
-        <View style={[styles.tail, isCompact && styles.tailCompact]} />
+        {/* Tail points left by default, or up toward the stacked mascot. */}
+        <View
+          style={[
+            styles.tail,
+            isCompact && styles.tailCompact,
+            isStacked && styles.tailStacked,
+          ]}
+        />
       </View>
     </Animated.View>
   );
@@ -172,6 +183,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.xs,
   },
+  rootStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   mascot: {
     flexShrink: 0,
   },
@@ -181,6 +196,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     position: "relative",
     paddingLeft: spacing.xs,
+  },
+  bubbleColumnStacked: {
+    flexGrow: 0,
+    flexShrink: 0,
+    flexBasis: "auto",
+    paddingLeft: spacing.none,
+    paddingTop: spacing.xs,
   },
   bubble: {
     backgroundColor: colors.surface,
@@ -230,5 +252,11 @@ const styles = StyleSheet.create({
   },
   tailCompact: {
     bottom: spacing.xs,
+  },
+  tailStacked: {
+    top: spacing.none,
+    bottom: "auto",
+    left: spacing.md,
+    transform: [{ rotate: "135deg" }],
   },
 });

@@ -2079,7 +2079,7 @@ function RecipeCard({
   embedded?: boolean;
   showDivider?: boolean;
 }) {
-  const { isRegular } = useResponsiveLayout();
+  const { isRegular, shouldStackDense } = useResponsiveLayout();
   const decisionSignals = getRecipeCardSignals(dish, inventorySnapshot);
   const decisionReason = decisionSignals
     .map((signal) => signal.label)
@@ -2131,7 +2131,7 @@ function RecipeCard({
             <AppText
               variant="caption"
               tone="subtext"
-              numberOfLines={1}
+              numberOfLines={shouldStackDense ? undefined : 1}
               ellipsizeMode="tail"
             >
               {dish.summary}
@@ -2142,8 +2142,6 @@ function RecipeCard({
             <AppText
               variant="caption"
               tone="subtext"
-              numberOfLines={1}
-              ellipsizeMode="tail"
               style={styles.recipeMeta}
             >
               {compactMeta}
@@ -2153,8 +2151,6 @@ function RecipeCard({
           <AppText
             variant="caption"
             tone={decisionReasonTone}
-            numberOfLines={1}
-            ellipsizeMode="tail"
             style={styles.recipeReason}
           >
             {decisionReason}

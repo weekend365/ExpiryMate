@@ -42,6 +42,7 @@ export function PhotoCaptureScreen({
   scene,
   accessLabel,
   issue,
+  continuation,
   isBusy,
   isActive,
   isCameraReady,
@@ -56,6 +57,7 @@ export function PhotoCaptureScreen({
   scene: InventoryPhotoParseScene;
   accessLabel: string;
   issue: CaptureIssue | null;
+  continuation?: { label: string; onPress: () => void; disabled: boolean };
   isBusy: boolean;
   isActive: boolean;
   isCameraReady: boolean;
@@ -72,6 +74,24 @@ export function PhotoCaptureScreen({
   const shouldUseCompactGuide = shouldStack || isPhoneLandscape;
   const hasPermission = permission?.granted ?? false;
   const canRequestPermission = permission?.canAskAgain ?? true;
+  const notice = issue || continuation ? (
+    <View style={styles.issueCard} accessibilityLiveRegion="polite">
+      {issue ? <AppText variant="bodyStrong">{issue.title}</AppText> : null}
+      {issue?.description ? (
+        <AppText variant="bodySmall" tone="subtext">{issue.description}</AppText>
+      ) : null}
+      {continuation ? (
+        <Button
+          onPress={continuation.onPress}
+          disabled={isBusy || continuation.disabled}
+          testID="photo-continue-button"
+          fullWidth
+        >
+          {continuation.label}
+        </Button>
+      ) : null}
+    </View>
+  ) : null;
 
   return (
     <View style={styles.root} testID="photo-capture-screen">
@@ -125,7 +145,7 @@ export function PhotoCaptureScreen({
         </View>
 
         {!hasPermission ? (
-          <View style={scannerScreenStyles.centerStage}>
+          <ScrollView contentContainerStyle={styles.permissionContent}>
             <View style={scannerScreenStyles.centerCard}>
               <AppText style={scannerScreenStyles.centerTitle}>
                 카메라가 필요해요
@@ -156,11 +176,12 @@ export function PhotoCaptureScreen({
                   설정 열기
                 </Button>
               )}
-              <Button variant="surface" onPress={onOpenLibrary} fullWidth>
+              <Button variant="surface" onPress={onOpenLibrary} disabled={isBusy} fullWidth>
                 앨범에서 선택
               </Button>
+              {notice}
             </View>
-          </View>
+          </ScrollView>
         ) : (
           <View
             style={[
@@ -228,16 +249,7 @@ export function PhotoCaptureScreen({
               showsVerticalScrollIndicator={false}
               bounces={false}
             >
-              {issue ? (
-                <View style={styles.issueCard} accessibilityLiveRegion="polite">
-                  <AppText variant="bodyStrong">{issue.title}</AppText>
-                  {issue.description ? (
-                    <AppText variant="bodySmall" tone="subtext">
-                      {issue.description}
-                    </AppText>
-                  ) : null}
-                </View>
-              ) : null}
+              {notice}
 
               <Pressable
                 onPress={onShowAccessDetails}
@@ -264,12 +276,14 @@ export function PhotoCaptureScreen({
                     icon={ReceiptText}
                     label="영수증"
                     selected={scene === "receipt"}
+                    disabled={isBusy}
                     onPress={() => onSceneChange("receipt")}
                   />
                   <SceneButton
                     icon={Refrigerator}
                     label="냉장고"
                     selected={scene === "fridge"}
+                    disabled={isBusy}
                     onPress={() => onSceneChange("fridge")}
                   />
                 </View>
@@ -331,18 +345,21 @@ function SceneButton({
   icon: Icon,
   label,
   selected,
+  disabled,
   onPress,
 }: {
   icon: typeof ReceiptText;
   label: string;
   selected: boolean;
+  disabled: boolean;
   onPress: () => void;
 }) {
   return (
     <Pressable
       onPress={onPress}
+      disabled={disabled}
       accessibilityRole="button"
-      accessibilityState={{ selected }}
+      accessibilityState={{ selected, disabled }}
       accessibilityLabel={`${label} 사진`}
       style={({ pressed }) => [
         styles.sceneButton,
@@ -369,6 +386,10 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.text,
+  },
+  permissionContent: {
+    flexGrow: 1,
+    justifyContent: "center",
   },
   captureBody: {
     flex: 1,

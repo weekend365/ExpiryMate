@@ -17,6 +17,7 @@ import {
   View,
 } from "react-native";
 import { Button } from "../../src/components/Button";
+import { AppText } from "../../src/components/AppText";
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { FormField } from "../../src/components/FormField";
@@ -26,7 +27,7 @@ import { SettingsGroup } from "../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
 import { useNotificationPreferences } from "../../src/features/settings/use-notification-preferences";
-import { spaceNotificationStatusCopy } from "../../src/features/spaces/space-notification-copy";
+import { spaceNotificationSaveCopy } from "../../src/features/settings/notification-save-copy";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { useUpdateSpaceNotifications } from "../../src/features/spaces/use-space-notifications";
 import { useDeviceNotificationStatus } from "../../src/features/notifications/use-device-notification-status";
@@ -61,6 +62,7 @@ export default function NotificationSettingsScreen() {
   const days = form.watch("reminderDaysBefore") ?? [];
   const groupBySpace = form.watch("groupBySpace") ?? true;
   const busy = mutation.isPending || device.connect.isPending;
+  const { isDirty } = form.formState;
   const connection = device.query.data;
 
   useEffect(() => {
@@ -89,11 +91,11 @@ export default function NotificationSettingsScreen() {
       const saved = await mutation.mutateAsync(values);
       form.reset(saved);
       Alert.alert(
-        "알림 설정을 저장했어요",
+        "기본 알림 설정을 저장했어요",
         !values.enabled
           ? "기한 알림을 꺼두었어요."
           : status === "connected"
-            ? "이 기기의 알림 연결을 확인했어요. 냉장고별 알림 설정도 함께 적용돼요."
+            ? "이 기기의 알림 연결을 확인했어요. 냉장고별 알림은 각 스위치에서 바로 저장돼요."
             : "설정은 저장했지만 이 기기의 알림 수신 준비가 끝나지 않았어요. 아래 연결 상태를 확인해 주세요.",
       );
     } catch (error) {
@@ -104,14 +106,21 @@ export default function NotificationSettingsScreen() {
   return (
     <SettingsScreen
       footer={
-        <Button
-          onPress={() => void handleSave()}
-          loading={busy}
-          disabled={!query.data || query.isError}
-          fullWidth
-        >
-          알림 설정 저장
-        </Button>
+        <View style={{ gap: spacing.xs }}>
+          {isDirty ? (
+            <AppText variant="bodySmall" tone="warning" accessibilityLiveRegion="polite">
+              기본 알림 설정에 저장하지 않은 변경이 있어요.
+            </AppText>
+          ) : null}
+          <Button
+            onPress={() => void handleSave()}
+            loading={busy}
+            disabled={!query.data || query.isError}
+            fullWidth
+          >
+            기본 알림 설정 저장
+          </Button>
+        </View>
       }
     >
       {query.isLoading ? (
@@ -163,7 +172,7 @@ export default function NotificationSettingsScreen() {
               }
         }
       />
-      <SettingsGroup title="알림">
+      <SettingsGroup title="기본 알림" description="이 항목과 아래 알림 시점·시간은 하단 버튼으로 저장해요.">
         <ListRow
           title="알림 받기"
           description="만료 전과 당일 알림을 받을 수 있어요."
@@ -223,7 +232,7 @@ export default function NotificationSettingsScreen() {
       ) : !spacesLoading && spaces.length ? (
         <SettingsGroup
           title="냉장고별 알림"
-          description="알림이 안 오면 이 냉장고만 쉬고 있는지 확인해 보세요."
+          description="변경 즉시 저장돼요. 하단 저장 버튼을 누르지 않아도 돼요."
         >
           {spaces.map((space, index) => {
             const Icon =
@@ -236,8 +245,11 @@ export default function NotificationSettingsScreen() {
               <ListRow
                 key={space.id}
                 title={space.name}
-                description={spaceNotificationStatusCopy(
+                description={spaceNotificationSaveCopy(
                   space.notificationsEnabled,
+                  spaceNotificationsMutation.variables?.spaceId === space.id
+                    ? spaceNotificationsMutation.status
+                    : undefined,
                 )}
                 icon={Icon}
                 last={index === spaces.length - 1}
@@ -258,6 +270,11 @@ export default function NotificationSettingsScreen() {
                       )
                     }
                     accessibilityLabel={`${space.name} 유통기한 알림`}
+                    accessibilityHint="변경 즉시 저장돼요."
+                    accessibilityState={{
+                      disabled: spaceNotificationsMutation.isPending,
+                      busy: spaceNotificationsMutation.isPending && spaceNotificationsMutation.variables?.spaceId === space.id,
+                    }}
                     trackColor={{
                       false: colors.border,
                       true: colors.primarySoft,

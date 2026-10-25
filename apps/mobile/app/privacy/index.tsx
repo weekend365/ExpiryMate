@@ -15,6 +15,7 @@ import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
+import { PrivacyHistoryStatus } from "../../src/features/privacy/privacy-history-status";
 import {
   useDeleteRecommendationHistory,
   usePrivacyStatus,
@@ -31,14 +32,15 @@ export default function PrivacyScreen() {
   const privacyStatusQuery = usePrivacyStatus();
   const deleteHistoryMutation = useDeleteRecommendationHistory();
   const status = privacyStatusQuery.data;
-  const historyCount = status?.recommendationHistoryCount ?? 0;
   const [historySheetOpen, setHistorySheetOpen] = useState(false);
 
   const openUrl = (url: string | undefined, label: string) => {
     if (!url) {
       Alert.alert(
-        "조금만 기다려 주세요",
-        `아직 ${label}를 불러오는 중이에요.`,
+        privacyStatusQuery.isError ? "안내를 불러오지 못했어요" : "조금만 기다려 주세요",
+        privacyStatusQuery.isError
+          ? "추천 기록의 다시 시도 버튼으로 정보를 다시 불러와 주세요."
+          : `아직 ${label}를 불러오는 중이에요.`,
       );
       return;
     }
@@ -107,29 +109,38 @@ export default function PrivacyScreen() {
             title="추천 기록"
             description="계정은 두고, 받은 추천과 즐겨찾기만 지울 수 있어요."
           />
-          <View style={styles.card}>
-            <PrivacyRow
-              icon={History}
-              title="추천 기록과 즐겨찾기 정리"
-              description={
-                historyCount > 0
-                  ? `지금 ${historyCount}건의 추천이 남아 있어요. 정리하면 바로 지워져요.`
-                  : "지금은 지울 추천 기록이 없어요."
-              }
-              tone="danger"
-              onPress={() => {
-                if (historyCount <= 0) {
-                  Alert.alert(
-                    "정리할 기록이 없어요",
-                    "아직 받아 두신 요리 추천이 없어요.",
-                  );
-                  return;
-                }
-                setHistorySheetOpen(true);
-              }}
-              last
-            />
-          </View>
+          <PrivacyHistoryStatus
+            count={status?.recommendationHistoryCount}
+            isError={privacyStatusQuery.isError}
+            isFetching={privacyStatusQuery.isFetching}
+            onRetry={() => void privacyStatusQuery.refetch()}
+          >
+            {(historyCount) => (
+              <View style={styles.card}>
+                <PrivacyRow
+                  icon={History}
+                  title="추천 기록과 즐겨찾기 정리"
+                  description={
+                    historyCount > 0
+                      ? `지금 ${historyCount}건의 추천이 남아 있어요. 정리하면 바로 지워져요.`
+                      : "지금은 지울 추천 기록이 없어요."
+                  }
+                  tone="danger"
+                  onPress={() => {
+                    if (historyCount <= 0) {
+                      Alert.alert(
+                        "정리할 기록이 없어요",
+                        "아직 받아 두신 요리 추천이 없어요.",
+                      );
+                      return;
+                    }
+                    setHistorySheetOpen(true);
+                  }}
+                  last
+                />
+              </View>
+            )}
+          </PrivacyHistoryStatus>
         </View>
 
         <View style={styles.section}>

@@ -124,7 +124,7 @@ describe("getHomeNotices", () => {
 
   it("uses the full urgent count even when the preview has no items", () => {
     expect(getHomeNotices({ ...base, within7DaysCount: 2, unknownExpiryCount: 1 })[0])
-      .toMatchObject({ id: "expiring", action: "expiring", message: "7일 안에 기한이 오는 재료 2건을 먼저 살펴보세요." });
+      .toMatchObject({ id: "expiring", action: "expiring", message: "7일 안에 기한이 오는 재료 2건을 살펴보세요." });
   });
 
   it("does not describe missing expiry dates as having no urgent work", () => {

@@ -29,6 +29,7 @@ type JangoHeroNoticeCarouselProps = {
   notices: JangoHeroNoticeItem[];
   size?: "small" | "medium";
   density?: "default" | "compact";
+  layout?: "inline" | "stacked";
   textVariant?: AppTextVariant;
   bubbleStyle?: StyleProp<ViewStyle>;
   onIndexChange?: (index: number) => void;
@@ -38,6 +39,7 @@ export function JangoHeroNoticeCarousel({
   notices,
   size = "small",
   density = "default",
+  layout = "inline",
   textVariant,
   bubbleStyle,
   onIndexChange,
@@ -131,6 +133,7 @@ export function JangoHeroNoticeCarousel({
                 notice={notice}
                 size={size}
                 density={density}
+                layout={layout}
                 textVariant={textVariant}
                 bubbleStyle={bubbleStyle}
               />
@@ -142,6 +145,7 @@ export function JangoHeroNoticeCarousel({
           notice={activeNotice}
           size={size}
           density={density}
+          layout={layout}
           textVariant={textVariant}
           bubbleStyle={bubbleStyle}
         />
@@ -154,12 +158,14 @@ function JangoHeroNoticeBubble({
   notice,
   size,
   density,
+  layout,
   textVariant,
   bubbleStyle,
 }: {
   notice: JangoHeroNoticeItem;
   size: "small" | "medium";
   density: "default" | "compact";
+  layout: "inline" | "stacked";
   textVariant?: AppTextVariant;
   bubbleStyle?: StyleProp<ViewStyle>;
 }) {
@@ -170,6 +176,7 @@ function JangoHeroNoticeBubble({
       mood={notice.mood}
       size={size}
       density={density}
+      layout={layout}
       textVariant={textVariant}
       style={bubbleStyle}
     />

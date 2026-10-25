@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { InventorySpaceSummary } from "@expirymate/shared";
 import { updateSpaceNotifications } from "../../services/api";
 import { spacesListQueryKey } from "../auth/session-boundary";
 import { useAuth } from "../auth/use-auth";
@@ -17,11 +18,21 @@ export function useUpdateSpaceNotifications() {
       spaceId: string;
       enabled: boolean;
     }) => updateSpaceNotifications(spaceId, enabled),
-    onSuccess: () => {
+    onMutate: () => ({ sessionUserId }),
+    onSuccess: ({ enabled }, { spaceId }, context) => {
+      if (!context?.sessionUserId) return;
+      const queryKey = spacesListQueryKey(context.sessionUserId);
+      // Reflect the server-confirmed value before announcing that the row is saved.
+      queryClient.setQueryData<InventorySpaceSummary[]>(
+        queryKey,
+        (spaces) => spaces?.map((space) => space.id === spaceId
+          ? { ...space, notificationsEnabled: enabled }
+          : space),
+      );
       void queryClient.invalidateQueries({
-        queryKey: spacesListQueryKey(sessionUserId),
+        queryKey,
       });
-      void refetchSpaces();
+      if (context.sessionUserId === sessionUserId) void refetchSpaces();
     },
   });
 }

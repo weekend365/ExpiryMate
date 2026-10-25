@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-25",
+  "baselineCommit": "77d1b0c303724b5188315753f5874be34fee9efd",
+  "renderer": "React Native Web 0.21.1; React 19.1.0; real component source, mocked services/native runtime",
+  "nativeQA": false,
+  "sourceSHA256": {
+    "apps/mobile/app/(tabs)/recommendations.tsx": "308a61b9e856aa3804ad559093a893fc6113adf52890d7fa507f2485e1e4d0cf",
+    "apps/mobile/app/privacy/index.tsx": "935537a97f416c93013fa4f80372df58f9de2f8d27cb3ee28d2fd38fb6b8fc3c",
+    "apps/mobile/app/register-photo.tsx": "41d2e8699621a99aa5a38f1cc9ea4626b4f0e4d4505fe159b3e1c96c0fd77df2",
+    "apps/mobile/app/settings/notifications.tsx": "312c48582e18c2e7d08cc0af0d6332bd718438ce8ce365e63e1bcec105b8205d",
+    "apps/mobile/src/components/JangoHeroNoticeCarousel.tsx": "c0c16a8ba6b0c6aac184d19c472e591896bc47cfea37865e8b97a510ceefa616",
+    "apps/mobile/src/components/MascotSpeechBubble.tsx": "7168abbb6156c7eb0c93fa54e61a356673ffb3e724994fd7cf04b9038709f607",
+    "apps/mobile/src/features/home/home-hero.tsx": "e5e614c63ed078b39a4cfb9e625fc8e6b270ef73d3a3ac1b7b1f9a83a3742a96",
+    "apps/mobile/src/features/home/home-notices.test.ts": "1407e9da61234d6ca96b4e2b8d4d2eabc75490e3c1af384ee86e8ce0abe04247",
+    "apps/mobile/src/features/home/home-notices.ts": "ff17236c827b4c7824a4fcb1e7396dc9ef3aeb25bfc19ebc662dbccf1ead79ae",
+    "apps/mobile/src/features/photo-intake/photo-capture-screen.test.tsx": "d50653c981e95badb8521edbd84c87f2be5a26ff07ea73c6533222b7747ec5af",
+    "apps/mobile/src/features/photo-intake/photo-capture-screen.tsx": "421d3f199fac953ee018585cdaa86c0a12d22cefa92698e5ff669d7e5d6947a1",
+    "apps/mobile/src/features/photo-intake/photo-selection-access.test.ts": "be9f397bed869691f382fe1c7efddcc7eb362d7b5a166219f566318c27951d7c",
+    "apps/mobile/src/features/photo-intake/photo-selection-access.ts": "4303d037c5388e8dcc13700a79b3492f503e3b0bff8d21450ef3e6ad2d6b289b",
+    "apps/mobile/src/features/privacy/privacy-history-status.test.tsx": "6769791cac1078febbc1be40ea54cbb61487144e901039af3eda6ab527b7eb54",
+    "apps/mobile/src/features/privacy/privacy-history-status.tsx": "1fbeeff6490d306e6abb8ea859119f97eabf945c9473bfbbb7f048ddb0cd7a6f",
+    "apps/mobile/src/features/settings/notification-save-copy.test.ts": "8c68dbe56ebe6b65868de406f2e9911274c448819bde15aaacd12317cd279638",
+    "apps/mobile/src/features/settings/notification-save-copy.ts": "9ccebb7d02c7e878258df87d3ef8568a8df7d4dc64b5c67e91525edd5f63e4c3",
+    "apps/mobile/src/features/spaces/use-space-notifications.test.ts": "6ceaffabcaf464cb68b14582550e7795c55534be18d8674731b056bbac7060a7",
+    "apps/mobile/src/features/spaces/use-space-notifications.ts": "d733f85f13e00002d1a96a213396e5e8ba7e01fc9c5b6654f174f001cd07c9f1"
+  },
+  "artifactSHA256": {
+    "README.md": "830914e5655faff790200c6e996419da5ee3372434c0cb69be4c04baafa61351",
+    "cards-320-2.png": "867f6c2aae704d6b96ad7cf373eb233f1808351fd662f2d2acdf1c29ecd46905",
+    "cards-360-1.png": "b2c267cfefd9ae0b205f142c79541adcb9fd44d5cd18162245c96c35a9abb044",
+    "layout-checks.json": "f210f2659b69e04565b53a2ccd63053ffaeea571eb27002b36516ed11fb05703",
+    "notifications-360-1.3.png": "856084c16f8472bff8d8ec1d58bc0c457833cceb5a7975393067132f1ca1900c",
+    "photo-ready-360-1.3.png": "762c6a1cc8c62973b94301b021e13139d9355b9b3ebf25d9439a7c186eed0b5a",
+    "privacy-error-360-1.3.png": "a971face0d8715fd2d7c662904a5d5a4ea820b2e83ada26ed5a166200075dba0",
+    "verification.json": "30ba1b4242d35bb082e2fd6f75eb0700fb7e5946588b9999570ccf7e3e689201"
+  }
+}

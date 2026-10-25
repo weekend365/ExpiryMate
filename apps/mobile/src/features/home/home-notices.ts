@@ -61,7 +61,7 @@ export function getHomeNotices(input: {
   if (input.hasLoaded && input.expiredCount > 0) {
     return [{
       id: "expired",
-      message: `기한이 지난 재료 ${input.expiredCount}건의 상태를 먼저 확인해 주세요.`,
+      message: `기한 지난 재료 ${input.expiredCount}건, 상태를 확인해 주세요.`,
       mood: "worry",
       action: "expired",
       actionHint: "기한 지난 재료 확인",
@@ -73,7 +73,7 @@ export function getHomeNotices(input: {
       id: "expiring",
       message: input.expiringGroups.length > 0
         ? getExpiringNoticeMessage(input.expiringGroups)
-        : `7일 안에 기한이 오는 재료 ${input.within7DaysCount}건을 먼저 살펴보세요.`,
+        : `7일 안에 기한이 오는 재료 ${input.within7DaysCount}건을 살펴보세요.`,
       mood: "speak",
       action: "expiring",
       actionHint: "보관함에 임박 재료 필터 적용",
