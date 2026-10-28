@@ -1,0 +1,46 @@
+{
+  "verifiedAt": "2026-10-28T04:47:19.996Z",
+  "verificationDateKst": "2026-10-28",
+  "state": "iOS 1.4.4(66) and Android 1.4.4(47) publicly available; full rollout verified",
+  "authorization": "User 2026-10-25: 바로 전체 공개해. User 2026-10-28: 진행중이던 작업 마무리해줘.",
+  "ios": {
+    "version": "1.4.4",
+    "build": 66,
+    "appStoreState": "READY_FOR_SALE",
+    "appVersionState": "READY_FOR_DISTRIBUTION",
+    "reviewState": "COMPLETE",
+    "releaseType": "AFTER_APPROVAL",
+    "phasedRelease": false,
+    "publicLookup": {
+      "trackId": 6793375883,
+      "trackName": "장고야 부탁해",
+      "version": "1.4.4",
+      "currentVersionReleaseDate": "2026-10-25T21:27:30Z",
+      "trackViewUrl": "https://apps.apple.com/kr/app/%EC%9E%A5%EA%B3%A0%EC%95%BC-%EB%B6%80%ED%83%81%ED%95%B4/id6793375883?uo=4"
+    },
+    "releasedAtKst": "2026-10-26 06:27:30 KST",
+    "sourceCommit": "d4d1ba3a447ceae9699e6311415714c8178add24"
+  },
+  "android": {
+    "version": "1.4.4",
+    "versionCode": 47,
+    "track": "production",
+    "status": "completed",
+    "rolloutPercent": 100,
+    "releaseName": "1.4.4 (47)",
+    "sourceCommit": "1aaa2f8394e5d458114c1fb71940f189242dd5f0",
+    "statusMeaningSource": "https://developers.google.com/android-publisher/api-ref/rest/v3/edits.tracks#Status",
+    "publicationTimestamp": "Not exposed by the read-only track response; no exact publication time claimed."
+  },
+  "verificationOnly": {
+    "productionChangesCommitted": false,
+    "temporaryPlayReadTransactionClosed": true,
+    "databaseChanges": false,
+    "newMobileBuildsCreated": false
+  },
+  "remainingValidationLimits": {
+    "iosTestflightPriceMismatch": "Unresolved historical Sandbox/TestFlight case; not marked passed.",
+    "fullNativeDesignMatrix": "Not verified; release proceeded under immediate-publication request.",
+    "ci": "Existing runner-only 20-second mascot reproduction timeout; local assertion and image checks passed. See ci-status.json."
+  }
+}

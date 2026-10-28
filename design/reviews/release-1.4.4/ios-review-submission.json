@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-10-25T09:52:42.815Z",
+  "appId": "6793375883",
+  "versionId": "e4532e8b-0934-4374-84dc-1901cece6a09",
+  "version": "1.4.4",
+  "build": "66",
+  "appleBuildId": "807ac7a6-a9ef-4f8b-bf3e-d2d3afdbdc6a",
+  "state": "WAITING_FOR_REVIEW",
+  "releaseType": "AFTER_APPROVAL",
+  "phasedRelease": null,
+  "submission": {
+    "id": "703b0ca3-4995-4e9f-8d66-0afb6d7df6be",
+    "state": "WAITING_FOR_REVIEW",
+    "submittedAt": "2026-10-25T09:51:54.058Z"
+  }
+}

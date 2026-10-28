@@ -1,0 +1,18 @@
+{
+  "preparedAt": "2026-10-25T09:36:50.771Z",
+  "appId": "6793375883",
+  "versionId": "e4532e8b-0934-4374-84dc-1901cece6a09",
+  "version": "1.4.4",
+  "releaseType": "AFTER_APPROVAL",
+  "phasedRelease": false,
+  "localizations": [
+    {
+      "locale": "ko",
+      "sets": 1,
+      "screenshots": 6
+    }
+  ],
+  "reviewDetailsPresent": true,
+  "reviewCredentialsPrinted": false,
+  "releaseNotes": "장고가 더 다정하게 안내해 드려요.\n\n• 화면마다 어울리는 생활 공간 배경을 더했어요.\n• 큰 글자에서도 안내와 버튼을 편하게 볼 수 있도록 다듬었어요.\n• 보관함 필터와 요리 안내를 더 알기 쉽게 정리했어요."
+}

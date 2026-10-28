@@ -1,7 +1,7 @@
 ---
 status: active
 owner: platform
-last_reviewed: 2026-10-13
+last_reviewed: 2026-10-28
 source_of_truth: true
 ---
 
@@ -158,6 +158,19 @@ artifact를 재배포했습니다. deployment `0d589013-7aff-49a2-ba9d-2543bd2de
 원본 dump는 저장소 밖0600 보호 폴더에 보존했고 로컬 격리 복구 사용자 데이터는 제거했습니다.
 미완료 기기 QA는 이번 버전에 한한 사용자 예외이며 통과로 기록하지 않습니다. 위10월10일의
 7일/5% 계획은 이 최종 요청으로 대체됐습니다. 앞으로 운영 변경에는 새 백업·검증을 사용합니다.
+
+## 2026-10-28 1.4.4 양대 스토어 전체 공개 확인
+
+[최종 공개 기록](../../design/reviews/release-1.4.4/full-public-release.json)에서
+iOS `1.4.4(66)`의 `READY_FOR_SALE`·공개 App Store 조회와 Android `1.4.4(47)`의
+production `completed`(100%)를 확인했습니다. 10월 25일 사용자의 즉시 전체 공개 요청에 따라
+iOS는 `AFTER_APPROVAL`·단계적 출시 없음, Google은 관리형 게시 해제·출시율 100%로 제출했습니다.
+이번 마무리는 기존 공개 상태 확인이며 새 모바일 빌드·스토어/서버 설정 변경·DB 작업은 없습니다.
+문서 커밋은 기존 main 연동 배포 흐름을 따릅니다.
+
+앱 코드·API 계약·Prisma 변경 없이 출시 기록을 정리했습니다. 10월 25일 main에 연결된
+API 자동 배포의 SHA는 `d4d1ba3a`이며, 10월 28일에도 health·ready 200을 확인했습니다.
+기존 가격·전체 기기 QA와 CI 원화 재현 시간 초과는 출시 기록의 미완료 범위로 보존합니다.
 
 ## Sentry
 

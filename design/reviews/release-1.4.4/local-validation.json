@@ -1,0 +1,58 @@
+{
+  "sourceCommit": "1aaa2f8394e5d458114c1fb71940f189242dd5f0",
+  "commands": [
+    {
+      "command": "pnpm docs:check",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm lint",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm typecheck",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm jango:check",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile backgrounds:audit",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm test",
+      "status": "initial-failure-corrected",
+      "jango": {
+        "passed": 41,
+        "failed": 0
+      },
+      "shared": {
+        "passed": 162
+      },
+      "api": {
+        "passed": 618,
+        "skipped": 6
+      },
+      "initialMobileFailure": "2 QA fixture cases still used 1.4.4 after production version advanced to 1.4.4"
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile test",
+      "status": "passed",
+      "passed": 679,
+      "failed": 0,
+      "note": "QA fixture now 1.4.5; same-version 1.4.4 refusal explicitly tested."
+    }
+  ],
+  "aggregatePassed": 1500,
+  "skipped": 6,
+  "nativeMatrix": "not verified; released under latest immediate-full-release request",
+  "priceConsistency": "unresolved TestFlight mismatch; not marked passed",
+  "configurationFollowup": {
+    "commit": "d4d1ba3a447ceae9699e6311415714c8178add24",
+    "change": "iOS EAS image only",
+    "qaEnvGuardTests": 21,
+    "status": "passed"
+  }
+}

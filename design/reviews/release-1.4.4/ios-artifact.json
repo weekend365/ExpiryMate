@@ -1,0 +1,22 @@
+{
+  "platform": "iOS",
+  "version": "1.4.4",
+  "build": "66",
+  "bundleIdentifier": "com.expirymate.mobile",
+  "minimumOS": "16.4",
+  "sdk": "iphoneos26.0",
+  "xcode": "2600",
+  "sha256": "7f37b01ba905eea3ed3185c008a9bc90baefd20a61907d5578ce7ccccb9d7d1e",
+  "bytes": 89234054,
+  "backgrounds": {
+    "welcome-room-bg": true,
+    "ingredient-prep-bg": true,
+    "cooking-workspace-bg": true,
+    "settings-study-bg": true,
+    "insights-journal-bg": true,
+    "shared-table-bg": true
+  },
+  "productionApiInBundle": true,
+  "qaApiInBundle": false,
+  "sourceCommit": "d4d1ba3a447ceae9699e6311415714c8178add24"
+}

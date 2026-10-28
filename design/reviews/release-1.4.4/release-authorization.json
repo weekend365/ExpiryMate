@@ -25,7 +25,7 @@
     "typecheck": "passed",
     "backgroundAudit": "passed",
     "jangoCheck": "passed",
-    "fullTests": "running"
+    "fullTests": "Jango 41, shared 162, API 618 passed; mobile 679 passed after QA-version fixture correction. 6 API DB tests skipped by default suite."
   },
   "androidClientFile": "Existing EAS secret file assigned to production and preview; value and FCM credentials preserved."
 }

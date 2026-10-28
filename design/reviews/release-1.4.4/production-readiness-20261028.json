@@ -1,0 +1,18 @@
+{
+  "checkedAtKst": "2026-10-28",
+  "checks": [
+    {
+      "endpoint": "health",
+      "httpStatus": 200,
+      "status": "ok",
+      "gitSha": "d4d1ba3a447ceae9699e6311415714c8178add24"
+    },
+    {
+      "endpoint": "ready",
+      "httpStatus": 200,
+      "status": "ready",
+      "gitSha": null
+    }
+  ],
+  "mutations": false
+}

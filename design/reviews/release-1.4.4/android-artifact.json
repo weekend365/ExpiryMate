@@ -1,0 +1,25 @@
+{
+  "platform": "Android",
+  "version": "1.4.4",
+  "versionCode": "47",
+  "package": "com.expirymate.mobile",
+  "minSdk": "24",
+  "targetSdk": "36",
+  "debuggable": "false",
+  "sha256": "06d72cb914987ad08cb54051f59b5b81e784a337fb6306c2543e82e43ce0b6ff",
+  "bytes": 144106472,
+  "backgrounds": {
+    "welcome-room-bg": true,
+    "ingredient-prep-bg": true,
+    "cooking-workspace-bg": true,
+    "settings-study-bg": true,
+    "insights-journal-bg": true,
+    "shared-table-bg": true
+  },
+  "productionApiInBundle": true,
+  "qaApiInBundle": false,
+  "firebaseProviderPresent": true,
+  "sourceCommit": "1aaa2f8394e5d458114c1fb71940f189242dd5f0",
+  "firebaseAppIdResourcePresent": true,
+  "bundletoolValidation": "passed"
+}

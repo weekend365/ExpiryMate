@@ -1,0 +1,73 @@
+{
+  "generatedOnKst": "2026-10-28",
+  "files": {
+    "README.md": {
+      "sha256": "e7c9fc9ab7f91d94f6ae9d12dc81db6d7a62670f159951a684ce93b2f5fbb75a",
+      "bytes": 4603
+    },
+    "android-artifact.json": {
+      "sha256": "b714e5683b182715b3302cac38ee8103c60a2992103afc801968956bb94cb2cd",
+      "bytes": 720
+    },
+    "android-production-client-config.json": {
+      "sha256": "6e62b670321135feccc9fe8ef264edc0d840055a1ec8eb0bb9505af845ae01c9",
+      "bytes": 397
+    },
+    "app-store-public-status.json": {
+      "sha256": "39bf1874f88ea514352ec8dc71d731d44b2aab8398d9c5e57651cda4734f5e42",
+      "bytes": 786
+    },
+    "build-retry.json": {
+      "sha256": "68e403b1a0557f10de576b6f3ea4ea4834d5291afd94c637d869581714ad1e1e",
+      "bytes": 961
+    },
+    "ci-status.json": {
+      "sha256": "0058a225440c396fef5a30a659462e6b09e401f8006bf8b8dc466ccd48cc942b",
+      "bytes": 1428
+    },
+    "cleanup.json": {
+      "sha256": "934f5e318c598a323ae078fdeb014a453b3a3542bf599feee52b4b3c0e353abe",
+      "bytes": 875
+    },
+    "full-public-release.json": {
+      "sha256": "b76f5a4de73594989e7600b0e30c6d35289aaf74b78c4d98ca0f4b76080ad7cc",
+      "bytes": 1993
+    },
+    "google-play-production.json": {
+      "sha256": "c655285733ba872b6d2776fecea47d158f90872bcc32bbcf57a9de92b1ca5cf4",
+      "bytes": 793
+    },
+    "ios-artifact.json": {
+      "sha256": "606f16e6ffe3fa81cc4da7c63dbf712b2fdddb412e9fda9b2a6a410f609ab2c8",
+      "bytes": 610
+    },
+    "ios-review-submission.json": {
+      "sha256": "2c2a76c6c518dd8de673c56c660a11d6af1bbfe3f164e9de32f6587670184f5e",
+      "bytes": 470
+    },
+    "ios-store-preparation.json": {
+      "sha256": "ed9ab32e9260ff18b9b72667e199c7d8ff855bab06e9d4febb595a8010ce042c",
+      "bytes": 686
+    },
+    "local-validation.json": {
+      "sha256": "02ab9f5cdc41dfa8e4cb193abf86d8322ceee64ca3d5f40f50b433a4208cd2d9",
+      "bytes": 1473
+    },
+    "production-readiness-20261028.json": {
+      "sha256": "e7343a1fb760dbbfbde049bbe69caedf25b5bc63c5af3fc153897f5218ca8ada",
+      "bytes": 332
+    },
+    "production-readiness.json": {
+      "sha256": "47841c52e06c7e3f393ade6b6e6dc8c25375aa88c00cdfaf29327ae0f32a0b86",
+      "bytes": 594
+    },
+    "release-authorization.json": {
+      "sha256": "57d7196c5c96812782a43ae2354673a7c04053f79c0d941fc0fa96ec6d4abb8a",
+      "bytes": 1571
+    },
+    "test-fixture-cleanup.json": {
+      "sha256": "9e7e84047e625b4463a557f3feb9fc4675ae8f1fc703f0a8b12cadb79cef13d3",
+      "bytes": 2573
+    }
+  }
+}

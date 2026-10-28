@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-10-28T04:49:35.496Z",
+  "packageName": "com.expirymate.mobile",
+  "productionTrack": {
+    "track": "production",
+    "releases": [
+      {
+        "name": "1.4.4 (47)",
+        "versionCodes": [
+          "47"
+        ],
+        "releaseNotes": [
+          {
+            "language": "ko-KR",
+            "text": "장고가 더 다정하게 안내해 드려요.\n• 화면마다 어울리는 생활 공간 배경을 더했어요.\n• 큰 글자에서도 안내와 버튼을 편하게 볼 수 있도록 다듬었어요.\n• 보관함 필터와 요리 안내를 더 알기 쉽게 정리했어요."
+          }
+        ],
+        "status": "completed"
+      }
+    ]
+  },
+  "productionChangesCommitted": false,
+  "method": "Temporary read transaction only; no commit."
+}

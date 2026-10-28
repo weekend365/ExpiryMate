@@ -1,0 +1,26 @@
+{
+  "failedBuild": {
+    "id": "021f1894-c48d-41b2-b5ec-ba619be42a32",
+    "buildNumber": 65,
+    "error": "Xcode latest resolved to SDK 27.1, which rejected old dependency deployment targets."
+  },
+  "fix": {
+    "commit": "d4d1ba3a447ceae9699e6311415714c8178add24",
+    "image": "macos-sequoia-15.6-xcode-26.0",
+    "reason": "SDK 54 supported image, already used by successful QA builds. Meets current iOS 26 SDK submission requirement.",
+    "publicSources": [
+      "https://docs.expo.dev/build-reference/infrastructure/",
+      "https://developer.apple.com/news/?id=ueeok6yw"
+    ]
+  },
+  "retry": {
+    "id": "379b1c3d-f49e-4bca-a954-c89ce517240e",
+    "buildNumber": 66
+  },
+  "android": {
+    "id": "741a19f8-1e72-48b4-a29a-6fae4b0960b9",
+    "versionCode": 47,
+    "sourceCommit": "1aaa2f8394e5d458114c1fb71940f189242dd5f0"
+  },
+  "sourceDifference": "Only iOS EAS build-image configuration differs. Runtime app code is identical across platforms."
+}

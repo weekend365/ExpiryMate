@@ -1,0 +1,26 @@
+{
+  "completedOnKst": "2026-10-28",
+  "detachedBuildWorktreeRemoved": true,
+  "ownedTemporaryDirectoryRemoved": true,
+  "binaryHashesVerifiedBeforeRemoval": true,
+  "removedTemporaryMaterials": [
+    "isolated build checkout",
+    "duplicate IPA and AAB",
+    "intermediate cloud logs",
+    "temporary device-app inventory",
+    "local API helpers without embedded keys",
+    "temporary publication screenshot"
+  ],
+  "removedAuxiliaryStatusFiles": [
+    "status-edddb8b4-f83b-4267-a456-e1b893dc0b8d.json",
+    "status-6922a582-7584-42ee-ac3a-1e8acd8fb9fd.json"
+  ],
+  "preserved": [
+    "source images, prompts, provenance, runtime assets",
+    "minimal review evidence",
+    "App Store and Google Play public release responses",
+    "binary checksums and EAS build/submission IDs"
+  ],
+  "originalUserFilesRemoved": false,
+  "credentialsOrSigningResourcesChanged": false
+}

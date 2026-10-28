@@ -1,0 +1,54 @@
+{
+  "runId": 40181624250,
+  "sourceCommit": "d4d1ba3a447ceae9699e6311415714c8178add24",
+  "jobs": [
+    {
+      "job": "quality",
+      "status": "completed",
+      "conclusion": "failure",
+      "failedSteps": [
+        "Test"
+      ]
+    },
+    {
+      "job": "build",
+      "status": "completed",
+      "conclusion": "skipped",
+      "failedSteps": []
+    },
+    {
+      "job": "migrate",
+      "status": "completed",
+      "conclusion": "skipped",
+      "failedSteps": []
+    },
+    {
+      "job": "mobile-layout",
+      "status": "completed",
+      "conclusion": "skipped",
+      "failedSteps": []
+    },
+    {
+      "job": "mobile-layout-ios",
+      "status": "completed",
+      "conclusion": "skipped",
+      "failedSteps": []
+    }
+  ],
+  "failureDetail": {
+    "file": "apps/mobile/scripts/mascot-anatomy.test.mjs",
+    "test": "reproduces committed measurements and overlays, including honest failing art results",
+    "failure": "20000ms timeout on GitHub runner; measured 31883ms",
+    "localResult": "passed in 14813ms; full mobile 679 passed",
+    "jangoGateOnCI": {
+      "passed": 39,
+      "failed": 0,
+      "skipped": 2
+    },
+    "assertionMismatchObserved": false,
+    "timeoutOrQualityThresholdChanged": false
+  },
+  "failedJobRerunRequested": true,
+  "failedJobRerunAccepted": false,
+  "rerunResult": "GitHub connector returned 403 Resource not accessible by integration. No permissions were expanded."
+}

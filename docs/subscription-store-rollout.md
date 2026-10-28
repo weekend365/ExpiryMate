@@ -1,15 +1,25 @@
 ---
 status: active
 owner: product-release
-last_reviewed: 2026-10-25
+last_reviewed: 2026-10-28
 source_of_truth: true
-data_as_of: 2026-10-25
+data_as_of: 2026-10-28
 ---
 
 # 개인 플러스 스토어 설정·출시 체크리스트
 
 장고야 부탁해는 이미 iOS와 Android에 출시되어 있습니다. 이 문서는 신규 앱 등록이
 아니라 **기존 앱에 첫 자동 갱신 구독을 추가하는 업데이트** 절차입니다.
+
+## 현재 상태 — 2026-10-28 1.4.4 전체 공개 확인
+
+[최종 공개 기록](../design/reviews/release-1.4.4/full-public-release.json)에서 iOS `1.4.4(66)`의
+`READY_FOR_SALE`·공개 조회와 Android `1.4.4(47)`의 production `completed`(전체 사용자 제공)를
+확인했습니다. 사용자의 즉시 전체 공개 요청에 따라 승인 후 자동 공개했습니다.
+이번 업데이트는 장고 디자인·배경이며 기존 구독 상품·판매 국가·정책을 유지합니다.
+기존 Sandbox 가격 불일치와 전체 기기 QA, CI 원화 재현 시간 초과는
+[출시 기록](../design/reviews/release-1.4.4/README.md)에 구분해 남겼습니다.
+아래 1.4.3 출시와 QA 빌드 1.4.4(60~64)는 당시 이력입니다. 현재 QA 프로필 버전은 `1.4.5`입니다.
 
 ## 2026-10-25 남은 iOS QA 결과·정리
 
@@ -120,9 +130,9 @@ HTTP 확인·mock 스토어 자동 테스트·실제 스토어/기기 결과를 
 시나리오는 증거가 있는 항목만 통과로 기록한다. QA 프로젝트 누적 사용료 $7 또는 생성 후
 72시간에 도달하면 검증을 끝내고 증거를 보존한 뒤 이 QA 프로젝트만 정리한다.
 
-## 현재 상태 — 2026-10-13 정식 출시 완료
+## 2026-10-13 정식 출시 이력
 
-[정식 출시 기록](../design/reviews/release-readiness-2026-10-13/full-public-release.json)이 최신 기준입니다.
+[정식 출시 기록](../design/reviews/release-readiness-2026-10-13/full-public-release.json)은 당시 이력입니다.
 iOS1.4.3(51)은21:22 KST 즉시 모든 사용자에게 출시했고 공개 한국 App Store에1.4.3이
 표시됩니다. Android1.4.3(39)와 Data Safety는21:25 KST 게시됐으며 production 출시율100%·
 Google Play에 제공됨을 확인했습니다. 사용자의 최종 요청으로 기존 iOS7일·Android5% 계획을
@@ -256,7 +266,7 @@ Google Play에 제공됨을 확인했습니다. 사용자의 최종 요청으로
 
 | 항목 | 값 |
 |---|---|
-| 현재 공개 앱 버전 | `1.4.3` (iOS51·Android39) |
+| 현재 공개 앱 버전 | `1.4.4` (iOS66·Android47) |
 | iOS Bundle ID | `com.expirymate.mobile` |
 | Android package | `com.expirymate.mobile` |
 | Apple 월간 Product ID | `expirymate_premium_monthly` |

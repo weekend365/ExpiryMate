@@ -1,7 +1,7 @@
 ---
 status: active
 owner: mobile-release
-last_reviewed: 2026-10-08
+last_reviewed: 2026-10-28
 source_of_truth: true
 ---
 
@@ -9,6 +9,16 @@ source_of_truth: true
 
 Apple Developer Program 가입 이후 **Sign in with Apple · Push · TestFlight/App Store** 를 켜기 위한 체크리스트입니다.  
 코드 쪽 설정은 `apps/mobile/app.json`, `app.config.js`, `eas.json`에 반영됩니다. iOS EAS worker에서는 패키지 `postinstall`이 tracked native 프로젝트를 `expo prebuild`로 다시 동기화하며, 이후 EAS가 CocoaPods를 설치합니다.
+
+## 현재 공개 — 1.4.4 (2026-10-28 확인)
+
+[최종 공개 기록](../design/reviews/release-1.4.4/full-public-release.json)에서 iOS `1.4.4(66)`의
+`READY_FOR_SALE`와 공개 한국 App Store의 `1.4.4`를 확인했습니다. 단계적 출시 없이
+승인 후 전체 공개했고 실제 공개 시각은 10월 26일 06:27:30 KST입니다.
+production iOS 이미지는 SDK 54용 `macos-sequoia-15.6-xcode-26.0`으로 고정했습니다.
+QA 프로필의 마케팅 버전은 `1.4.5`이며 원격 빌드 번호 자동 증가를 유지합니다.
+아래 1.4.1·46번 준비 절차는 당시 이력입니다. 신규 제출은 현재 `app.json` 버전과
+EAS 원격 번호를 확인해 진행합니다.
 
 ## 출시 앱과 개발 앱 함께 사용하기
 
