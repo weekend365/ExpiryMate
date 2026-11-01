@@ -1,0 +1,20 @@
+{
+  "version": "1.4.5",
+  "qaVersion": "1.4.6",
+  "baselineFullTests": {
+    "passed": 1533,
+    "skipped": 6,
+    "record": "../photo-intake-quality-20261101/validation.json"
+  },
+  "releaseVersionAndPhotoRelatedTests": 87,
+  "docs": true,
+  "lint": true,
+  "typecheckAndSharedBuild": true,
+  "envParity": true,
+  "jangoRecords": true,
+  "iosNativeSync": "Existing EAS postinstall regenerates tracked iOS project from app config; native:variants:sync run locally. Android excluded from archive and regenerated on EAS.",
+  "needsNewNativeBinary": true,
+  "liveRecognitionAccuracyVerified": false,
+  "fullNativeMatrixVerified": false,
+  "ci": "pending exact release commit"
+}

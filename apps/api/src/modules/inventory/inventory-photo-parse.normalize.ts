@@ -22,7 +22,7 @@ export function normalizePhotoParseItems(
 
   for (const raw of rawItems) {
     const displayName = raw.displayName.trim().replace(/\s+/g, " ");
-    if (!displayName || RECEIPT_NOISE_PATTERN.test(displayName)) {
+    if (!displayName || (scene === "receipt" && RECEIPT_NOISE_PATTERN.test(displayName))) {
       continue;
     }
 

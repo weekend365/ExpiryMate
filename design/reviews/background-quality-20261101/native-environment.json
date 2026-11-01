@@ -1,0 +1,11 @@
+{
+  "androidAttached": 0,
+  "iOSBootedSimulators": 0,
+  "availablePhysicalIPhones": 0,
+  "knownPhysicalState": "unavailable",
+  "browserHost": "CUA browser access host unavailable; separate local headless Chromium used",
+  "actualOSKeyboard": false,
+  "safeAreaNative": false,
+  "screenReaderNative": false,
+  "newNativeBuild": false
+}

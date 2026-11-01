@@ -4,6 +4,7 @@ import {
   JangoHeroNoticeCarousel,
   type JangoHeroNoticeItem,
 } from "../../components/JangoHeroNoticeCarousel";
+import { useResponsiveLayout } from "../../shared/responsive-layout";
 import { colors, radius, spacing } from "../../shared/theme";
 
 export function ShoppingHeroCard({
@@ -12,9 +13,15 @@ export function ShoppingHeroCard({
 }: PropsWithChildren<{
   notices: JangoHeroNoticeItem[];
 }>) {
+  const { shouldStackDense } = useResponsiveLayout();
+
   return (
     <View style={styles.card}>
-      <JangoHeroNoticeCarousel notices={notices} size="medium" layout="adaptive" />
+      <JangoHeroNoticeCarousel
+        notices={notices}
+        size="small"
+        layout={shouldStackDense ? "stacked" : "inline"}
+      />
       {children}
     </View>
   );

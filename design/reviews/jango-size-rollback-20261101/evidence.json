@@ -1,0 +1,151 @@
+{
+  "generatedAt": "2026-11-01T04:49:23.578Z",
+  "baseline": "cf37517d81d63ffea70c6235c6324a74bc4ead8b",
+  "images": [
+    {
+      "file": "cooking-done-320-2.jpg",
+      "sha256": "006d3128a5cfa83ac37e4abe94805a9a36f09f4a69c8040bceb23ffe38be7084",
+      "beforeCaptureSHA256": "795aff02a46e3905da7717b8cce370eba6091740877d71ea8e8d873fed89a5f6",
+      "afterCaptureSHA256": "d41b89c32b8059a6429606f229bdf94eabffda565573272e53941ee911e2ab1d"
+    },
+    {
+      "file": "home-360-1.jpg",
+      "sha256": "c7803e8524c365d3dd6406884e687fb26c9f67acbb1687a5fa080edcd3f684f6",
+      "beforeCaptureSHA256": "8b516a2dba85a718ca6911f78fb5bf82cd2e99bedb35b1cce143d195ee07ef38",
+      "afterCaptureSHA256": "8a1b35c39588ae187a391509946dde37e37bb7926f6d67326e14eee1bb789814"
+    },
+    {
+      "file": "onboarding-360-1.jpg",
+      "sha256": "4a764e615e322af581c6774e4fa7241ee2e742fc071ef187648b7fa8dd46f483",
+      "beforeCaptureSHA256": "abff98ca365312369f84e1c1edec9e2d0e7297d397bc9811884705d9ffea4731",
+      "afterCaptureSHA256": "eaeaf4e68999f6f2672967a491ab1a115a3269a987f4675dd7e1b7eea6106e1b"
+    },
+    {
+      "file": "recommendations-780-1.jpg",
+      "sha256": "2f4c5743b1699ffe21965fc90f9b8cc37c23253a4a6a847897216a576b1fea83",
+      "beforeCaptureSHA256": "a30f1110d5cb492bf6291f674230b53c8ebdc5bb8e6f5c85591b9415c5ca7662",
+      "afterCaptureSHA256": "0bfa43daf14f21fffdfc7463843061358befd826367ad5658b5af732d59dd5d7"
+    },
+    {
+      "file": "register-done-360-1.jpg",
+      "sha256": "dbca718149ed42fbe24319ae475fcdf67bdc051ca84d9998eb04913047c9e2ac",
+      "beforeCaptureSHA256": "9e4ae515e7a0fbcdc8635e116e05cb7ef4cd7dc43c85473785c34c78def24f72",
+      "afterCaptureSHA256": "1bbb3bb4e85381230bf71bf180c0f5ef73fb04014d02d0103b678f0785fbad47"
+    },
+    {
+      "file": "register-first-360-1.jpg",
+      "sha256": "ec62633ece9a3e66d96abb09a7b52f4987582e680bfbbf75765bf9926a484153",
+      "beforeCaptureSHA256": "5117133474a99f9ca21d42d03f3b288e4491c605b03f3ef98c924314ef49a494",
+      "afterCaptureSHA256": "adb3a3aa6987c31945f01492c11d51086006640c8c670cfda5a87d07b00e2b8a"
+    },
+    {
+      "file": "register-keyboard-780-1.jpg",
+      "sha256": "224bb113e06bee5769dd3ae26e4dee34b021f4815f3d73f8c21797b95501e682",
+      "beforeCaptureSHA256": "d36b26efebf48a6c062c7b025b271ee0ca049eb6b743698df0879b10835372f3",
+      "afterCaptureSHA256": "57348cb571d25fd30a0094d71db97eb7abd8145a6ee8ff01cc5605523d496974"
+    },
+    {
+      "file": "settings-360-1.jpg",
+      "sha256": "1b354baf97320e8b92684ba726494c1555fb79eab310e5db08037cff7cb82fca",
+      "beforeCaptureSHA256": "226f51f5d506de470b6de571b5e7971a3ff2d38742141b82581383802a14686b",
+      "afterCaptureSHA256": "66e9ba4c8ed84028f08b62b0c480739f9c33a3f13bb04050068829e9e228fa51"
+    },
+    {
+      "file": "shopping-320-2.jpg",
+      "sha256": "847d412512008c452692f4ae290d1668d977fe4151716c8d3aaee82448bea797",
+      "beforeCaptureSHA256": "d0e0a3b5e1fa991076b339d4dc8227dcefb2a4c6fa99b6803899803717f19f5a",
+      "afterCaptureSHA256": "dee228d5b61cc9527248af7f74be1360b92d9f4de2ca8f8f3a084cdc154d6498"
+    }
+  ],
+  "scripts": [
+    {
+      "file": "build.cjs.txt",
+      "sha256": "322227a85c21d6d1c750f9fdbbc143d1a4282a444ecbe193e4e38237b75afe57"
+    },
+    {
+      "file": "capture.cjs.txt",
+      "sha256": "b288759af9c4f77021d3a7df588300e5e0ef039e49a327d2097b97132a2a9407"
+    },
+    {
+      "file": "audit.cjs.txt",
+      "sha256": "712dbb0e18a0d71e7d4c59c00d52e1081af38f6c8ba139e92184c9c5b76eb418"
+    },
+    {
+      "file": "finalize.cjs.txt",
+      "sha256": "5feeffd7ab7252801964cc7be8e7a69be428857f71093545e0a16f3f8042609e"
+    }
+  ],
+  "layoutSHA256": "7f5aa639a1e810723b7afaba9240bba0c272db0adcb1f1d0cc44d3547b4ca40b",
+  "sourceAuditSHA256": "973264bbde36b82fadc263518b25248e6203bdfba93c9924e9d22ee690ef295a",
+  "artifacts": [
+    {
+      "file": "README.md",
+      "sha256": "b76c82ef481ba5ab65c2adab45320f55fabfabdf08feae4451f099fa21657515"
+    },
+    {
+      "file": "audit.cjs.txt",
+      "sha256": "712dbb0e18a0d71e7d4c59c00d52e1081af38f6c8ba139e92184c9c5b76eb418"
+    },
+    {
+      "file": "build.cjs.txt",
+      "sha256": "322227a85c21d6d1c750f9fdbbc143d1a4282a444ecbe193e4e38237b75afe57"
+    },
+    {
+      "file": "capture.cjs.txt",
+      "sha256": "b288759af9c4f77021d3a7df588300e5e0ef039e49a327d2097b97132a2a9407"
+    },
+    {
+      "file": "cooking-done-320-2.jpg",
+      "sha256": "006d3128a5cfa83ac37e4abe94805a9a36f09f4a69c8040bceb23ffe38be7084"
+    },
+    {
+      "file": "finalize.cjs.txt",
+      "sha256": "5feeffd7ab7252801964cc7be8e7a69be428857f71093545e0a16f3f8042609e"
+    },
+    {
+      "file": "home-360-1.jpg",
+      "sha256": "c7803e8524c365d3dd6406884e687fb26c9f67acbb1687a5fa080edcd3f684f6"
+    },
+    {
+      "file": "layout-checks.json",
+      "sha256": "7f5aa639a1e810723b7afaba9240bba0c272db0adcb1f1d0cc44d3547b4ca40b"
+    },
+    {
+      "file": "onboarding-360-1.jpg",
+      "sha256": "4a764e615e322af581c6774e4fa7241ee2e742fc071ef187648b7fa8dd46f483"
+    },
+    {
+      "file": "recommendations-780-1.jpg",
+      "sha256": "2f4c5743b1699ffe21965fc90f9b8cc37c23253a4a6a847897216a576b1fea83"
+    },
+    {
+      "file": "register-done-360-1.jpg",
+      "sha256": "dbca718149ed42fbe24319ae475fcdf67bdc051ca84d9998eb04913047c9e2ac"
+    },
+    {
+      "file": "register-first-360-1.jpg",
+      "sha256": "ec62633ece9a3e66d96abb09a7b52f4987582e680bfbbf75765bf9926a484153"
+    },
+    {
+      "file": "register-keyboard-780-1.jpg",
+      "sha256": "224bb113e06bee5769dd3ae26e4dee34b021f4815f3d73f8c21797b95501e682"
+    },
+    {
+      "file": "settings-360-1.jpg",
+      "sha256": "1b354baf97320e8b92684ba726494c1555fb79eab310e5db08037cff7cb82fca"
+    },
+    {
+      "file": "shopping-320-2.jpg",
+      "sha256": "847d412512008c452692f4ae290d1668d977fe4151716c8d3aaee82448bea797"
+    },
+    {
+      "file": "source-audit.json",
+      "sha256": "973264bbde36b82fadc263518b25248e6203bdfba93c9924e9d22ee690ef295a"
+    },
+    {
+      "file": "validation.json",
+      "sha256": "9a2a1e9b50adea76ea6f75c3544ddc9622c867aef263d081e29d4a508303f4b5"
+    }
+  ],
+  "completedAt": "2026-11-01T04:49:59.092Z"
+}

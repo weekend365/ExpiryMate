@@ -58,4 +58,15 @@ describe("normalizePhotoParseItems", () => {
     expect(kept[0]?.expirySource).toBe("ocr_detected");
     expect(dropped[0]?.suggestedExpiryDate).toBeUndefined();
   });
+  it("keeps fridge products containing receipt-noise words and limits output to 30", () => {
+    const raw=visionItem({displayName:"냉동 보관 봉투",brand:"브랜드",reason:"일부 가려져 수량 확인 필요"});
+    expect(normalizePhotoParseItems("receipt",[raw])).toEqual([]);
+    expect(normalizePhotoParseItems("fridge",[raw])[0]).toMatchObject({displayName:raw.displayName,brand:"브랜드",reason:raw.reason,needsReview:true});
+    expect(normalizePhotoParseItems("fridge",Array.from({length:40},()=>raw))).toHaveLength(30);
+  });
+  it("does not synthesize an expiry for an unreadable label and accepts no items", () => {
+    expect(normalizePhotoParseItems("fridge",[])).toEqual([]);
+    expect(normalizePhotoParseItems("fridge",[visionItem({suggestedExpiryDate:"2026-02-30"})])[0]?.suggestedExpiryDate).toBeUndefined();
+  });
+
 });

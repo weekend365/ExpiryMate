@@ -1,0 +1,80 @@
+const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
+const {PNG}=require('/Users/namu/Desktop/ExpiryMate/apps/mobile/node_modules/pngjs');
+const {chromium}=require('/Users/namu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core');
+const base=__dirname,root='/Users/namu/Desktop/ExpiryMate';
+const afterOnly=process.argv.includes('--after-only');const statesOnly=process.argv.includes('--states');const smoke=process.argv.includes('--smoke');const option=(key,fallback)=>process.argv.find(x=>x.startsWith('--'+key+'='))?.split('=')[1]||fallback;
+const scenes=['settings','notifications','onboarding','forgot','verify-pending','privacy','ai-notice','sharing','activity','records','ingredients','cooking','payment','photo-review'];
+const selected=new Set(['settings-360-1','notifications-360-1.3','onboarding-360-1','forgot-320-2','verify-pending-360-1','privacy-320-2','ai-notice-780-1.3','sharing-360-1.3','activity-780-2','records-360-1','ingredients-320-2','cooking-360-1.3','payment-360-1.3','photo-review-360-1']);
+const server=http.createServer((req,res)=>{
+ const url=new URL(req.url,'http://127.0.0.1'),variant=url.searchParams.get('variant')==='before'?'before':'after',rel=decodeURIComponent(url.pathname);
+ const candidates=rel.startsWith('/fonts/')?[root+'/apps/mobile/assets'+rel]:[path.join(base,'out',variant,rel==='/'?'index.html':rel),path.join(base,'out','before',rel),path.join(base,'out','after',rel)];
+ const target=candidates.find(f=>fs.existsSync(f)&&fs.statSync(f).isFile());if(!target||(!target.startsWith(base+'/out/')&&!target.startsWith(root+'/apps/mobile/assets/fonts/'))){res.writeHead(404);return res.end();}
+ res.setHeader('Content-Type',target.endsWith('.html')?'text/html':target.endsWith('.js')?'text/javascript':target.endsWith('.png')?'image/png':'font/otf');res.end(fs.readFileSync(target));
+});
+const lum=c=>c.map(n=>{const x=n/255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4;}).reduce((v,x,i)=>v+x*[.2126,.7152,.0722][i],0);
+async function inspect(page){return page.evaluate(()=>{
+ const rect=e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};};
+ const texts=Array.from(document.querySelectorAll('[dir="auto"],input,textarea')).filter(e=>(e.textContent?.trim()||e.value)&& (e.matches('input,textarea')||Array.from(e.childNodes).some(n=>n.nodeType===3&&n.textContent.trim()))).map((e,i)=>{
+  e.setAttribute('data-qa-text',String(i));let disabled=!!e.closest('[aria-disabled="true"]');for(let n=e;n;n=n.parentElement)if(Number(getComputedStyle(n).opacity)<.99)disabled=true;
+  const c=getComputedStyle(e);return{id:i,text:(e.value||e.textContent).slice(0,180),...rect(e),color:c.color,fontSize:parseFloat(c.fontSize),disabled};
+ });
+ const layer=document.querySelector('[data-testid="screen-background"]'),img=layer?.querySelector('img');
+ const buttons=Array.from(document.querySelectorAll('[role="button"]')).map(e=>({...rect(e),label:e.getAttribute('aria-label')||e.textContent,disabled:e.getAttribute('aria-disabled')==='true'}));
+ return{viewport:{width:innerWidth,height:innerHeight},documentWidth:document.documentElement.scrollWidth,texts,buttons,layer:layer?{...rect(layer),hidden:layer.getAttribute('aria-hidden'),pointerEvents:getComputedStyle(layer).pointerEvents,veil:getComputedStyle(layer.lastElementChild).opacity}:null,image:{loaded:!!img?.complete&&img.naturalWidth===1024,width:img?.naturalWidth,height:img?.naturalHeight,src:img?.getAttribute('src')}};
+});}
+async function contrast(page,texts){
+ const style=await page.addStyleTag({content:'[data-qa-text]{color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:none!important}*{caret-color:transparent!important}'});
+ const background=PNG.sync.read(await page.screenshot({animations:'disabled'}));
+ await style.evaluate(e=>e.textContent='[data-qa-text]{color:black!important;-webkit-text-fill-color:black!important;text-shadow:none!important}*{caret-color:transparent!important}');
+ const black=PNG.sync.read(await page.screenshot({animations:'disabled'}));
+ await style.evaluate(e=>e.textContent='[data-qa-text]{color:white!important;-webkit-text-fill-color:white!important;text-shadow:none!important}*{caret-color:transparent!important}');
+ const white=PNG.sync.read(await page.screenshot({animations:'disabled'}));
+ const idColor=id=>[8+(id%16)*16,8+(Math.floor(id/16)%16)*16,104];
+ await style.evaluate((e,colors)=>{e.textContent=colors.map(({id,c})=>'[data-qa-text=\"'+id+'\"]{color:rgb('+c.join(',')+')!important;-webkit-text-fill-color:rgb('+c.join(',')+')!important;text-shadow:none!important}').join('')+'*{caret-color:transparent!important}';},texts.map(t=>({id:t.id,c:idColor(t.id)})));
+ const identity=PNG.sync.read(await page.screenshot({animations:'disabled'}));await style.evaluate(e=>e.remove());
+ const results=[];
+ for(const t of texts){
+  if(t.disabled||t.width<=0||t.height<=0)continue;const channels=t.color.match(/[\d.]+/g)?.map(Number);if(!channels||channels.length<3)continue;
+  const foreground=lum(channels.slice(0,3)),identityColor=idColor(t.id);let min=100,pixels=0;
+  for(let y=Math.max(0,Math.ceil(t.y));y<Math.min(background.height,Math.floor(t.y+t.height));y++)for(let x=Math.max(0,Math.ceil(t.x));x<Math.min(background.width,Math.floor(t.x+t.width));x++){
+   const index=(y*background.width+x)*4;
+   if(white.data[index]-black.data[index]<200||white.data[index+1]-black.data[index+1]<200||white.data[index+2]-black.data[index+2]<200)continue;
+   if(identityColor.some((c,k)=>Math.abs(identity.data[index+k]-c)>2))continue;
+   const b=lum([background.data[index],background.data[index+1],background.data[index+2]]);min=Math.min(min,(Math.max(foreground,b)+.05)/(Math.min(foreground,b)+.05));pixels++;
+  }
+  if(pixels)results.push({id:t.id,text:t.text,color:t.color,fontSize:t.fontSize,pixels,minContrast:min,passes:min>=4.5});
+ }
+ return results;
+}
+(async()=>{
+ await new Promise((r,j)=>{server.once('error',j);server.listen(0,'127.0.0.1',r);});
+ const browser=await chromium.launch({headless:true,executablePath:'/Users/namu/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell'});
+ const results=[],scrollChecks=[],errors=[],keyboardChecks=[];fs.mkdirSync(base+'/captures',{recursive:true});
+ try{
+  for(const state of statesOnly?['loading','error']:['ready'])for(const variant of smoke||statesOnly||afterOnly?['after']:['before','after'])for(const width of smoke||statesOnly?[Number(option('width',360))]:[320,360,780])for(const scale of smoke||statesOnly?[Number(option('scale',1.3))]:[1,1.3,2])for(const scene of scenes.filter(s=>(!statesOnly||['notifications','privacy','records'].includes(s))&&(!option('scene','')||s===option('scene','')))){
+   const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:1,reducedMotion:'reduce'}),page=await context.newPage();const caseErrors=[];
+   page.on('pageerror',e=>caseErrors.push(e.message));
+   await page.route('**/*',route=>new URL(route.request().url()).hostname==='127.0.0.1'?route.continue():route.abort());
+   await page.goto(`http://127.0.0.1:${server.address().port}/?variant=${variant}&scene=${scene}&scale=${scale}&state=${state}`,{waitUntil:'networkidle'});
+   await page.waitForFunction(()=>document.body.dataset.fonts==='ready'&&document.querySelector('#root')?.children.length>0,null,{timeout:10000});
+   await page.evaluate(()=>Promise.all(Array.from(document.images).map(i=>i.decode().catch(()=>{}))));
+   await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+   const data=await inspect(page);
+   if(variant==='after')data.contrast=await contrast(page,data.texts);
+   if(smoke||selected.has(`${scene}-${width}-${scale}`))await page.screenshot({path:`${base}/captures/${variant}-${scene}-${width}-${scale}${state==='ready'?'':'-'+state}.png`,animations:'disabled'});
+   const row={variant,scene,width,scale,state,...data,errors:caseErrors};results.push(row);
+   console.log(variant,scene,width,scale,'texts',data.texts.length,'contrastFails',data.contrast?.filter(x=>!x.passes).length??'-');
+   if(caseErrors.length||!data.layer||!data.image.loaded){errors.push(row);throw Error(JSON.stringify(row));}
+   if(!smoke&&!statesOnly&&variant==='after'&&width===360&&scale===1.3&&['settings','notifications','privacy','records','sharing'].includes(scene)){
+    for(const fraction of [.5,1]){
+     const scrolled=await page.evaluate(f=>{const nodes=Array.from(document.querySelectorAll('div')).filter(e=>e.scrollHeight>e.clientHeight+5&&['auto','scroll'].includes(getComputedStyle(e).overflowY));const n=nodes.sort((a,b)=>(b.scrollHeight-b.clientHeight)-(a.scrollHeight-a.clientHeight))[0];if(!n)return null;n.scrollTop=(n.scrollHeight-n.clientHeight)*f;return{scrollTop:n.scrollTop,height:n.clientHeight};},fraction);
+     await page.evaluate(()=>new Promise(r=>requestAnimationFrame(r)));const d=await inspect(page);d.contrast=await contrast(page,d.texts);scrollChecks.push({scene,width,scale,fraction,scrolled,...d});
+     if(fraction===1)await page.screenshot({path:`${base}/captures/after-${scene}-scrolled-360-1.3.png`,animations:'disabled'});
+    }
+   }
+   if(afterOnly&&scene==='forgot'&&width===360&&scale===1.3){await page.locator('input').first().fill('qa@example.test');await page.setViewportSize({width,height:480});await page.locator('input').first().focus();await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));const d=await inspect(page);keyboardChecks.push({...d,email:await page.locator('input').first().inputValue(),focus:await page.locator('input').first().evaluate(e=>e===document.activeElement),simulatedViewport:true});await page.screenshot({path:base+'/captures/after-forgot-keyboard-360-1.3.png',animations:'disabled'});}
+   await context.close();
+  }
+ }finally{await browser.close();server.close();fs.writeFileSync(base+(afterOnly?'/after-matrix.json':statesOnly?'/states.json':smoke?'/smoke.json':'/matrix.json'),JSON.stringify({results,scrollChecks,errors,keyboardChecks},null,2));}
+ console.log('Completed '+results.length+' renders.');
+})().catch(e=>{console.error(e);server.close();process.exitCode=1;});

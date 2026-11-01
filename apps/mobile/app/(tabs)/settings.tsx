@@ -36,7 +36,7 @@ export default function SettingsScreen() {
   return (
     <Screen background="settings" bottomInsetMode="navigator" testID="settings-screen">
       <View style={[styles.brandCard, shouldStack && styles.brandCardStacked]}>
-        <Mascot size="medium" mood="acknowledge" decorative />
+        <Mascot size="small" mood="acknowledge" decorative />
         <View style={styles.brandCopy}>
           <AppText variant="heading" style={styles.brandName}>
             {appBrand.appNameKo}

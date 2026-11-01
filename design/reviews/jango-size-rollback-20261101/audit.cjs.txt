@@ -1,0 +1,21 @@
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),{execFileSync}=require('node:child_process');
+const root='/Users/namu/Desktop/ExpiryMate',base=__dirname,ts=require(root+'/node_modules/typescript');
+const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+const {files,baseline}=JSON.parse(fs.readFileSync(base+'/sources.json'));
+const historical='68306b56';
+const source=(f,rev)=>rev?execFileSync('git',['show',rev+':'+f],{cwd:root}):fs.readFileSync(root+'/'+f);
+function calls(f,rev){
+ const ast=ts.createSourceFile(f,source(f,rev).toString(),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),result=[];
+ function walk(n){
+  if((ts.isJsxOpeningElement(n)||ts.isJsxSelfClosingElement(n))&&['Mascot','JangoHeroNoticeCarousel','StepFlow'].includes(n.tagName.getText(ast))){
+   const props={};for(const p of n.attributes.properties)if(ts.isJsxAttribute(p))props[p.name.getText(ast)]=p.initializer?.getText(ast)??true;
+   result.push({component:n.tagName.getText(ast),props});
+  }ts.forEachChild(n,walk);
+ }walk(ast);return result;
+}
+const unchanged=['apps/mobile/src/components/Mascot.tsx','apps/mobile/src/components/MascotSpeechBubble.tsx','apps/mobile/src/components/JangoHeroNoticeCarousel.tsx','apps/mobile/src/components/StepFlow.tsx','apps/mobile/src/components/Screen.tsx','apps/mobile/src/components/ScreenBackground.tsx','apps/mobile/src/shared/responsive-layout-core.ts','apps/mobile/src/shared/theme.ts','apps/mobile/app/register-photo.tsx','apps/mobile/assets/characters/moods.json'];
+const preserved=unchanged.filter(f=>fs.existsSync(root+'/'+f)).map(file=>({file,sha256:sha(source(file)),matchesBaseline:sha(source(file))===sha(source(file,baseline))}));
+if(preserved.some(p=>!p.matchesBaseline))throw Error('Shared or out-of-scope file changed');
+const evidence={baseline,historicalSizeBaseline:execFileSync('git',['rev-parse',historical],{cwd:root,encoding:'utf8'}).trim(),changes:files.map(file=>({file,beforeSHA256:sha(source(file,baseline)),afterSHA256:sha(source(file)),historicalCalls:calls(file,historical),beforeCalls:calls(file,'HEAD'),afterCalls:calls(file)})),preserved,unchangedAssetDiff:execFileSync('git',['diff','--name-only','--','apps/mobile/assets','design/backgrounds','packages/shared'],{cwd:root,encoding:'utf8'}).trim(),native:{android:'adb devices: no attached device',ios:'simctl list devices booted: no booted simulator; first sandbox query failed, escalated query completed after Xcode tool initialization',browserHost:'CUA browser access host unavailable; separate headless Chromium used'}};
+fs.writeFileSync(base+'/source-audit.json',JSON.stringify(evidence,null,2));
+console.log(evidence.changes.length+' source files and '+preserved.length+' preserved files checked.');

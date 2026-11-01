@@ -1,0 +1,82 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const {execFileSync} = require('node:child_process');
+const base = __dirname;
+const root = process.env.JANGO_REVIEW_ROOT || '/Users/namu/Desktop/ExpiryMate';
+const baseline = 'working-tree-before-background-v2';
+const esbuild = require(base + '/node_modules/esbuild');
+const ts = require(root + '/node_modules/typescript');
+const files = ['apps/mobile/src/features/home/home-hero.tsx', 'apps/mobile/src/features/shopping/shopping-hero-card.tsx', 'apps/mobile/app/(tabs)/recommendations.tsx', 'apps/mobile/app/(tabs)/settings.tsx', 'apps/mobile/app/onboarding.tsx', 'apps/mobile/app/register.tsx', 'apps/mobile/app/cooking/[recommendationId].tsx'];
+fs.writeFileSync(base + '/native.tsx', `
+import React from 'react';
+import * as RN from 'react-native-web';
+export * from 'react-native-web';
+export const useWindowDimensions=()=>({...RN.useWindowDimensions(), fontScale:Number(new URLSearchParams(location.search).get('scale')||1)});
+export const Text=React.forwardRef(({style,maxFontSizeMultiplier=2,allowFontScaling=true,...props}:any,ref:any)=>{
+ const flat=RN.StyleSheet.flatten(style)||{};
+ const factor=allowFontScaling?Math.min(Number(new URLSearchParams(location.search).get('scale')||1),maxFontSizeMultiplier):1;
+ return <RN.Text {...props} ref={ref} style={[style,{fontSize:flat.fontSize?flat.fontSize*factor:undefined,lineHeight:flat.lineHeight?flat.lineHeight*factor:undefined}]} />;
+});
+`);
+fs.writeFileSync(base + '/motion.tsx', `import React from 'react'; import {View} from 'react-native'; export default {View}; export const useSharedValue=(value:any)=>React.useRef({value}).current; export const useAnimatedStyle=(f:any)=>({...f(),opacity:1,transform:[]}); export const useReducedMotion=()=>true; export const withSpring=(v:any)=>v; export const cancelAnimation=()=>{};`);
+fs.writeFileSync(base + '/safe.tsx', `export {View as SafeAreaView,View as SafeAreaProvider} from 'react-native'; export const useSafeAreaInsets=()=>({top:0,bottom:0,left:0,right:0});`);
+fs.writeFileSync(base + '/router.ts', `export const router={push:()=>{},replace:()=>{},back:()=>{},canGoBack:()=>false};`);
+fs.writeFileSync(base + '/store.ts', `export const useAppStore=(s:any)=>s({completeOnboarding:()=>{},keepCookingScreenAwake:true,setKeepCookingScreenAwake:()=>{}});`);
+fs.writeFileSync(base + '/monetization.ts', `export const useMonetization=()=>({access:{tier:'free',paidCredits:{enabled:false}}});`);
+fs.writeFileSync(base + '/sheet.tsx', `export const BottomSheet=()=>null;`);
+const icons = ['X','ChevronLeft','ChevronRight','Bell','ChefHat','CreditCard','MapPin','MessageCircleHeart','ShieldCheck','Sun','Ticket','UserRound','Users','Check','Clock','Plus','Minus','AlertCircle','Info'];
+fs.writeFileSync(base + '/icons.tsx', `import React from 'react'; const Icon=({size=24,color='currentColor',...props}:any)=><svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke={color}/></svg>; ${icons.map(n=>`export const ${n}=Icon;`).join('\n')}`);
+fs.appendFileSync(base+'/native.tsx', `
+export const TextInput=React.forwardRef(({style,maxFontSizeMultiplier=2,allowFontScaling=true,...props}:any,ref:any)=>{
+ const flat=RN.StyleSheet.flatten(style)||{},factor=allowFontScaling?Math.min(Number(new URLSearchParams(location.search).get('scale')||1),maxFontSizeMultiplier):1;
+ return <RN.TextInput {...props} ref={ref} style={[style,{fontSize:flat.fontSize?flat.fontSize*factor:undefined,lineHeight:flat.lineHeight?flat.lineHeight*factor:undefined}]} />;
+});`);
+fs.writeFileSync(base+'/router.tsx', `import React from 'react'; export const router={push:()=>{},replace:()=>{},back:()=>{},canGoBack:()=>false}; export const useLocalSearchParams=()=>({email:'qa@example.test'}); export const useFocusEffect=()=>{}; export const Stack=Object.assign(({children}:any)=>children,{Screen:()=>null});`);
+const queryCode=`const noop=()=>{}; const mutation={isPending:false,mutate:noop,mutateAsync:async()=>({}),reset:noop}; const blank={data:[],isLoading:false,isError:false,isFetching:false,refetch:async()=>({})}; const infinite={...blank,data:{pages:[{items:[],nextCursor:null}]},hasNextPage:false,fetchNextPage:async()=>{}}; const client={invalidateQueries:async()=>{},setQueryData:noop}; export const useQuery=()=>blank; export const useInfiniteQuery=()=>infinite; export const useMutation=()=>mutation; export const useQueryClient=()=>client;`;
+fs.writeFileSync(base+'/query.ts',queryCode);
+fs.writeFileSync(base+'/auth.ts',`const noop=()=>{};const mutation={isPending:false,mutate:noop,mutateAsync:async()=>({})};const auth={sessionUserId:'qa-user',query:{data:{email:'qa@example.test'},isLoading:false,isError:false},forgotPasswordMutation:mutation,requestVerificationMutation:mutation};export const useAuth=()=>auth;`);
+fs.writeFileSync(base+'/spaces.ts',`const spaces=[{id:'qa-space',name:'우리 집 냉장고',type:'household',memberCount:2,myRole:'owner',notificationsEnabled:true}];const value={spaces,activeSpaceId:'qa-space',isLoading:false,error:null,setActiveSpaceId:()=>{},refetchSpaces:async()=>{}};export const useActiveSpace=()=>value;`);
+fs.writeFileSync(base+'/notification-preferences.ts',`const reviewState=new URLSearchParams(location.search).get('state');const data={enabled:true,remindOnDayOf:true,reminderDaysBefore:[1,3],deliveryTime:'09:00',groupBySpace:true,quietHoursStart:'22:00',quietHoursEnd:'07:00'};const value={query:{data:reviewState==='ready'||!reviewState?data:undefined,isLoading:reviewState==='loading',isError:reviewState==='error',error:reviewState==='error'?new Error('검토용 연결 오류'):null,refetch:async()=>{}},mutation:{isPending:false,mutateAsync:async()=>{}}};export const useNotificationPreferences=()=>value;`);
+fs.writeFileSync(base+'/space-notifications.ts',`export const useUpdateSpaceNotifications=()=>({isPending:false,mutate:()=>{}});`);
+fs.writeFileSync(base+'/device-notifications.ts',`const value={query:{data:'connected',isFetching:false,isError:false},connect:{isPending:false,mutate:()=>{},mutateAsync:async()=>'connected'}};export const useDeviceNotificationStatus=()=>value;`);
+fs.writeFileSync(base+'/privacy.ts',`const reviewState=new URLSearchParams(location.search).get('state');const data={hasAcceptedCurrentAiDataNotice:false,aiDataNoticeVersion:'local-example',aiDataNoticeAcceptedAt:null,recommendationHistoryCount:8,privacyPolicyUrl:'https://example.test/privacy',privacyChoicesUrl:'https://example.test/choices'};const query={data:reviewState==='ready'||!reviewState?data:undefined,isLoading:reviewState==='loading',isError:reviewState==='error',isFetching:reviewState==='loading',refetch:async()=>{}};const mutation={isPending:false,mutate:()=>{}};export const usePrivacyStatus=()=>query;export const useAcceptAiDataNotice=()=>mutation;export const useRevokeAiDataNotice=()=>mutation;export const useDeleteRecommendationHistory=()=>mutation;`);
+fs.writeFileSync(base+'/insights.ts',`const preview={data:{period:{from:'2026-10-01',to:'2026-10-31'},consumed:12,discarded:2,resolved:14,ready:true},isLoading:false,isError:false,refetch:async()=>{}};export const useInsightsPreview=()=>preview;export const useInsightsOverview=()=>({});`);
+fs.writeFileSync(base+'/entitlement.ts',`const reviewState=new URLSearchParams(location.search).get('state');const value={query:{data:reviewState==='ready'||!reviewState?{hasActiveEntitlement:false}:undefined,isLoading:reviewState==='loading',isError:reviewState==='error',refetch:async()=>{}}};export const useSubscriptionEntitlement=()=>value;`);
+fs.writeFileSync(base+'/web-browser.ts',`export const openBrowserAsync=async()=>{};`);
+const iconNames=new Set();
+function scan(dir){for(const ent of fs.readdirSync(dir,{withFileTypes:true})){const p=path.join(dir,ent.name);if(ent.isDirectory())scan(p);else if(/\.tsx?$/.test(p)){const ast=ts.createSourceFile(p,fs.readFileSync(p,'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);for(const n of ast.statements)if(ts.isImportDeclaration(n)&&n.moduleSpecifier.text==='lucide-react-native'&&n.importClause?.namedBindings&&ts.isNamedImports(n.importClause.namedBindings))for(const s of n.importClause.namedBindings.elements)if(!s.isTypeOnly)iconNames.add((s.propertyName||s.name).text);}}}
+scan(root+'/apps/mobile/src');scan(root+'/apps/mobile/app');
+fs.writeFileSync(base+'/icons.tsx',`import React from 'react';const Icon=({size=24,color='currentColor'}:any)=><svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke={color}/></svg>;${[...iconNames].map(n=>`export const ${n}=Icon;`).join('\n')}`);
+const apiAst=ts.createSourceFile('api.ts',fs.readFileSync(root+'/apps/mobile/src/services/api.ts','utf8'),ts.ScriptTarget.Latest,true);
+const apiNames=['getEmailVerificationStatus'];for(const n of apiAst.statements)if(n.modifiers?.some(m=>m.kind===ts.SyntaxKind.ExportKeyword)){if(ts.isVariableStatement(n))for(const d of n.declarationList.declarations)apiNames.push(d.name.text);if(ts.isFunctionDeclaration(n)&&n.name)apiNames.push(n.name.text);}
+fs.writeFileSync(base+'/api.ts',`export class ApiError extends Error {}\n`+apiNames.filter(n=>n!=='ApiError').map(n=>`export const ${n}=async(...args:any[])=>${n==='getEmailVerificationStatus'?'({verified:false})':"{throw Error('Local QA disallows API calls')}"};`).join('\n'));
+fs.writeFileSync(base+'/session-boundary.ts',`export const sessionQueryKeys={storageLocations:['locations'],inventoryActivity:['activity'],auth:['auth']};export const withInventorySpace=(k:any[],u:any,s:any)=>[...k,u,s];export const spacesListQueryKey=(u:any)=>['spaces',u];`);
+
+fs.writeFileSync(base+'/camera.tsx',`import React from 'react';import {View} from 'react-native';export const CameraView=View;export const useCameraPermissions=()=>[{granted:true},async()=>({granted:true})];`);
+fs.writeFileSync(base+'/locations.ts',`const value={selectableOptions:[{key:'fridge',label:'냉장'},{key:'freezer',label:'냉동'},{key:'pantry',label:'실온'}],resolveLabel:(key)=>({fridge:'냉장',freezer:'냉동',pantry:'실온'}[key]||key)};export const useStorageLocations=()=>value;`);
+fs.writeFileSync(base+'/inventory.ts',`const data=[{id:'milk',displayName:'우유 500ml',brand:'서울',quantity:1,unit:'개',unitCode:'ea',storageLocation:'fridge',expiryDate:null,expirySource:'unknown',quantityBase:1,version:1}];export const useInventoryList=()=>({data});`);
+fs.writeFileSync(base+'/registration.ts',`const drafts=[{localId:'milk',displayName:'우유 500ml',brand:'서울',quantity:2,unit:'개',unitCode:'ea',storageLocation:'fridge',expiryDate:null,expirySource:'unknown',needsReview:true,reason:'뒤쪽 포장이 일부 가려져 있어 수량을 확인해 주세요.'},{localId:'other',displayName:'우유 500ml',brand:'매일',quantity:1,unit:'개',unitCode:'ea',storageLocation:'fridge',expiryDate:null,expirySource:'unknown',needsReview:false},{localId:'possible',displayName:'우유 500ml',quantity:1,unit:'개',unitCode:'ea',storageLocation:'fridge',expiryDate:null,expirySource:'unknown',needsReview:false},{localId:'date',displayName:'두부 300g',quantity:1,unit:'개',unitCode:'ea',storageLocation:'fridge',expiryDate:null,expirySource:'manual',needsReview:true,reason:'작은 라벨이 흐릿해 이름을 확인해 주세요.'}];const noop=()=>{};const state={hasHydrated:true,setPhotoDraft:noop,clearPhotoDraft:noop,setLastStorageLocation:noop};export const useRegistrationStore=(s)=>s(state);export const photoDraftForSpace=()=>drafts;export const lastStorageLocationForSpace=()=>'fridge';`);
+fs.writeFileSync(base+'/photo-access.ts',`const access={canParse:true,requiredAction:'none',adOffer:null,free:{used:0,limit:1},rewardedAds:{verified:0,dailyLimit:2}};const value={access,adState:'idle',isLoading:false,isError:false,refresh:async()=>{},adFeedback:null};export const usePhotoParseAccess=()=>value;`);
+fs.writeFileSync(base+'/selection.ts',`export const loadRecentPhotoIntakeSelection=async()=>null;export const saveRecentPhotoIntakeSelection=async()=>{};`);
+fs.writeFileSync(base+'/prepare.ts',`export const withPreparedInventoryPhoto=async()=>{throw Error('QA blocks native upload')};`);
+fs.writeFileSync(base+'/pick.ts',`export const pickInventoryPhoto=async()=>({status:'cancelled'});`);
+fs.writeFileSync(base+'/date.tsx',`export default function DatePicker(){return null;}`);
+fs.writeFileSync(base+'/gesture.tsx',`import React from 'react';const chain=new Proxy({}, {get:()=>()=>chain});export const Gesture={Pan:()=>chain};export const GestureDetector=({children})=>children;`);
+fs.appendFileSync(base+'/motion.tsx',`export const interpolate=(v)=>v;export const ReduceMotion={Always:'always'};export const withRepeat=(v)=>v;export const withTiming=(v)=>v;export const Easing={out:(v)=>v,cubic:(v)=>v};export const runOnJS=(f)=>f;`);
+const entry=`import React from 'react';import {createRoot} from 'react-dom/client';import Photo from '${root}/apps/mobile/app/register-photo';
+Promise.all(['Regular','Medium','SemiBold','Bold','ExtraBold'].map(async face=>{const f=new FontFace('Pretendard-'+face,'url(/fonts/Pretendard-'+face+'.otf)');document.fonts.add(await f.load());})).then(()=>{createRoot(document.getElementById('root')!).render(<Photo/>);document.body.dataset.fonts='ready';});`;
+fs.writeFileSync(base+'/entry.tsx',entry);
+const stems=['welcome-room','ingredient-prep','cooking-workspace','settings-study','insights-journal','shared-table'];
+(async()=>{for(const variant of ['before','after']){
+ await esbuild.build({entryPoints:[base+'/entry.tsx'],outdir:base+'/out/'+variant,bundle:true,resolveExtensions:['.web.tsx','.tsx','.web.ts','.ts','.web.js','.js','.json'],format:'iife',platform:'browser',jsx:'automatic',loader:{'.png':'file','.otf':'file'},assetNames:'assets/[name]-[hash]',define:{'process.env.NODE_ENV':'"development"','__DEV__':'true'},logLevel:'warning',plugins:[{name:'review-adapters',setup(build){
+ const aliases={'react-native':base+'/native.tsx','react-native-reanimated':base+'/motion.tsx','react-native-safe-area-context':base+'/safe.tsx','expo-router':base+'/router.tsx','lucide-react-native':base+'/icons.tsx','react-native-svg':root+'/apps/mobile/node_modules/react-native-svg/lib/module/ReactNativeSVG.web.js','@tanstack/react-query':base+'/query.ts','expo-web-browser':base+'/web-browser.ts','expo-camera':base+'/camera.tsx','@react-native-community/datetimepicker':base+'/date.tsx','react-native-gesture-handler':base+'/gesture.tsx'};
+ const suffixes={'/app-store':'store.ts','/monetization-provider':'monetization.ts','/use-auth':'auth.ts','/space-provider':'spaces.ts','/use-notification-preferences':'notification-preferences.ts','/use-space-notifications':'space-notifications.ts','/use-device-notification-status':'device-notifications.ts','/use-privacy':'privacy.ts','/use-insights':'insights.ts','/use-subscription-entitlement':'entitlement.ts','/services/api':'api.ts','/session-boundary':'session-boundary.ts','/use-storage-locations':'locations.ts','/use-inventory-list':'inventory.ts','/registration-store':'registration.ts','/use-photo-parse-access':'photo-access.ts','/photo-intake-selection':'selection.ts','/prepare-inventory-photo':'prepare.ts','/pick-inventory-photo':'pick.ts'};
+ build.onResolve({filter:/.*/},args=>{if(aliases[args.path])return{path:aliases[args.path]};for(const [s,file]of Object.entries(suffixes))if(args.path.endsWith(s))return{path:base+'/'+file};if(/^react(?:\/.*)?$/.test(args.path)||/^react-dom(?:\/.*)?$/.test(args.path)||args.path==='react-native-web')return{path:require.resolve(args.path,{paths:[base]})};if(args.path==='@expirymate/shared')return{path:root+'/packages/shared/dist/index.js'};});
+ build.onLoad({filter:/\.(tsx?|ts)$/},args=>{
+ if(variant==='before' && ['apps/mobile/app/register-photo.tsx','apps/mobile/src/features/photo-intake/photo-intake-draft.ts','apps/mobile/src/features/photo-intake/photo-capture-screen.tsx'].some(p=>args.path===root+'/'+p)){
+ return {contents:execFileSync('git',['show','HEAD:'+path.relative(root,args.path)],{cwd:root,encoding:'utf8'}),loader:args.path.endsWith('tsx')?'tsx':'ts',resolveDir:path.dirname(args.path)};
+ }
+ });
+ }}]});
+ fs.writeFileSync(base+'/out/'+variant+'/index.html',`<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body,#root{margin:0;width:100%;height:100%;}#root{display:flex;flex-direction:column}*{box-sizing:border-box}</style><div id="root"></div><script src="/entry.js?variant=${variant}"></script></html>`);
+}})().catch(e=>{console.error(e);process.exitCode=1;});

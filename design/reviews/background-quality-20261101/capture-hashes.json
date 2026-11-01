@@ -1,0 +1,74 @@
+{
+  "images": [
+    {
+      "file": "settings-360-1.jpg",
+      "sha256": "43d42edf9ca51ebbad5d3c5e0c8aaf6621938fb2669854d0223da2aa2f6cd22a",
+      "beforePNG": "66e9ba4c8ed84028f08b62b0c480739f9c33a3f13bb04050068829e9e228fa51",
+      "afterPNG": "e5042b50f3e0a2b6776510798e8a31a52c794c2aa93012d30b1eec267683eb77"
+    },
+    {
+      "file": "notifications-360-1.3.jpg",
+      "sha256": "4410b1669014f2b99de8989d9ad97bd2e324cdd8f9b59c8538075a3dfeec2fb3",
+      "beforePNG": "b54fc8ccb3a11997199bb368ba06e1ce2d064bec92aa28eccbac72af2c0d295f",
+      "afterPNG": "f55f5acccaf664648d21afa0ee24fdadb65eaaa5394a38735f473315f4bec422"
+    },
+    {
+      "file": "onboarding-360-1.jpg",
+      "sha256": "ce980b6d406742d6397a9ba36aa5e20b7b1bd0f3d069c823a2293bfa82212d74",
+      "beforePNG": "eaeaf4e68999f6f2672967a491ab1a115a3269a987f4675dd7e1b7eea6106e1b",
+      "afterPNG": "707228c1630ab16425dc35a3c259092dd1f799e8081e787143f84e2f5a63d5ae"
+    },
+    {
+      "file": "forgot-320-2.jpg",
+      "sha256": "82e84c054cc801a3d43a51de8a2abfde102a2c5f6752004f491cc9d5491bff0f",
+      "beforePNG": "5c3acfb6d017f85d8d21de20cc7cd1a23c812bf23c73ab5f3dce9efa47172aa4",
+      "afterPNG": "beda4b1f884c028b0897365e6dde40ff49ea12037454dad220d08217d650069d"
+    },
+    {
+      "file": "privacy-320-2.jpg",
+      "sha256": "72d387649b80100bcd19aea240bb15eabee603bec437348177c2742aaef84730",
+      "beforePNG": "4eb94edace08c713a59b175431036205d09e38fc92a2ce202a21a7fbf5fd0dc6",
+      "afterPNG": "d7d34f7f2b63b0754e42ceb5524d3a807fd7a5e8d9ebb89cc270e84afdaac6e5"
+    },
+    {
+      "file": "sharing-360-1.3.jpg",
+      "sha256": "67954c63ec6f525a5c8e7e70ae809ead1c1f5d814cdeeab0b3777b9b6037e22b",
+      "beforePNG": "1d6b10367f3e5255938f2b16e6a32fafd7e5ca12f72969af07ff511716b31aca",
+      "afterPNG": "858f04f6faa18faf350c918aa53e924fe1bcb3a2ce3b6183fc5867b2ab7b8c49"
+    },
+    {
+      "file": "records-360-1.jpg",
+      "sha256": "968e1822a5faca4b50bbdce13c81e9e1619705cc9522ea37b5f4744ee4d86c7b",
+      "beforePNG": "16684cf3fdd26b0ad3449675074d1e8383954417f0ea8fd77d101da050526ceb",
+      "afterPNG": "aa85953417e4e0667988e2608581b9df613dc7a76335eabd148e1b9e55832091"
+    },
+    {
+      "file": "ingredients-320-2.jpg",
+      "sha256": "ccbc993b961b11e99459bcfcdd7101af3332488344ad6989064de464a71b86bf",
+      "beforePNG": "146fd77f2192e9e54150cc89177e764f0ab6c7be8715386d69d6884db457326d",
+      "afterPNG": "65135e45cb349e80f0e4c62dd74ebf5809441f7dd51bb94d9fc5bf07ac7fe087"
+    },
+    {
+      "file": "cooking-360-1.3.jpg",
+      "sha256": "8dcacc7546af6ec77d9b9a77ab1d365afc05d0bd0d11b1b5a7b7db57dc9351a7",
+      "beforePNG": "be22c76ef9e40d56d810e809adc6cde7c2ce0ab605640102ae827f076cb846a8",
+      "afterPNG": "b0a05ef857d0d09a1778728cbdd3d39c5fce879870b6d118c17448018461ab16"
+    },
+    {
+      "file": "photo-review-360-1.jpg",
+      "sha256": "df766fd297ed444f4ca2bd7e96174ba30f85d3951a1069097dfd115c340e0b26",
+      "beforePNG": "9772f1cf42fe39935879221e62533f22532fb594463781d9e22783f5632874e5",
+      "afterPNG": "4ef0243c0db263bebbe50005bc04461c27319650febe02f5571497ae89f5a611"
+    },
+    {
+      "file": "notifications-scrolled-360-1.3.jpg",
+      "sha256": "d86359215ec30a1e5b984d9dfa678449d64fa9f465520bc20e06478c2935b6da",
+      "sourcePNG": "11543a94c1bc548ac96993393d396e39d1e0d44f7c64f05af4f09933e61e0607"
+    },
+    {
+      "file": "forgot-keyboard-360-1.3.jpg",
+      "sha256": "0b712b916357f0197e378c02ac435fa9101cf05c1f2a24521eb7cf497ed54982",
+      "sourcePNG": "f1b4870f6845603f8b35902839db3fff1787cfaf401b8f5cc2906d62bfaaaeae"
+    }
+  ]
+}

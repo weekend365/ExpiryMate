@@ -32,8 +32,8 @@ import { prepareVisionImage } from "./inventory-photo-parse.image";
 import { normalizePhotoParseItems } from "./inventory-photo-parse.normalize";
 import { InventoryPhotoParsePolicyService } from "./inventory-photo-parse.policy";
 
-export const PHOTO_AI_PROMPT_VERSION = "inventory-photo-parse-v1";
-const DEFAULT_MAX_OUTPUT_TOKENS = 1800;
+export const PHOTO_AI_PROMPT_VERSION = "inventory-photo-parse-v2";
+const DEFAULT_MAX_OUTPUT_TOKENS = 4096;
 const DEFAULT_MAX_BYTES = 4 * 1024 * 1024;
 const PROJECTED_PARSE_COST_USD = 0.04;
 
@@ -359,12 +359,15 @@ function buildInstructions(scene: InventoryPhotoParseScene) {
 
   return [
     "You identify visible food and household products in a fridge or pantry photo.",
-    "Only include items you can actually see. Do not guess hidden items.",
+    "Scan each shelf from top to bottom, left to right, checking the front and visible back areas and door shelves once before returning the results.",
+    "Include partially occluded products when their visible part is identifiable; set needsReview true and explain the occlusion in a short Korean reason.",
+    "Only include visible, identifiable items. Do not guess completely hidden items or infer a product from an unidentifiable fragment.",
     `category must be one of: ${categories}, or null.`,
-    "quantity is 1 unless a count is clearly visible.",
-    "suggestedExpiryDate only if a date is readable on packaging; otherwise null.",
-    "Do not invent expiry dates. Set needsReview true for low-confidence items.",
-    "reason should be a short Korean hint when review is needed.",
+    "Preserve readable brand in brand and readable package size in displayName. Use null for unreadable brands; never guess them.",
+    "Count distinct visible packages of the same product, not repeated views of one object. Keep different brands or package sizes as separate items.",
+    "quantity is the number of visible packages or individual loose items, otherwise 1. Package capacity (e.g. 500 ml, 1 kg) is not the package count; keep it in displayName, with unit 개 and unitCode EA for package counts.",
+    "suggestedExpiryDate only if a complete date is actually readable on that package; otherwise null. Do not invent or estimate expiry dates.",
+    "Set needsReview true for uncertain identity, count, small labels or partial occlusion. reason should explain the specific uncertainty in Korean.",
     "Respond in Korean product names. Maximum 30 items.",
   ].join(" ");
 }

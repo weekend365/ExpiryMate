@@ -1,0 +1,135 @@
+{
+  "date": "2026-11-01",
+  "scope": "implementation, QA, documentation only; no commit, deployment, store submission, database or public contract change",
+  "head": "cf37517d81d63ffea70c6235c6324a74bc4ead8b",
+  "commands": [
+    {
+      "command": "pnpm docs:check",
+      "exitCode": 0,
+      "log": "docs-check.txt"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "log": "lint.txt"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "log": "typecheck.txt"
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "log": "tests.txt"
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile backgrounds:audit",
+      "exitCode": 0,
+      "log": "background-audit.txt"
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile exec vitest run src/features/photo-intake --maxWorkers=1",
+      "exitCode": 0,
+      "log": "related-mobile-tests.txt"
+    },
+    {
+      "command": "pnpm --filter @expirymate/api exec vitest run src/modules/inventory/inventory-photo-parse.service.test.ts src/modules/inventory/inventory-photo-parse.normalize.test.ts src/modules/inventory/inventory-photo-parse.image.test.ts --maxWorkers=1",
+      "exitCode": 0,
+      "log": "related-api-tests.txt"
+    }
+  ],
+  "tests": {
+    "jango": 41,
+    "shared": 162,
+    "api": 623,
+    "mobile": 707,
+    "totalPassed": 1533,
+    "skipped": 6,
+    "skipReason": "existing opt-in database integration suites",
+    "timeoutsThisRun": 0,
+    "relatedMobile": 65,
+    "relatedApi": 18
+  },
+  "web": {
+    "actualComponent": "apps/mobile/app/register-photo.tsx",
+    "widths": [
+      320,
+      360,
+      780
+    ],
+    "fontScales": [
+      1,
+      1.3,
+      2
+    ],
+    "renders": 18,
+    "jsErrors": [],
+    "horizontalOverflows": 0,
+    "footerOutOfViewport": 0,
+    "allLastCardsReachable": true,
+    "interactions": [
+      {
+        "interaction": true,
+        "beforeDisabled": true,
+        "separatePreservesAIReview": true,
+        "expiryPreservesAIReview": true
+      },
+      {
+        "interaction": true,
+        "mergeEnabledAfterReview": true
+      },
+      {
+        "interaction": true,
+        "keyboardViewportOnly": true,
+        "detailFooterVisible": true
+      }
+    ],
+    "nativeKeyboardSimulated": false,
+    "shrunkenViewportIsOnlyWebApproximation": true
+  },
+  "native": {
+    "androidAttachedDevices": 0,
+    "physicalIphone": "unavailable",
+    "bootedSimulators": 0,
+    "matchingNewNativeBuildInstalled": false,
+    "rotationHeicRealCompressionAndKeyboardVerified": false
+  },
+  "liveAccuracy": {
+    "status": "incomplete",
+    "frozenPublicImagesAvailable": 7,
+    "requiredImages": 15,
+    "remainingDownloadStatus": 429,
+    "attemptedAnalysisCalls": 1,
+    "successfulAnalysisCalls": 0,
+    "maxCalls": 60,
+    "maxCostUsd": 1,
+    "usageStatus": "unavailable",
+    "calculatedCostUsd": 0,
+    "billedCostConfirmed": false,
+    "nonGeneratingDiagnostic": {
+      "status": 401,
+      "code": "invalid_api_key"
+    },
+    "accuracyImprovementClaimed": false,
+    "noFurtherCallsAfterUnknownAccounting": true
+  },
+  "preserved": {
+    "backgroundAssetsMatchRecordedSources": 11,
+    "priorJangoSizeChangesPreserved": true,
+    "apiSchemaAndDbUnchanged": true,
+    "modelAndSingleCallPolicyUnchanged": true,
+    "localAndProductionEnvUnmodified": true
+  },
+  "sourceSha256": {
+    "apps/mobile/app/register-photo.tsx": "f0bf0435b5d65f2f353612fe57c758f962e454c5950c7fa40d0e99328dd13c75",
+    "apps/mobile/src/features/photo-intake/prepare-inventory-photo.ts": "91e1cba28c0f051854c7ddcf42e0334a58f063ac3b053a890b29c968b42afb45",
+    "apps/mobile/src/features/photo-intake/photo-intake-draft.ts": "6f5cdfb334a94f345a68abe497e5ab701bc8ed0041615fe04b4ae5ec65e29392",
+    "apps/mobile/src/features/photo-intake/pick-inventory-photo.ts": "f159609aad2d477bbd79c74306186ce59fdec9224d809b53a543b1f6e3156d97",
+    "apps/mobile/src/features/photo-intake/photo-capture-screen.tsx": "8765dfdcb819fdc3541c48cac6baab82b7902bf4e8fc722d5e0b5c14436f0e28",
+    "apps/api/src/modules/inventory/inventory-photo-parse.service.ts": "5f50b320c7278741525a6da665beffce0e3a8ac093d02750d8e1254cf2e8e488",
+    "apps/api/src/modules/inventory/inventory-photo-parse.normalize.ts": "0aba26cd38cf3cee69f11da38bbe8222e1ec890530030c906562e1523ca4a4d5",
+    "apps/mobile/package.json": "f4f4762edaeb5b9b1e79db8e104c89c0065fca06b4b17f7ce8c6f00d9c69327b",
+    "pnpm-lock.yaml": "ce21fd9f8f2dc37a1e7875e9da86a9f420113bc7db56a1b9ed37e92d3045b841"
+  }
+}

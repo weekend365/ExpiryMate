@@ -806,8 +806,8 @@ export default function RegisterScreen() {
           >
             <JangoHeroNoticeCarousel
               notices={doneHeroNotices}
-              size="large"
-              layout="adaptive"
+              size="small"
+              layout="stacked"
               density="compact"
               textVariant="bodyStrong"
               bubbleStyle={styles.doneBubble}
@@ -922,8 +922,8 @@ export default function RegisterScreen() {
             : visibleSteps[Math.max(stepIndex, 0)]?.guideMessage
         }
         guideMood={step === "product" ? "encourage" : "check"}
-        guideSize={step === "product" && !keyboardVisible ? "large" : "small"}
-        guideLayout="adaptive"
+        guideSize="small"
+        guideLayout={step === "product" && !keyboardVisible ? "stacked" : "adaptive"}
         guideAnimation="none"
       >
         {step === "product" && rewardNotice?.granted ? (

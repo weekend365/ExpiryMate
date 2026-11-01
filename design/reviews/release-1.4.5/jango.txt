@@ -1,0 +1,5 @@
+
+> expirymate-monorepo@ jango:check /Users/namu/Desktop/ExpiryMate
+> node scripts/jango-design-gate.mjs check
+
+Jango gate: records valid; 0 signed releases. Candidates are not approved.

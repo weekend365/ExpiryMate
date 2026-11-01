@@ -1,0 +1,13 @@
+{
+  "verifiedAt": "2026-11-01T06:31:11.783628+00:00",
+  "sha256": "b7eff6a3f5ab394b7af789f34ccaf7d3c61811d4bc65bbb12a8a71a19b4d8085",
+  "bytes": 11717205,
+  "mode": "0o600",
+  "isolatedRestorePassed": true,
+  "amcheckPassed": true,
+  "tables": 41,
+  "appliedMigrations": 45,
+  "productionWrites": false,
+  "backupOutsideRepository": true,
+  "initialLocalAmcheckMissingExtension": "Installed amcheck only on isolated restored DB, then reran successfully."
+}

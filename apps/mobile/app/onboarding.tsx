@@ -31,7 +31,7 @@ export default function OnboardingScreen() {
     >
       <View style={styles.hero}>
         <AppText variant="label" tone="primary">{appBrand.appNameKo}</AppText>
-        <Mascot size="large" mood="encourage" decorative />
+        <Mascot size="medium" mood="encourage" decorative />
         <AppText variant="heading" style={styles.centered}>안녕하세요, 장고예요. 재료 챙기는 일, 같이 해볼까요?</AppText>
         <AppText variant="body" tone="subtext" style={styles.centered}>재료를 넣으면 기한을 챙기고, 남은 재료로 요리를 추천해요.</AppText>
       </View>

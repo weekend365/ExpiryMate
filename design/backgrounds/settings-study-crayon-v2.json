@@ -1,0 +1,49 @@
+{
+  "source": "settings-study-crayon-v2.png",
+  "sha256": "3077e23936058e2dd2dc10e32600ef116f3bbb438d9ca575c5fceaa6aa1b4aef",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "tool": "built-in image_gen (new v2 illustration, followed by pigment correction edit)",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a171f9-7cd3-7352-985a-d58901338a25/exec-1af62f35-6f8f-43e1-ba53-c6f62d1db2a2.png",
+  "prompt": "settings-study-crayon-v2.prompt.txt",
+  "promptSha256": "cb2aa9efff1d5b8abcb4906d8f61586c02facf5b5f9371e9239e82cded3db62d",
+  "styleReferences": [
+    {
+      "file": "design/backgrounds/home-welcome-crayon-v1.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+      "role": "ancestor-style-reference-only; used to generate the edit target"
+    },
+    {
+      "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+      "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+      "role": "ancestor-style-reference-only; used to generate the edit target"
+    }
+  ],
+  "previousArtwork": {
+    "file": "design/backgrounds/settings-study-crayon-v1.png",
+    "sha256": "1314accad920f2185b5823b2bd85c97406c2bcd3e2cd8168d210352391aef405"
+  },
+  "runtime": "apps/mobile/assets/backgrounds/settings-study-bg.png",
+  "status": "implemented-under-user-request",
+  "date": "2026-11-01",
+  "constraints": [
+    "opaque",
+    "no character",
+    "no text or numbers",
+    "no functional icons",
+    "quiet central content area",
+    "fully framed primary furniture",
+    "new native-resolution artwork; no upscale or crop"
+  ],
+  "generationInputs": [
+    {
+      "file": "design/backgrounds/iterations/settings-study-crayon-v2-palette-input.png",
+      "sha256": "a2b8157923e2d17cb3bd40539c0ea7d98654e24a40536ef0b7ff66e99c206ca2",
+      "role": "edit-target: generated v2 contrast candidate",
+      "prompt": "design/backgrounds/iterations/settings-study-crayon-v2-palette-input.prompt.txt",
+      "promptSha256": "a75c828eecb49804ae9bfce82561ed4d8fd0b320e70e5ff2820427a94394f921"
+    }
+  ]
+}

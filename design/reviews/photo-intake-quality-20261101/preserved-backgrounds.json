@@ -1,0 +1,57 @@
+[
+  {
+    "file": "design/backgrounds/welcome-room-crayon-v2.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  },
+  {
+    "file": "design/backgrounds/ingredient-prep-crayon-v2.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  },
+  {
+    "file": "design/backgrounds/cooking-workspace-crayon-v2.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  },
+  {
+    "file": "design/backgrounds/settings-study-crayon-v2.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  },
+  {
+    "file": "design/backgrounds/insights-journal-crayon-v2.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  },
+  {
+    "file": "design/backgrounds/shared-table-crayon-v2.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  },
+  {
+    "file": "design/backgrounds/shopping-preparation-crayon-v1.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  },
+  {
+    "file": "design/backgrounds/login-welcome-crayon-v1.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  },
+  {
+    "file": "design/backgrounds/home-welcome-crayon-v1.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  },
+  {
+    "file": "design/backgrounds/fridge-interior-crayon-v1.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  },
+  {
+    "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+    "matchesPriorReview": true,
+    "runtimeMatches": true
+  }
+]

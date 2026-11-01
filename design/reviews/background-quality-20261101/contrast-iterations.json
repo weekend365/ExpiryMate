@@ -1,0 +1,119 @@
+{
+  "method": "per-text identity glyph mask, after excluding occlusion by sticky footer",
+  "initialFailures": [
+    {
+      "scene": "notifications",
+      "width": 320,
+      "scale": 2,
+      "id": 3,
+      "text": "기본 알림",
+      "color": "rgb(81, 91, 85)",
+      "fontSize": 26,
+      "pixels": 692,
+      "minContrast": 1.6456567663949537,
+      "passes": false
+    },
+    {
+      "scene": "notifications",
+      "width": 320,
+      "scale": 2,
+      "id": 4,
+      "text": "이 항목과 아래 알림 시점·시간은 하단 버튼으로 저장해요.",
+      "color": "rgb(81, 91, 85)",
+      "fontSize": 24,
+      "pixels": 2214,
+      "minContrast": 1.300901665141195,
+      "passes": false
+    },
+    {
+      "scene": "onboarding",
+      "width": 320,
+      "scale": 2,
+      "id": 2,
+      "text": "재료를 넣으면 기한을 챙기고, 남은 재료로 요리를 추천해요.",
+      "color": "rgb(81, 91, 85)",
+      "fontSize": 32,
+      "pixels": 4703,
+      "minContrast": 2.1463965138337073,
+      "passes": false
+    },
+    {
+      "scene": "forgot",
+      "width": 320,
+      "scale": 2,
+      "id": 1,
+      "text": "재설정 링크를 메일로 보내드릴게요.",
+      "color": "rgb(81, 91, 85)",
+      "fontSize": 28,
+      "pixels": 2201,
+      "minContrast": 3.371617988519397,
+      "passes": false
+    },
+    {
+      "scene": "forgot",
+      "width": 320,
+      "scale": 2,
+      "id": 3,
+      "text": "이메일",
+      "color": "rgb(48, 46, 44)",
+      "fontSize": 28,
+      "pixels": 617,
+      "minContrast": 3.256875595337263,
+      "passes": false
+    }
+  ],
+  "resolutions": [
+    {
+      "scene": "notifications",
+      "width": 320,
+      "scale": 2,
+      "text": "기본 알림",
+      "initial": 1.6456567663949537,
+      "final": 4.985321261236008,
+      "veil": 0.16,
+      "foregroundAndLayoutUnchanged": true
+    },
+    {
+      "scene": "notifications",
+      "width": 320,
+      "scale": 2,
+      "text": "이 항목과 아래 알림 시점·시간은 하단 버튼으로 저장해요.",
+      "initial": 1.300901665141195,
+      "final": 4.875521847931605,
+      "veil": 0.16,
+      "foregroundAndLayoutUnchanged": true
+    },
+    {
+      "scene": "onboarding",
+      "width": 320,
+      "scale": 2,
+      "text": "재료를 넣으면 기한을 챙기고, 남은 재료로 요리를 추천해요.",
+      "initial": 2.1463965138337073,
+      "final": 6.438444236604994,
+      "veil": 0.16,
+      "foregroundAndLayoutUnchanged": true
+    },
+    {
+      "scene": "forgot",
+      "width": 320,
+      "scale": 2,
+      "text": "재설정 링크를 메일로 보내드릴게요.",
+      "initial": 3.371617988519397,
+      "final": 5.196107644361044,
+      "veil": 0.16,
+      "foregroundAndLayoutUnchanged": true
+    },
+    {
+      "scene": "forgot",
+      "width": 320,
+      "scale": 2,
+      "text": "이메일",
+      "initial": 3.256875595337263,
+      "final": 8.38306213377756,
+      "veil": 0.16,
+      "foregroundAndLayoutUnchanged": true
+    }
+  ],
+  "threshold": 4.5,
+  "measurementCorrection": "A text-specific identity color mask excludes other visible text (notably the sticky footer) from a hidden paragraph rectangle."
+}

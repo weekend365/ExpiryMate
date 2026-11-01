@@ -1,0 +1,255 @@
+{
+  "baseline": "working tree at task start, including uncommitted mascot size rollback",
+  "head": "cf37517d81d63ffea70c6235c6324a74bc4ead8b",
+  "routes": 27,
+  "screenBranches": 41,
+  "checks": [
+    {
+      "file": "apps/mobile/app/onboarding.tsx",
+      "preset": "welcome",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "2eb226669c3e1424c6bbd3c1eda635675ca4ee48bc7b4c0ac298ffe4be504218",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/auth/register.tsx",
+      "preset": "welcome",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "sha256": "ecbc62b575a9432ac5c0537d8fae6a623b210799e0b4b860b9d27a4455f03f83",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/auth/forgot-password.tsx",
+      "preset": "welcome",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "241b3ea76c8d7538078b833cc60b87d8f2e9ecad03ed630629608948d0db6795",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/auth/reset-password.tsx",
+      "preset": "welcome",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "f653513218dadcd9583ab655f9e1944fc813442784ed6ad7d2766f26a61f4720",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/auth/verify-email.tsx",
+      "preset": "welcome",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "24cca0cdfb941f9e417d8d2aac980002be60577d214df19b26ee4900d22eea83",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/auth/verify-pending.tsx",
+      "preset": "welcome",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "sha256": "0c737c5e94aed0a4f40a2a458e7b1f6758812c0dca0ff6f7e13bc24736dc7abf",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/register.tsx",
+      "preset": "ingredients",
+      "treatment": "standard",
+      "screenBranches": 2,
+      "sha256": "456f380d8dcdd28eaa682bc88c6a9b96f5b6761757d1b435d95bb945d697ab03",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/register-photo.tsx",
+      "preset": "ingredients",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "5e4786539829c94483afe237c81edf101d4bdaa0bab8351bb1078b6501ede123",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/inventory/[id].tsx",
+      "preset": "ingredients",
+      "treatment": "standard",
+      "screenBranches": 4,
+      "sha256": "f4ae994428347e7d4caa8178a55175fce273c8e65be3f71379f32a54632c4bf2",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/cooking/[recommendationId].tsx",
+      "preset": "cooking",
+      "treatment": "reading",
+      "screenBranches": 5,
+      "sha256": "0e128d34c3dd138df666adf93dd35eea1f4cdbf5ebd8683e3a90d5548c0ace82",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/(tabs)/settings.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "952461852501d984207ef67dbd02c8f86ff07205df8b7e9f1cb0b242dc4ab908",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/privacy/index.tsx",
+      "preset": "settings",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "sha256": "743093a4e80075537f04147a5dba218f2b3efe0a34c52038c2ab36509859b1c6",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/privacy/ai-data-notice.tsx",
+      "preset": "settings",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "sha256": "bf1e287316f01b132286b09f3e1983a2ec894e443fa4caa932219f15d435720d",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/privacy/account-delete.tsx",
+      "preset": "settings",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "sha256": "ca943a045dcbc084db303d6174205ac6ae39d8d5af8bb9d66d502ffec169aa28",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/insights.tsx",
+      "preset": "records",
+      "treatment": "standard",
+      "screenBranches": 3,
+      "sha256": "a12bd7575ee99a1d37d1f7b3d54404ecb34b0a3c0d083f0697466dd45f6b4cbf",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/inventory/activity.tsx",
+      "preset": "records",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "sha256": "8de42338ca7523868c59019bb2e87ff05935cc5ca64a700949f69ed9a2236f4d",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/settings/spaces.tsx",
+      "preset": "sharing",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "322f2a04de84ca67995618e640e18057f13d859cea821a64746635f523e3dd20",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/settings/spaces/[spaceId].tsx",
+      "preset": "sharing",
+      "treatment": "standard",
+      "screenBranches": 3,
+      "sha256": "09c9914e87742304cac85a195d780852ef704f93b2512b953e1a9cda644f7b30",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/spaces/invitations/accept.tsx",
+      "preset": "sharing",
+      "treatment": "standard",
+      "screenBranches": 3,
+      "sha256": "8bb40e908d1aec916ec897d8a6836b82905ad1eacb7ee244c154258a91281f20",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/spaces/invitations/code.tsx",
+      "preset": "sharing",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "f579f5d760bde0b15bb3acbf0d62582fb7b0f4c0a732abc914633837534b872e",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/settings/account.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "0d90f40a097d0b82ef480fc6ee72fd87989aaf8954d3365339a788192d84c9dd",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/settings/notifications.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "312c48582e18c2e7d08cc0af0d6332bd718438ce8ce365e63e1bcec105b8205d",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/settings/recipe-preferences.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "bae8d47486fb4eb1765915c658241934296866106ae679ceb822da81b7362d0e",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/settings/recommendation-credits.tsx",
+      "preset": "settings",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "sha256": "dc0837293d5768c41471160231d517798085b2c33f23c51087e330719523927c",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/settings/storage-locations.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "45a5c93e0d72da351fa197bc1e0071ff5f67d416914336225804bad21ca4b739",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/settings/subscription.tsx",
+      "preset": "settings",
+      "treatment": "reading",
+      "screenBranches": 1,
+      "sha256": "5a0125cf36bd625d390799bf25e8873a0bbf0d53cae06184392114c8f5e169da",
+      "matchesWorkingTreeBefore": true
+    },
+    {
+      "file": "apps/mobile/app/settings/support.tsx",
+      "preset": "settings",
+      "treatment": "standard",
+      "screenBranches": 1,
+      "sha256": "2c411e457e3d8d1f855d52ed67f981f9bfa79e45ccf75574467a6d241306cbe7",
+      "matchesWorkingTreeBefore": true
+    }
+  ],
+  "allMobileSourceFilesUnchanged": true,
+  "mobileSourceFileCount": 338,
+  "preservedV1FileCount": 35,
+  "preservedRuntime": [
+    {
+      "file": "apps/mobile/assets/backgrounds/home-welcome-bg.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+      "unchanged": true
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/fridge-interior-bg.png",
+      "sha256": "9327e58d2c122199738b706219f73ce4ec237a3c91e3f207481021afcd5a8067",
+      "unchanged": true
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/kitchen-cooking-bg.png",
+      "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+      "unchanged": true
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/shopping-preparation-bg.png",
+      "sha256": "44720e9280b6657a566fe52c107829665aae00cf1022bafe7e53b5bba81e030d",
+      "unchanged": true
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/login-welcome-bg.png",
+      "sha256": "e6992b8d99609c01f1648f2690e77481cd26ccf0336d5bce9137ad3f9346e30b",
+      "unchanged": true
+    }
+  ],
+  "scopeExclusions": "Camera, scanner and startup routes/components match the task-start source hashes."
+}

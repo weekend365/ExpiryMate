@@ -18,7 +18,7 @@ export function HomeHero({
   onNoticeAction: (action: HomeNoticeAction) => void;
 }) {
   const [noticeIndex, setNoticeIndex] = useState(0);
-  const { width, fontScale } = useResponsiveLayout();
+  const { width, fontScale, shouldStackDense } = useResponsiveLayout();
   const activeNotice = notices[noticeIndex] ?? notices[0] ?? null;
   const heroTone = getHeroTone(activeNotice);
 
@@ -30,8 +30,8 @@ export function HomeHero({
     <SurfaceCard variant="hero" tone={heroTone} style={styles.heroCard}>
       <JangoHeroNoticeCarousel
         density={getHomeHeroDensity(width, fontScale)}
-        size="medium"
-        layout="adaptive"
+        size="small"
+        layout={shouldStackDense ? "stacked" : "inline"}
         notices={notices.map((notice) => ({
           id: notice.id,
           message: notice.message,

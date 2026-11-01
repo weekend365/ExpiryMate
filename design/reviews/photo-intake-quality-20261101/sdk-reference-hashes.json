@@ -1,0 +1,5 @@
+{
+  "apps/mobile/node_modules/expo-image-manipulator/src/ImageManipulator.ts": "5bc9e480d93e3a287c7456956ed51cdab16c0d164e5befdb498727ea537f8d72",
+  "apps/mobile/node_modules/expo-image-manipulator/ios/ImageManipulatorModule.swift": "14a507b474cf0944db91244787ff802b31765f6b9d2175d9390daa8f44d2ec32",
+  "apps/mobile/node_modules/expo-image-manipulator/android/src/main/java/expo/modules/imagemanipulator/ImageManipulatorModule.kt": "c6812f31f872eb0b0799594b415cd0c0d78ff3776246dce804fdc30b9bf8bee8"
+}

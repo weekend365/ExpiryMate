@@ -2,6 +2,7 @@ import {
   ExpirySource,
   UnitCode,
   isDateOnlyString,
+  inferUnitCode,
   toBaseQuantity,
   type CreateInventoryItemBody,
   type InventoryPhotoParseCandidate,
@@ -25,55 +26,100 @@ export type PhotoIntakeDraftItem = {
 type DuplicateComparable = {
   displayName: string;
   quantity: number;
+  brand?: string | null;
+  unitCode?: UnitCode;
   unit?: string | null;
   storageLocation: string;
   expiryDate: string | null;
 };
 
-export type PhotoIntakeDuplicateMatch<T> =
+export type PhotoIntakeDuplicateMatch<T> = (
   | { kind: "inventory"; target: T }
-  | { kind: "draft"; targetLocalId: string; targetName: string };
+  | { kind: "draft"; targetLocalId: string; targetName: string }
+) & { strength: "exact" | "possible" };
+
+const normalize = (value?: string | null) =>
+  value?.normalize("NFKC").trim().replace(/\s+/g, "").toLowerCase() ?? "";
+
+function displayUnit(item: Pick<DuplicateComparable, "unit" | "unitCode">) {
+  return item.unit?.trim() ||
+    (item.unitCode === UnitCode.ML ? "ml" : item.unitCode === UnitCode.G ? "g" : "개");
+}
+
+function normalizedBrand(brand?: string | null) {
+  const value = normalize(brand);
+  return ["미상", "불명", "알수없음", "없음", "브랜드미상", "브랜드불명", "브랜드없음", "unknown"].includes(value)
+    ? ""
+    : value;
+}
 
 export function photoIntakeDuplicateKey(item: DuplicateComparable) {
-  const normalize = (value?: string | null) =>
-    value?.normalize("NFKC").trim().replace(/\s+/g, "").toLowerCase() ?? "";
-  return [
+  return JSON.stringify([
     normalize(item.displayName),
-    normalize(item.unit ?? "개"),
+    normalize(displayUnit(item)),
+    item.unitCode ?? inferUnitCode(displayUnit(item)),
     item.storageLocation,
     item.expiryDate ?? "unknown",
-  ].join(":");
+  ]);
+}
+
+function matchStrength(left: DuplicateComparable, right: DuplicateComparable) {
+  if (photoIntakeDuplicateKey(left) !== photoIntakeDuplicateKey(right)) return undefined;
+  const a = normalizedBrand(left.brand);
+  const b = normalizedBrand(right.brand);
+  if (a && b) return a === b ? "exact" as const : undefined;
+  return "possible" as const;
 }
 
 export function findPhotoIntakeDuplicateMatches<
   T extends DuplicateComparable & { id: string },
 >(items: PhotoIntakeDraftItem[], existingItems: T[]) {
-  const existingByKey = new Map<string, T>();
-  for (const item of existingItems) {
-    const key = photoIntakeDuplicateKey(item);
-    if (!existingByKey.has(key)) existingByKey.set(key, item);
-  }
-  const firstDraftByKey = new Map<string, PhotoIntakeDraftItem>();
   const matches = new Map<string, PhotoIntakeDuplicateMatch<T>>();
+  const preceding: PhotoIntakeDraftItem[] = [];
   for (const item of items) {
-    const key = photoIntakeDuplicateKey(item);
-    const existing = existingByKey.get(key);
-    if (existing) {
-      matches.set(item.localId, { kind: "inventory", target: existing });
-      continue;
+    const options: PhotoIntakeDuplicateMatch<T>[] = [];
+    for (const target of existingItems) {
+      const strength = matchStrength(item, target);
+      if (strength) options.push({ kind: "inventory", target, strength });
     }
-    const firstDraft = firstDraftByKey.get(key);
-    if (firstDraft) {
-      matches.set(item.localId, {
+    for (const target of preceding) {
+      const strength = matchStrength(item, target);
+      if (strength) options.push({
         kind: "draft",
-        targetLocalId: firstDraft.localId,
-        targetName: firstDraft.displayName,
+        targetLocalId: target.localId,
+        targetName: target.displayName,
+        strength,
       });
-      continue;
     }
-    firstDraftByKey.set(key, item);
+    const match = options.find((option) => option.strength === "exact") ?? options[0];
+    if (match) matches.set(item.localId, match);
+    preceding.push(item);
   }
   return matches;
+}
+
+/** Raw quantities may only be added with the same display AND canonical units. */
+export function photoIntakeCanMerge(
+  source: PhotoIntakeDraftItem,
+  target: DuplicateComparable,
+) {
+  return (
+    photoIntakeItemIsReadyToSave(source) &&
+    matchStrength(source, target) === "exact" &&
+    toBaseQuantity(source.quantity, displayUnit(source)).unitCode === (source.unitCode ?? inferUnitCode(displayUnit(source))) &&
+    toBaseQuantity(target.quantity, displayUnit(target)).unitCode === (target.unitCode ?? inferUnitCode(displayUnit(target)))
+  );
+}
+
+export function photoIntakeDuplicateMessage(match: PhotoIntakeDuplicateMatch<unknown>) {
+  if (match.strength === "possible") {
+    return match.kind === "inventory"
+      ? "보관함에 비슷한 항목이 있어요. 브랜드가 불명확해 참고만 해 주세요."
+      : "사진 결과에 비슷한 항목이 있어요. 브랜드가 불명확해 참고만 해 주세요.";
+  }
+  return match.kind === "inventory"
+    ? "보관함에 같은 정보의 항목이 있어요"
+    : "사진 결과에 같은 항목이 반복됐어요";
 }
 
 export function candidatesToDrafts(
@@ -86,8 +132,8 @@ export function candidatesToDrafts(
     brand: candidate.brand,
     category: candidate.category,
     quantity: candidate.quantity ?? 1,
-    unit: candidate.unit,
-    unitCode: candidate.unitCode ?? UnitCode.EA,
+    unit: displayUnit(candidate),
+    unitCode: candidate.unitCode ?? inferUnitCode(candidate.unit),
     storageLocation: candidate.suggestedStorageLocation ?? defaultStorageLocation,
     expiryDate: candidate.suggestedExpiryDate ?? null,
     expirySource: candidate.expirySource ?? ExpirySource.MANUAL,
@@ -139,7 +185,10 @@ export function mergePhotoIntakeDraftItems(
 ) {
   const source = items.find((item) => item.localId === sourceLocalId);
   const target = items.find((item) => item.localId === targetLocalId);
-  if (!source || !target || source.localId === target.localId) return items;
+  if (
+    !source || !target || source.localId === target.localId ||
+    !photoIntakeItemIsReadyToSave(target) || !photoIntakeCanMerge(source, target)
+  ) return items;
 
   return items
     .filter((item) => item.localId !== source.localId)

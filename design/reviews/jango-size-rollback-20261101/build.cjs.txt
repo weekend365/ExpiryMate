@@ -1,0 +1,116 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const {execFileSync} = require('node:child_process');
+const base = __dirname;
+const root = process.env.JANGO_REVIEW_ROOT || '/Users/namu/Desktop/ExpiryMate';
+const baseline = 'cf37517d81d63ffea70c6235c6324a74bc4ead8b';
+const esbuild = require(base + '/node_modules/esbuild');
+const ts = require(root + '/node_modules/typescript');
+const files = ['apps/mobile/src/features/home/home-hero.tsx', 'apps/mobile/src/features/shopping/shopping-hero-card.tsx', 'apps/mobile/app/(tabs)/recommendations.tsx', 'apps/mobile/app/(tabs)/settings.tsx', 'apps/mobile/app/onboarding.tsx', 'apps/mobile/app/register.tsx', 'apps/mobile/app/cooking/[recommendationId].tsx'];
+fs.writeFileSync(base + '/native.tsx', `
+import React from 'react';
+import * as RN from 'react-native-web';
+export * from 'react-native-web';
+export const useWindowDimensions=()=>({...RN.useWindowDimensions(), fontScale:Number(new URLSearchParams(location.search).get('scale')||1)});
+export const Text=React.forwardRef(({style,maxFontSizeMultiplier=2,allowFontScaling=true,...props}:any,ref:any)=>{
+ const flat=RN.StyleSheet.flatten(style)||{};
+ const factor=allowFontScaling?Math.min(Number(new URLSearchParams(location.search).get('scale')||1),maxFontSizeMultiplier):1;
+ return <RN.Text {...props} ref={ref} style={[style,{fontSize:flat.fontSize?flat.fontSize*factor:undefined,lineHeight:flat.lineHeight?flat.lineHeight*factor:undefined}]} />;
+});
+`);
+fs.writeFileSync(base + '/motion.tsx', `import React from 'react'; import {View} from 'react-native'; export default {View}; export const useSharedValue=(value:any)=>React.useRef({value}).current; export const useAnimatedStyle=(f:any)=>({...f(),opacity:1,transform:[]}); export const useReducedMotion=()=>true; export const withSpring=(v:any)=>v; export const cancelAnimation=()=>{};`);
+fs.writeFileSync(base + '/safe.tsx', `export {View as SafeAreaView,View as SafeAreaProvider} from 'react-native'; export const useSafeAreaInsets=()=>({top:0,bottom:0,left:0,right:0});`);
+fs.writeFileSync(base + '/router.ts', `export const router={push:()=>{},replace:()=>{},back:()=>{},canGoBack:()=>false};`);
+fs.writeFileSync(base + '/store.ts', `export const useAppStore=(s:any)=>s({completeOnboarding:()=>{},keepCookingScreenAwake:true,setKeepCookingScreenAwake:()=>{}});`);
+fs.writeFileSync(base + '/monetization.ts', `export const useMonetization=()=>({access:{tier:'free',paidCredits:{enabled:false}}});`);
+fs.writeFileSync(base + '/sheet.tsx', `export const BottomSheet=()=>null;`);
+const icons = ['X','ChevronLeft','ChevronRight','Bell','ChefHat','CreditCard','MapPin','MessageCircleHeart','ShieldCheck','Sun','Ticket','UserRound','Users','Check','Clock','Plus','Minus','AlertCircle','Info'];
+fs.writeFileSync(base + '/icons.tsx', `import React from 'react'; const Icon=({size=24,color='currentColor',...props}:any)=><svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke={color}/></svg>; ${icons.map(n=>`export const ${n}=Icon;`).join('\n')}`);
+function source(file, variant) { return variant==='before'?execFileSync('git',['show',baseline+':'+file],{cwd:root,encoding:'utf8'}):fs.readFileSync(path.join(root,file),'utf8'); }
+function jsx(file, variant, name, match, openingOnly=false) {
+ const src=ts.createSourceFile(file,source(file,variant),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+ let found;
+ function walk(n){if ((ts.isJsxOpeningElement(n)||ts.isJsxSelfClosingElement(n)) && n.tagName.getText(src)===name && match(n.getText(src))) found=n.getText(src); ts.forEachChild(n,walk);}
+ walk(src); if (!found) throw Error('Missing JSX '+file+name);
+ return openingOnly?found:found;
+}
+function style(file,variant,name) {
+ const src=ts.createSourceFile(file,source(file,variant),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX); let result;
+ function walk(n){if(ts.isPropertyAssignment(n)&&n.name.getText(src)===name&&ts.isObjectLiteralExpression(n.initializer))result=n.initializer.getText(src);ts.forEachChild(n,walk);}
+ walk(src); if(!result)throw Error('Missing style '+name);return result;
+}
+(async()=>{
+ for(const variant of ['before','after']) {
+  const rec=jsx(files[2],variant,'JangoHeroNoticeCarousel',s=>s.includes('recommendationHeroNotices'));
+  const done=jsx(files[5],variant,'JangoHeroNoticeCarousel',s=>s.includes('doneHeroNotices'));
+  const reg=jsx(files[5],variant,'StepFlow',()=>true,true);
+  const cook=jsx(files[6],variant,'StepFlow',()=>true,true);
+  const entry=`
+import React from 'react'; import {createRoot} from 'react-dom/client';
+import {View,TextInput} from 'react-native';
+import {Screen} from '${root}/apps/mobile/src/components/Screen';
+import {AppText} from '${root}/apps/mobile/src/components/AppText';
+import {Button} from '${root}/apps/mobile/src/components/Button';
+import {StepFlow} from '${root}/apps/mobile/src/components/StepFlow';
+import {JangoHeroNoticeCarousel} from '${root}/apps/mobile/src/components/JangoHeroNoticeCarousel';
+import {HomeHero} from '${root}/${files[0]}';
+import {ShoppingHeroCard} from '${root}/${files[1]}';
+import Onboarding from '${root}/${files[4]}'; import Settings from '${root}/${files[3]}';
+import {useResponsiveLayout} from '${root}/apps/mobile/src/shared/responsive-layout';
+import {colors,radius,spacing,typography} from '${root}/apps/mobile/src/shared/theme';
+import {getCookingGuideMessage} from '${root}/apps/mobile/src/features/recipes/cooking-guide';
+const query=new URLSearchParams(location.search), scene=query.get('scene')||'home';
+const noop=()=>{};
+const styles={heroCard:${style(files[2],variant,'heroCard')},doneBubble:${style(files[5],variant,'doneBubble')}};
+function App(){
+ const {shouldStackDense}=useResponsiveLayout();
+ const keyboardVisible=scene==='register-keyboard';
+ const step=scene==='register-progress'?'quantity':'product', stepIndex=step==='product'?0:1;
+ const visibleSteps=[{key:'product',label:'재료',title:'어떤 재료를 넣을까요?',guideMessage:'재료 이름을 알려 주세요.'},{key:'quantity',label:'수량',title:'얼마나 넣을까요?',guideMessage:'지금 넣을 수량을 확인해 주세요.'},{key:'expiry',label:'기한',title:'언제까지 보관할까요?'}];
+ const productGuideMessage='재료 이름을 알려 주세요.';
+ const goToPreviousStep=noop, handlePreviousStep=noop, setStepsOverviewVisible=noop;
+ const completionStepIndex=2,currentIndex=scene==='cooking-done'?2:1,uncheckedPrepCount=0;
+ const dish={steps:['재료를 준비해요.']};
+ const steps=[{key:'prep',label:'준비',title:'재료를 준비해요'},{key:'cook',label:'조리',title:'차근차근 조리해요'},{key:'done',label:'완료',title:'요리가 완성됐어요!'}];
+ const recommendationHeroNotices=[{id:'ready',message:'추천 요리가 준비됐어요. 끌리는 요리부터 살펴봐요.',mood:'excited'}];
+ const doneHeroNotices=[{id:'saved',message:'재료를 보관함에 넣었어요. 기한은 제가 챙길게요.',mood:'praise'}];
+ if(scene==='settings')return <Settings/>; if(scene==='onboarding')return <Onboarding/>;
+ const isReg=scene.startsWith('register'),isCook=scene.startsWith('cooking');
+ let content;
+ if(scene==='home')content=<HomeHero notices={[{id:'expiry',message:'기한이 가까운 재료가 있어요. 먼저 살펴볼까요?',mood:'check',tone:'warning'}] as any} onNoticeAction={noop}/>;
+ else if(scene==='shopping')content=<ShoppingHeroCard notices={[{id:'shopping',message:'필요한 재료를 장보기 목록에 적어볼까요?',mood:'shopping'}]}/>;
+ else if(scene==='recommendations')content=<View style={styles.heroCard}>${rec}</View>;
+ else if(scene==='register-done')content=<View style={styles.heroCard}>${done}</View>;
+ else if(isReg)content=${reg}<TextInput testID="ingredient-input" defaultValue="당근" accessibilityLabel="재료 이름" style={{backgroundColor:colors.surface,minHeight:56,padding:16,borderWidth:1,borderColor:colors.borderControl,borderRadius:radius.lg,fontFamily:'Pretendard-Regular',fontSize:16}}/></StepFlow>;
+ else content=${cook}<AppText>예시 요리 · 입력 상태와 완료 안내의 배치 검토</AppText></StepFlow>;
+ return <Screen background={isReg?'ingredients':isCook?'cooking':undefined} backgroundTreatment={isCook?'reading':'standard'} footer={<Button fullWidth testID="primary-action" onPress={()=>document.body.dataset.action='pressed'}>{scene==='register-done'?'완료':scene==='cooking-done'?'보관함 정리하기':'다음'}</Button>}>
+ <AppText variant="caption" tone="subtext">크기 비교용 예시 · ${variant} · {scene}</AppText>{content}<AppText tone="subtext">예시 데이터로 확인한 실제 공통 컴포넌트입니다.</AppText>
+ </Screen>;
+}
+Promise.all(['Regular','Medium','SemiBold','Bold','ExtraBold'].map(async face=>{const f=new FontFace('Pretendard-'+face,'url(/fonts/Pretendard-'+face+'.otf)');document.fonts.add(await f.load());})).then(()=>{createRoot(document.getElementById('root')!).render(<App/>);document.body.dataset.fonts='ready';});
+`;
+  // Locate the real guide module without substituting its behavior.
+  const guideFile=execFileSync('rg',['-l','export function getCookingGuideMessage','apps/mobile/src'],{cwd:root,encoding:'utf8'}).trim();
+  const entryFixed=entry.replace(root+'/apps/mobile/src/features/recipes/cooking-guide',root+'/'+guideFile);
+  fs.writeFileSync(base+`/entry-${variant}.tsx`,entryFixed);
+  await esbuild.build({entryPoints:[base+`/entry-${variant}.tsx`],outdir:base+`/out/${variant}`,bundle:true,resolveExtensions:['.web.tsx','.tsx','.web.ts','.ts','.web.js','.js','.json'],format:'iife',platform:'browser',jsx:'automatic',loader:{'.png':'file','.otf':'file'},assetNames:'assets/[name]-[hash]',define:{'process.env.NODE_ENV':'"development"','__DEV__':'true'},logLevel:'warning',plugins:[{
+   name:'review-adapters',setup(build){
+    const aliases={'react-native':base+'/native.tsx','react-native-reanimated':base+'/motion.tsx','react-native-safe-area-context':base+'/safe.tsx','expo-router':base+'/router.ts','lucide-react-native':base+'/icons.tsx','react-native-svg':root+'/apps/mobile/node_modules/react-native-svg/lib/module/ReactNativeSVG.web.js'};
+    build.onResolve({filter:/.*/},args=>{
+      if(aliases[args.path])return {path:aliases[args.path]};
+      if(/^react(?:\/.*)?$/.test(args.path)||/^react-dom(?:\/.*)?$/.test(args.path)||args.path==='react-native-web')return {path:require.resolve(args.path,{paths:[base]})};
+      if(args.path==='@expirymate/shared')return {path:root+'/packages/shared/dist/index.js'};
+      if(args.path.endsWith('/app-store'))return {path:base+'/store.ts'};
+      if(args.path.endsWith('/monetization-provider'))return {path:base+'/monetization.ts'};
+      if(args.path.endsWith('/BottomSheet'))return {path:base+'/sheet.tsx'};
+    });
+    build.onLoad({filter:/\.[jt]sx?$/},args=>{
+      const rel=path.relative(root,args.path);
+      if(variant==='before'&&files.includes(rel))return {contents:source(rel,variant),loader:'tsx',resolveDir:path.dirname(args.path)};
+    });
+   }
+  }]});
+  fs.writeFileSync(base+`/out/${variant}/index.html`,`<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body,#root{margin:0;width:100%;height:100%;}#root{display:flex;flex-direction:column}*{box-sizing:border-box}</style><div id="root"></div><script src="/entry-${variant}.js"></script></html>`);
+ }
+ fs.writeFileSync(base+'/sources.json',JSON.stringify({baseline,files},null,2));
+})().catch(e=>{console.error(e);process.exitCode=1;});

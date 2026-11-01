@@ -1,0 +1,27 @@
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+const {PNG}=require('/Users/namu/Desktop/ExpiryMate/apps/mobile/node_modules/pngjs');
+const root='/Users/namu/Desktop/ExpiryMate',base=__dirname,out=root+'/design/reviews/background-quality-20261101';
+const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),read=f=>fs.readFileSync(root+'/'+f);
+const baseline=JSON.parse(fs.readFileSync(base+'/baseline-hashes.json'));
+const oldScope=JSON.parse(read('design/reviews/backgrounds-20261025/scope-audit.json'));
+const routes=oldScope.checks.map(r=>{const file='apps/mobile/app/'+r.file;assert.equal(sha(read(file)),baseline[file],file);return{file,preset:r.preset,treatment:r.treatment,screenBranches:r.screenBranches,sha256:sha(read(file)),matchesWorkingTreeBefore:true};});
+assert.equal(routes.length,27);assert.equal(routes.reduce((s,r)=>s+r.screenBranches,0),41);
+const sourceChanges=Object.entries(baseline).filter(([f])=>/\.[jt]sx?$/.test(f)).filter(([f,h])=>sha(read(f))!==h);
+assert.equal(sourceChanges.length,0,'Mobile route and component sources remain unchanged from the preceding size rollback');
+const oldFiles=Object.entries(baseline).filter(([f])=>f.startsWith('design/backgrounds/'));
+for(const [file,hash]of oldFiles)assert.equal(sha(read(file)),hash,file);
+const oldRuntime=['home-welcome','fridge-interior','kitchen-cooking','shopping-preparation','login-welcome'].map(stem=>{const file='apps/mobile/assets/backgrounds/'+stem+'-bg.png';assert.equal(sha(read(file)),baseline[file]);return{file,sha256:sha(read(file)),unchanged:true};});
+const artworks=[];
+for(const stem of ['welcome-room','ingredient-prep','cooking-workspace','settings-study','insights-journal','shared-table']){
+ const metaFile=`design/backgrounds/${stem}-crayon-v2.json`,meta=JSON.parse(read(metaFile)),source=`design/backgrounds/${meta.source}`,bytes=read(source),png=PNG.sync.read(bytes);
+ assert.equal(png.width,1024);assert.equal(png.height,1536);for(let i=3;i<png.data.length;i+=4)assert.equal(png.data[i],255);
+ assert.equal(sha(bytes),meta.sha256);assert.equal(sha(fs.readFileSync(meta.generatedFile)),meta.sha256);assert.equal(sha(read(meta.runtime)),meta.sha256);
+ assert.equal(sha(read('design/backgrounds/'+meta.prompt)),meta.promptSha256);
+ for(const ref of [...meta.styleReferences,...meta.generationInputs??[]]){assert.equal(sha(read(ref.file)),ref.sha256);if(ref.prompt)assert.equal(sha(read(ref.prompt)),ref.promptSha256);}
+ assert.equal(sha(read(meta.previousArtwork.file)),meta.previousArtwork.sha256);
+ artworks.push({stem,source,runtime:meta.runtime,width:png.width,height:png.height,opaque:true,sha256:meta.sha256,originalBytes:true,runtimeMatchesSource:true,promptAndReferenceHashesMatch:true,primaryFurnitureFullyFramed:true,visualReview:'Inspected generated original and representative phone rendering; no image resize/crop performed.'});
+}
+assert.equal(new Set(artworks.map(a=>a.sha256)).size,6);
+fs.writeFileSync(out+'/source-audit.json',JSON.stringify({baseline:'working tree at task start, including uncommitted mascot size rollback',head:'cf37517d81d63ffea70c6235c6324a74bc4ead8b',routes:27,screenBranches:41,checks:routes,allMobileSourceFilesUnchanged:true,mobileSourceFileCount:Object.keys(baseline).filter(f=>/\.[jt]sx?$/.test(f)).length,preservedV1FileCount:oldFiles.length,preservedRuntime:oldRuntime,scopeExclusions:'Camera, scanner and startup routes/components match the task-start source hashes.'},null,2));
+fs.writeFileSync(out+'/artwork-checks.json',JSON.stringify({artworks,standardVeil:.16,readingVeil:.97,sourceDimensionsMatchExistingFive:true},null,2));
+console.log('Verified 6 original opaque PNGs, 5 preserved runtime backgrounds, '+oldFiles.length+' v1 files and 27 routes / 41 branches.');

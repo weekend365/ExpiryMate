@@ -1,6 +1,9 @@
 import fs from "node:fs";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
+
+const { PNG } = createRequire(import.meta.url)("pngjs");
 
 const backgrounds = [
   ["Home", "home-welcome"],
@@ -8,15 +11,15 @@ const backgrounds = [
   ["Recommendations", "kitchen-cooking"],
   ["Shopping", "shopping-preparation"],
   ["Login", "login-welcome"],
-  ["Welcome room", "welcome-room"],
-  ["Ingredient preparation", "ingredient-prep"],
-  ["Cooking workspace", "cooking-workspace"],
-  ["Settings study", "settings-study"],
-  ["Insights journal", "insights-journal"],
-  ["Shared table", "shared-table"],
-].map(([name, stem]) => {
+  ["Welcome room", "welcome-room", "v2"],
+  ["Ingredient preparation", "ingredient-prep", "v2"],
+  ["Cooking workspace", "cooking-workspace", "v2"],
+  ["Settings study", "settings-study", "v2"],
+  ["Insights journal", "insights-journal", "v2"],
+  ["Shared table", "shared-table", "v2"],
+].map(([name, stem, version = "v1"]) => {
   const record = JSON.parse(fs.readFileSync(
-    new URL(`../../../design/backgrounds/${stem}-crayon-v1.json`, import.meta.url),
+    new URL(`../../../design/backgrounds/${stem}-crayon-${version}.json`, import.meta.url),
     "utf8",
   ));
   if (!/^[a-f0-9]{64}$/.test(record.sha256)) {
@@ -28,10 +31,22 @@ const backgrounds = [
       throw new Error(`${name} generation prompt differs from its provenance record.`);
     }
   }
-  for (const reference of record.styleReferences ?? []) {
+  for (const reference of [...(record.styleReferences ?? []), ...(record.generationInputs ?? [])]) {
     const bytes = fs.readFileSync(new URL(`../../../${reference.file}`, import.meta.url));
     if (createHash("sha256").update(bytes).digest("hex") !== reference.sha256) {
-      throw new Error(`${name} style reference differs from its provenance record.`);
+      throw new Error(`${name} generation reference differs from its provenance record.`);
+    }
+    if (reference.prompt) {
+      const prompt = fs.readFileSync(new URL(`../../../${reference.prompt}`, import.meta.url));
+      if (createHash("sha256").update(prompt).digest("hex") !== reference.promptSha256) {
+        throw new Error(`${name} input generation prompt differs from its provenance record.`);
+      }
+    }
+  }
+  if (record.previousArtwork && typeof record.previousArtwork === "object") {
+    const bytes = fs.readFileSync(new URL(`../../../${record.previousArtwork.file}`, import.meta.url));
+    if (createHash("sha256").update(bytes).digest("hex") !== record.previousArtwork.sha256) {
+      throw new Error(`${name} previous artwork differs from its provenance record.`);
     }
   }
   return { name, source: record.source, destination: `${stem}-bg.png`, sourceHash: record.sha256 };
@@ -44,6 +59,15 @@ const assets = backgrounds.map((background) => {
   const original = fs.readFileSync(source);
   if (createHash("sha256").update(original).digest("hex") !== background.sourceHash) {
     throw new Error(`${background.name} source differs from its recorded artwork.`);
+  }
+  const png = PNG.sync.read(original);
+  if (png.width !== 1024 || png.height !== 1536) {
+    throw new Error(`${background.name} background must be a native 1024×1536 PNG.`);
+  }
+  for (let index = 3; index < png.data.length; index += 4) {
+    if (png.data[index] !== 255) {
+      throw new Error(`${background.name} background must be fully opaque.`);
+    }
   }
   return { ...background, destination, original };
 });

@@ -1,0 +1,8 @@
+
+> expirymate-monorepo@ validate:env-parity /Users/namu/Desktop/ExpiryMate
+> node scripts/check-env-parity.mjs
+
+[env-parity] apps/api/.env.production.example OK (62 keys present)
+[env-parity] docs/env.staging.example OK (62 keys present)
+[env-parity] apps/mobile/.env.production.example OK (9 keys present)
+[env-parity] all checks passed

@@ -55,6 +55,8 @@ describe("pickInventoryPhoto", () => {
     expect(mocks.imagePicker.launchImageLibraryAsync).toHaveBeenCalledWith(
       expect.objectContaining({
         mediaTypes: ["images"],
+        quality: 1,
+        exif: false,
         preferredAssetRepresentationMode: "compatible",
       }),
     );

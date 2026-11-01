@@ -946,8 +946,8 @@ export default function RecommendationsScreen() {
               <View style={styles.heroCard}>
                 <JangoHeroNoticeCarousel
                   notices={recommendationHeroNotices}
-                  size="medium"
-                  layout="adaptive"
+                  size="small"
+                  layout={shouldStackDense ? "stacked" : "inline"}
                 />
               </View>
               <View style={styles.optionsSummaryGroup}>

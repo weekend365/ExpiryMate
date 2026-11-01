@@ -1,0 +1,40 @@
+{
+  "source": "insights-journal-crayon-v2.png",
+  "sha256": "01d58ac6c7a53ee0b2dded870ea1f0bfbb42af7bf67d9510085f4821b9e98e9d",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "tool": "built-in image_gen (new illustration with style references)",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a171f9-7cd3-7352-985a-d58901338a25/exec-f06d33a0-60d1-4e5a-b504-dbb5982b4f04.png",
+  "prompt": "insights-journal-crayon-v2.prompt.txt",
+  "promptSha256": "0927b9733511db52a2e9c1cda675b66fbd60a2a0f05e5aae01ade9ddda22653c",
+  "styleReferences": [
+    {
+      "file": "design/backgrounds/home-welcome-crayon-v1.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+      "role": "style-reference-only"
+    },
+    {
+      "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+      "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+      "role": "style-reference-only"
+    }
+  ],
+  "previousArtwork": {
+    "file": "design/backgrounds/insights-journal-crayon-v1.png",
+    "sha256": "1e2a89b059722429d77be4d24dc20a6db901794d92f155bba975c4f37bdf9f5a"
+  },
+  "runtime": "apps/mobile/assets/backgrounds/insights-journal-bg.png",
+  "status": "implemented-under-user-request",
+  "date": "2026-11-01",
+  "constraints": [
+    "opaque",
+    "no character",
+    "no text or numbers",
+    "no functional icons",
+    "quiet central content area",
+    "fully framed primary furniture",
+    "new native-resolution artwork; no upscale or crop"
+  ]
+}

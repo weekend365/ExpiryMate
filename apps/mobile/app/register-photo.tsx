@@ -40,6 +40,8 @@ import {
 } from "../src/features/auth/session-boundary";
 import {
   canSubmitPhotoIntake,
+  photoIntakeCanMerge,
+  photoIntakeDuplicateMessage,
   candidatesToDrafts,
   draftsToCreateBody,
   findPhotoIntakeDuplicateMatches,
@@ -51,6 +53,7 @@ import {
   type PhotoIntakeDraftItem,
 } from "../src/features/photo-intake/photo-intake-draft";
 import { PhotoBulkEditPanel } from "../src/features/photo-intake/photo-bulk-edit-panel";
+import { withPreparedInventoryPhoto } from "../src/features/photo-intake/prepare-inventory-photo";
 import { pickInventoryPhoto } from "../src/features/photo-intake/pick-inventory-photo";
 import { PhotoCaptureScreen } from "../src/features/photo-intake/photo-capture-screen";
 import {
@@ -179,7 +182,11 @@ export default function RegisterPhotoScreen() {
     return findPhotoIntakeDuplicateMatches(items, existingInventory);
   }, [existingInventory, items]);
   const duplicateCandidateIds = useMemo(
-    () => new Set(duplicateMatches.keys()),
+    () => new Set(
+      [...duplicateMatches]
+        .filter(([, match]) => match.strength === "exact")
+        .map(([id]) => id),
+    ),
     [duplicateMatches],
   );
   const confirmedDuplicateIdSet = useMemo(
@@ -266,7 +273,12 @@ export default function RegisterPhotoScreen() {
       if (!context.activeSpaceId || currentSelectionContext.current !== context) {
         throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
       }
-      return parseInventoryPhoto({ scene, ...photo }, context.activeSpaceId);
+      const spaceId = context.activeSpaceId;
+      return withPreparedInventoryPhoto(
+        photo,
+        () => currentSelectionContext.current === context,
+        (prepared) => parseInventoryPhoto({ scene, ...prepared }, spaceId),
+      );
     },
     onSuccess: (result, { context }) => {
       if (currentSelectionContext.current !== context) return;
@@ -311,6 +323,9 @@ export default function RegisterPhotoScreen() {
     }) => {
       if (!activeSpaceId) {
         throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      if (!photoIntakeCanMerge(draft, target)) {
+        throw new Error("내용과 기한을 확인하고 같은 단위의 항목만 합칠 수 있어요.");
       }
       const canonicalDraftQuantity = toBaseQuantity(draft.quantity, draft.unit);
       if (canonicalDraftQuantity.unitCode !== target.unitCode) {
@@ -525,7 +540,7 @@ export default function RegisterPhotoScreen() {
       try {
         const photo = selection.source === "camera"
           ? await cameraRef.current?.takePictureAsync({
-              quality: 0.7,
+              quality: 1,
               exif: false,
               shutterSound: true,
             })
@@ -849,7 +864,7 @@ export default function RegisterPhotoScreen() {
             {items.map((item) => {
               const duplicateMatch = duplicateMatches.get(item.localId);
               const isUnconfirmedDuplicate =
-                Boolean(duplicateMatch) &&
+                duplicateMatch?.strength === "exact" &&
                 !confirmedDuplicateIdSet.has(item.localId);
               const needsAttention =
                 !photoIntakeItemIsReadyToSave(item) || isUnconfirmedDuplicate;
@@ -896,13 +911,14 @@ export default function RegisterPhotoScreen() {
                             ? formatDateKorean(item.expiryDate)
                             : "기한 없음"}
                       </AppText>
+                      {duplicateMatch ? (
+                        <AppText variant="caption" tone="warning">
+                          {photoIntakeDuplicateMessage(duplicateMatch)}
+                        </AppText>
+                      ) : null}
                       {needsAttention ? (
                         <AppText variant="caption" tone="warning">
-                          {isUnconfirmedDuplicate
-                            ? duplicateMatch?.kind === "draft"
-                              ? "사진 결과 안에 같은 내용이 한 번 더 있어요."
-                              : "보관함에 같은 내용이 있어요."
-                            : item.reason ?? "필요한 정보만 바로 확인해 주세요."}
+                          {item.reason ?? "필요한 정보만 바로 확인해 주세요."}
                         </AppText>
                       ) : null}
                     </Pressable>
@@ -964,8 +980,6 @@ export default function RegisterPhotoScreen() {
                               updateItem(item.localId, {
                                 expiryDate: isoDate,
                                 expirySource: ExpirySource.PRESET,
-                                needsReview: false,
-                                reason: undefined,
                               })
                             }
                           />
@@ -974,8 +988,6 @@ export default function RegisterPhotoScreen() {
                               updateItem(item.localId, {
                                 expiryDate: null,
                                 expirySource: ExpirySource.UNKNOWN,
-                                needsReview: false,
-                                reason: undefined,
                               })
                             }
                             accessibilityRole="button"
@@ -991,12 +1003,12 @@ export default function RegisterPhotoScreen() {
                             onPress={() =>
                               handleMergeDuplicate(item, duplicateMatch)
                             }
-                            disabled={mergeIntoInventoryMutation.isPending}
+                            disabled={mergeIntoInventoryMutation.isPending || !canMergeDuplicate(item, duplicateMatch)}
                             accessibilityRole="button"
                             style={[
                               styles.actionChip,
                               styles.actionChipPrimary,
-                              mergeIntoInventoryMutation.isPending &&
+                              (mergeIntoInventoryMutation.isPending || !canMergeDuplicate(item, duplicateMatch)) &&
                                 styles.actionChipDisabled,
                             ]}
                           >
@@ -1004,6 +1016,15 @@ export default function RegisterPhotoScreen() {
                               수량 합치기
                             </AppText>
                           </Pressable>
+                          {item.needsReview ? (
+                            <Pressable
+                              onPress={() => updateItem(item.localId, { needsReview: false, reason: undefined })}
+                              accessibilityRole="button"
+                              style={styles.actionChip}
+                            >
+                              <AppText variant="bodySmall">이 내용이 맞아요</AppText>
+                            </Pressable>
+                          ) : null}
                           <Pressable
                             onPress={() => confirmDuplicate(item.localId)}
                             accessibilityRole="button"
@@ -1213,7 +1234,7 @@ export default function RegisterPhotoScreen() {
             fullWidth
           >
             {editingItem && duplicateCandidateIds.has(editingItem.localId)
-              ? "중복으로 추가"
+              ? "내용 확인 후 별도로 추가"
               : "내용 확인"}
           </Button>
         }
@@ -1223,8 +1244,8 @@ export default function RegisterPhotoScreen() {
             {duplicateCandidateIds.has(editingItem.localId) ? (
               <FeedbackBanner
                 tone="warning"
-                title="같은 재료가 이미 있거나 겹쳐 보여요"
-                description="이름·단위·자리·기한이 같아요. 수량을 합치거나 별도 묶음으로 둘 수 있어요."
+                title={photoIntakeDuplicateMessage(duplicateMatches.get(editingItem.localId)!)}
+                description="이름·브랜드·단위·자리·기한이 같아요. 내용을 확인한 뒤 수량을 합치거나 별도로 추가할 수 있어요."
               />
             ) : null}
             <View style={styles.editFieldGroup}>
@@ -1399,22 +1420,22 @@ export default function RegisterPhotoScreen() {
   }
 
   function confirmDuplicate(localId: string) {
-    setItems((current) =>
-      current.map((item) =>
-        item.localId === localId
-          ? { ...item, needsReview: false, reason: undefined }
-          : item,
-      ),
-    );
     setConfirmedDuplicateIds((current) =>
       current.includes(localId) ? current : [...current, localId],
     );
+  }
+
+  function canMergeDuplicate(draft: PhotoIntakeDraftItem, match: DuplicateMatch) {
+    if (match.kind === "inventory") return photoIntakeCanMerge(draft, match.target);
+    const target = items.find((item) => item.localId === match.targetLocalId);
+    return Boolean(target && photoIntakeItemIsReadyToSave(target) && photoIntakeCanMerge(draft, target));
   }
 
   function handleMergeDuplicate(
     draft: PhotoIntakeDraftItem,
     match: DuplicateMatch,
   ) {
+    if (!canMergeDuplicate(draft, match)) return;
     if (match.kind === "inventory") {
       mergeIntoInventoryMutation.mutate({ draft, target: match.target });
       return;

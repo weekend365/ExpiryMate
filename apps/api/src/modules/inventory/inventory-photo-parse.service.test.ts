@@ -53,6 +53,7 @@ describe("InventoryPhotoParseService", () => {
   const originalEnabled = process.env.INVENTORY_PHOTO_PARSE_ENABLED;
   const originalKey = process.env.OPENAI_API_KEY;
   const originalModel = process.env.INVENTORY_PHOTO_PARSE_MODEL;
+  const originalTokens = process.env.INVENTORY_PHOTO_PARSE_MAX_OUTPUT_TOKENS;
   let privacyService: { ensureAiDataNoticeAccepted: ReturnType<typeof vi.fn> };
   let policy: {
     ensureEnabled: ReturnType<typeof vi.fn>;
@@ -70,6 +71,7 @@ describe("InventoryPhotoParseService", () => {
     process.env.INVENTORY_PHOTO_PARSE_ENABLED = "true";
     process.env.OPENAI_API_KEY = "test-key";
     delete process.env.INVENTORY_PHOTO_PARSE_MODEL;
+    delete process.env.INVENTORY_PHOTO_PARSE_MAX_OUTPUT_TOKENS;
     parseMock.mockReset();
     privacyService = {
       ensureAiDataNoticeAccepted: vi.fn().mockResolvedValue(undefined),
@@ -97,6 +99,8 @@ describe("InventoryPhotoParseService", () => {
     process.env.INVENTORY_PHOTO_PARSE_ENABLED = originalEnabled;
     process.env.OPENAI_API_KEY = originalKey;
     process.env.INVENTORY_PHOTO_PARSE_MODEL = originalModel;
+    if (originalTokens === undefined) delete process.env.INVENTORY_PHOTO_PARSE_MAX_OUTPUT_TOKENS;
+    else process.env.INVENTORY_PHOTO_PARSE_MAX_OUTPUT_TOKENS = originalTokens;
   });
 
   it("rejects when the feature flag is off", async () => {
@@ -271,4 +275,29 @@ describe("InventoryPhotoParseService", () => {
     expect(parseMock).not.toHaveBeenCalled();
     expect(policy.completeParse).not.toHaveBeenCalled();
   });
+  it("uses one high-detail call, a 4096 token ceiling and shelf/occlusion/package instructions", async () => {
+    parseMock.mockResolvedValue({output:[],status:"completed",output_parsed:{items:visionItems().slice(0,1)}});
+    await service.parsePhoto({ownerKey:"user-1",scene:"fridge",file:{buffer:jpeg}});
+    expect(parseMock).toHaveBeenCalledTimes(1);
+    const request = parseMock.mock.calls[0]![0];
+    expect(request.max_output_tokens).toBe(4096);
+    expect(request.metadata.promptVersion).toBe("inventory-photo-parse-v2");
+    for (const text of ["top to bottom", "partially occluded", "completely hidden", "never guess", "Package capacity", "distinct visible packages", "Do not invent or estimate expiry"]) expect(request.instructions.toLowerCase()).toContain(text.toLowerCase());
+    expect(request.input[0].content).toContainEqual(expect.objectContaining({type:"input_image",detail:"high"}));
+  });
+  it("respects the configured token ceiling and returns a valid empty result without retrying", async () => {
+    process.env.INVENTORY_PHOTO_PARSE_MAX_OUTPUT_TOKENS="2200";
+    parseMock.mockResolvedValue({output:[],status:"completed",output_parsed:{items:[]}});
+    await expect(service.parsePhoto({ownerKey:"user-1",scene:"fridge",file:{buffer:jpeg}})).resolves.toEqual({scene:"fridge",items:[]});
+    expect(parseMock).toHaveBeenCalledTimes(1);
+    expect(parseMock.mock.calls[0]![0].max_output_tokens).toBe(2200);
+  });
+  it("rejects truncated output without retrying or saving a partial candidate list", async () => {
+    parseMock.mockResolvedValue({output:[],status:"incomplete",output_parsed:{items:visionItems()}});
+    await expect(service.parsePhoto({ownerKey:"user-1",scene:"fridge",file:{buffer:jpeg}})).rejects.toThrow();
+    expect(parseMock).toHaveBeenCalledTimes(1);
+    expect(policy.completeParse).not.toHaveBeenCalled();
+    expect(policy.failParse).toHaveBeenCalledWith("evt-1",expect.objectContaining({failureCode:"incomplete"}));
+  });
+
 });

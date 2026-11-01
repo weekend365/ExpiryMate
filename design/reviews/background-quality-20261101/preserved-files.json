@@ -1,0 +1,1519 @@
+{
+  "baseline": "task-start working tree",
+  "preserved": [
+    {
+      "file": "apps/mobile/app/index.tsx",
+      "sha256": "c481a4c530aad13b02831a9f0ce08a7622877ebc8c629f4ba309a175843ef198"
+    },
+    {
+      "file": "apps/mobile/app/register.tsx",
+      "sha256": "456f380d8dcdd28eaa682bc88c6a9b96f5b6761757d1b435d95bb945d697ab03"
+    },
+    {
+      "file": "apps/mobile/app/scanner.tsx",
+      "sha256": "77736829c0c3f84747551313c0a094d7f0e9290fe717059a39079441fec031eb"
+    },
+    {
+      "file": "apps/mobile/app/insights.tsx",
+      "sha256": "a12bd7575ee99a1d37d1f7b3d54404ecb34b0a3c0d083f0697466dd45f6b4cbf"
+    },
+    {
+      "file": "apps/mobile/app/onboarding.tsx",
+      "sha256": "2eb226669c3e1424c6bbd3c1eda635675ca4ee48bc7b4c0ac298ffe4be504218"
+    },
+    {
+      "file": "apps/mobile/app/register-photo.tsx",
+      "sha256": "5e4786539829c94483afe237c81edf101d4bdaa0bab8351bb1078b6501ede123"
+    },
+    {
+      "file": "apps/mobile/app/_layout.tsx",
+      "sha256": "0f954890391b3550cffae34a7c5d323ca3f03797a4aa39a849ea631ad11d9119"
+    },
+    {
+      "file": "apps/mobile/src/shared/screen-background.test.tsx",
+      "sha256": "b39642ebd6f6783b2171827bbcc7ae7009ebd456bbc7cd6ba906ea129f292ef9"
+    },
+    {
+      "file": "apps/mobile/src/components/ContentSkeleton.tsx",
+      "sha256": "3bd57426df392a23341e1d9c1dec2fd9f5c8c6240d83ae5d542fb1798f694dd6"
+    },
+    {
+      "file": "apps/mobile/src/components/BottomSheet.tsx",
+      "sha256": "a344f8ebd0b4bcdc5a5a88ddd41384a61061c1e99b1d5a55f5a99e3b7960f11e"
+    },
+    {
+      "file": "apps/mobile/src/components/SpaceSwitcher.tsx",
+      "sha256": "331ad3a308d32b7a058757e9999fba9596ad4914f44aa93e5d9d77a9d52fd870"
+    },
+    {
+      "file": "apps/mobile/src/components/EmailDomainInput.tsx",
+      "sha256": "1904a6330c90cfb6cde0e1e5df32c3d79eab879f61ebe173b15afcc51c538c29"
+    },
+    {
+      "file": "apps/mobile/src/components/DatePickerField.tsx",
+      "sha256": "a305c79e7417259e974a5eef985b84c3c7357864270c7760a8bf90b68b9d1a13"
+    },
+    {
+      "file": "apps/mobile/src/components/SettingsGroup.tsx",
+      "sha256": "74489b8cd606ace868e70b2a7d488f7f6880bdafaf09bfa1e83d474c404c1a55"
+    },
+    {
+      "file": "apps/mobile/src/components/OAuthButton.tsx",
+      "sha256": "0fa3bf89382be34b3386e66ad72898d648b49dbda2cebcf3ce50691e5572322a"
+    },
+    {
+      "file": "apps/mobile/src/components/SurfaceCard.tsx",
+      "sha256": "c7e5c9919df6271cde5663de09b55ea625487e2361a38398037506417da25fb5"
+    },
+    {
+      "file": "apps/mobile/src/components/FormField.tsx",
+      "sha256": "8be619315349841d4b28aed7bdc694113c7d2abf2e7e504e3df1ac7ba12cb6cf"
+    },
+    {
+      "file": "apps/mobile/src/components/ListRow.tsx",
+      "sha256": "528563b4f910584c4bf6f85bdc4b6fddc58717e5b7d2b3e0ba516c5e10bbf4a8"
+    },
+    {
+      "file": "apps/mobile/src/components/settings-density.tsx",
+      "sha256": "335a7cc09ce55f49c3165cd23c6afe84ed8acd69694ff7e3c17da074be20a630"
+    },
+    {
+      "file": "apps/mobile/src/components/MascotSpeechBubble.tsx",
+      "sha256": "db7f9d7a1eaefd86d305bdcacde5f37ef587a2ea298c3d12308f12b87d0c7398"
+    },
+    {
+      "file": "apps/mobile/src/components/InventoryCleanupSheet.tsx",
+      "sha256": "d2b244ed200860d6cb3306c5a5407f32bb6120e2ff09ce26e67cf9c49417debf"
+    },
+    {
+      "file": "apps/mobile/src/components/StatCard.tsx",
+      "sha256": "5ec174450823791a7e219fbc5bb84914ef2b46c1188a2d460bd7cb1ca3e299ed"
+    },
+    {
+      "file": "apps/mobile/src/components/JangoHeroNoticeCarousel.tsx",
+      "sha256": "ed2b19db7334e45ad8805628e3e195438f667c65d2b6e33457e05026b4e2d99c"
+    },
+    {
+      "file": "apps/mobile/src/components/AppText.tsx",
+      "sha256": "6e0efc43e63b31213877dbdcb52c123bd7bb7ec2a8f58b6179fde0ddb32839e2"
+    },
+    {
+      "file": "apps/mobile/src/components/AppTextInput.tsx",
+      "sha256": "983c2d332d9a42e089e876a044a47fed4ccdaa88d5562ca1694a74589c008b73"
+    },
+    {
+      "file": "apps/mobile/src/components/SectionHeader.tsx",
+      "sha256": "c3ec4377e7c69b59d34edc473a6060fa10bfbb3ec3f72dba53eba50f451e4ab7"
+    },
+    {
+      "file": "apps/mobile/src/components/InventoryCard.tsx",
+      "sha256": "66a055809dd891ae6e66583787016ae2ba2a39845e78b06f9160e254d9dc2940"
+    },
+    {
+      "file": "apps/mobile/src/components/ExpiryTrafficIcon.tsx",
+      "sha256": "608f4cb14a59866f3b5f91c89b0bc352d9c408eff7e02f73a1644da645e574b4"
+    },
+    {
+      "file": "apps/mobile/src/components/StepFlow.tsx",
+      "sha256": "1c38044a0cda7f1b4ce6ab114f3baed2e0601a3c989d7f9f931cb56dcb8f0e9e"
+    },
+    {
+      "file": "apps/mobile/src/components/Pill.tsx",
+      "sha256": "d5cbad7c4447cc0f049b24f929431c8c5c97d6d49472fc21e14f5b323411792b"
+    },
+    {
+      "file": "apps/mobile/src/components/FeedbackBanner.tsx",
+      "sha256": "18d20935396fe52f1d7d0967c5cdeb88445fe142c4cb0c94960c99c256ba14cf"
+    },
+    {
+      "file": "apps/mobile/src/components/SettingsScreen.tsx",
+      "sha256": "a17440823e6465345f11b3f43b756c6baef14329bac6ad4718777a4b82d873cb"
+    },
+    {
+      "file": "apps/mobile/src/components/Screen.tsx",
+      "sha256": "e23b57a2a2f76cc4ce186f4decc9bd9da2c840b79814398192185b418ebdd38c"
+    },
+    {
+      "file": "apps/mobile/src/components/ScreenBackground.tsx",
+      "sha256": "d48e74e2d2a09a617a3fb32449579a18bbc8ffaa05b93e2c9d419df0451911e5"
+    },
+    {
+      "file": "apps/mobile/src/components/HeaderBackButton.tsx",
+      "sha256": "c37a629aa3a227195615e4b72a883a014c307f15e96e4ad989780c3baad5653d"
+    },
+    {
+      "file": "apps/mobile/src/components/Button.tsx",
+      "sha256": "7ce48a7edcfa97df9ba6956f7abf6312207c2cac9e21e4c18a17fd1510f49155"
+    },
+    {
+      "file": "apps/mobile/src/components/EmptyState.tsx",
+      "sha256": "427f94078a2b6c4f142b29a4c404352e057cd81e813b850fc7e6e0b99ffab01d"
+    },
+    {
+      "file": "apps/mobile/src/components/Mascot.tsx",
+      "sha256": "0b15009cd03a1e954c2b34b31e03cb2ac16b3384863a935f58ccb03b7c369f0c"
+    },
+    {
+      "file": "apps/mobile/src/components/QuantityStepper.tsx",
+      "sha256": "5e3d612edc3a6bb08b8578e18a2acd10d7bd9b4dd98129955fd3cd549b421892"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/subscription-entry.test.tsx",
+      "sha256": "1de86ac3d6960e7df94741bc57fe0b19fef0e08d386f660de1e6070bbd3a0294"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-quick-entry.tsx",
+      "sha256": "054a593eb2a43133cf65d3ac99af4f1220c9f0d3d27b21f8a08fc14474436198"
+    },
+    {
+      "file": "apps/mobile/src/features/home/inventory-ux.test.tsx",
+      "sha256": "200e69fbe38674807b637fd55840c74016a9cf2345cd1da200cb4c3ba0e4f2e0"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-section-header.tsx",
+      "sha256": "249eb3df79e69c191202260fd30f9ceddb409510302efcbcbf7711c2e627c4d5"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-hero.tsx",
+      "sha256": "5537f4e0b8f71c37c8cc111ac0f125663a587ff36cc07e64abcbb05f07f46930"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/ingredient-entry-method-sheet.tsx",
+      "sha256": "4b5360431799371957a4301d3e8b96761f2d4dc97f81d0fddd31504e792ecd88"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/registration-completion-actions.tsx",
+      "sha256": "6fd0ab7d2b2bb9a819f34e316eec066f96d12d1bb071dce6941f3e2d13c21028"
+    },
+    {
+      "file": "apps/mobile/src/features/shopping/shopping-controls.test.tsx",
+      "sha256": "85b52d9ba34de732163f6b9faee0683d39fa4716d88e63c991fe774aeca16f32"
+    },
+    {
+      "file": "apps/mobile/src/features/shopping/shopping-list-panel.tsx",
+      "sha256": "bdfeb93cf69b64fac2c7e5a1037a76b47541246ba70f9c0b07ba8340fd224f08"
+    },
+    {
+      "file": "apps/mobile/src/features/shopping/shopping-hero-card.tsx",
+      "sha256": "952f05dcb5d260b44abf59fba1fa20cfd040477c056b333d3312e3179ec99c3d"
+    },
+    {
+      "file": "apps/mobile/src/features/privacy/privacy-history-status.test.tsx",
+      "sha256": "6769791cac1078febbc1be40ea54cbb61487144e901039af3eda6ab527b7eb54"
+    },
+    {
+      "file": "apps/mobile/src/features/privacy/privacy-history-status.tsx",
+      "sha256": "1fbeeff6490d306e6abb8ea859119f97eabf945c9473bfbbb7f048ddb0cd7a6f"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/onboarding.test.tsx",
+      "sha256": "21eb8ed36aeca1583c7851d6323644026bb22243e20d93b8f3a6b9bf0911c419"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/auth-gate.tsx",
+      "sha256": "6da27e53f6058c33f854b8ad496c4a0b9c585705b5c4be623d10513ab916e371"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/space-provider-revocation.test.tsx",
+      "sha256": "0632f8e84203c192993cc5ad80238721a3b0bb695023cde809dabdff7a6efaa9"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/space-provider.tsx",
+      "sha256": "ab5c66d3ba22de81eadb574d8d40fafa46c31d49cc75617aa6fef821fd4789b3"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/pending-invitation.tsx",
+      "sha256": "8625fa773777deb36d503bfe339b594a2d6b8f19d8cb0f0659e109ace648527f"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-products-notice.test.tsx",
+      "sha256": "3c610266f4fbaeac9405fbcdee1e1969ee0b4f926d75cad0da41524d75ca91ce"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-status.test.tsx",
+      "sha256": "768a4977dbd4119aa5813ee82f88f6e9c6051beefd247e7bc33ce9768b6ecd23"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-products-notice.tsx",
+      "sha256": "eb70af8a9c6167338947ebcd05fffce1098cb766156274518693e3dfbbd7abff"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-status.tsx",
+      "sha256": "f227cb507ef5fcba7ff021f38fe3c2186e1afb9a8e7d82eb112ea908760b799d"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-restore.test.tsx",
+      "sha256": "a6e5ea2a22f63c14da34cd4a4c582d3d9329683faaefb47dd5aeac00338c2138"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/CookingStepText.tsx",
+      "sha256": "a183d51db4469dff1615ac2618daba58d4b0e901115c646fe63642a484781604"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/pending-cooking-cleanup-card.tsx",
+      "sha256": "877c642273a04a43703eee84e67761e1ae5e5405c2f1f107f3868ee835bd0bf3"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking-timer-card.tsx",
+      "sha256": "147c3a2911e157ffc6d44f25dd51ea37a8dad5067e45bbf95fe0d08da0ad7e9c"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/active-cooking-timer-bar.tsx",
+      "sha256": "996324e10d6af33c020f29c338195e12535d1838823fc476fe78051ade67ccc2"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recommendation-quota-panel.tsx",
+      "sha256": "ff9208235449d5e1ea4df4e2b4abefcea10d65ea663b537528b89a5f48d30c7f"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-generation-provider.tsx",
+      "sha256": "5cfbcf984cfd68fb3664a86f37257daf98e3b3bab94255ed36fa8401636f5169"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-detail-sheet.tsx",
+      "sha256": "f68b774f1b925c4badc9b06f4233da2ad37d410e70e539f30f2224f72e3e98d0"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-list-header.tsx",
+      "sha256": "b6cc522f640ee3a7078a684423325144ac8d49fc53316f78b9a1bf5b199f8142"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/opened-inventory-fields.tsx",
+      "sha256": "44d493c10ebffea1d8248da504923c5ac9e8276228ba508caf6eda881b7148c8"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-form-ui.tsx",
+      "sha256": "07f0adbc962e6f77b71a586c6daeb8bfc88f261d7dea4745d2bbb3c702cc30ce"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-undo-snackbar.tsx",
+      "sha256": "e3cf0cbd4557393681170ee61a0674fece28a9c58d78973158e50968db3614cc"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-urgency-section.tsx",
+      "sha256": "5c6e1154e218211eb9a3178ed05483c2668521c3ff78feed49f64b227367e120"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-list-sheets.tsx",
+      "sha256": "04cf0e25cc56cf9312df10a1e282f84195cce1a4760e975bda071b5dde565d75"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-step-fields.tsx",
+      "sha256": "cf2f0a44ef0f8e8336b72a8720c3215d26777cfe11843e59955dfe1ffc38971b"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/QuantityUnitPills.tsx",
+      "sha256": "299e9b6f30c2eb0d7dc505b8638e9359f4a76866743ed9a90c9d73f1ad17b2f8"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/affiliate-entry-tracking.tsx",
+      "sha256": "e5a266ad5404d3e975cdf8aa246ae9364126cc7c3037da5316a7d4d873892089"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/optional-missing-ingredients.tsx",
+      "sha256": "6421d653dd07827bcf738cd29e05dfb02da3fd4259ea80e4ec7455d4a63e4225"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/affiliate-cta.tsx",
+      "sha256": "17f3865a7df6cde9b2ee25c97db7adc743dbe7b173ad35e7c271d534dcefac92"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/affiliate-disclosure.tsx",
+      "sha256": "b27b0d8b03e59313eafccabab9276485eea11dd76d3703be0d513c603011572b"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/ShoppingScreen.tsx",
+      "sha256": "797f98afb59c77bd640c76f7d3a39cb1e9cb59a1fc4b205836f2d31d7bdb0a07"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/affiliate-product-group.tsx",
+      "sha256": "de184798d3a7c5fe354652d53a6cc46cec2514d6cd81a111ce58b713f15c2b78"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-capture-screen.test.tsx",
+      "sha256": "d50653c981e95badb8521edbd84c87f2be5a26ff07ea73c6533222b7747ec5af"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-bulk-edit-panel.tsx",
+      "sha256": "b41035c747d87df786f0039b2984733382f28445a977d8e2e076dcfc2de812d2"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-bulk-edit.test.tsx",
+      "sha256": "191ffd4cce347ac6a283cd04ed24165777a4a4653aa36f61d17ed90fa4c4d387"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-capture-screen.tsx",
+      "sha256": "421d3f199fac953ee018585cdaa86c0a12d22cefa92698e5ff669d7e5d6947a1"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanner-chrome.tsx",
+      "sha256": "43eafbaac6eeb7cda8e291e0c889d3384b9e0a83fb7ce3211c2195d7fa1d768f"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanner-camera.tsx",
+      "sha256": "7c91024fb51bcabee28fb0f4c71f8d52b7ca37b52117c6a052dec80fb943864e"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/ScannerScreen.tsx",
+      "sha256": "e0c188f851004341de1890b4a0ec1e36449dcc8663f70e42c6ef5336e9919f88"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanner-confirm-sheet.tsx",
+      "sha256": "846aad59090682218b880756568045d938f037f5a9b2ea7d8f99afc949de92cf"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanner-permission.tsx",
+      "sha256": "8b1a23ca8ac9efa16ddbd433cd2369f88cfe6e0624e8c47932007e61371d9c9e"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanner-manual-expiry.tsx",
+      "sha256": "08abfc623016907e017f965e6afa7a86cb942c8f027b368437e48e339cf97666"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/iap-purchase-provider.tsx",
+      "sha256": "c29fc2b282482b164cd2fe5c55a7a86b791255caa8669f6087c67b738dc082cf"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/monetization-provider.tsx",
+      "sha256": "2379ffe05e29c3bfbd5104117d32038e2b5cea299ce1010daf275619c653b04e"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/IapUnavailableState.tsx",
+      "sha256": "91c36972f72796b9b542348cef1ba0c63ca84aa2308b1ba5354e0ffb25c493de"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/monetization-resume.test.tsx",
+      "sha256": "d6b45255705dc6f2cd31d228591dbc227a12b28041d0749e1f0912d830cf5839"
+    },
+    {
+      "file": "apps/mobile/src/features/notifications/notification-navigation.tsx",
+      "sha256": "801cb90dc6bc92a024b454b4db13153216fdb32ec433fe8f477db61472a6e199"
+    },
+    {
+      "file": "apps/mobile/e2e/fixtures/crayon-review-scenes.tsx",
+      "sha256": "30a3b7ddded063d600ab4914121ca8b4f433ee94f5963edec30bc00cf9c843bc"
+    },
+    {
+      "file": "apps/mobile/e2e/fixtures/native-crayon-entry.tsx",
+      "sha256": "11a0bdd23da66c2a9f21b5f80067209db7662da181874cb74ff7426764b9e574"
+    },
+    {
+      "file": "apps/mobile/app/settings/spaces.tsx",
+      "sha256": "322f2a04de84ca67995618e640e18057f13d859cea821a64746635f523e3dd20"
+    },
+    {
+      "file": "apps/mobile/app/settings/subscription.tsx",
+      "sha256": "5a0125cf36bd625d390799bf25e8873a0bbf0d53cae06184392114c8f5e169da"
+    },
+    {
+      "file": "apps/mobile/app/settings/support.tsx",
+      "sha256": "2c411e457e3d8d1f855d52ed67f981f9bfa79e45ccf75574467a6d241306cbe7"
+    },
+    {
+      "file": "apps/mobile/app/settings/account.tsx",
+      "sha256": "0d90f40a097d0b82ef480fc6ee72fd87989aaf8954d3365339a788192d84c9dd"
+    },
+    {
+      "file": "apps/mobile/app/settings/recipe-preferences.tsx",
+      "sha256": "bae8d47486fb4eb1765915c658241934296866106ae679ceb822da81b7362d0e"
+    },
+    {
+      "file": "apps/mobile/app/settings/storage-locations.tsx",
+      "sha256": "45a5c93e0d72da351fa197bc1e0071ff5f67d416914336225804bad21ca4b739"
+    },
+    {
+      "file": "apps/mobile/app/settings/recommendation-credits.tsx",
+      "sha256": "dc0837293d5768c41471160231d517798085b2c33f23c51087e330719523927c"
+    },
+    {
+      "file": "apps/mobile/app/settings/notifications.tsx",
+      "sha256": "312c48582e18c2e7d08cc0af0d6332bd718438ce8ce365e63e1bcec105b8205d"
+    },
+    {
+      "file": "apps/mobile/app/cooking/[recommendationId].tsx",
+      "sha256": "0e128d34c3dd138df666adf93dd35eea1f4cdbf5ebd8683e3a90d5548c0ace82"
+    },
+    {
+      "file": "apps/mobile/app/privacy/index.tsx",
+      "sha256": "743093a4e80075537f04147a5dba218f2b3efe0a34c52038c2ab36509859b1c6"
+    },
+    {
+      "file": "apps/mobile/app/privacy/ai-data-notice.tsx",
+      "sha256": "bf1e287316f01b132286b09f3e1983a2ec894e443fa4caa932219f15d435720d"
+    },
+    {
+      "file": "apps/mobile/app/privacy/account-delete.tsx",
+      "sha256": "ca943a045dcbc084db303d6174205ac6ae39d8d5af8bb9d66d502ffec169aa28"
+    },
+    {
+      "file": "apps/mobile/app/auth/login.tsx",
+      "sha256": "2964cc84d1259176a772b5aa1565fe018966846d8735da8abb9977e8f7412e5d"
+    },
+    {
+      "file": "apps/mobile/app/auth/register.tsx",
+      "sha256": "ecbc62b575a9432ac5c0537d8fae6a623b210799e0b4b860b9d27a4455f03f83"
+    },
+    {
+      "file": "apps/mobile/app/auth/reset-password.tsx",
+      "sha256": "f653513218dadcd9583ab655f9e1944fc813442784ed6ad7d2766f26a61f4720"
+    },
+    {
+      "file": "apps/mobile/app/auth/forgot-password.tsx",
+      "sha256": "241b3ea76c8d7538078b833cc60b87d8f2e9ecad03ed630629608948d0db6795"
+    },
+    {
+      "file": "apps/mobile/app/auth/verify-email.tsx",
+      "sha256": "24cca0cdfb941f9e417d8d2aac980002be60577d214df19b26ee4900d22eea83"
+    },
+    {
+      "file": "apps/mobile/app/auth/verify-pending.tsx",
+      "sha256": "0c737c5e94aed0a4f40a2a458e7b1f6758812c0dca0ff6f7e13bc24736dc7abf"
+    },
+    {
+      "file": "apps/mobile/app/(tabs)/settings.tsx",
+      "sha256": "952461852501d984207ef67dbd02c8f86ff07205df8b7e9f1cb0b242dc4ab908"
+    },
+    {
+      "file": "apps/mobile/app/(tabs)/inventory.tsx",
+      "sha256": "eab55e5def1ae7b182808cc1e661651856ec453769b21d7a77e92b5213c5b585"
+    },
+    {
+      "file": "apps/mobile/app/(tabs)/home.tsx",
+      "sha256": "b5649669fab0c4d4241b1522d45c880472182bc6fdf5ca98f4ebd8a146689c51"
+    },
+    {
+      "file": "apps/mobile/app/(tabs)/shop.tsx",
+      "sha256": "ce5342273545ff12c0e7528f62a31a3d6ed20b710edbdcfeb9d49a4f83c78180"
+    },
+    {
+      "file": "apps/mobile/app/(tabs)/_layout.tsx",
+      "sha256": "42d629fc376e0cd8b42eb8c61bcd254461cc289eb8c8db63435b2597cc8766af"
+    },
+    {
+      "file": "apps/mobile/app/(tabs)/recommendations.tsx",
+      "sha256": "81a2459b4b128697b467e7b5be28995e52d1a2b995d019c8301181d43faf66b7"
+    },
+    {
+      "file": "apps/mobile/app/inventory/activity.tsx",
+      "sha256": "8de42338ca7523868c59019bb2e87ff05935cc5ca64a700949f69ed9a2236f4d"
+    },
+    {
+      "file": "apps/mobile/app/inventory/[id].tsx",
+      "sha256": "f4ae994428347e7d4caa8178a55175fce273c8e65be3f71379f32a54632c4bf2"
+    },
+    {
+      "file": "apps/mobile/app/spaces/invitations/code.tsx",
+      "sha256": "f579f5d760bde0b15bb3acbf0d62582fb7b0f4c0a732abc914633837534b872e"
+    },
+    {
+      "file": "apps/mobile/app/spaces/invitations/accept.tsx",
+      "sha256": "8bb40e908d1aec916ec897d8a6836b82905ad1eacb7ee244c154258a91281f20"
+    },
+    {
+      "file": "apps/mobile/app/settings/spaces/[spaceId].tsx",
+      "sha256": "09c9914e87742304cac85a195d780852ef704f93b2512b953e1a9cda644f7b30"
+    },
+    {
+      "file": "apps/mobile/src/types/assets.d.ts",
+      "sha256": "597159c3ae384177ed4b5ec52b424addb894c3beefa9ce83c40947ac67a05375"
+    },
+    {
+      "file": "apps/mobile/src/shared/dynamic-type-contract.test.ts",
+      "sha256": "b7fbec7f1a279b552015a8efc46fea95d803ba25c52f24e19e5b41900f71a8ae"
+    },
+    {
+      "file": "apps/mobile/src/shared/font-scale.ts",
+      "sha256": "f2db5988dee0a42107f649d15a1f063fc5b989c7182d6c098d3d338d531880b6"
+    },
+    {
+      "file": "apps/mobile/src/shared/font-scale.test.ts",
+      "sha256": "89d8ed84fe4ac0568c021ad7200c427888f217b886e2968c11e081986fdac801"
+    },
+    {
+      "file": "apps/mobile/src/shared/fonts.ts",
+      "sha256": "18931660d8a94e9ac8b0224438fa8f0401454d32dd496ea38827d3ee7e9cf2fd"
+    },
+    {
+      "file": "apps/mobile/src/shared/flow-deduplication-contract.test.ts",
+      "sha256": "57c6885d5cbc9920c1d84383b3fc046f72fcb0c1e5f35eafb640fd7e2a405a09"
+    },
+    {
+      "file": "apps/mobile/src/shared/responsive-layout-core.ts",
+      "sha256": "e2b7a56f4bfb3bda667d456bdbe283504849e5fd4d45eea7c829d3d2479ec49d"
+    },
+    {
+      "file": "apps/mobile/src/shared/design-token-contract.test.ts",
+      "sha256": "ec299039d264945e067c6ca19250fb7cddb7f4db95b09182cbfe41175285269a"
+    },
+    {
+      "file": "apps/mobile/src/shared/android-push-config.test.ts",
+      "sha256": "4294c8e5d8fa02f0f3cc4aa296d7c6177713f537bae9264a698030435da6b034"
+    },
+    {
+      "file": "apps/mobile/src/shared/date-picker.test.ts",
+      "sha256": "9b78ff774bb0e988744aad6a094871ce4d1a9224794aab11616e5d469b030b30"
+    },
+    {
+      "file": "apps/mobile/src/shared/public-web-url.ts",
+      "sha256": "b53363dc772cef62e29fcbbb372724c2e0f107ef31878e2dfbafd9a1a493517e"
+    },
+    {
+      "file": "apps/mobile/src/shared/ios-team-env.test.ts",
+      "sha256": "97c6cf524351a753fe77997cab491468e91f2435fe40810045084bdca3f1493a"
+    },
+    {
+      "file": "apps/mobile/src/shared/public-web-url.test.ts",
+      "sha256": "4005a08716f079b9f8103d00da46a7821ec08715532f41fb8ef482d683228f0c"
+    },
+    {
+      "file": "apps/mobile/src/shared/async-timeout.ts",
+      "sha256": "eeb4058cc7b62c43caf2dbe61fdcecab9c5973ac14fa5db46d8d2d9545432c3e"
+    },
+    {
+      "file": "apps/mobile/src/shared/async-timeout.test.ts",
+      "sha256": "3d4d027158cf78a9f74ed246a3863cc28f7f136b43fc5c84e30862a4a3b40770"
+    },
+    {
+      "file": "apps/mobile/src/shared/date-picker.ts",
+      "sha256": "a7bc42e9d5deaedfc9289022e7bfcf77606f2ec66f22c0d4200838fcf7815191"
+    },
+    {
+      "file": "apps/mobile/src/shared/responsive-layout.ts",
+      "sha256": "3e65b7a588189dc9cff5b5b047790978ad0ce2e581cea8ee23fd7ac9ec8fb542"
+    },
+    {
+      "file": "apps/mobile/src/shared/responsive-layout.test.ts",
+      "sha256": "70a80d831b9d213361c7c5b8270fcad32e4c41e93b8704b8a3e457c64803aea5"
+    },
+    {
+      "file": "apps/mobile/src/shared/theme.ts",
+      "sha256": "f32637bc3671cdea07d2a4c9c8b18f48b5e70073e3ef0d87b5d768b3fa79bd60"
+    },
+    {
+      "file": "apps/mobile/src/shared/validate-public-env.test.ts",
+      "sha256": "7c42cbd16d44264406dea4d20ad83eb05789918505b07b5484bbd54896b12f92"
+    },
+    {
+      "file": "apps/mobile/src/shared/mascot-notice-contract.test.ts",
+      "sha256": "c3db6353492ab69fc6f6f78fdc13345f1bd04fc6f93f36717500eea804f9f2dd"
+    },
+    {
+      "file": "apps/mobile/src/shared/eas-sync-native-config.test.ts",
+      "sha256": "60ac98b9d07748901e4c8001e19808981937e49e0216a8eb73ab17ba85369358"
+    },
+    {
+      "file": "apps/mobile/src/shared/android-font-scale-patch.test.ts",
+      "sha256": "a61214a5384470e8e520e2732f6b5b1c13f7401d27e6afdb0172c06113a6e888"
+    },
+    {
+      "file": "apps/mobile/src/services/query-client.ts",
+      "sha256": "99bad64a69675b85b275f8e75dcbc7a3267063a79e5e70045402b82c1d297675"
+    },
+    {
+      "file": "apps/mobile/src/services/api-transport.ts",
+      "sha256": "ed539144054bff03716b31e155c6d92c803d480508d21b09407d32b2c65e3904"
+    },
+    {
+      "file": "apps/mobile/src/services/bootstrap-diagnostics.ts",
+      "sha256": "6c3a30d614c591ecf2075a487f4bad37d3558cbc007ca0bfca124db845f91e23"
+    },
+    {
+      "file": "apps/mobile/src/services/sentry.ts",
+      "sha256": "b4dcd0d41f0ec617fa20be7b6cef34b876b3fe121ed7392e37a0d80ac05fbff5"
+    },
+    {
+      "file": "apps/mobile/src/services/notifications.test.ts",
+      "sha256": "62c089971aa09eb3893d9196c953fb4eb2c3b422d81e13cb2684b58b834a6911"
+    },
+    {
+      "file": "apps/mobile/src/services/notifications.ts",
+      "sha256": "8ff5b7976bdfc91de398d4bd99b198c092d3c4bf27a61e620eded671ab7bda57"
+    },
+    {
+      "file": "apps/mobile/src/services/query-cache-persistence.test.ts",
+      "sha256": "d09e6b3ea28b8f5f951ca98798df829b63ed937cff243dcd85db57215f7dedf8"
+    },
+    {
+      "file": "apps/mobile/src/services/api.ts",
+      "sha256": "3f2bc27c1beb45f1cad8c112982c301b8216954214a5070dc39cda98229b413d"
+    },
+    {
+      "file": "apps/mobile/src/services/query-cache-policy.test.ts",
+      "sha256": "857699745f7c186160c54bcde7663fa85767afbdea794e4618e3dc0a9d2d18ce"
+    },
+    {
+      "file": "apps/mobile/src/services/api-session.ts",
+      "sha256": "6426fd11e58cb4a55fc937497244e709e0351f310eb26e909892131dd91738fc"
+    },
+    {
+      "file": "apps/mobile/src/services/sentry.test.ts",
+      "sha256": "0bb69011f5f5515f3d79371b51888b4d578c173c16d14ef00d03feb659d3cc57"
+    },
+    {
+      "file": "apps/mobile/src/services/api-transport.test.ts",
+      "sha256": "2d3552210173b76aa075fb503ffda28d39b2d0333384d95a0daaf16c8848f9a7"
+    },
+    {
+      "file": "apps/mobile/src/services/query-cache-policy.ts",
+      "sha256": "3f3616c0cb507ad735ec48b7a8012256727bd97c83363bb5ba368c163e03f8f5"
+    },
+    {
+      "file": "apps/mobile/src/services/api.test.ts",
+      "sha256": "1c912c0ea34ba89a29d868b5d6a789988baf2d586858d821d9381b4eab1c3870"
+    },
+    {
+      "file": "apps/mobile/src/store/registration-store.ts",
+      "sha256": "3985e32f0a4fa1b5c0de5b82c42b0b70ca3711e5a40a765875284c651da39f2d"
+    },
+    {
+      "file": "apps/mobile/src/store/registration-store.test.ts",
+      "sha256": "6eb3bd260b96ec9bc212c28d297834a25e71309c0510ff77f5b5553eef6cfc7b"
+    },
+    {
+      "file": "apps/mobile/src/store/app-store.ts",
+      "sha256": "1d637acc77a729fec8222080873c6629e242bcfddfa3faa37398172aac493d95"
+    },
+    {
+      "file": "apps/mobile/src/store/app-store.test.ts",
+      "sha256": "572b9ed033ecb0e83dd3e4c814ab873dc6d9dfed215a6868650b78209f09dc1a"
+    },
+    {
+      "file": "apps/mobile/src/features/insights/use-insights.ts",
+      "sha256": "03691065520c68c40c61372852e24e2567b77ef08169e923c3917c197500da6d"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/use-notification-preferences.ts",
+      "sha256": "ef7a3742ad41b374f929c93d4134fea0388184f7c626b09084d269a4958c77b0"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/recipe-preference-navigation.test.ts",
+      "sha256": "e45c54e2294f57197c0b5c24792376ae8c206bcaae6482b6597760294d104a75"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/settings-format.ts",
+      "sha256": "3273c9375a90bc298adce7dc750d70c31b54481422f78e5a73ebf6d5d0675327"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/use-storage-locations.ts",
+      "sha256": "ed97ae26099ba4d11bd062b0d5de2d00b32ffbeaab5a4afcf2ae46462e545410"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/recipe-preference-display.ts",
+      "sha256": "014dd0f0b3a3ae8c53cdbac4807a8ede266537633d851348629721c1bfc42f09"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/use-recipe-preferences.ts",
+      "sha256": "a89bec61b713bbb86b02a9c28c35e6695bb15ee26bef7873722f0cd52c37f786"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/recipe-preference-display.test.ts",
+      "sha256": "12084bbf1f9a0d8aaaf7fe5361f774df6ee5c64ef81a55186d7e4ae214218ada"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/notification-save-copy.ts",
+      "sha256": "9ccebb7d02c7e878258df87d3ef8568a8df7d4dc64b5c67e91525edd5f63e4c3"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/notification-save-copy.test.ts",
+      "sha256": "8c68dbe56ebe6b65868de406f2e9911274c448819bde15aaacd12317cd279638"
+    },
+    {
+      "file": "apps/mobile/src/features/settings/recipe-preference-navigation.ts",
+      "sha256": "cc11b10481bb2a4e6b2c32fa299ddd6173ca12fc70af9becaa9564a64f7a31f7"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-notices.test.ts",
+      "sha256": "1407e9da61234d6ca96b4e2b8d4d2eabc75490e3c1af384ee86e8ce0abe04247"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-screen-styles.ts",
+      "sha256": "eb8dc1ae9ac29f166303893d5aeb6fa6b46cd108d557fa4ce7a9a971755ef187"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-notices.ts",
+      "sha256": "ad9f5263794654348826aa6328e76d27f7ea7ee60c3815bdcd40e08c28749d47"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-hero-density.test.ts",
+      "sha256": "fbf8bc411368c5e3b7ee5ad00d3297701b88f3be026f5d6a1993fcc191fd3a88"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-hero-density.ts",
+      "sha256": "e84ffe30dddbe837142c9c1058414a246af4e6dd68a921568c3ee3b1b8874c35"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/registration-completion-notices.test.ts",
+      "sha256": "520a99107410f6072524b3e708642b3201602c0de9f5ddbfbaff3385c76501a4"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/registration-navigation.ts",
+      "sha256": "b9502b2395e0e24a2adb3b1ee46d388ff91a05b80b1723da488af51d0fca9df7"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/registration-completion-notices.ts",
+      "sha256": "6fb228eacf222427dbdfdc0c26f8d03b7f9886ac2f8f3cc31f0de1c1d2757b34"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/registration-navigation.test.ts",
+      "sha256": "424f494702da97dbaeb5be6981ff3c2e98bca110b78d22fd9af224b63d98294d"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/use-save-inventory-item.ts",
+      "sha256": "126899692ad026b1d3b98f30a9cd67c23dcfa8a9a417635362c3b97578a716cb"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/registration-return.test.ts",
+      "sha256": "2d1967c1b4174337c47e1da9a2aad3e82001dbe80e2ea3d8e3c6e57d3bdf2727"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/registration-return.ts",
+      "sha256": "92e3f20bb8eb418e4ab94e4cd7c9b85c7b54f1357fcd7ee7a83a17b934d9d457"
+    },
+    {
+      "file": "apps/mobile/src/features/shopping/use-shopping-list.ts",
+      "sha256": "d681480abf27c277d7b1bb6a89b91d8ee3d11bd7a00f8e6a4a5b7a24e7a88709"
+    },
+    {
+      "file": "apps/mobile/src/features/privacy/use-privacy.ts",
+      "sha256": "bc510467ad3de236c7fea76efa54621674caf0e4dda1b01d3b60276cb3f991bb"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/use-auth.ts",
+      "sha256": "d5a511a206e7286532151350f332e303d441c7c7825112d688bc1280c2c4c58b"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/auth-routing.ts",
+      "sha256": "914a197595bf735b89993b67a7b55264830784b98e665254ef8fcc04fb3610e0"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/oauth-return.ts",
+      "sha256": "297dc15adf0faaba2e668dc04636a2715839b9040db1bcddb986964f2ca7e075"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/auth-errors.ts",
+      "sha256": "89826129d130c839aba73875a49ff0dd50077e60d01b388367f3950326f04428"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/auth-errors.test.ts",
+      "sha256": "daa2aaca9522bd84c972bd7c15fc0f665f55214655581d94bb729002725c8e2f"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/oauth-return.test.ts",
+      "sha256": "7a41a2cbcce32032eacad54399b265514da77c5062e9017970839a1841aaa24b"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/session-boundary.test.ts",
+      "sha256": "97a3160efdf08cec5d4995a7996ada8da259cb9fe498f19ce3de2c9934a74126"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/use-web-oauth.ts",
+      "sha256": "bed2ba50c6490a14897e442187d6d50955b837bde32d432a3d4e8dfcc1870b4d"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/session-boundary.ts",
+      "sha256": "a8c1b922fbd50190318b534a7619a85230943da618c2f100209450ca69945dc1"
+    },
+    {
+      "file": "apps/mobile/src/features/auth/auth-routing.test.ts",
+      "sha256": "cbf77dc8d03465f7c5530505e5e1682bbe080c12ba0057d087ca11487ea32c87"
+    },
+    {
+      "file": "apps/mobile/src/features/store-review/store-review.ts",
+      "sha256": "e77fc61a4f386bd767bb4e0aca1e343d6cabdfb7c13ed54d7b39360054a7e802"
+    },
+    {
+      "file": "apps/mobile/src/features/store-review/review-service.test.ts",
+      "sha256": "bdfc65d400b81c565dc7042e9a14b21c609652c7f25c347d8d052f96f61bb293"
+    },
+    {
+      "file": "apps/mobile/src/features/store-review/use-store-review.test.ts",
+      "sha256": "0e39acfa2f50d54f12d2f7e7286a26d50aa876faefe0187102b2cfe9f7496bcb"
+    },
+    {
+      "file": "apps/mobile/src/features/store-review/review-service.ts",
+      "sha256": "f69f1c2cfc6d70b33f01388168e00141b8d27ddc787d9a68d85749e7014d84be"
+    },
+    {
+      "file": "apps/mobile/src/features/store-review/use-store-review.ts",
+      "sha256": "62a30dd7cdc75b5ae546b0069e1f6cc76b3a104df824e213a1e4d402182c74e7"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/use-space-management.ts",
+      "sha256": "f209857f289f829e1ed267d08f605868c598f25c9ab1612683290fe32b7a03a6"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/use-space-notifications.ts",
+      "sha256": "d733f85f13e00002d1a96a213396e5e8ba7e01fc9c5b6654f174f001cd07c9f1"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/use-space-notifications.test.ts",
+      "sha256": "6ceaffabcaf464cb68b14582550e7795c55534be18d8674731b056bbac7060a7"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/use-space-scoped-query-gate.ts",
+      "sha256": "66ddf7c52d36e35c0029d6715402394e1100739b8857c93200bd194f2e185fd3"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/space-notification-copy.ts",
+      "sha256": "9761cef2508749a4211b739585aee466a5a73279711f5c1ec333f0c7e841579f"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/prefetch-space-queries.ts",
+      "sha256": "106c27621e4772d11f81e2ef96aa549f58bc30d777c325ca740ff9345f5496dc"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/ensure-enabled-query-fetch.ts",
+      "sha256": "d3e0ad90aced6c9b527a98d5bb78dbd50fa1c98bfaf1cb6c70483c1fb2ae3f1e"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/use-space-scoped-query-result.test.ts",
+      "sha256": "f8b36cfe71527c9584d5475892deb86d68af14b666a766a7e95e5533f4424f4b"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/ensure-enabled-query-fetch.test.ts",
+      "sha256": "ec2d80c6d80eab7ce6e415cfa370c9ae1a82a0b7b8ac42f99f6ef2b30b7ec9a5"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/pending-invitation-storage.ts",
+      "sha256": "a5d30ba8ea8b266bb8f9dc5d853025a52f895f7fd6aa15ca9eac4289bbb04196"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/prefetch-space-queries.test.ts",
+      "sha256": "0421cf8012af1ee22cc2f2a1ab6f5e1414c681a14b82e1918e3185849ee2f345"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/space-selection.test.ts",
+      "sha256": "a76a135f09192671fc719306eaea163703a06c2a182e746cfb444f6b90a41a5b"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/space-selection.ts",
+      "sha256": "6fb2d66068b20f81bacbb432b136286a5f34046a7ad67b2a664b22913df676be"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/pending-invitation.test.ts",
+      "sha256": "d80304cd6988437a4beeb27599030a97c591482203167d9dcf66cf486282416c"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/use-space-scoped-query-result.ts",
+      "sha256": "ace0890b75a7b88de54e4b7f7db186d8bf33ddb3b6337654b45d728401339d33"
+    },
+    {
+      "file": "apps/mobile/src/features/spaces/space-notification-copy.test.ts",
+      "sha256": "2cb98201ed48cdfc650942ecaaaa25c4f46978a1a7341a6fc450c86f8c30a677"
+    },
+    {
+      "file": "apps/mobile/src/features/navigation/header-back-title.test.ts",
+      "sha256": "0a1f063ee2e84968061f2a6e8330d72748945fe0a7975b2cc7c189093a69938a"
+    },
+    {
+      "file": "apps/mobile/src/features/navigation/header-back-title.ts",
+      "sha256": "41c96da75f14ac2a5dc539944890ef7a8ba83b3e95e9b867acd8c818a1e8e3cf"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/use-subscription-entitlement.ts",
+      "sha256": "e8106f34f2fce6473359b43dc1e5f522fdda4082033260a118fdf791dc46e6d7"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-screen-state.ts",
+      "sha256": "cb1bec8d2505255941323a56634cb6db3543f0dd46d5ebcfd8c1a95d675ee54c"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-plans.ts",
+      "sha256": "876d05eee212ec857c2a8e5a9eddf2c2cbd4eab17bc1ca32639cb2f6ddd014d2"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-verification-request.ts",
+      "sha256": "1632092c376e0ccaaea6fead6d6f30717917f39c7fddeee914e7cb8ab2127195"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-verification-request.test.ts",
+      "sha256": "e542bf8367e15735e340c2d5a03719f135ca21f2db6c4f181cdaa0bc676ea958"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-screen-state.test.ts",
+      "sha256": "7aeeffeb7098ea4db6af86b907a09e59b62da0cc3db7364b9ea8d6eff0374fd5"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/use-subscription-products.ts",
+      "sha256": "89e231daf36ee2b27a3a38258f092b776b5234d77d33c15d43cd3a90042eb7ae"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-products-query.test.ts",
+      "sha256": "9e3f96a3f6afb14914185288da8d9e7daa5f4220625c48a7392be70ddd5c8bb8"
+    },
+    {
+      "file": "apps/mobile/src/features/subscriptions/subscription-products-query.ts",
+      "sha256": "4deea3182d0d6311dd782f82bce6ab40a3303232da7fd10e553f7942bf276268"
+    },
+    {
+      "file": "apps/mobile/src/features/dashboard/use-dashboard-summary.ts",
+      "sha256": "c97cb6ac4fa91d09a5be9d40bb914ebd9397dd025dfa20a4eba9b2384673943d"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/use-cooking-session.ts",
+      "sha256": "476f890ddc68fc19dac418d3161fa2b9056586016ab3beed01b092c5a257d50a"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking-session-draft-writer.test.ts",
+      "sha256": "668ad1ae729a1a115c89db976a08c26f0cc836b3ccddcf8d5387d939d82819cc"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking-session-draft-writer.ts",
+      "sha256": "e8e13d0fffc2abc863f52df58250b46fd27214a45d8dd05a5d32f86b56e5b365"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking-flow-resilience-contract.test.ts",
+      "sha256": "3dcae20d6d7ae761f8f863d40f8e456bccceae3c111826e5c6b8e14affc1a996"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-generation-request.ts",
+      "sha256": "b44b07d653b14b533ff6514e6feb1e4796a82d6e45e874e0e866d3e3b3b8f1e1"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/use-recommendation-generate-flow.ts",
+      "sha256": "0b5788d3f94bfa44ad5b169b35dedb3f50afe57e4a08b8be75832952cb9bd4b4"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/CookingStepText.test.ts",
+      "sha256": "77fc5a51fd4874351df206019ce07a179c012f01201646d7dc967eed5030d2e4"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/use-recipe-recommendation.ts",
+      "sha256": "5075339c6cf4703f587f33ba8c9aeaae6dbafc95a1fd29f4d976b6b3a36d6a27"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recommendation-flow-contract.test.ts",
+      "sha256": "5d81c60c0bccaa98532887a996199799eb66ccebd1fd0c72a2b89640f82585f9"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-generation-reset.ts",
+      "sha256": "5d198fea58c4833a59411aa97991e6160a67f1380af73dbd102d5056add8556e"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking-session-draft.ts",
+      "sha256": "9d199df8f98a8b4bf2b460a237080556de0d3d27dfe2d68b4c7b893a333b458f"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/use-recipe-recommendations.ts",
+      "sha256": "99bec09889341772f9ba715b645cb88d12b9501884840041f75f9b77c9b18e86"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking-session-draft.test.ts",
+      "sha256": "2d572f6be49fe348c3744104172ace0b465e81fa5792cfa4d97eed0cc7731ee8"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking-step-text.ts",
+      "sha256": "a3388634562983ec572fbb9a5d4f15a6129f51e6b3ab6e1628456c13cea4d6f8"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recommendation-hero.test.ts",
+      "sha256": "05d64a0d19be1390ce885a014c8c7505d40fedb90bbc194e0dc07ab85f5ad686"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/use-cooking-timer.ts",
+      "sha256": "25518100a68a2787e7d6da096a7c0037b9bee3985e1ee32a6d586392c8970764"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking.ts",
+      "sha256": "0ab3ee2c691353b79e42410b947c4b5c386da04f1873560e7467768d05d56952"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recommendation-ingredient-selection.test.ts",
+      "sha256": "d460953b4d9d97e6877aa608abffcc8cb60513acc118516ad05a2d8bae3a1504"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking-timer.test.ts",
+      "sha256": "c6de86353eac340c6154203b4060a0a3d80aa7f5c3a404670eeb07cbf0df9eef"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recommendation-hero.ts",
+      "sha256": "8ec54af8dd833d966d3a84570cfdcdde5f39eac67230bde3c8f5fc0c90beb1aa"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recommendation-errors.ts",
+      "sha256": "0286dbe6303efea8da69cf1d86dd8291da0ed60172d60568ece36d69abfc74a2"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-generation-provider.test.ts",
+      "sha256": "5aaa2799aba68ba82bcdaea488100ea14ea73fae7dd830d728bc3ecb883674b5"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking-timer.ts",
+      "sha256": "7c618f641ca1279070cfa3b671290cff898790aa400cbda46f9b4c5406f78c07"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recommendation-ingredient-selection.ts",
+      "sha256": "90a40669bdd267d630ea5bab56e88f12e97066da3b72605a15fb326912a36893"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-detail.test.ts",
+      "sha256": "d1c4c22fd55aaf1ffe35a29afdc9ab8ebac67e63c09ee03ff562c0c8b44e21ad"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/cooking.test.ts",
+      "sha256": "634ce397dcca6ea7ebf5e74b8e30e94b9ff9f23f767c713ae0875750b9faf9d7"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-detail.ts",
+      "sha256": "156b152b0d3fd884e38b7946164a6d19ac5d0e910ab2b8176ae5520e8ce872b0"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-hero.test.ts",
+      "sha256": "3f3ef827cee5af0a52d9bbfe695c7ff682f7157b3bc1b5a47971a36e848afb99"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/filters.ts",
+      "sha256": "b07a403ff98bd7f2b38e1fac55cd009222a1930a0754914b615be74b039c3253"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/filters.test.ts",
+      "sha256": "e630e1b24f2bcfb4400329e6ea4b6ad4fcedfd5a3e073e84f4ddfebef9d2d7c1"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/use-inventory-list.ts",
+      "sha256": "c685c0c729bbedfdac0bf77985334b67f3d314e519633ea66e34a67330b49229"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/deferred-inventory-removal.test.ts",
+      "sha256": "ea4c6e18661fb2deae90868677fa6dd0d67aad2ca721a61b9c8911d6bb9053e9"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-screen-styles.ts",
+      "sha256": "d5f8fd79e3ebd09470f4b3a406eef057cbbe816908057f544bd90b1a41652b81"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-hero.ts",
+      "sha256": "aed4570b6b23ab3e53bb1ea924754241463b30d2f5b2bf64d2856a4bbb4d9511"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-action-notice-contract.test.ts",
+      "sha256": "47330b5434189690afab5d50c1e8952af00fa4b16093643fefb48258fd960f71"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-form-copy.ts",
+      "sha256": "d1ca8b627b1e35266dd0e3d7942293573a06c810906afc8bd0c8b800e61b17a8"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-expiry-filter-contract.test.ts",
+      "sha256": "8bef404cbf82104c628e7e7fd5fe7df2e012209232e6720c3edae83efbfe063c"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/deferred-inventory-removal.ts",
+      "sha256": "bc1b99aa3c2a7fe95dc8a877e05e815840df8c9a11a7b48568db958212e81af5"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/review-consumption.test.ts",
+      "sha256": "67b51de15fa156d9f4bc2ba2579a2401b0754ae00a05d0172c5cafbeae960220"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-row-contract.test.ts",
+      "sha256": "7f27010d57413e376aa0d59d4601b8a1d5b32c331343dcc018f0056a24c24af2"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/use-deferred-inventory-item-removal.ts",
+      "sha256": "c69bf9db0c16a560f01d220b282f1b255a9b453184d1ef62c8a13848783b79db"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-form-ui.test.ts",
+      "sha256": "865635395018051639414db17513df0fba84615efc9eb97c67e25160a5773352"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/use-visible-impression.ts",
+      "sha256": "2c6f18929825684a2c42c47b48bc02d47ce7d263926f9031fed812b7b58e90fe"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/use-visible-impression.test.ts",
+      "sha256": "d7c70d4edc272c532d15fe3d598b1cac9bbfd453ca9c9a72267bf37781c042a5"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/affiliate-visibility.ts",
+      "sha256": "28c0ab91a067bc3e0ca14c9b0e44fc83942dbf97b0732bb5c15dbab399b03dbb"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/shopping-recent-rotation.test.ts",
+      "sha256": "0d076cdb74726a0b63ef571ee7ed41ee2a081ffa56b9e7eee5aacbd74d2472e5"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/shopping-hero.test.ts",
+      "sha256": "3143ee7af3bd2a1068342dd05d805a42b089c1e9684b492d347cbcb3ade17bfe"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/optional-missing-ingredients.test.ts",
+      "sha256": "ac3e6628fa0c478f1bb4fcca3c895f944f1a43a199a97d985cc63e7355805755"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/shopping-recent-rotation.ts",
+      "sha256": "88e69c751dab8f99beb7bb9bd280602cfda4a2d10ad0f7f22681f50cee2008ef"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/shopping-entry-context.test.ts",
+      "sha256": "63f094f32a880cea15346a9631f85db5a0d749011717bd97779d317efb963fa2"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/affiliate-group-reason.ts",
+      "sha256": "d8f7a1326d1be6314f06a077be1cb681a29a1c5d5c05ba30b6cf785801a6b99a"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/optional-missing-visibility.ts",
+      "sha256": "ecf0cee99db777bc08dbb22b1d991e156f72b611edb7c83ef3e003b75b399ac4"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/use-affiliate-shopping.ts",
+      "sha256": "06bf080d5eefb94f8e52fc920b2535d98285908ee91fd53f85cec7146e6e160d"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/shopping-entry-context.ts",
+      "sha256": "c5715e017e3b8bba25c1ceeb1c918f93e470cc7f7faf092d39e87260a5741434"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/affiliate-group-reason.test.ts",
+      "sha256": "833202d7c3429b4f0a40ce4749b8e9f5337f96e79e96dad8b28209dded51cddc"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/shopping-layout-contract.test.ts",
+      "sha256": "c5dd6eb96e1c5acd608ad6451f5fef90d5853b44279ec0e64d5cc000bff4ac82"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/use-affiliate-reorder-preview.ts",
+      "sha256": "3f8a2afd2b53833f89c9e12cc139516945fc9e0c6ffe663215e0135826da4028"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/shopping-hero.ts",
+      "sha256": "db9cfec33d6a782a398535c28e44754ac99cf8905a3ee6ae47a19e312065224f"
+    },
+    {
+      "file": "apps/mobile/src/features/affiliate/use-affiliate-offers.ts",
+      "sha256": "05f1488331c0abc642aded6c419a13b35f6071c2b775784930e2be29315720a0"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-intake-selection.ts",
+      "sha256": "f2f32654a2d8db3f7d374290bb715786d891d301d9f1b3735c0f167a1ad071e3"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-bulk-edit.ts",
+      "sha256": "bb66e70cdfa1b071fbd63b4f5adde1133e4a02600932c62607c06530598e215a"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-intake-draft.ts",
+      "sha256": "dc5bd40eb803333363c91458f2d4501b4e37ec3694b6502f28134a1b4f645490"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/use-photo-parse-access.ts",
+      "sha256": "af28f2ebd0da70d321629f651212bc69129e55eaaa5b2611715dd88e63eba247"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-parse-enabled.ts",
+      "sha256": "65e3d9673424a1c49e4ed463c8983506b04ae24296f8091c277e891f9f1844e2"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-parse-access-ui.ts",
+      "sha256": "fdb273131d9f0df673b2c9a3fa19cab9a3efa94b264f5936b8d87394096aac9e"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-selection-access.ts",
+      "sha256": "4303d037c5388e8dcc13700a79b3492f503e3b0bff8d21450ef3e6ad2d6b289b"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-intake-selection.test.ts",
+      "sha256": "2ffe1dd9fbcf2a69d9db3bac7e3d500f169f8e27905953923c276b173a8fd9fd"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/pick-inventory-photo.ts",
+      "sha256": "680c9bbd010c7c87a65991605615092f5957798ebcdd3eaaf7c64d24b5421d78"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-parse-access-ui.test.ts",
+      "sha256": "115a277356b29f18372c4b7b0df1691fb7d1ae0f6c3241a31f78a4989ee6804a"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-parse-enabled.test.ts",
+      "sha256": "d9683e693d531096b3596923b77c7a57258f063c676848a5fd88a7c7d8a2885a"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-intake-draft.test.ts",
+      "sha256": "ce438478a4a96724f5c9ac867838717e6a827d85ce964b430ed2073c9ee9b2b0"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/pick-inventory-photo.test.ts",
+      "sha256": "0d67b20be88f59831914e74f9cdc6ee68c38608855e48dd697dfb83b01aa33ee"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-selection-access.test.ts",
+      "sha256": "be9f397bed869691f382fe1c7efddcc7eb362d7b5a166219f566318c27951d7c"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/parseExpirationDate.ts",
+      "sha256": "3fb9e997dbdbdee5ff311023fef93d7c39b475a5c39c0ff6ceb1af3538acf7c3"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanner-confirm-copy.ts",
+      "sha256": "753699fa8b9e22146fa91dd96d0eec4b6fb29b955b0eaaae2bda6b61b50aaab2"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/barcodeContributionModeration.test.ts",
+      "sha256": "26ded74b2278c26c9e8fa3542138f6e5967411ca6c8a81a775a2c14232dfceca"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/useProductScanner.ts",
+      "sha256": "1145d38a94735db4fa2facf30aaf825907deb54a1ce06ed4f27489624ae2a9bf"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanner-confirm-copy.test.ts",
+      "sha256": "a14ef6547a083aa0755e4c8f537cc77281f7537874327d93eae634aad3d3d9b2"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanGuide.ts",
+      "sha256": "c061bde28edb3926b307ff7703dc7e0ce283dda4911ce9ffc03959b11bf39cb8"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/barcodeContributionModeration.ts",
+      "sha256": "868685433492e278949d1ec6b52e625fbfc26db288fe7dd160da183c57fc3351"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanner-quick-add.test.ts",
+      "sha256": "ddd8c4b99198e9202840abc2a4592e1f5f08149597a56c19534b45502d11f236"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanner-screen-styles.ts",
+      "sha256": "f54cecdfd28d19e6bb50d2e0d28aa56da43d44d4602c8a0d69a920e0b025ef4c"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanner-quick-add.ts",
+      "sha256": "4dccf0e44ec18fc2465a1d55141415f49afa5bf900583dd03f713e89f82dd975"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/parseExpirationDate.test.ts",
+      "sha256": "044749bb0cad2b0ae6490151b73a5e83382267937598641ff1a6ba5e48df2364"
+    },
+    {
+      "file": "apps/mobile/src/features/scanner/scanGuide.test.ts",
+      "sha256": "e131be77a2d89ddf865309fb39ea5afaad8472ef40efd705f67c9e589f2d52a9"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/monetization-offer.test.ts",
+      "sha256": "b28bae12fd46c6a6307d44c9e8bba17c01050c21de977ef10d93b4f3ee91ade6"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/rewarded-ad.ts",
+      "sha256": "aec2780c5a0d1ff974fecca2d7f22322c0b06fc277b2b77bf58f99159c5fd982"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/iap-provider-contract.test.ts",
+      "sha256": "bf055d2e94de56af4ee14a417af2646bef8db8301b3ba0fc8500107f4df29206"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/pending-rewarded-ad.ts",
+      "sha256": "ad65b7b80530dcff0da3f6b9aaaa2a8e52a96a58d9fda577c936b46f10a2acc9"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/recommendation-access.ts",
+      "sha256": "6ff9f7c07946e73011f7232ff2e58d68bef46962c642c6e0870ce8b62fbb68db"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/iap-runtime.ts",
+      "sha256": "148ad63448963aa5f9c11c33694684e0288dc8b113f2d1f05dd72afeaf9864af"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/monetization-offer.ts",
+      "sha256": "827e247315b5893e4c10355ae1711da19a05540f85b6547179d1d09fc9cabff9"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/rewarded-ad-runtime.test.ts",
+      "sha256": "c496968ea3a909ffc997ebc2b3af87d273de1ea8338ddb2ab197f0347763543f"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/recommendation-access.test.ts",
+      "sha256": "e90497a7c6bbb0ea6ab0513f49f3891ae95c60565b131adc57b099407bd420c4"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/rewarded-ad-runtime.ts",
+      "sha256": "666a61ac7e4fb8c86ea3e7e7d94c7581abd750ea36207d56d798ca5515661362"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/iap-products.ts",
+      "sha256": "5ab22b0df1137b402b878233740c57d52afa8670b76c1f6dd3f11b5a891f07bb"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/iap-runtime-policy.test.ts",
+      "sha256": "3309b9462cb804def06ecefec2b1f4fda021ed29dafbe8c4c4059708fe336f5a"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/iap-runtime-policy.ts",
+      "sha256": "344e481830526e083b251d9e3c8b1e7f573bea1c197281943fd572b4a2cea379"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/pending-rewarded-ad.test.ts",
+      "sha256": "fe15046186c615018e2137d9b28480b40df6ef2a44f614aa78e7bb35d2e08a26"
+    },
+    {
+      "file": "apps/mobile/src/features/monetization/iap-products.test.ts",
+      "sha256": "4242c4e75485c13aae49e55d15e9d0eee4f74f9a4e575155a36c4c8d3828b44c"
+    },
+    {
+      "file": "apps/mobile/src/features/notifications/use-device-notification-status.ts",
+      "sha256": "a2913fb23b4b4f3bc159712b45ead8df111595f1fb87d980bc3785230331444e"
+    },
+    {
+      "file": "design/backgrounds/shopping-preparation-crayon-v1.json",
+      "sha256": "2afd2a02edc6bbc76c17d5a169a805fdd1ed6846dc18482e243faf49f34f4a03"
+    },
+    {
+      "file": "design/backgrounds/fridge-interior-crayon-v1.prompt.txt",
+      "sha256": "ac99706f68b5818ccf26794db1d10f56b7092e114d02fc706c56616b76f1bcd8"
+    },
+    {
+      "file": "design/backgrounds/shopping-preparation-v1.prompt.txt",
+      "sha256": "844d7e17908fcb1ea0bb7ce1ad3298253cf4099ff76120151aed2b0705fc892f"
+    },
+    {
+      "file": "design/backgrounds/shopping-preparation-v1.png",
+      "sha256": "594c088d770ab8bc98ef6308aa2a67ee34d7e2c150d0cfa5c637332f59d5d6a8"
+    },
+    {
+      "file": "design/backgrounds/login-welcome-crayon-v1.json",
+      "sha256": "fc09b2c9b7a538edf66d592494e0509c6679024398ed29fd1963297a3b697ee2"
+    },
+    {
+      "file": "design/backgrounds/insights-journal-crayon-v1.prompt.txt",
+      "sha256": "178fa5c0a0a140beea60ffaf31b46e5304ca10f38dafd12e7b408c2dbc9f5684"
+    },
+    {
+      "file": "design/backgrounds/insights-journal-crayon-v1.png",
+      "sha256": "1e2a89b059722429d77be4d24dc20a6db901794d92f155bba975c4f37bdf9f5a"
+    },
+    {
+      "file": "design/backgrounds/insights-journal-crayon-v1.json",
+      "sha256": "ef67ef9028e6aa1ef1325f50a9cd5b3a84ac36f73dea51f90b9f8823d71bdcda"
+    },
+    {
+      "file": "design/backgrounds/ingredient-prep-crayon-v1.png",
+      "sha256": "05d536d91cb94439e37eb067c566c9fe32f7862555718d06d8f10ba27c6c0b1b"
+    },
+    {
+      "file": "design/backgrounds/login-welcome-crayon-v1.prompt.txt",
+      "sha256": "f662db578bb2e9a6c5d546ee82c4901baa50891a25e1435d4acf46703d9e4f48"
+    },
+    {
+      "file": "design/backgrounds/settings-study-crayon-v1.json",
+      "sha256": "6eecfa413562989c70a38001d3b6954c1c0205236916cf26cd1453eb09271dde"
+    },
+    {
+      "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+      "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c"
+    },
+    {
+      "file": "design/backgrounds/settings-study-crayon-v1.prompt.txt",
+      "sha256": "65abbd038b68fa64ce151d54128fc9d7b78a3835a21ddc7a5d8b2193899ec529"
+    },
+    {
+      "file": "design/backgrounds/home-welcome-crayon-v1.json",
+      "sha256": "c27bc3f666924204015556962015a5ce1599764598df9998fbba312b62ed9f74"
+    },
+    {
+      "file": "design/backgrounds/ingredient-prep-crayon-v1.prompt.txt",
+      "sha256": "02fcd31f571bb470511e7ade4a39e6853ccbe92436d481ece9718dd9c56a777f"
+    },
+    {
+      "file": "design/backgrounds/home-welcome-crayon-v1.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf"
+    },
+    {
+      "file": "design/backgrounds/welcome-room-crayon-v1.json",
+      "sha256": "86ad16f9b945a9b41f93c6c4d9f5f36e87111c06824532231ea1e8f0d7c76ca4"
+    },
+    {
+      "file": "design/backgrounds/fridge-interior-crayon-v1.json",
+      "sha256": "b8f38b669bd5009420f68fdf4d68f7ffba80652d533b21bc27ba5581e0ac653c"
+    },
+    {
+      "file": "design/backgrounds/shopping-preparation-crayon-v1.png",
+      "sha256": "44720e9280b6657a566fe52c107829665aae00cf1022bafe7e53b5bba81e030d"
+    },
+    {
+      "file": "design/backgrounds/login-welcome-crayon-v1.png",
+      "sha256": "e6992b8d99609c01f1648f2690e77481cd26ccf0336d5bce9137ad3f9346e30b"
+    },
+    {
+      "file": "design/backgrounds/kitchen-cooking-crayon-v1.prompt.txt",
+      "sha256": "903e99a9a78cea5d0f70b9dfd43738e123342f0d3394c68e5116cdb77195076b"
+    },
+    {
+      "file": "design/backgrounds/welcome-room-crayon-v1.prompt.txt",
+      "sha256": "09095c93da6bf126b8da9e08a156ecccd2b98ee09acba494d4d4553e895ff2d6"
+    },
+    {
+      "file": "design/backgrounds/cooking-workspace-crayon-v1.json",
+      "sha256": "957f7c7402b3bc35d325dcc5c814a1409161e8c30bca5537962d3638e92e4293"
+    },
+    {
+      "file": "design/backgrounds/cooking-workspace-crayon-v1.png",
+      "sha256": "7f49a5f79da291ef1d00ad5ad188cf26e96696794c6d7b64ed24598282425d3c"
+    },
+    {
+      "file": "design/backgrounds/ingredient-prep-crayon-v1.json",
+      "sha256": "a44b3fd03f3a7a31769d59e86d4a21397e0907f7cd2fb248f3ff9c3b966f835b"
+    },
+    {
+      "file": "design/backgrounds/shopping-preparation-crayon-v1.prompt.txt",
+      "sha256": "0fbff0c91b698f26f0d6c28592cc85262fb7bee66e9404f63fff2481a431283d"
+    },
+    {
+      "file": "design/backgrounds/shared-table-crayon-v1.png",
+      "sha256": "d065cc301089c7163c5d63452ac40debd4c3317c1d77835dd458d35b4a6e35c6"
+    },
+    {
+      "file": "design/backgrounds/shopping-preparation-crayon-v1.refinement-prompt.txt",
+      "sha256": "1d09ae8cfc10a34d3dad2d75efcbce4479d7003b1e7f3679080c8f22a12484dc"
+    },
+    {
+      "file": "design/backgrounds/cooking-workspace-crayon-v1.prompt.txt",
+      "sha256": "94606ed6692f5e1d0986f84918cc1d738656773a561e7df4032ed2d7afe860b4"
+    },
+    {
+      "file": "design/backgrounds/fridge-interior-crayon-v1.png",
+      "sha256": "9327e58d2c122199738b706219f73ce4ec237a3c91e3f207481021afcd5a8067"
+    },
+    {
+      "file": "design/backgrounds/shared-table-crayon-v1.json",
+      "sha256": "72d04d1af7c20a13ce0fc7c918a94163d81caa3084f283a0ffc8d1b8fc694743"
+    },
+    {
+      "file": "design/backgrounds/welcome-room-crayon-v1.png",
+      "sha256": "2f2379a34cd7e60e13f73843348f3f2525e47259008d113891a592c6a640e701"
+    },
+    {
+      "file": "design/backgrounds/shared-table-crayon-v1.prompt.txt",
+      "sha256": "16af8089463678151722f07bd983df2eb38dac5a944ea2d108d8939d315f235d"
+    },
+    {
+      "file": "design/backgrounds/kitchen-cooking-crayon-v1.json",
+      "sha256": "a241aa166a8423c07c7248bff9e0d2d2a38380d4137d831532aca2eb7dcea686"
+    },
+    {
+      "file": "design/backgrounds/settings-study-crayon-v1.png",
+      "sha256": "1314accad920f2185b5823b2bd85c97406c2bcd3e2cd8168d210352391aef405"
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/login-welcome-bg.png",
+      "sha256": "e6992b8d99609c01f1648f2690e77481cd26ccf0336d5bce9137ad3f9346e30b"
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/kitchen-cooking-bg.png",
+      "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c"
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/home-welcome-bg.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf"
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/shopping-preparation-bg.png",
+      "sha256": "44720e9280b6657a566fe52c107829665aae00cf1022bafe7e53b5bba81e030d"
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/fridge-interior-bg.png",
+      "sha256": "9327e58d2c122199738b706219f73ce4ec237a3c91e3f207481021afcd5a8067"
+    }
+  ],
+  "tokenBeforeSHA256": "32087771859146423f016e6bdb7fcc884c930e912d9b900eb01430c167b67127",
+  "tokenAfterSHA256": "05cbc726b09373d835a3e22b501f3093cb4591cbfc0c44df5d02657da5be0821"
+}

@@ -1,0 +1,131 @@
+{
+  "checkedAt": "2026-11-01T06:30:11.641Z",
+  "apple": [
+    {
+      "id": "e4532e8b-0934-4374-84dc-1901cece6a09",
+      "platform": "IOS",
+      "versionString": "1.4.4",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
+      "copyright": "2026 devnamu",
+      "reviewType": "APP_STORE",
+      "releaseType": "AFTER_APPROVAL",
+      "earliestReleaseDate": null,
+      "usesIdfa": null,
+      "downloadable": true,
+      "createdDate": "2026-10-25T02:36:47-07:00"
+    },
+    {
+      "id": "fe1d4124-979d-4e75-a285-301764f98b37",
+      "platform": "IOS",
+      "versionString": "1.4.3",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
+      "copyright": "2026 devnamu",
+      "reviewType": "APP_STORE",
+      "releaseType": "MANUAL",
+      "earliestReleaseDate": null,
+      "usesIdfa": null,
+      "downloadable": true,
+      "createdDate": "2026-10-10T06:23:02-07:00"
+    },
+    {
+      "id": "1fa19076-3662-46a1-a306-8cb27b87ee55",
+      "platform": "IOS",
+      "versionString": "1.4.2",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
+      "copyright": "2026 devnamu",
+      "reviewType": "APP_STORE",
+      "releaseType": "AFTER_APPROVAL",
+      "earliestReleaseDate": null,
+      "usesIdfa": null,
+      "downloadable": true,
+      "createdDate": "2026-09-17T21:46:51-07:00"
+    },
+    {
+      "id": "5b837f5c-fe80-440f-868d-8ff86c6fdf73",
+      "platform": "IOS",
+      "versionString": "1.4.1",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
+      "copyright": "2026 devnamu",
+      "reviewType": "APP_STORE",
+      "releaseType": "AFTER_APPROVAL",
+      "earliestReleaseDate": null,
+      "usesIdfa": null,
+      "downloadable": true,
+      "createdDate": "2026-09-12T00:46:50-07:00"
+    },
+    {
+      "id": "a54cf881-10a3-43f0-8a23-1905c9cc3534",
+      "platform": "IOS",
+      "versionString": "1.4.0",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
+      "copyright": "2026 devnamu",
+      "reviewType": "APP_STORE",
+      "releaseType": "AFTER_APPROVAL",
+      "earliestReleaseDate": null,
+      "usesIdfa": null,
+      "downloadable": true,
+      "createdDate": "2026-08-28T23:03:24-07:00"
+    }
+  ],
+  "google": {
+    "kind": "androidpublisher#tracksListResponse",
+    "tracks": [
+      {
+        "track": "production",
+        "releases": [
+          {
+            "name": "1.4.4 (47)",
+            "versionCodes": [
+              "47"
+            ],
+            "releaseNotes": [
+              {
+                "language": "ko-KR",
+                "text": "장고가 더 다정하게 안내해 드려요.\n• 화면마다 어울리는 생활 공간 배경을 더했어요.\n• 큰 글자에서도 안내와 버튼을 편하게 볼 수 있도록 다듬었어요.\n• 보관함 필터와 요리 안내를 더 알기 쉽게 정리했어요."
+              }
+            ],
+            "status": "completed"
+          }
+        ]
+      },
+      {
+        "track": "beta"
+      },
+      {
+        "track": "alpha",
+        "releases": [
+          {
+            "name": "장고야 부탁해",
+            "versionCodes": [
+              "17"
+            ],
+            "releaseNotes": [
+              {
+                "language": "ko-KR",
+                "text": "첫 버전입니다. 재료와 유통기한 관리, 알림, 공유 냉장고와 요리 추천 기능을 제공합니다."
+              }
+            ],
+            "status": "completed"
+          }
+        ]
+      },
+      {
+        "track": "internal",
+        "releases": [
+          {
+            "name": "1.4.4",
+            "versionCodes": [
+              "47"
+            ],
+            "status": "completed"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "source": "cooking-workspace-crayon-v2.png",
+  "sha256": "35f744a48917c2b20abc166dc68ecad8d2e8ec88d0be9e7e87abddc8952bc46c",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "tool": "built-in image_gen (new illustration with style references)",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a171f9-7cd3-7352-985a-d58901338a25/exec-34601e46-ee48-4dd5-8bba-1f35f53aecbd.png",
+  "prompt": "cooking-workspace-crayon-v2.prompt.txt",
+  "promptSha256": "69ffccb042bd93cb11ae7b6811fe26dfd717d41178347aa5255c2808fee1362c",
+  "styleReferences": [
+    {
+      "file": "design/backgrounds/home-welcome-crayon-v1.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+      "role": "style-reference-only"
+    },
+    {
+      "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+      "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+      "role": "style-reference-only"
+    }
+  ],
+  "previousArtwork": {
+    "file": "design/backgrounds/cooking-workspace-crayon-v1.png",
+    "sha256": "7f49a5f79da291ef1d00ad5ad188cf26e96696794c6d7b64ed24598282425d3c"
+  },
+  "runtime": "apps/mobile/assets/backgrounds/cooking-workspace-bg.png",
+  "status": "implemented-under-user-request",
+  "date": "2026-11-01",
+  "constraints": [
+    "opaque",
+    "no character",
+    "no text or numbers",
+    "no functional icons",
+    "quiet central content area",
+    "fully framed primary furniture",
+    "new native-resolution artwork; no upscale or crop"
+  ]
+}

@@ -7,6 +7,8 @@ import {
 import { describe, expect, it } from "vitest";
 import {
   canSubmitPhotoIntake,
+  photoIntakeCanMerge,
+  photoIntakeDuplicateMessage,
   candidatesToDrafts,
   draftsToCreateBody,
   findPhotoIntakeDuplicateMatches,
@@ -113,8 +115,8 @@ describe("photo intake drafts", () => {
   it("merges a repeated photo result into the first draft", () => {
     const drafts = candidatesToDrafts(
       [
-        { displayName: "우유", quantity: 1, confidence: 0.9, needsReview: false },
-        { displayName: "우유", quantity: 1, confidence: 0.9, needsReview: false },
+        { displayName: "우유", brand: "서울", quantity: 1, confidence: 0.9, needsReview: false, expirySource: ExpirySource.UNKNOWN },
+        { displayName: "우유", brand: "서울", quantity: 1, confidence: 0.9, needsReview: false, expirySource: ExpirySource.UNKNOWN },
       ],
       StorageLocation.FRIDGE,
     );
@@ -161,4 +163,65 @@ describe("photo intake drafts", () => {
       expect.objectContaining({ kind: "inventory" }),
     );
   });
+  const ready = (extra = {}) => ({
+    ...candidatesToDrafts([{ displayName: "우유 500ml", brand: "서울", confidence: 0.9, needsReview: false }], StorageLocation.FRIDGE)[0]!,
+    expirySource: ExpirySource.UNKNOWN, ...extra,
+  });
+
+  it("excludes different known brands, package sizes, display or canonical units", () => {
+    const draft = ready();
+    for (const patch of [{brand: "매일"}, {displayName: "우유 1L"}, {unit: "병"}, {unitCode: UnitCode.ML}, {expiryDate: "2026-11-02"}, {storageLocation: StorageLocation.FREEZER}]) {
+      expect(findPhotoIntakeDuplicateMatches([draft], [{...draft, id: "stored", ...patch}]).size).toBe(0);
+    }
+    expect(findPhotoIntakeDuplicateMatches([ready({unit: "kg", unitCode: UnitCode.G})], [{...ready({unit:"g",unitCode:UnitCode.G}),id:"g"}]).size).toBe(0);
+  });
+
+  it("prefers confirmed information over an unknown-brand possible match", () => {
+    const draft = ready();
+    const match = findPhotoIntakeDuplicateMatches([draft], [{...draft, brand: undefined, id:"unknown"}, {...draft,id:"exact"}]).get(draft.localId)!;
+    expect(match).toMatchObject({kind:"inventory",strength:"exact",target:{id:"exact"}});
+    expect(photoIntakeDuplicateMessage(match)).toBe("보관함에 같은 정보의 항목이 있어요");
+    const possible = findPhotoIntakeDuplicateMatches([draft], [{...draft, brand: undefined,id:"unknown"}]).get(draft.localId)!;
+    expect(possible.strength).toBe("possible");
+    expect(photoIntakeDuplicateMessage(possible)).toContain("참고만");
+    expect(canSubmitPhotoIntake([draft])).toBe(true);
+  });
+
+  it("requires content review and completeness on both sides of a draft merge", () => {
+    const target=ready({localId:"target"});
+    const source=ready({localId:"source"});
+    expect(photoIntakeCanMerge(source,target)).toBe(true);
+    for (const patch of [{needsReview:true},{expirySource:ExpirySource.MANUAL},{unit:"ml",unitCode:UnitCode.ML}]) {
+      const drafts=[target,{...source,...patch}];
+      expect(mergePhotoIntakeDraftItems(drafts,"source","target")).toBe(drafts);
+    }
+    const drafts=[{...target,needsReview:true},source];
+    expect(mergePhotoIntakeDraftItems(drafts,"source","target")).toBe(drafts);
+  });
+
+  it("retains canonical volume when the model omitted the display unit", () => {
+    const draft=ready({...candidatesToDrafts([{displayName:"우유",quantity:500,unitCode:UnitCode.ML,confidence:.9,needsReview:false}],StorageLocation.FRIDGE)[0]!,expirySource:ExpirySource.UNKNOWN});
+    expect(draft.unit).toBe("ml");
+    expect(draftsToCreateBody([draft])[0]).toMatchObject({quantityBase:500,unitCode:UnitCode.ML});
+  });
+
+  it.each([undefined, "", "미상", "브랜드 불명", "알 수 없음", "unknown"])("treats an unclear brand %s as advisory", (brand) => {
+    const draft=ready({brand});
+    const match=findPhotoIntakeDuplicateMatches([draft],[{...draft,id:"stored"}]).get(draft.localId)!;
+    expect(match.strength).toBe("possible");
+    expect(canSubmitPhotoIntake([draft])).toBe(true);
+  });
+
+  it("separates an exact repeated photo row from an existing inventory duplicate", () => {
+    const first=ready({localId:"first"}),second=ready({localId:"second"});
+    const match=findPhotoIntakeDuplicateMatches([first,second],[]).get("second")!;
+    expect(match).toMatchObject({kind:"draft",targetLocalId:"first",strength:"exact"});
+    expect(photoIntakeDuplicateMessage(match)).toBe("사진 결과에 같은 항목이 반복됐어요");
+    expect(findPhotoIntakeDuplicateMatches([first,ready({localId:"other",brand:"매일"})],[]).size).toBe(0);
+  });
+  it("never sums a display unit contradicting the canonical unit, even on both sides", () => {
+    const source=ready({unit:"ml",unitCode:UnitCode.EA});
+    expect(photoIntakeCanMerge(source,{...source})).toBe(false);
+  });
+
 });

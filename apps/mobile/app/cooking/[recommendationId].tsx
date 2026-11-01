@@ -618,8 +618,8 @@ export default function CookingScreen() {
             uncheckedPrepCount,
           )}
           guideMood={currentIndex >= completionStepIndex ? "enjoy" : "cooking"}
-          guideSize={currentIndex >= completionStepIndex ? "large" : "small"}
-          guideLayout="adaptive"
+          guideSize="small"
+          guideLayout={currentIndex >= completionStepIndex ? "stacked" : "adaptive"}
           guideAnimation="none"
         >
         {draftSaveError ? (

@@ -1,0 +1,39 @@
+const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+const sharp=require('/Users/namu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp');
+const base=__dirname,out='/Users/namu/Desktop/ExpiryMate/design/reviews/background-quality-20261101';
+const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+const selected=['settings-360-1','notifications-360-1.3','onboarding-360-1','forgot-320-2','privacy-320-2','sharing-360-1.3','records-360-1','ingredients-320-2','cooking-360-1.3','photo-review-360-1'];
+const singles=['notifications-scrolled-360-1.3','forgot-keyboard-360-1.3'];
+(async()=>{
+ const before=JSON.parse(fs.readFileSync(base+'/matrix.json')).results.filter(r=>r.variant==='before');
+ const final=JSON.parse(fs.readFileSync(base+'/after-matrix.json')),after=final.results;
+ const states=JSON.parse(fs.readFileSync(base+'/states.json'));
+ assert.equal(before.length,126);assert.equal(after.length,126);assert.equal(states.results.length,6);assert.equal(final.keyboardChecks.length,1);
+ const pairs=[];
+ for(const a of after){
+  const b=before.find(r=>r.scene===a.scene&&r.width===a.width&&r.scale===a.scale);assert(b);
+  assert.equal(a.texts.length,b.texts.length);assert.equal(a.buttons.length,b.buttons.length);
+  for(const k of ['x','y','width','height'])assert(Math.abs(a.layer[k]-b.layer[k])<=.1);
+  for(let i=0;i<a.texts.length;i++){const t=a.texts[i],u=b.texts[i];assert.equal(t.text,u.text);assert.equal(t.color,u.color);assert.equal(t.fontSize,u.fontSize);for(const k of ['x','y','width','height'])assert(Math.abs(t[k]-u[k])<=.1,`${a.scene} ${a.width}/${a.scale} ${k} text geometry`);}
+  for(let i=0;i<a.buttons.length;i++)for(const k of ['x','y','width','height'])assert(Math.abs(a.buttons[i][k]-b.buttons[i][k])<=.1);
+  const reading=['verify-pending','privacy','ai-notice','activity','cooking','payment'].includes(a.scene);
+  assert.equal(Number(a.layer.veil),reading?.97:.16);assert.equal(Number(b.layer.veil),reading?.97:.84);
+  for(const r of [a,b]){assert.equal(r.image.loaded,true);assert.equal(r.image.width,1024);assert.equal(r.image.height,1536);assert(r.documentWidth<=r.width);assert.equal(r.layer.hidden,'true');assert.equal(r.layer.pointerEvents,'none');assert.equal(r.errors.length,0);}
+  pairs.push({scene:a.scene,width:a.width,fontScale:a.scale,geometryPreserved:true,overflow:false,veil:Number(a.layer.veil)});
+ }
+ const contrast=[];
+ for(const r of [...after,...states.results])for(const t of r.contrast||[]){assert(t.minContrast>=4.5,JSON.stringify({scene:r.scene,width:r.width,scale:r.scale,...t}));contrast.push({scene:r.scene,width:r.width,fontScale:r.scale,state:r.state||'ready',...t});}
+ for(const r of final.scrollChecks){const initial=after.find(a=>a.scene===r.scene&&a.width===r.width&&a.scale===r.scale);for(const k of ['x','y','width','height'])assert(Math.abs(r.layer[k]-initial.layer[k])<=.1);for(const t of r.contrast){assert(t.minContrast>=4.5,JSON.stringify({scene:r.scene,scroll:r.fraction,...t}));contrast.push({scene:r.scene,width:r.width,fontScale:r.scale,scroll:r.fraction,...t});}}
+ for(const r of states.results){assert(r.image.loaded);assert.equal(r.errors.length,0);}
+ const keyboard=final.keyboardChecks[0];assert.equal(keyboard.email,'qa@example.test');assert.equal(keyboard.focus,true);assert.equal(keyboard.viewport.height,480);const action=keyboard.buttons.find(b=>b.label==='재설정 메일 받기');assert(action&&!action.disabled);assert(action.y+action.height<=480.1);
+ fs.writeFileSync(out+'/layout-checks.json',JSON.stringify({beforeAfterPairs:126,renders:252,geometryTolerance:.1,pairs,before,after},null,2));
+ fs.writeFileSync(out+'/contrast-checks.json',JSON.stringify({method:'Per-text identity color mask intersects black/white glyph core mask; original foreground versus text-hidden background; disabled text excluded; occluded text is not counted as sticky-footer text.',threshold:4.5,samples:contrast.length,minContrast:Math.min(...contrast.map(t=>t.minContrast)),failures:0,checks:contrast},null,2));
+ fs.writeFileSync(out+'/state-checks.json',JSON.stringify(states,null,2));
+ fs.writeFileSync(out+'/interactions.json',JSON.stringify({scrollChecks:final.scrollChecks,keyboardChecks:final.keyboardChecks,nativeKeyboard:false},null,2));
+ const images=[];
+ for(const scene of selected){const p=base+'/captures/',a=p+'after-'+scene+'.png',b=p+'before-'+scene+'.png',m=await sharp(a).metadata(),gap=12,top=32;const labels=Buffer.from(`<svg width="${m.width*2+gap}" height="32"><rect width="100%" height="100%" fill="#f5f2eb"/><text x="12" y="22" font-family="Helvetica" font-size="14">Before</text><text x="${m.width+gap+12}" y="22" font-family="Helvetica" font-size="14">Regenerated</text></svg>`);await sharp({create:{width:m.width*2+gap,height:m.height+top,channels:3,background:'#f5f2eb'}}).composite([{input:labels,left:0,top:0},{input:b,left:0,top},{input:a,left:m.width+gap,top}]).jpeg({quality:86}).toFile(out+'/'+scene+'.jpg');images.push({file:scene+'.jpg',sha256:hash(fs.readFileSync(out+'/'+scene+'.jpg')),beforePNG:hash(fs.readFileSync(b)),afterPNG:hash(fs.readFileSync(a))});}
+ for(const scene of singles){const p=base+'/captures/after-'+scene+'.png';await sharp(p).jpeg({quality:86}).toFile(out+'/'+scene+'.jpg');images.push({file:scene+'.jpg',sha256:hash(fs.readFileSync(out+'/'+scene+'.jpg')),sourcePNG:hash(fs.readFileSync(p))});}
+ for(const file of ['build.cjs','capture.cjs','audit.cjs','finalize.cjs'])fs.copyFileSync(base+'/'+file,out+'/'+file+'.txt');
+ fs.writeFileSync(out+'/capture-hashes.json',JSON.stringify({images},null,2));
+ console.log(`Verified 126 before/after pairs, ${contrast.length} text samples (minimum ${Math.min(...contrast.map(t=>t.minContrast)).toFixed(4)}:1), 6 loading/error states, 10 scroll positions and a simulated keyboard. Retained ${images.length} images.`);
+})().catch(e=>{console.error(e);process.exitCode=1;});

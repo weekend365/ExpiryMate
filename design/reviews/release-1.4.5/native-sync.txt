@@ -1,0 +1,4 @@
+
+> @expirymate/mobile@0.1.0 native:variants:sync /Users/namu/Desktop/ExpiryMate/apps/mobile
+> node scripts/sync-ios-app-variants.cjs
+

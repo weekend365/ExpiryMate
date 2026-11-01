@@ -1,0 +1,7 @@
+{
+  "lookup": "failed",
+  "httpStatus": 401,
+  "code": "invalid_api_key",
+  "method": "non-generating models.retrieve",
+  "rawErrorAndKeyRetained": false
+}

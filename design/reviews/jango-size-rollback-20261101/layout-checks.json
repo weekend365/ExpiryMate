@@ -1,0 +1,8198 @@
+{
+  "caseCount": 99,
+  "renderCount": 198,
+  "checks": [
+    {
+      "scene": "home",
+      "width": 320,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "recommendations",
+      "width": 320,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "shopping",
+      "width": 320,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "settings",
+      "width": 320,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "onboarding",
+      "width": 320,
+      "fontScale": 1,
+      "before": 160,
+      "after": 112,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-first",
+      "width": 320,
+      "fontScale": 1,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-keyboard",
+      "width": 320,
+      "fontScale": 1,
+      "before": 72,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-progress",
+      "width": 320,
+      "fontScale": 1,
+      "before": 72,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-done",
+      "width": 320,
+      "fontScale": 1,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-progress",
+      "width": 320,
+      "fontScale": 1,
+      "before": 72,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-done",
+      "width": 320,
+      "fontScale": 1,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "home",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "recommendations",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "shopping",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "settings",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "onboarding",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 112,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-first",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-keyboard",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-progress",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-done",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-progress",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-done",
+      "width": 320,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "home",
+      "width": 320,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "recommendations",
+      "width": 320,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "shopping",
+      "width": 320,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "settings",
+      "width": 320,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "onboarding",
+      "width": 320,
+      "fontScale": 2,
+      "before": 160,
+      "after": 112,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-first",
+      "width": 320,
+      "fontScale": 2,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-keyboard",
+      "width": 320,
+      "fontScale": 2,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-progress",
+      "width": 320,
+      "fontScale": 2,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-done",
+      "width": 320,
+      "fontScale": 2,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-progress",
+      "width": 320,
+      "fontScale": 2,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-done",
+      "width": 320,
+      "fontScale": 2,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "home",
+      "width": 360,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "recommendations",
+      "width": 360,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "shopping",
+      "width": 360,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "settings",
+      "width": 360,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "onboarding",
+      "width": 360,
+      "fontScale": 1,
+      "before": 160,
+      "after": 112,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-first",
+      "width": 360,
+      "fontScale": 1,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-keyboard",
+      "width": 360,
+      "fontScale": 1,
+      "before": 72,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-progress",
+      "width": 360,
+      "fontScale": 1,
+      "before": 72,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-done",
+      "width": 360,
+      "fontScale": 1,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-progress",
+      "width": 360,
+      "fontScale": 1,
+      "before": 72,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-done",
+      "width": 360,
+      "fontScale": 1,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "home",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "recommendations",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "shopping",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "settings",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "onboarding",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 112,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-first",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-keyboard",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-progress",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-done",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-progress",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-done",
+      "width": 360,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "home",
+      "width": 360,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "recommendations",
+      "width": 360,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "shopping",
+      "width": 360,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "settings",
+      "width": 360,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "onboarding",
+      "width": 360,
+      "fontScale": 2,
+      "before": 160,
+      "after": 112,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-first",
+      "width": 360,
+      "fontScale": 2,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-keyboard",
+      "width": 360,
+      "fontScale": 2,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-progress",
+      "width": 360,
+      "fontScale": 2,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-done",
+      "width": 360,
+      "fontScale": 2,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-progress",
+      "width": 360,
+      "fontScale": 2,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-done",
+      "width": 360,
+      "fontScale": 2,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "home",
+      "width": 780,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "recommendations",
+      "width": 780,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "shopping",
+      "width": 780,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "settings",
+      "width": 780,
+      "fontScale": 1,
+      "before": 112,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "onboarding",
+      "width": 780,
+      "fontScale": 1,
+      "before": 160,
+      "after": 112,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-first",
+      "width": 780,
+      "fontScale": 1,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-keyboard",
+      "width": 780,
+      "fontScale": 1,
+      "before": 72,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-progress",
+      "width": 780,
+      "fontScale": 1,
+      "before": 72,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-done",
+      "width": 780,
+      "fontScale": 1,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-progress",
+      "width": 780,
+      "fontScale": 1,
+      "before": 72,
+      "after": 72,
+      "direction": "row",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-done",
+      "width": 780,
+      "fontScale": 1,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "home",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "recommendations",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "shopping",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "settings",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "onboarding",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 112,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-first",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-keyboard",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-progress",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-done",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-progress",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-done",
+      "width": 780,
+      "fontScale": 1.3,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "home",
+      "width": 780,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "recommendations",
+      "width": 780,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "shopping",
+      "width": 780,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "settings",
+      "width": 780,
+      "fontScale": 2,
+      "before": 112,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "onboarding",
+      "width": 780,
+      "fontScale": 2,
+      "before": 160,
+      "after": 112,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-first",
+      "width": 780,
+      "fontScale": 2,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-keyboard",
+      "width": 780,
+      "fontScale": 2,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-progress",
+      "width": 780,
+      "fontScale": 2,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "register-done",
+      "width": 780,
+      "fontScale": 2,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-progress",
+      "width": 780,
+      "fontScale": 2,
+      "before": 72,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "scene": "cooking-done",
+      "width": 780,
+      "fontScale": 2,
+      "before": 160,
+      "after": 72,
+      "direction": "column",
+      "overflow": false,
+      "passed": true
+    }
+  ],
+  "matrix": [
+    {
+      "variant": "before",
+      "scene": "home",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-PROFZPTW.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "recommendations",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-YXPY22EA.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "shopping",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-C7OHCGPG.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "settings",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-BEAXZ2UK.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 357,
+          "width": 270,
+          "height": 107,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 464,
+          "width": 270,
+          "height": 107,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 696,
+          "width": 270,
+          "height": 107,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 803,
+          "width": 270,
+          "height": 107,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 910,
+          "width": 270,
+          "height": 107,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 1017,
+          "width": 270,
+          "height": 125,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 1142,
+          "width": 270,
+          "height": 125,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 1267,
+          "width": 270,
+          "height": 124,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "onboarding",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 80,
+        "y": 74,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 764,
+          "width": 272,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-first",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 177,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-keyboard",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 196,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 404,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-progress",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 184,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-done",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-H7DUXLRN.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-progress",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 214,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-done",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 207,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-CLYOYVPJ.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "home",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-PROFZPTW.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "recommendations",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 114.59375,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-YXPY22EA.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "shopping",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-C7OHCGPG.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "settings",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-BEAXZ2UK.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 428.203125,
+          "width": 270,
+          "height": 119.609375,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 547.8125,
+          "width": 270,
+          "height": 143.015625,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 833.84375,
+          "width": 270,
+          "height": 119.609375,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 953.453125,
+          "width": 270,
+          "height": 143.015625,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 1096.46875,
+          "width": 270,
+          "height": 143.015625,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 1239.484375,
+          "width": 270,
+          "height": 166.421875,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 1405.90625,
+          "width": 270,
+          "height": 143.015625,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 1548.921875,
+          "width": 270,
+          "height": 165.421875,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "onboarding",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 80,
+        "y": 79.40625,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 764,
+          "width": 272,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-first",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 187.203125,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-keyboard",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": -39,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 404,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-progress",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 208,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-done",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-H7DUXLRN.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-progress",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 232.59375,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 114.59375,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-done",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 211.796875,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-CLYOYVPJ.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 93.796875,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "home",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-PROFZPTW.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "recommendations",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-YXPY22EA.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "shopping",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-C7OHCGPG.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "settings",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-BEAXZ2UK.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 515,
+          "width": 270,
+          "height": 185,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 700,
+          "width": 270,
+          "height": 233,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 1202,
+          "width": 270,
+          "height": 185,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 1387,
+          "width": 270,
+          "height": 233,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 1620,
+          "width": 270,
+          "height": 185,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 1805,
+          "width": 270,
+          "height": 257,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 2062,
+          "width": 270,
+          "height": 221,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 2283,
+          "width": 270,
+          "height": 256,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "onboarding",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 80,
+        "y": 92,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 690,
+          "width": 272,
+          "height": 112,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 810,
+          "width": 272,
+          "height": 66,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-first",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 230.40625,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-keyboard",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": -163.59375,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 392,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-progress",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 230.40625,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-done",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-H7DUXLRN.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-progress",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 255,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 137,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-done",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 255,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-CLYOYVPJ.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 137,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "home",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-PROFZPTW.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "recommendations",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-YXPY22EA.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "shopping",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-C7OHCGPG.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "settings",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-BEAXZ2UK.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 357,
+          "width": 310,
+          "height": 107,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 464,
+          "width": 310,
+          "height": 107,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 678,
+          "width": 310,
+          "height": 107,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 785,
+          "width": 310,
+          "height": 107,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 892,
+          "width": 310,
+          "height": 107,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 999,
+          "width": 310,
+          "height": 125,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 1124,
+          "width": 310,
+          "height": 107,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 1231,
+          "width": 310,
+          "height": 124,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "onboarding",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 100,
+        "y": 74,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 764,
+          "width": 312,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-first",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 177,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-keyboard",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 177,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 404,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-progress",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 184,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-done",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-H7DUXLRN.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-progress",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 207,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-done",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 207,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-CLYOYVPJ.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "home",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-PROFZPTW.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "recommendations",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-YXPY22EA.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "shopping",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-C7OHCGPG.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "settings",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-BEAXZ2UK.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 381.40625,
+          "width": 310,
+          "height": 119.609375,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 501.015625,
+          "width": 310,
+          "height": 119.609375,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 763.640625,
+          "width": 310,
+          "height": 119.609375,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 883.25,
+          "width": 310,
+          "height": 119.609375,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 1002.859375,
+          "width": 310,
+          "height": 119.609375,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 1122.46875,
+          "width": 310,
+          "height": 143.015625,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 1265.484375,
+          "width": 310,
+          "height": 143.015625,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 1408.5,
+          "width": 310,
+          "height": 142.015625,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "onboarding",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 100,
+        "y": 79.40625,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 764,
+          "width": 312,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-first",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 187.203125,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-keyboard",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": -38.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 404,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-progress",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 187.203125,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-done",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-H7DUXLRN.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-progress",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 211.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 93.796875,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-done",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 211.796875,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-CLYOYVPJ.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 93.796875,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "home",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-PROFZPTW.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "recommendations",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-YXPY22EA.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "shopping",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-C7OHCGPG.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "settings",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-BEAXZ2UK.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 515,
+          "width": 310,
+          "height": 149,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 664,
+          "width": 310,
+          "height": 185,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 1082,
+          "width": 310,
+          "height": 185,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 1267,
+          "width": 310,
+          "height": 233,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 1500,
+          "width": 310,
+          "height": 185,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 1685,
+          "width": 310,
+          "height": 221,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 1906,
+          "width": 310,
+          "height": 185,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 2091,
+          "width": 310,
+          "height": 220,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "onboarding",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 100,
+        "y": 92,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 738,
+          "width": 312,
+          "height": 64,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 810,
+          "width": 312,
+          "height": 66,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-first",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 230.40625,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-keyboard",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": -163.59375,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 392,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-progress",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 230.40625,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-done",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-H7DUXLRN.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-progress",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 255,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 137,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-done",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 255,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-CLYOYVPJ.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 137,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "home",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 89,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-PROFZPTW.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "recommendations",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 89,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-YXPY22EA.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "shopping",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 89,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-C7OHCGPG.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "settings",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 79,
+        "y": 49,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-BEAXZ2UK.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 55,
+          "y": 261,
+          "width": 670,
+          "height": 79,
+          "label": "알림"
+        },
+        {
+          "x": 55,
+          "y": 340,
+          "width": 670,
+          "height": 79,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 55,
+          "y": 498,
+          "width": 670,
+          "height": 79,
+          "label": "보관 위치"
+        },
+        {
+          "x": 55,
+          "y": 577,
+          "width": 670,
+          "height": 79,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 55,
+          "y": 656,
+          "width": 670,
+          "height": 79,
+          "label": "계정"
+        },
+        {
+          "x": 55,
+          "y": 735,
+          "width": 670,
+          "height": 79,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 55,
+          "y": 814,
+          "width": 670,
+          "height": 79,
+          "label": "문의하기"
+        },
+        {
+          "x": 55,
+          "y": 893,
+          "width": 670,
+          "height": 78,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "onboarding",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 310,
+        "y": 74,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 110,
+          "y": 764,
+          "width": 560,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 110,
+          "y": 824,
+          "width": 560,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-first",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 177,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-keyboard",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 177,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 404,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-progress",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 177,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-done",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 89,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-H7DUXLRN.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-progress",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 207,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-done",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 207,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-CLYOYVPJ.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "home",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 93.796875,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-PROFZPTW.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "recommendations",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 93.796875,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-YXPY22EA.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "shopping",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 93.796875,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-C7OHCGPG.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "settings",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 79,
+        "y": 49,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-BEAXZ2UK.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 55,
+          "y": 381.40625,
+          "width": 670,
+          "height": 119.609375,
+          "label": "알림"
+        },
+        {
+          "x": 55,
+          "y": 501.015625,
+          "width": 670,
+          "height": 119.609375,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 55,
+          "y": 740.234375,
+          "width": 670,
+          "height": 119.609375,
+          "label": "보관 위치"
+        },
+        {
+          "x": 55,
+          "y": 859.84375,
+          "width": 670,
+          "height": 119.609375,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 55,
+          "y": 979.453125,
+          "width": 670,
+          "height": 119.609375,
+          "label": "계정"
+        },
+        {
+          "x": 55,
+          "y": 1099.0625,
+          "width": 670,
+          "height": 119.609375,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 55,
+          "y": 1218.671875,
+          "width": 670,
+          "height": 119.609375,
+          "label": "문의하기"
+        },
+        {
+          "x": 55,
+          "y": 1338.28125,
+          "width": 670,
+          "height": 118.609375,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "onboarding",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 310,
+        "y": 79.40625,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 110,
+          "y": 764,
+          "width": 560,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 110,
+          "y": 824,
+          "width": 560,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-first",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 187.203125,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-keyboard",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": -20.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 404,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-progress",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 187.203125,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-done",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 93.796875,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-H7DUXLRN.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-progress",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 211.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 93.796875,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-done",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 211.796875,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-CLYOYVPJ.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 93.796875,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "home",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 105,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-PROFZPTW.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "recommendations",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 105,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-YXPY22EA.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "shopping",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 105,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-C7OHCGPG.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "settings",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 79,
+        "y": 49,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-BEAXZ2UK.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 55,
+          "y": 443,
+          "width": 670,
+          "height": 149,
+          "label": "알림"
+        },
+        {
+          "x": 55,
+          "y": 592,
+          "width": 670,
+          "height": 149,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 55,
+          "y": 890,
+          "width": 670,
+          "height": 149,
+          "label": "보관 위치"
+        },
+        {
+          "x": 55,
+          "y": 1039,
+          "width": 670,
+          "height": 149,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 55,
+          "y": 1188,
+          "width": 670,
+          "height": 149,
+          "label": "계정"
+        },
+        {
+          "x": 55,
+          "y": 1337,
+          "width": 670,
+          "height": 149,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 55,
+          "y": 1486,
+          "width": 670,
+          "height": 149,
+          "label": "문의하기"
+        },
+        {
+          "x": 55,
+          "y": 1635,
+          "width": 670,
+          "height": 148,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "onboarding",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 310,
+        "y": 92,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 110,
+          "y": 738,
+          "width": 560,
+          "height": 64,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 110,
+          "y": 810,
+          "width": 560,
+          "height": 66,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-first",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 198.40625,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-keyboard",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": -75.59375,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 392,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-progress",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 198.40625,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "register-done",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 105,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-H7DUXLRN.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-progress",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 223,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 105,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "before",
+      "scene": "cooking-done",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 223,
+        "width": 160,
+        "height": 160
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-CLYOYVPJ.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 105,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "home",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "recommendations",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-MYP665FI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "shopping",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-HG35PCBH.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "settings",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-UMM4U3UI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 317,
+          "width": 270,
+          "height": 107,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 424,
+          "width": 270,
+          "height": 107,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 656,
+          "width": 270,
+          "height": 107,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 763,
+          "width": 270,
+          "height": 107,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 870,
+          "width": 270,
+          "height": 107,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 977,
+          "width": 270,
+          "height": 125,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 1102,
+          "width": 270,
+          "height": 125,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 1227,
+          "width": 270,
+          "height": 124,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "onboarding",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 104,
+        "y": 74,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 764,
+          "width": 272,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-first",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 177,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-keyboard",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 196,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 404,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-progress",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 184,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-done",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-4P5NZHGU.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-progress",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 214,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-done",
+      "width": 320,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 207,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-AXJU4RZB.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "home",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "recommendations",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 114.59375,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-MYP665FI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "shopping",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-HG35PCBH.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "settings",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-UMM4U3UI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 388.203125,
+          "width": 270,
+          "height": 119.609375,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 507.8125,
+          "width": 270,
+          "height": 143.015625,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 793.84375,
+          "width": 270,
+          "height": 119.609375,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 913.453125,
+          "width": 270,
+          "height": 143.015625,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 1056.46875,
+          "width": 270,
+          "height": 143.015625,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 1199.484375,
+          "width": 270,
+          "height": 166.421875,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 1365.90625,
+          "width": 270,
+          "height": 143.015625,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 1508.921875,
+          "width": 270,
+          "height": 165.421875,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "onboarding",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 104,
+        "y": 79.40625,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 764,
+          "width": 272,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-first",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 187.203125,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-keyboard",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": -39,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 404,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-progress",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 208,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-done",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-4P5NZHGU.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-progress",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 232.59375,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 114.59375,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-done",
+      "width": 320,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 211.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-AXJU4RZB.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 93.796875,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 272,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "home",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "recommendations",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-MYP665FI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "shopping",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-HG35PCBH.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "settings",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-UMM4U3UI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 475,
+          "width": 270,
+          "height": 185,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 660,
+          "width": 270,
+          "height": 233,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 1162,
+          "width": 270,
+          "height": 185,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 1347,
+          "width": 270,
+          "height": 233,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 1580,
+          "width": 270,
+          "height": 185,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 1765,
+          "width": 270,
+          "height": 257,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 2022,
+          "width": 270,
+          "height": 221,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 2243,
+          "width": 270,
+          "height": 256,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "onboarding",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 104,
+        "y": 92,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 690,
+          "width": 272,
+          "height": 112,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 810,
+          "width": 272,
+          "height": 66,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-first",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 230.40625,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-keyboard",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": -163.59375,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 392,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-progress",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 230.40625,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-done",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-4P5NZHGU.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-progress",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 255,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 137,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-done",
+      "width": 320,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 320,
+      "viewportWidth": 320,
+      "mascot": {
+        "x": 41,
+        "y": 255,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-AXJU4RZB.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 231,
+          "y": 137,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 812,
+          "width": 272,
+          "height": 64,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "home",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "recommendations",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-MYP665FI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "shopping",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-HG35PCBH.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "settings",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-UMM4U3UI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 317,
+          "width": 310,
+          "height": 107,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 424,
+          "width": 310,
+          "height": 107,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 638,
+          "width": 310,
+          "height": 107,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 745,
+          "width": 310,
+          "height": 107,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 852,
+          "width": 310,
+          "height": 107,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 959,
+          "width": 310,
+          "height": 125,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 1084,
+          "width": 310,
+          "height": 107,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 1191,
+          "width": 310,
+          "height": 124,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "onboarding",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 124,
+        "y": 74,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 764,
+          "width": 312,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-first",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 177,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-keyboard",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 177,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 404,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-progress",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 184,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-done",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-4P5NZHGU.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-progress",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 207,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-done",
+      "width": 360,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 207,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-AXJU4RZB.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "home",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "recommendations",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-MYP665FI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "shopping",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-HG35PCBH.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "settings",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-UMM4U3UI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 341.40625,
+          "width": 310,
+          "height": 119.609375,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 461.015625,
+          "width": 310,
+          "height": 119.609375,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 723.640625,
+          "width": 310,
+          "height": 119.609375,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 843.25,
+          "width": 310,
+          "height": 119.609375,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 962.859375,
+          "width": 310,
+          "height": 119.609375,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 1082.46875,
+          "width": 310,
+          "height": 143.015625,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 1225.484375,
+          "width": 310,
+          "height": 143.015625,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 1368.5,
+          "width": 310,
+          "height": 142.015625,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "onboarding",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 124,
+        "y": 79.40625,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 764,
+          "width": 312,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-first",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 187.203125,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-keyboard",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": -38.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 404,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-progress",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 187.203125,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-done",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-4P5NZHGU.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-progress",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 211.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 93.796875,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-done",
+      "width": 360,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 211.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-AXJU4RZB.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 93.796875,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "home",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 105,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "recommendations",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-MYP665FI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "shopping",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-HG35PCBH.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "settings",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 49,
+        "y": 49,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-UMM4U3UI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 25,
+          "y": 475,
+          "width": 310,
+          "height": 149,
+          "label": "알림"
+        },
+        {
+          "x": 25,
+          "y": 624,
+          "width": 310,
+          "height": 185,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 25,
+          "y": 1042,
+          "width": 310,
+          "height": 185,
+          "label": "보관 위치"
+        },
+        {
+          "x": 25,
+          "y": 1227,
+          "width": 310,
+          "height": 233,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 25,
+          "y": 1460,
+          "width": 310,
+          "height": 185,
+          "label": "계정"
+        },
+        {
+          "x": 25,
+          "y": 1645,
+          "width": 310,
+          "height": 221,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 25,
+          "y": 1866,
+          "width": 310,
+          "height": 185,
+          "label": "문의하기"
+        },
+        {
+          "x": 25,
+          "y": 2051,
+          "width": 310,
+          "height": 220,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "onboarding",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 124,
+        "y": 92,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 738,
+          "width": 312,
+          "height": 64,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 24,
+          "y": 810,
+          "width": 312,
+          "height": 66,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-first",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 230.40625,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-keyboard",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": -163.59375,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 392,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-progress",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 230.40625,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-done",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 137,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-4P5NZHGU.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-progress",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 255,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 137,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-done",
+      "width": 360,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 360,
+      "viewportWidth": 360,
+      "mascot": {
+        "x": 41,
+        "y": 255,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-AXJU4RZB.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 271,
+          "y": 137,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 24,
+          "y": 812,
+          "width": 312,
+          "height": 64,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "home",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "recommendations",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-MYP665FI.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "shopping",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-HG35PCBH.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "settings",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 79,
+        "y": 49,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-UMM4U3UI.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 55,
+          "y": 221,
+          "width": 670,
+          "height": 79,
+          "label": "알림"
+        },
+        {
+          "x": 55,
+          "y": 300,
+          "width": 670,
+          "height": 79,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 55,
+          "y": 458,
+          "width": 670,
+          "height": 79,
+          "label": "보관 위치"
+        },
+        {
+          "x": 55,
+          "y": 537,
+          "width": 670,
+          "height": 79,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 55,
+          "y": 616,
+          "width": 670,
+          "height": 79,
+          "label": "계정"
+        },
+        {
+          "x": 55,
+          "y": 695,
+          "width": 670,
+          "height": 79,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 55,
+          "y": 774,
+          "width": 670,
+          "height": 79,
+          "label": "문의하기"
+        },
+        {
+          "x": 55,
+          "y": 853,
+          "width": 670,
+          "height": 78,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "onboarding",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 334,
+        "y": 74,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 110,
+          "y": 764,
+          "width": 560,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 110,
+          "y": 824,
+          "width": 560,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-first",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 177,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-keyboard",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 177,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 404,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-progress",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 177,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-done",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 89,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-4P5NZHGU.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-progress",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 207,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "row",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-done",
+      "width": 780,
+      "scale": 1,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 207,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-AXJU4RZB.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 89,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "home",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "recommendations",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-MYP665FI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "shopping",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-HG35PCBH.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "settings",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 79,
+        "y": 49,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-UMM4U3UI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 55,
+          "y": 341.40625,
+          "width": 670,
+          "height": 119.609375,
+          "label": "알림"
+        },
+        {
+          "x": 55,
+          "y": 461.015625,
+          "width": 670,
+          "height": 119.609375,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 55,
+          "y": 700.234375,
+          "width": 670,
+          "height": 119.609375,
+          "label": "보관 위치"
+        },
+        {
+          "x": 55,
+          "y": 819.84375,
+          "width": 670,
+          "height": 119.609375,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 55,
+          "y": 939.453125,
+          "width": 670,
+          "height": 119.609375,
+          "label": "계정"
+        },
+        {
+          "x": 55,
+          "y": 1059.0625,
+          "width": 670,
+          "height": 119.609375,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 55,
+          "y": 1178.671875,
+          "width": 670,
+          "height": 119.609375,
+          "label": "문의하기"
+        },
+        {
+          "x": 55,
+          "y": 1298.28125,
+          "width": 670,
+          "height": 118.609375,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "onboarding",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 334,
+        "y": 79.40625,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 110,
+          "y": 764,
+          "width": 560,
+          "height": 52,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 110,
+          "y": 824,
+          "width": 560,
+          "height": 52,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-first",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 187.203125,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-keyboard",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": -20.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 404,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-progress",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 187.203125,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-done",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 93.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-4P5NZHGU.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-progress",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 211.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 93.796875,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-done",
+      "width": 780,
+      "scale": 1.3,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 211.796875,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-AXJU4RZB.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 93.796875,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 30,
+          "y": 824,
+          "width": 720,
+          "height": 52,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "home",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 105,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "recommendations",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 105,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-excited-MYP665FI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "shopping",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 105,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-shopping-HG35PCBH.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "settings",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 79,
+        "y": 49,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-acknowledge-UMM4U3UI.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 55,
+          "y": 403,
+          "width": 670,
+          "height": 149,
+          "label": "알림"
+        },
+        {
+          "x": 55,
+          "y": 552,
+          "width": 670,
+          "height": 149,
+          "label": "추천 맞춤 설정"
+        },
+        {
+          "x": 55,
+          "y": 850,
+          "width": 670,
+          "height": 149,
+          "label": "보관 위치"
+        },
+        {
+          "x": 55,
+          "y": 999,
+          "width": 670,
+          "height": 149,
+          "label": "함께 쓰는 냉장고"
+        },
+        {
+          "x": 55,
+          "y": 1148,
+          "width": 670,
+          "height": 149,
+          "label": "계정"
+        },
+        {
+          "x": 55,
+          "y": 1297,
+          "width": 670,
+          "height": 149,
+          "label": "장고 플러스"
+        },
+        {
+          "x": 55,
+          "y": 1446,
+          "width": 670,
+          "height": 149,
+          "label": "문의하기"
+        },
+        {
+          "x": 55,
+          "y": 1595,
+          "width": 670,
+          "height": 148,
+          "label": "개인정보"
+        }
+      ],
+      "focused": null,
+      "lastSettingsActionReachable": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "onboarding",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 334,
+        "y": 92,
+        "width": 112,
+        "height": 112
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-LA5QCX6D.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 110,
+          "y": 738,
+          "width": 560,
+          "height": 64,
+          "label": "로그인하고 시작하기"
+        },
+        {
+          "x": 110,
+          "y": 810,
+          "width": 560,
+          "height": 66,
+          "label": "사용법 보기"
+        }
+      ],
+      "focused": null,
+      "onboardingFooterVisible": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-first",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 198.40625,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-keyboard",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": -75.59375,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-encourage-RDP37MSY.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 392,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": "ingredient-input",
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-progress",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 198.40625,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-check-AVPW7Z6Q.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "register-done",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 105,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-praise-4P5NZHGU.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "완료"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-progress",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 223,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-cooking-KPE5XCMR.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 105,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 2/3"
+        },
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "다음"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    },
+    {
+      "variant": "after",
+      "scene": "cooking-done",
+      "width": 780,
+      "scale": 2,
+      "decorationVisible": true,
+      "documentWidth": 780,
+      "viewportWidth": 780,
+      "mascot": {
+        "x": 71,
+        "y": 223,
+        "width": 72,
+        "height": 72
+      },
+      "imageLoaded": true,
+      "imageSource": "./assets/jango-enjoy-AXJU4RZB.png",
+      "bubbleDirection": "column",
+      "buttons": [
+        {
+          "x": 661,
+          "y": 105,
+          "width": 48,
+          "height": 48,
+          "label": "전체 단계 보기, 현재 3/3"
+        },
+        {
+          "x": 30,
+          "y": 812,
+          "width": 720,
+          "height": 64,
+          "label": "보관함 정리하기"
+        }
+      ],
+      "focused": null,
+      "primaryActionWorks": true,
+      "errors": []
+    }
+  ]
+}

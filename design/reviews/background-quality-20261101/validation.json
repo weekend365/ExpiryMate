@@ -1,0 +1,123 @@
+{
+  "recordedAt": "2026-11-01T05:50:37.391Z",
+  "runtime": "v24.22.1",
+  "head": "cf37517d81d63ffea70c6235c6324a74bc4ead8b",
+  "baseline": "Task-start working tree including prior uncommitted mascot size rollback",
+  "checks": [
+    {
+      "command": "pnpm --filter @expirymate/shared build",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile backgrounds:sync",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile backgrounds:audit",
+      "status": "passed",
+      "artworks": 11
+    },
+    {
+      "command": "related background/responsive/font/design token tests",
+      "status": "passed",
+      "files": 5,
+      "passed": 38
+    },
+    {
+      "command": "pnpm docs:check",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm lint",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm typecheck",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm test",
+      "status": "failed",
+      "jango": {
+        "passed": 41,
+        "failed": 0
+      },
+      "workspace": {
+        "shared": 162,
+        "api": 618,
+        "mobile": 678,
+        "skipped": 6,
+        "failed": 1
+      },
+      "failure": {
+        "file": "apps/mobile/scripts/mascot-anatomy.test.mjs",
+        "test": "rejects a stretched door and compressed eye spacing",
+        "reason": "5000 ms timeout; observed 6065 ms"
+      },
+      "note": "The initial full command did not pass; no image assertion failure was reported."
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile exec vitest run scripts/mascot-anatomy.test.mjs",
+      "status": "passed",
+      "passed": 11,
+      "stretchedDoorMs": 551,
+      "timeoutUnchanged": true
+    },
+    {
+      "command": "pnpm -r --if-present run test --maxWorkers=1",
+      "status": "passed",
+      "shared": 162,
+      "api": 618,
+      "mobile": 679,
+      "total": 1459,
+      "skipped": 6,
+      "note": "Only test worker concurrency changed; assertions and 5000/20000 ms limits remain unchanged."
+    }
+  ],
+  "finalCoverage": {
+    "jango": 41,
+    "workspace": 1459,
+    "totalUniqueTests": 1500,
+    "skipped": 6,
+    "allAssertionsCovered": true,
+    "singleRootCommandGreen": false
+  },
+  "visual": {
+    "beforeAfterPairs": 126,
+    "selectedRenders": 252,
+    "additionalStateRenders": 6,
+    "textSamples": 1219,
+    "minContrast": 4.7141,
+    "threshold": 4.5,
+    "fixedLayerDuringScroll": true,
+    "simulatedKeyboard": true,
+    "native": false
+  },
+  "preservation": {
+    "oldRuntimeBackgrounds": 5,
+    "v1Files": 35,
+    "routes": 27,
+    "screenBranches": 41,
+    "foregroundSourceUnchanged": true,
+    "mascotRollbackPreserved": true,
+    "committed": false,
+    "pushed": false,
+    "deployed": false
+  },
+  "ci": {
+    "run": false,
+    "priorKnownTimeout": "Historical 20-second anatomy reproduction timeout is separate from this run's 5-second stretched-door timeout."
+  },
+  "logSummary": "packages/shared test:  Test Files  24 passed (24)\npackages/shared test:       Tests  162 passed (162)\napps/mobile test:    ✓ BIBLE anatomy measurement > rejects a stretched door and compressed eye spacing  563ms\napps/api test:  Test Files  72 passed | 2 skipped (74)\napps/api test:       Tests  618 passed | 6 skipped (624)\napps/mobile test:  Test Files  113 passed (113)\napps/mobile test:       Tests  679 passed (679)",
+  "logHashes": {
+    "docs": "8ab1082f9555197717a1909707e724f5d562004055069dffe345268c7ebb3686",
+    "lint": "00ef67cb63a900a02962a1d94c9c248d2df234a297af80005ad635fd3b525393",
+    "types": "1f73e73c8b36d0bab2ba5440b53aafb38bae6e19b28a0e151fe43191f8ee9692",
+    "test": "f18272c641a7f172ad5c46de69a38eb5049498073a6c179f45244779351c8d72",
+    "workspace-rerun": "2c49983f2e2fff9b720bf0b6e1faf40ddec53a37d533316946f07831c7bd5f98",
+    "anatomy-rerun": "709f999be0a62ba53605eaec103f8ab5cce0eaaa4d9ee2c014e0d1b41050d6ef",
+    "audit": "97cafdc4ed1e81be4e73c58d67a2a99bb515c4b39b5b3fac9d46b38ddb93a029",
+    "related": "c0b804de35405467b89da1dc09dde1738ee940cb28002d62e24c47b4d65731c1",
+    "shared-build": "253ea82005e1c06c37c35e3dd2502879a4d777d5aed84592938cdd7d42f9bb1a"
+  }
+}

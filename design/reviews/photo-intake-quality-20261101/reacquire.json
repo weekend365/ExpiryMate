@@ -1,0 +1,123 @@
+[
+  {
+    "id": "fridge-01",
+    "expectedSha256": "19e3e3b8285184f27e09b163e3b8eb74417dc4be5f960ecdee35925efa8e5f46",
+    "actualSha256": "19e3e3b8285184f27e09b163e3b8eb74417dc4be5f960ecdee35925efa8e5f46",
+    "match": true,
+    "bytes": 160977
+  },
+  {
+    "id": "fridge-02",
+    "expectedSha256": "34e3f32cf005e75b434f6ffe29597754a40d87e079a23d6016b70caee99efb02",
+    "actualSha256": "34e3f32cf005e75b434f6ffe29597754a40d87e079a23d6016b70caee99efb02",
+    "match": true,
+    "bytes": 262431
+  },
+  {
+    "id": "fridge-03",
+    "expectedSha256": "77946503f3aa20b67cf651c326f150fe3a04a0fa57bb3314b24a9d8f4ef7b3c8",
+    "actualSha256": "77946503f3aa20b67cf651c326f150fe3a04a0fa57bb3314b24a9d8f4ef7b3c8",
+    "match": true,
+    "bytes": 644283
+  },
+  {
+    "id": "fridge-04",
+    "error": "HTTP Error 429: Too many requests (f061ab2)"
+  },
+  {
+    "id": "fridge-05",
+    "error": "HTTP Error 429: Too many requests (f061ab2)"
+  },
+  {
+    "id": "fridge-06",
+    "error": "HTTP Error 429: Too many requests (f061ab2)"
+  },
+  {
+    "id": "fridge-07",
+    "error": "HTTP Error 429: Too many requests (f061ab2)"
+  },
+  {
+    "id": "fridge-08",
+    "error": "HTTP Error 429: Too many requests (f061ab2)"
+  },
+  {
+    "id": "fridge-09",
+    "expectedSha256": "966766c9c34645f18efcd86de8af2e34edaf90d663b445d09db2d3d4760689f3",
+    "actualSha256": "966766c9c34645f18efcd86de8af2e34edaf90d663b445d09db2d3d4760689f3",
+    "match": true,
+    "bytes": 204795
+  },
+  {
+    "id": "fridge-10",
+    "error": "HTTP Error 429: Too many requests (f061ab2)"
+  },
+  {
+    "id": "fridge-11",
+    "expectedSha256": "fba6c48f3824d35f44f2465f82433b69d19d1da00de696652f0e5c4d004932eb",
+    "actualSha256": "fba6c48f3824d35f44f2465f82433b69d19d1da00de696652f0e5c4d004932eb",
+    "match": true,
+    "bytes": 278860
+  },
+  {
+    "id": "fridge-12",
+    "expectedSha256": "d709b9f7b1b7ffa56f8d1b07f03c0db0c23c66d2b5b0789f7369f39b4872da56",
+    "actualSha256": "d709b9f7b1b7ffa56f8d1b07f03c0db0c23c66d2b5b0789f7369f39b4872da56",
+    "match": true,
+    "bytes": 131817
+  },
+  {
+    "id": "fridge-13",
+    "expectedSha256": "0ba198d32022d404f70815667188daf254e6c56a1619657e95511e1c74848a4c",
+    "actualSha256": "0ba198d32022d404f70815667188daf254e6c56a1619657e95511e1c74848a4c",
+    "match": true,
+    "bytes": 3803163
+  },
+  {
+    "id": "fridge-14",
+    "error": "HTTP Error 429: Too many requests (f061ab2)"
+  },
+  {
+    "id": "fridge-15",
+    "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+  },
+  {
+    "id": "fridge-04",
+    "alternateHost": "upload.wikimedia.org",
+    "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+  },
+  {
+    "id": "fridge-05",
+    "alternateHost": "upload.wikimedia.org",
+    "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+  },
+  {
+    "id": "fridge-06",
+    "alternateHost": "upload.wikimedia.org",
+    "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+  },
+  {
+    "id": "fridge-07",
+    "alternateHost": "upload.wikimedia.org",
+    "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+  },
+  {
+    "id": "fridge-08",
+    "alternateHost": "upload.wikimedia.org",
+    "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+  },
+  {
+    "id": "fridge-10",
+    "alternateHost": "upload.wikimedia.org",
+    "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+  },
+  {
+    "id": "fridge-14",
+    "alternateHost": "upload.wikimedia.org",
+    "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+  },
+  {
+    "id": "fridge-15",
+    "alternateHost": "upload.wikimedia.org",
+    "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+  }
+]

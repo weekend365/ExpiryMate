@@ -1,0 +1,15 @@
+
+> @expirymate/mobile@0.1.0 backgrounds:audit /Users/namu/Desktop/ExpiryMate/apps/mobile
+> node scripts/sync-background-assets.mjs --check
+
+Home background matches its source artwork.
+Inventory background matches its source artwork.
+Recommendations background matches its source artwork.
+Shopping background matches its source artwork.
+Login background matches its source artwork.
+Welcome room background matches its source artwork.
+Ingredient preparation background matches its source artwork.
+Cooking workspace background matches its source artwork.
+Settings study background matches its source artwork.
+Insights journal background matches its source artwork.
+Shared table background matches its source artwork.

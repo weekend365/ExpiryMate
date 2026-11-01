@@ -1,0 +1,19 @@
+
+ RUN  v3.2.4 /Users/namu/Desktop/ExpiryMate/apps/mobile
+
+ ✓ src/features/photo-intake/prepare-inventory-photo.test.ts (16 tests) 5ms
+ ✓ src/features/photo-intake/pick-inventory-photo.test.ts (3 tests) 9ms
+ ✓ src/features/photo-intake/photo-intake-draft.test.ts (17 tests) 4ms
+ ✓ src/features/photo-intake/photo-bulk-edit.test.tsx (7 tests) 6ms
+ ✓ src/shared/validate-public-env.test.ts (22 tests) 4ms
+ ✓ src/features/photo-intake/photo-selection-access.test.ts (8 tests) 3ms
+ ✓ src/features/photo-intake/photo-capture-screen.test.tsx (5 tests) 3ms
+ ✓ src/features/photo-intake/photo-parse-access-ui.test.ts (4 tests) 2ms
+ ✓ src/features/photo-intake/photo-intake-selection.test.ts (2 tests) 2ms
+ ✓ src/features/photo-intake/photo-parse-enabled.test.ts (3 tests) 1ms
+
+ Test Files  10 passed (10)
+      Tests  87 passed (87)
+   Start at  15:28:25
+   Duration  2.35s (transform 176ms, setup 0ms, collect 402ms, tests 40ms, environment 1ms, prepare 297ms)
+

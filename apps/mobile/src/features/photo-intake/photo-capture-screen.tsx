@@ -209,7 +209,7 @@ export function PhotoCaptureScreen({
                 >
                   {scene === "receipt"
                     ? "영수증 전체가 보이게 맞춰 주세요"
-                    : "재료가 겹치지 않게 보여 주세요"}
+                    : "재료와 포장이 잘 보이게 찍어 주세요"}
                 </AppText>
                 {!shouldUseCompactGuide ? (
                   <AppText

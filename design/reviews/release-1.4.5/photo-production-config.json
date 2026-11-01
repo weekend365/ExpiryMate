@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-11-01T06:31:34.725377+00:00",
+  "service": "api",
+  "environment": "production",
+  "changedKeys": [
+    "INVENTORY_PHOTO_PARSE_MAX_OUTPUT_TOKENS"
+  ],
+  "before": "1800",
+  "after": "4096",
+  "modelUnchanged": true,
+  "deploymentDeferredToMainPush": true,
+  "databaseContractChanged": false
+}

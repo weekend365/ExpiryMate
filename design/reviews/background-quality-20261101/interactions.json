@@ -1,0 +1,3875 @@
+{
+  "scrollChecks": [
+    {
+      "scene": "settings",
+      "width": 360,
+      "scale": 1.3,
+      "fraction": 0.5,
+      "scrolled": {
+        "scrollTop": 346,
+        "height": 900
+      },
+      "viewport": {
+        "width": 360,
+        "height": 900
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "장고야 부탁해",
+          "x": 49,
+          "y": -201,
+          "width": 258.515625,
+          "height": 36.40625,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 26,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "알림과 추천을 생활 리듬에 맞춰봐요.",
+          "x": 49,
+          "y": -160.59375,
+          "width": 258.515625,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "Jango · 한국어 우선 재고·유통기한 관리",
+          "x": 49,
+          "y": -130.59375,
+          "width": 258.515625,
+          "height": 20.796875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "내 장고 설정",
+          "x": 24,
+          "y": -52.796875,
+          "width": 312,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "알림",
+          "x": 105,
+          "y": 11.40625,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "기한 알림 시점·시간",
+          "x": 105,
+          "y": 46.609375,
+          "width": 206,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 6,
+          "text": "추천 맞춤 설정",
+          "x": 105,
+          "y": 131.015625,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 7,
+          "text": "알레르기·식단·매운맛·조리도구",
+          "x": 105,
+          "y": 166.21875,
+          "width": 206,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 8,
+          "text": "조리 중 화면 켜두기",
+          "x": 105,
+          "y": 250.625,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 9,
+          "text": "켜짐 · 조리 중 화면 꺼짐을 막아요.",
+          "x": 105,
+          "y": 285.828125,
+          "width": 206,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 10,
+          "text": "on",
+          "x": 271,
+          "y": 340.640625,
+          "width": 40,
+          "height": 20,
+          "color": "rgb(0, 0, 0)",
+          "fontSize": 13.3333,
+          "disabled": false
+        },
+        {
+          "id": 11,
+          "text": "보관 위치",
+          "x": 105,
+          "y": 393.640625,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 12,
+          "text": "냉장·냉동·나만의 위치",
+          "x": 105,
+          "y": 428.84375,
+          "width": 206,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 13,
+          "text": "함께 쓰는 냉장고",
+          "x": 105,
+          "y": 513.25,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 14,
+          "text": "가족·동료 초대와 냉장고 전환",
+          "x": 105,
+          "y": 548.453125,
+          "width": 206,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 15,
+          "text": "계정",
+          "x": 105,
+          "y": 632.859375,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 16,
+          "text": "계정 정보·로그아웃·계정 정리",
+          "x": 105,
+          "y": 668.0625,
+          "width": 206,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 17,
+          "text": "장고 플러스",
+          "x": 105,
+          "y": 752.46875,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 18,
+          "text": "30·90일 폐기 예방 리포트와 광고 없는 AI를 살펴봐요.",
+          "x": 105,
+          "y": 787.671875,
+          "width": 206,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 19,
+          "text": "문의하기",
+          "x": 105,
+          "y": 895.484375,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 20,
+          "text": "불편한 점이나 궁금한 점을 남겨 주세요.",
+          "x": 105,
+          "y": 930.6875,
+          "width": 206,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 21,
+          "text": "개인정보",
+          "x": 105,
+          "y": 1038.5,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 22,
+          "text": "어떤 정보를 쓰는지, 어떻게 지울 수 있는지 같이 볼게요.",
+          "x": 105,
+          "y": 1073.703125,
+          "width": 206,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 25,
+          "y": -4.59375,
+          "width": 310,
+          "height": 119.609375,
+          "label": "알림",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 115.015625,
+          "width": 310,
+          "height": 119.609375,
+          "label": "추천 맞춤 설정",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 377.640625,
+          "width": 310,
+          "height": 119.609375,
+          "label": "보관 위치",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 497.25,
+          "width": 310,
+          "height": 119.609375,
+          "label": "함께 쓰는 냉장고",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 616.859375,
+          "width": 310,
+          "height": 119.609375,
+          "label": "계정",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 736.46875,
+          "width": 310,
+          "height": 143.015625,
+          "label": "장고 플러스",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 879.484375,
+          "width": 310,
+          "height": 143.015625,
+          "label": "문의하기",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 1022.5,
+          "width": 310,
+          "height": 142.015625,
+          "label": "개인정보",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 900,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.16"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/settings-study-bg-KO6OCJHT.png"
+      },
+      "contrast": [
+        {
+          "id": 4,
+          "text": "알림",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 201,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 5,
+          "text": "기한 알림 시점·시간",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 447,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 6,
+          "text": "추천 맞춤 설정",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 478,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 7,
+          "text": "알레르기·식단·매운맛·조리도구",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 682,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 8,
+          "text": "조리 중 화면 켜두기",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 595,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 9,
+          "text": "켜짐 · 조리 중 화면 꺼짐을 막아요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 773,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 11,
+          "text": "보관 위치",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 303,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 12,
+          "text": "냉장·냉동·나만의 위치",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 505,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 13,
+          "text": "함께 쓰는 냉장고",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 536,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 14,
+          "text": "가족·동료 초대와 냉장고 전환",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 638,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 15,
+          "text": "계정",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 150,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 16,
+          "text": "계정 정보·로그아웃·계정 정리",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 643,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 17,
+          "text": "장고 플러스",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 354,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 18,
+          "text": "30·90일 폐기 예방 리포트와 광고 없는 AI를 살펴봐요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 1263,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        }
+      ]
+    },
+    {
+      "scene": "settings",
+      "width": 360,
+      "scale": 1.3,
+      "fraction": 1,
+      "scrolled": {
+        "scrollTop": 692,
+        "height": 900
+      },
+      "viewport": {
+        "width": 360,
+        "height": 900
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "장고야 부탁해",
+          "x": 49,
+          "y": -547,
+          "width": 258.515625,
+          "height": 36.40625,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 26,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "알림과 추천을 생활 리듬에 맞춰봐요.",
+          "x": 49,
+          "y": -506.59375,
+          "width": 258.515625,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "Jango · 한국어 우선 재고·유통기한 관리",
+          "x": 49,
+          "y": -476.59375,
+          "width": 258.515625,
+          "height": 20.796875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "내 장고 설정",
+          "x": 24,
+          "y": -398.796875,
+          "width": 312,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "알림",
+          "x": 105,
+          "y": -334.59375,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "기한 알림 시점·시간",
+          "x": 105,
+          "y": -299.390625,
+          "width": 206,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 6,
+          "text": "추천 맞춤 설정",
+          "x": 105,
+          "y": -214.984375,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 7,
+          "text": "알레르기·식단·매운맛·조리도구",
+          "x": 105,
+          "y": -179.78125,
+          "width": 206,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 8,
+          "text": "조리 중 화면 켜두기",
+          "x": 105,
+          "y": -95.375,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 9,
+          "text": "켜짐 · 조리 중 화면 꺼짐을 막아요.",
+          "x": 105,
+          "y": -60.171875,
+          "width": 206,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 10,
+          "text": "on",
+          "x": 271,
+          "y": -5.359375,
+          "width": 40,
+          "height": 20,
+          "color": "rgb(0, 0, 0)",
+          "fontSize": 13.3333,
+          "disabled": false
+        },
+        {
+          "id": 11,
+          "text": "보관 위치",
+          "x": 105,
+          "y": 47.640625,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 12,
+          "text": "냉장·냉동·나만의 위치",
+          "x": 105,
+          "y": 82.84375,
+          "width": 206,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 13,
+          "text": "함께 쓰는 냉장고",
+          "x": 105,
+          "y": 167.25,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 14,
+          "text": "가족·동료 초대와 냉장고 전환",
+          "x": 105,
+          "y": 202.453125,
+          "width": 206,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 15,
+          "text": "계정",
+          "x": 105,
+          "y": 286.859375,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 16,
+          "text": "계정 정보·로그아웃·계정 정리",
+          "x": 105,
+          "y": 322.0625,
+          "width": 206,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 17,
+          "text": "장고 플러스",
+          "x": 105,
+          "y": 406.46875,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 18,
+          "text": "30·90일 폐기 예방 리포트와 광고 없는 AI를 살펴봐요.",
+          "x": 105,
+          "y": 441.671875,
+          "width": 206,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 19,
+          "text": "문의하기",
+          "x": 105,
+          "y": 549.484375,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 20,
+          "text": "불편한 점이나 궁금한 점을 남겨 주세요.",
+          "x": 105,
+          "y": 584.6875,
+          "width": 206,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 21,
+          "text": "개인정보",
+          "x": 105,
+          "y": 692.5,
+          "width": 206,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 22,
+          "text": "어떤 정보를 쓰는지, 어떻게 지울 수 있는지 같이 볼게요.",
+          "x": 105,
+          "y": 727.703125,
+          "width": 206,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 25,
+          "y": -350.59375,
+          "width": 310,
+          "height": 119.609375,
+          "label": "알림",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": -230.984375,
+          "width": 310,
+          "height": 119.609375,
+          "label": "추천 맞춤 설정",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 31.640625,
+          "width": 310,
+          "height": 119.609375,
+          "label": "보관 위치",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 151.25,
+          "width": 310,
+          "height": 119.609375,
+          "label": "함께 쓰는 냉장고",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 270.859375,
+          "width": 310,
+          "height": 119.609375,
+          "label": "계정",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 390.46875,
+          "width": 310,
+          "height": 143.015625,
+          "label": "장고 플러스",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 533.484375,
+          "width": 310,
+          "height": 143.015625,
+          "label": "문의하기",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 676.5,
+          "width": 310,
+          "height": 142.015625,
+          "label": "개인정보",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 900,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.16"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/settings-study-bg-KO6OCJHT.png"
+      },
+      "contrast": [
+        {
+          "id": 11,
+          "text": "보관 위치",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 303,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 12,
+          "text": "냉장·냉동·나만의 위치",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 505,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 13,
+          "text": "함께 쓰는 냉장고",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 536,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 14,
+          "text": "가족·동료 초대와 냉장고 전환",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 638,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 15,
+          "text": "계정",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 150,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 16,
+          "text": "계정 정보·로그아웃·계정 정리",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 643,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 17,
+          "text": "장고 플러스",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 354,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 18,
+          "text": "30·90일 폐기 예방 리포트와 광고 없는 AI를 살펴봐요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 1263,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 19,
+          "text": "문의하기",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 326,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 20,
+          "text": "불편한 점이나 궁금한 점을 남겨 주세요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 864,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 21,
+          "text": "개인정보",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 304,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 22,
+          "text": "어떤 정보를 쓰는지, 어떻게 지울 수 있는지 같이 볼게요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 1216,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        }
+      ]
+    },
+    {
+      "scene": "notifications",
+      "width": 360,
+      "scale": 1.3,
+      "fraction": 0.5,
+      "scrolled": {
+        "scrollTop": 441,
+        "height": 799
+      },
+      "viewport": {
+        "width": 360,
+        "height": 900
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "기기 권한 허용 · 알림 연결 확인됨",
+          "x": 48,
+          "y": -401,
+          "width": 264,
+          "height": 62.40625,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "앱의 알림 받기와 냉장고별 알림이 켜져 있어야 해요. 실제 표시 여부는 기기의 집중 모드와 네트워크 상태에 따라 달라질 수 있어요.",
+          "x": 48,
+          "y": -334.59375,
+          "width": 264,
+          "height": 104,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "연결 확인",
+          "x": 48,
+          "y": -218.203125,
+          "width": 76.84375,
+          "height": 31.203125,
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "기본 알림",
+          "x": 24,
+          "y": -130.59375,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "이 항목과 아래 알림 시점·시간은 하단 버튼으로 저장해요.",
+          "x": 24,
+          "y": -103.1875,
+          "width": 312,
+          "height": 41.59375,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "알림 받기",
+          "x": 41,
+          "y": -44.59375,
+          "width": 278,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 6,
+          "text": "만료 전과 당일 알림을 받을 수 있어요.",
+          "x": 41,
+          "y": -9.390625,
+          "width": 278,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 7,
+          "text": "on",
+          "x": 279,
+          "y": 22.015625,
+          "width": 40,
+          "height": 20,
+          "color": "rgb(0, 0, 0)",
+          "fontSize": 13.3333,
+          "disabled": false
+        },
+        {
+          "id": 8,
+          "text": "냉장고별로 묶어서 받기",
+          "x": 41,
+          "y": 59.015625,
+          "width": 278,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 9,
+          "text": "같은 날 확인할 재료를 냉장고마다 한 번에 알려드려요.",
+          "x": 41,
+          "y": 94.21875,
+          "width": 278,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 10,
+          "text": "on",
+          "x": 279,
+          "y": 149.03125,
+          "width": 40,
+          "height": 20,
+          "color": "rgb(0, 0, 0)",
+          "fontSize": 13.3333,
+          "disabled": false
+        },
+        {
+          "id": 11,
+          "text": "냉장고별 알림",
+          "x": 24,
+          "y": 202.03125,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 12,
+          "text": "변경 즉시 저장돼요. 하단 저장 버튼을 누르지 않아도 돼요.",
+          "x": 24,
+          "y": 229.4375,
+          "width": 312,
+          "height": 41.59375,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 13,
+          "text": "우리 집 냉장고",
+          "x": 89,
+          "y": 288.03125,
+          "width": 230,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 14,
+          "text": "유통기한 알림을 받고 있어요",
+          "x": 89,
+          "y": 323.234375,
+          "width": 230,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 15,
+          "text": "on",
+          "x": 279,
+          "y": 354.640625,
+          "width": 40,
+          "height": 20,
+          "color": "rgb(0, 0, 0)",
+          "fontSize": 13.3333,
+          "disabled": false
+        },
+        {
+          "id": 16,
+          "text": "알림 시점",
+          "x": 24,
+          "y": 407.640625,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 17,
+          "text": "장고가 미리 챙길 시점을 골라 주세요.",
+          "x": 24,
+          "y": 435.046875,
+          "width": 312,
+          "height": 20.796875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 18,
+          "text": "당일",
+          "x": 58,
+          "y": 489.84375,
+          "width": 31.46875,
+          "height": 26,
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 19,
+          "text": "1일 전",
+          "x": 131.46875,
+          "y": 489.84375,
+          "width": 44.1875,
+          "height": 26,
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 20,
+          "text": "3일 전",
+          "x": 217.65625,
+          "y": 489.84375,
+          "width": 47.28125,
+          "height": 26,
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 21,
+          "text": "7일 전",
+          "x": 58,
+          "y": 541.84375,
+          "width": 46.125,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 22,
+          "text": "14일 전",
+          "x": 146.125,
+          "y": 541.84375,
+          "width": 56.15625,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 23,
+          "text": "받을 시간",
+          "x": 24,
+          "y": 617.84375,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 24,
+          "text": "한국 시간 기준이에요. 선택한 시간 이후 다음 알림 점검 때 보내므로 조금 늦어질 수 있어요.",
+          "x": 24,
+          "y": 645.25,
+          "width": 312,
+          "height": 41.59375,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 25,
+          "text": "알림 시간 (24시간제)",
+          "x": 41,
+          "y": 711.84375,
+          "width": 278,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 26,
+          "text": "09:00",
+          "x": 41,
+          "y": 745.84375,
+          "width": 278,
+          "height": 52,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 27,
+          "text": "방해 금지 시간",
+          "x": 24,
+          "y": 838.84375,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 28,
+          "text": "이 시간에는 알림을 보내지 않아요. 받을 시간은 이 구간 밖으로 골라 주세요. 시작과 종료가 같으면 방해 금지를 사용하지 않아요.",
+          "x": 24,
+          "y": 866.25,
+          "width": 312,
+          "height": 62.390625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 29,
+          "text": "시작 시간",
+          "x": 41,
+          "y": 953.640625,
+          "width": 278,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 30,
+          "text": "22:00",
+          "x": 41,
+          "y": 987.640625,
+          "width": 278,
+          "height": 52,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 31,
+          "text": "종료 시간",
+          "x": 41,
+          "y": 1055.640625,
+          "width": 278,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 32,
+          "text": "07:00",
+          "x": 41,
+          "y": 1089.640625,
+          "width": 278,
+          "height": 52,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 33,
+          "text": "기본 알림 설정 저장",
+          "x": 100.6875,
+          "y": 834.390625,
+          "width": 158.625,
+          "height": 31.203125,
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 48,
+          "y": -226.59375,
+          "width": 92.84375,
+          "height": 48,
+          "label": "연결 확인",
+          "disabled": false
+        },
+        {
+          "x": 41,
+          "y": 480.84375,
+          "width": 65.46875,
+          "height": 44,
+          "label": "당일",
+          "disabled": false
+        },
+        {
+          "x": 114.46875,
+          "y": 480.84375,
+          "width": 78.1875,
+          "height": 44,
+          "label": "1일 전",
+          "disabled": false
+        },
+        {
+          "x": 200.65625,
+          "y": 480.84375,
+          "width": 81.28125,
+          "height": 44,
+          "label": "3일 전",
+          "disabled": false
+        },
+        {
+          "x": 41,
+          "y": 532.84375,
+          "width": 80.125,
+          "height": 44,
+          "label": "7일 전",
+          "disabled": false
+        },
+        {
+          "x": 129.125,
+          "y": 532.84375,
+          "width": 90.15625,
+          "height": 44,
+          "label": "14일 전",
+          "disabled": false
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "기본 알림 설정 저장",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 900,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.16"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/settings-study-bg-KO6OCJHT.png"
+      },
+      "contrast": [
+        {
+          "id": 6,
+          "text": "만료 전과 당일 알림을 받을 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 527,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 8,
+          "text": "냉장고별로 묶어서 받기",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 752,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 9,
+          "text": "같은 날 확인할 재료를 냉장고마다 한 번에 알려드려요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 1208,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 11,
+          "text": "냉장고별 알림",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 364,
+          "minContrast": 6.596447129915912,
+          "passes": true
+        },
+        {
+          "id": 12,
+          "text": "변경 즉시 저장돼요. 하단 저장 버튼을 누르지 않아도 돼요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 613,
+          "minContrast": 6.596447129915912,
+          "passes": true
+        },
+        {
+          "id": 13,
+          "text": "우리 집 냉장고",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 473,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 14,
+          "text": "유통기한 알림을 받고 있어요",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 664,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 16,
+          "text": "알림 시점",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 221,
+          "minContrast": 6.547619729016351,
+          "passes": true
+        },
+        {
+          "id": 17,
+          "text": "장고가 미리 챙길 시점을 골라 주세요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 384,
+          "minContrast": 6.5601281262639155,
+          "passes": true
+        },
+        {
+          "id": 18,
+          "text": "당일",
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "pixels": 155,
+          "minContrast": 4.988729167245214,
+          "passes": true
+        },
+        {
+          "id": 19,
+          "text": "1일 전",
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "pixels": 185,
+          "minContrast": 4.988729167245214,
+          "passes": true
+        },
+        {
+          "id": 20,
+          "text": "3일 전",
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "pixels": 201,
+          "minContrast": 4.988729167245214,
+          "passes": true
+        },
+        {
+          "id": 21,
+          "text": "7일 전",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "pixels": 178,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 22,
+          "text": "14일 전",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "pixels": 220,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 23,
+          "text": "받을 시간",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 222,
+          "minContrast": 5.280090533220276,
+          "passes": true
+        },
+        {
+          "id": 24,
+          "text": "한국 시간 기준이에요. 선택한 시간 이후 다음 알림 점검 때 보내므로 조금 늦어질 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 910,
+          "minContrast": 5.730147764596908,
+          "passes": true
+        },
+        {
+          "id": 25,
+          "text": "알림 시간 (24시간제)",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "pixels": 617,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 26,
+          "text": "09:00",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 219,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 33,
+          "text": "기본 알림 설정 저장",
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "pixels": 660,
+          "minContrast": 6.681036161629571,
+          "passes": true
+        }
+      ]
+    },
+    {
+      "scene": "notifications",
+      "width": 360,
+      "scale": 1.3,
+      "fraction": 1,
+      "scrolled": {
+        "scrollTop": 881,
+        "height": 799
+      },
+      "viewport": {
+        "width": 360,
+        "height": 900
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "기기 권한 허용 · 알림 연결 확인됨",
+          "x": 48,
+          "y": -841,
+          "width": 264,
+          "height": 62.40625,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "앱의 알림 받기와 냉장고별 알림이 켜져 있어야 해요. 실제 표시 여부는 기기의 집중 모드와 네트워크 상태에 따라 달라질 수 있어요.",
+          "x": 48,
+          "y": -774.59375,
+          "width": 264,
+          "height": 104,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "연결 확인",
+          "x": 48,
+          "y": -658.203125,
+          "width": 76.84375,
+          "height": 31.203125,
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "기본 알림",
+          "x": 24,
+          "y": -570.59375,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "이 항목과 아래 알림 시점·시간은 하단 버튼으로 저장해요.",
+          "x": 24,
+          "y": -543.1875,
+          "width": 312,
+          "height": 41.59375,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "알림 받기",
+          "x": 41,
+          "y": -484.59375,
+          "width": 278,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 6,
+          "text": "만료 전과 당일 알림을 받을 수 있어요.",
+          "x": 41,
+          "y": -449.390625,
+          "width": 278,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 7,
+          "text": "on",
+          "x": 279,
+          "y": -417.984375,
+          "width": 40,
+          "height": 20,
+          "color": "rgb(0, 0, 0)",
+          "fontSize": 13.3333,
+          "disabled": false
+        },
+        {
+          "id": 8,
+          "text": "냉장고별로 묶어서 받기",
+          "x": 41,
+          "y": -380.984375,
+          "width": 278,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 9,
+          "text": "같은 날 확인할 재료를 냉장고마다 한 번에 알려드려요.",
+          "x": 41,
+          "y": -345.78125,
+          "width": 278,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 10,
+          "text": "on",
+          "x": 279,
+          "y": -290.96875,
+          "width": 40,
+          "height": 20,
+          "color": "rgb(0, 0, 0)",
+          "fontSize": 13.3333,
+          "disabled": false
+        },
+        {
+          "id": 11,
+          "text": "냉장고별 알림",
+          "x": 24,
+          "y": -237.96875,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 12,
+          "text": "변경 즉시 저장돼요. 하단 저장 버튼을 누르지 않아도 돼요.",
+          "x": 24,
+          "y": -210.5625,
+          "width": 312,
+          "height": 41.59375,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 13,
+          "text": "우리 집 냉장고",
+          "x": 89,
+          "y": -151.96875,
+          "width": 230,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 14,
+          "text": "유통기한 알림을 받고 있어요",
+          "x": 89,
+          "y": -116.765625,
+          "width": 230,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 15,
+          "text": "on",
+          "x": 279,
+          "y": -85.359375,
+          "width": 40,
+          "height": 20,
+          "color": "rgb(0, 0, 0)",
+          "fontSize": 13.3333,
+          "disabled": false
+        },
+        {
+          "id": 16,
+          "text": "알림 시점",
+          "x": 24,
+          "y": -32.359375,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 17,
+          "text": "장고가 미리 챙길 시점을 골라 주세요.",
+          "x": 24,
+          "y": -4.953125,
+          "width": 312,
+          "height": 20.796875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 18,
+          "text": "당일",
+          "x": 58,
+          "y": 49.84375,
+          "width": 31.46875,
+          "height": 26,
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 19,
+          "text": "1일 전",
+          "x": 131.46875,
+          "y": 49.84375,
+          "width": 44.1875,
+          "height": 26,
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 20,
+          "text": "3일 전",
+          "x": 217.65625,
+          "y": 49.84375,
+          "width": 47.28125,
+          "height": 26,
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 21,
+          "text": "7일 전",
+          "x": 58,
+          "y": 101.84375,
+          "width": 46.125,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 22,
+          "text": "14일 전",
+          "x": 146.125,
+          "y": 101.84375,
+          "width": 56.15625,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 23,
+          "text": "받을 시간",
+          "x": 24,
+          "y": 177.84375,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 24,
+          "text": "한국 시간 기준이에요. 선택한 시간 이후 다음 알림 점검 때 보내므로 조금 늦어질 수 있어요.",
+          "x": 24,
+          "y": 205.25,
+          "width": 312,
+          "height": 41.59375,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 25,
+          "text": "알림 시간 (24시간제)",
+          "x": 41,
+          "y": 271.84375,
+          "width": 278,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 26,
+          "text": "09:00",
+          "x": 41,
+          "y": 305.84375,
+          "width": 278,
+          "height": 52,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 27,
+          "text": "방해 금지 시간",
+          "x": 24,
+          "y": 398.84375,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 28,
+          "text": "이 시간에는 알림을 보내지 않아요. 받을 시간은 이 구간 밖으로 골라 주세요. 시작과 종료가 같으면 방해 금지를 사용하지 않아요.",
+          "x": 24,
+          "y": 426.25,
+          "width": 312,
+          "height": 62.390625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 29,
+          "text": "시작 시간",
+          "x": 41,
+          "y": 513.640625,
+          "width": 278,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 30,
+          "text": "22:00",
+          "x": 41,
+          "y": 547.640625,
+          "width": 278,
+          "height": 52,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 31,
+          "text": "종료 시간",
+          "x": 41,
+          "y": 615.640625,
+          "width": 278,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 32,
+          "text": "07:00",
+          "x": 41,
+          "y": 649.640625,
+          "width": 278,
+          "height": 52,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 33,
+          "text": "기본 알림 설정 저장",
+          "x": 100.6875,
+          "y": 834.390625,
+          "width": 158.625,
+          "height": 31.203125,
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 48,
+          "y": -666.59375,
+          "width": 92.84375,
+          "height": 48,
+          "label": "연결 확인",
+          "disabled": false
+        },
+        {
+          "x": 41,
+          "y": 40.84375,
+          "width": 65.46875,
+          "height": 44,
+          "label": "당일",
+          "disabled": false
+        },
+        {
+          "x": 114.46875,
+          "y": 40.84375,
+          "width": 78.1875,
+          "height": 44,
+          "label": "1일 전",
+          "disabled": false
+        },
+        {
+          "x": 200.65625,
+          "y": 40.84375,
+          "width": 81.28125,
+          "height": 44,
+          "label": "3일 전",
+          "disabled": false
+        },
+        {
+          "x": 41,
+          "y": 92.84375,
+          "width": 80.125,
+          "height": 44,
+          "label": "7일 전",
+          "disabled": false
+        },
+        {
+          "x": 129.125,
+          "y": 92.84375,
+          "width": 90.15625,
+          "height": 44,
+          "label": "14일 전",
+          "disabled": false
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "기본 알림 설정 저장",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 900,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.16"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/settings-study-bg-KO6OCJHT.png"
+      },
+      "contrast": [
+        {
+          "id": 17,
+          "text": "장고가 미리 챙길 시점을 골라 주세요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 308,
+          "minContrast": 6.6786946567497365,
+          "passes": true
+        },
+        {
+          "id": 18,
+          "text": "당일",
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "pixels": 155,
+          "minContrast": 4.988729167245214,
+          "passes": true
+        },
+        {
+          "id": 19,
+          "text": "1일 전",
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "pixels": 185,
+          "minContrast": 4.988729167245214,
+          "passes": true
+        },
+        {
+          "id": 20,
+          "text": "3일 전",
+          "color": "rgb(40, 103, 79)",
+          "fontSize": 18.2,
+          "pixels": 201,
+          "minContrast": 4.988729167245214,
+          "passes": true
+        },
+        {
+          "id": 21,
+          "text": "7일 전",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "pixels": 178,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 22,
+          "text": "14일 전",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "pixels": 220,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 23,
+          "text": "받을 시간",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 222,
+          "minContrast": 6.592509438713218,
+          "passes": true
+        },
+        {
+          "id": 24,
+          "text": "한국 시간 기준이에요. 선택한 시간 이후 다음 알림 점검 때 보내므로 조금 늦어질 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 910,
+          "minContrast": 6.54372580271846,
+          "passes": true
+        },
+        {
+          "id": 25,
+          "text": "알림 시간 (24시간제)",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "pixels": 617,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 26,
+          "text": "09:00",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 219,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 27,
+          "text": "방해 금지 시간",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 340,
+          "minContrast": 6.547619729016351,
+          "passes": true
+        },
+        {
+          "id": 28,
+          "text": "이 시간에는 알림을 보내지 않아요. 받을 시간은 이 구간 밖으로 골라 주세요. 시작과 종료가 같으면 방해 금지를 사용하지 않아요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 1211,
+          "minContrast": 6.547619729016351,
+          "passes": true
+        },
+        {
+          "id": 29,
+          "text": "시작 시간",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "pixels": 213,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 30,
+          "text": "22:00",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 212,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 31,
+          "text": "종료 시간",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "pixels": 250,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 32,
+          "text": "07:00",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 195,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 33,
+          "text": "기본 알림 설정 저장",
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "pixels": 660,
+          "minContrast": 6.681036161629571,
+          "passes": true
+        }
+      ]
+    },
+    {
+      "scene": "privacy",
+      "width": 360,
+      "scale": 1.3,
+      "fraction": 0.5,
+      "scrolled": {
+        "scrollTop": 270,
+        "height": 900
+      },
+      "viewport": {
+        "width": 360,
+        "height": 900
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "살펴보기",
+          "x": 24,
+          "y": -246,
+          "width": 312,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "짧게 읽고, 필요할 때만 더 열어보세요.",
+          "x": 24,
+          "y": -206.796875,
+          "width": 312,
+          "height": 26,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "개인정보 다루는 방법",
+          "x": 113,
+          "y": -139.796875,
+          "width": 162,
+          "height": 62.40625,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "장고야 부탁해는 계정, 넣은 재료와 유통기한, 알림 설정, 공유 초대, 그동안 받은 요리 추천을 서비스를 위해 써요.",
+          "x": 113,
+          "y": -73.390625,
+          "width": 162,
+          "height": 103.984375,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "데이터 삭제·동의 철회 안내",
+          "x": 113,
+          "y": 79.59375,
+          "width": 162,
+          "height": 62.40625,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "앱에서 동의 철회, 추천 기록 정리, 계정 정리를 하는 방법을 웹에서도 볼 수 있어요.",
+          "x": 113,
+          "y": 146,
+          "width": 162,
+          "height": 83.1875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 6,
+          "text": "요리 추천 안내",
+          "x": 113,
+          "y": 278.1875,
+          "width": 162,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 7,
+          "text": "요리 추천을 부탁하면, 보관 중인 재료 일부와 고른 조건이 장고 서버를 거쳐 외부 요리 도우미로 전달돼요. 동의는 언제든 거둘 수 있어요.",
+          "x": 113,
+          "y": 313.390625,
+          "width": 162,
+          "height": 124.78125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 8,
+          "text": "추천 기록",
+          "x": 24,
+          "y": 495.171875,
+          "width": 312,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 9,
+          "text": "계정은 두고, 받은 추천과 즐겨찾기만 지울 수 있어요.",
+          "x": 24,
+          "y": 534.375,
+          "width": 312,
+          "height": 52,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 10,
+          "text": "추천 기록과 즐겨찾기 정리",
+          "x": 113,
+          "y": 627.375,
+          "width": 162,
+          "height": 62.40625,
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 11,
+          "text": "지금 8건의 추천이 남아 있어요. 정리하면 바로 지워져요.",
+          "x": 113,
+          "y": 693.78125,
+          "width": 162,
+          "height": 62.390625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 12,
+          "text": "계정 정리",
+          "x": 24,
+          "y": 813.171875,
+          "width": 312,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 13,
+          "text": "떠나실 때도 데이터를 직접 지우실 수 있어요.",
+          "x": 24,
+          "y": 852.375,
+          "width": 312,
+          "height": 52,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 14,
+          "text": "계정과 데이터 정리",
+          "x": 113,
+          "y": 945.375,
+          "width": 162,
+          "height": 31.203125,
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 15,
+          "text": "개인 냉장고의 재료와 내 추천·알림·로그인 정보가 지워져요. 함께 쓰는 공동 재고는 유지돼요.",
+          "x": 113,
+          "y": 980.578125,
+          "width": 162,
+          "height": 83.1875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 25,
+          "y": -163.796875,
+          "width": 310,
+          "height": 219.390625,
+          "label": "개인정보 다루는 방법",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 55.59375,
+          "width": 310,
+          "height": 198.59375,
+          "label": "데이터 삭제·동의 철회 안내",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 254.1875,
+          "width": 310,
+          "height": 207.984375,
+          "label": "요리 추천 안내",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 603.375,
+          "width": 310,
+          "height": 176.796875,
+          "label": "추천 기록과 즐겨찾기 정리",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 921.375,
+          "width": 310,
+          "height": 166.390625,
+          "label": "계정과 데이터 정리",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 900,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.97"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/settings-study-bg-KO6OCJHT.png"
+      },
+      "contrast": [
+        {
+          "id": 3,
+          "text": "장고야 부탁해는 계정, 넣은 재료와 유통기한, 알림 설정, 공유 초대, 그동안 받은 요리 추천을 서비스를 위해 써요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 194,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 4,
+          "text": "데이터 삭제·동의 철회 안내",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 1069,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 5,
+          "text": "앱에서 동의 철회, 추천 기록 정리, 계정 정리를 하는 방법을 웹에서도 볼 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 947,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 6,
+          "text": "요리 추천 안내",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 518,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 7,
+          "text": "요리 추천을 부탁하면, 보관 중인 재료 일부와 고른 조건이 장고 서버를 거쳐 외부 요리 도우미로 전달돼요. 동의는 언제든 거둘 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 1457,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 8,
+          "text": "추천 기록",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 299,
+          "minContrast": 12.695142548878042,
+          "passes": true
+        },
+        {
+          "id": 9,
+          "text": "계정은 두고, 받은 추천과 즐겨찾기만 지울 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "pixels": 865,
+          "minContrast": 6.616896748672104,
+          "passes": true
+        },
+        {
+          "id": 10,
+          "text": "추천 기록과 즐겨찾기 정리",
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 20.8,
+          "pixels": 960,
+          "minContrast": 7.036568489013855,
+          "passes": true
+        },
+        {
+          "id": 11,
+          "text": "지금 8건의 추천이 남아 있어요. 정리하면 바로 지워져요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 583,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 12,
+          "text": "계정 정리",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 294,
+          "minContrast": 12.805959347785736,
+          "passes": true
+        },
+        {
+          "id": 13,
+          "text": "떠나실 때도 데이터를 직접 지우실 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "pixels": 742,
+          "minContrast": 6.6786946567497365,
+          "passes": true
+        }
+      ]
+    },
+    {
+      "scene": "privacy",
+      "width": 360,
+      "scale": 1.3,
+      "fraction": 1,
+      "scrolled": {
+        "scrollTop": 539,
+        "height": 900
+      },
+      "viewport": {
+        "width": 360,
+        "height": 900
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "살펴보기",
+          "x": 24,
+          "y": -515,
+          "width": 312,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "짧게 읽고, 필요할 때만 더 열어보세요.",
+          "x": 24,
+          "y": -475.796875,
+          "width": 312,
+          "height": 26,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "개인정보 다루는 방법",
+          "x": 113,
+          "y": -408.796875,
+          "width": 162,
+          "height": 62.40625,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "장고야 부탁해는 계정, 넣은 재료와 유통기한, 알림 설정, 공유 초대, 그동안 받은 요리 추천을 서비스를 위해 써요.",
+          "x": 113,
+          "y": -342.390625,
+          "width": 162,
+          "height": 103.984375,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "데이터 삭제·동의 철회 안내",
+          "x": 113,
+          "y": -189.40625,
+          "width": 162,
+          "height": 62.40625,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "앱에서 동의 철회, 추천 기록 정리, 계정 정리를 하는 방법을 웹에서도 볼 수 있어요.",
+          "x": 113,
+          "y": -123,
+          "width": 162,
+          "height": 83.1875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 6,
+          "text": "요리 추천 안내",
+          "x": 113,
+          "y": 9.1875,
+          "width": 162,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 7,
+          "text": "요리 추천을 부탁하면, 보관 중인 재료 일부와 고른 조건이 장고 서버를 거쳐 외부 요리 도우미로 전달돼요. 동의는 언제든 거둘 수 있어요.",
+          "x": 113,
+          "y": 44.390625,
+          "width": 162,
+          "height": 124.78125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 8,
+          "text": "추천 기록",
+          "x": 24,
+          "y": 226.171875,
+          "width": 312,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 9,
+          "text": "계정은 두고, 받은 추천과 즐겨찾기만 지울 수 있어요.",
+          "x": 24,
+          "y": 265.375,
+          "width": 312,
+          "height": 52,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 10,
+          "text": "추천 기록과 즐겨찾기 정리",
+          "x": 113,
+          "y": 358.375,
+          "width": 162,
+          "height": 62.40625,
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 11,
+          "text": "지금 8건의 추천이 남아 있어요. 정리하면 바로 지워져요.",
+          "x": 113,
+          "y": 424.78125,
+          "width": 162,
+          "height": 62.390625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 12,
+          "text": "계정 정리",
+          "x": 24,
+          "y": 544.171875,
+          "width": 312,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 13,
+          "text": "떠나실 때도 데이터를 직접 지우실 수 있어요.",
+          "x": 24,
+          "y": 583.375,
+          "width": 312,
+          "height": 52,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 14,
+          "text": "계정과 데이터 정리",
+          "x": 113,
+          "y": 676.375,
+          "width": 162,
+          "height": 31.203125,
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 15,
+          "text": "개인 냉장고의 재료와 내 추천·알림·로그인 정보가 지워져요. 함께 쓰는 공동 재고는 유지돼요.",
+          "x": 113,
+          "y": 711.578125,
+          "width": 162,
+          "height": 83.1875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 25,
+          "y": -432.796875,
+          "width": 310,
+          "height": 219.390625,
+          "label": "개인정보 다루는 방법",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": -213.40625,
+          "width": 310,
+          "height": 198.59375,
+          "label": "데이터 삭제·동의 철회 안내",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": -14.8125,
+          "width": 310,
+          "height": 207.984375,
+          "label": "요리 추천 안내",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 334.375,
+          "width": 310,
+          "height": 176.796875,
+          "label": "추천 기록과 즐겨찾기 정리",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 652.375,
+          "width": 310,
+          "height": 166.390625,
+          "label": "계정과 데이터 정리",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 900,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.97"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/settings-study-bg-KO6OCJHT.png"
+      },
+      "contrast": [
+        {
+          "id": 6,
+          "text": "요리 추천 안내",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 518,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 7,
+          "text": "요리 추천을 부탁하면, 보관 중인 재료 일부와 고른 조건이 장고 서버를 거쳐 외부 요리 도우미로 전달돼요. 동의는 언제든 거둘 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 1457,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 8,
+          "text": "추천 기록",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 299,
+          "minContrast": 12.805959347785736,
+          "passes": true
+        },
+        {
+          "id": 9,
+          "text": "계정은 두고, 받은 추천과 즐겨찾기만 지울 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "pixels": 865,
+          "minContrast": 6.6786946567497365,
+          "passes": true
+        },
+        {
+          "id": 10,
+          "text": "추천 기록과 즐겨찾기 정리",
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 20.8,
+          "pixels": 960,
+          "minContrast": 7.036568489013855,
+          "passes": true
+        },
+        {
+          "id": 11,
+          "text": "지금 8건의 추천이 남아 있어요. 정리하면 바로 지워져요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 583,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 12,
+          "text": "계정 정리",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 294,
+          "minContrast": 12.687465908679256,
+          "passes": true
+        },
+        {
+          "id": 13,
+          "text": "떠나실 때도 데이터를 직접 지우실 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "pixels": 742,
+          "minContrast": 6.6209003484403866,
+          "passes": true
+        },
+        {
+          "id": 14,
+          "text": "계정과 데이터 정리",
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 20.8,
+          "pixels": 758,
+          "minContrast": 7.036568489013855,
+          "passes": true
+        },
+        {
+          "id": 15,
+          "text": "개인 냉장고의 재료와 내 추천·알림·로그인 정보가 지워져요. 함께 쓰는 공동 재고는 유지돼요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 910,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        }
+      ]
+    },
+    {
+      "scene": "sharing",
+      "width": 360,
+      "scale": 1.3,
+      "fraction": 0.5,
+      "scrolled": null,
+      "viewport": {
+        "width": 360,
+        "height": 900
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "참여하기",
+          "x": 24,
+          "y": 16,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "초대 코드로 참여",
+          "x": 89,
+          "y": 56.40625,
+          "width": 230,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "가족이나 매장 동료에게 받은 8자리 코드를 입력해요.",
+          "x": 89,
+          "y": 91.609375,
+          "width": 230,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "내 냉장고",
+          "x": 24,
+          "y": 199.421875,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "우리 집 냉장고",
+          "x": 89,
+          "y": 239.828125,
+          "width": 230,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "2명이 함께 써요 · 지금 보는 중",
+          "x": 89,
+          "y": 275.03125,
+          "width": 230,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 6,
+          "text": "냉장고 만들기",
+          "x": 137.59375,
+          "y": 834.390625,
+          "width": 112.796875,
+          "height": 31.203125,
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 25,
+          "y": 48.40625,
+          "width": 310,
+          "height": 126.015625,
+          "label": "초대 코드로 참여",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 231.828125,
+          "width": 310,
+          "height": 102.609375,
+          "label": "우리 집 냉장고",
+          "disabled": false
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "냉장고 만들기",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 900,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.16"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/shared-table-bg-WOOXNW44.png"
+      },
+      "contrast": [
+        {
+          "id": 0,
+          "text": "참여하기",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 194,
+          "minContrast": 6.6786946567497365,
+          "passes": true
+        },
+        {
+          "id": 1,
+          "text": "초대 코드로 참여",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 490,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 2,
+          "text": "가족이나 매장 동료에게 받은 8자리 코드를 입력해요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 1250,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 3,
+          "text": "내 냉장고",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 212,
+          "minContrast": 6.454715273980033,
+          "passes": true
+        },
+        {
+          "id": 4,
+          "text": "우리 집 냉장고",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 473,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 5,
+          "text": "2명이 함께 써요 · 지금 보는 중",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 681,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 6,
+          "text": "냉장고 만들기",
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "pixels": 404,
+          "minContrast": 6.681036161629571,
+          "passes": true
+        }
+      ]
+    },
+    {
+      "scene": "sharing",
+      "width": 360,
+      "scale": 1.3,
+      "fraction": 1,
+      "scrolled": null,
+      "viewport": {
+        "width": 360,
+        "height": 900
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "참여하기",
+          "x": 24,
+          "y": 16,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "초대 코드로 참여",
+          "x": 89,
+          "y": 56.40625,
+          "width": 230,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "가족이나 매장 동료에게 받은 8자리 코드를 입력해요.",
+          "x": 89,
+          "y": 91.609375,
+          "width": 230,
+          "height": 46.8125,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "내 냉장고",
+          "x": 24,
+          "y": 199.421875,
+          "width": 312,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "우리 집 냉장고",
+          "x": 89,
+          "y": 239.828125,
+          "width": 230,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "2명이 함께 써요 · 지금 보는 중",
+          "x": 89,
+          "y": 275.03125,
+          "width": 230,
+          "height": 23.40625,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "disabled": false
+        },
+        {
+          "id": 6,
+          "text": "냉장고 만들기",
+          "x": 137.59375,
+          "y": 834.390625,
+          "width": 112.796875,
+          "height": 31.203125,
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 25,
+          "y": 48.40625,
+          "width": 310,
+          "height": 126.015625,
+          "label": "초대 코드로 참여",
+          "disabled": false
+        },
+        {
+          "x": 25,
+          "y": 231.828125,
+          "width": 310,
+          "height": 102.609375,
+          "label": "우리 집 냉장고",
+          "disabled": false
+        },
+        {
+          "x": 24,
+          "y": 824,
+          "width": 312,
+          "height": 52,
+          "label": "냉장고 만들기",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 900,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.16"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/shared-table-bg-WOOXNW44.png"
+      },
+      "contrast": [
+        {
+          "id": 0,
+          "text": "참여하기",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 194,
+          "minContrast": 6.6786946567497365,
+          "passes": true
+        },
+        {
+          "id": 1,
+          "text": "초대 코드로 참여",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 490,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 2,
+          "text": "가족이나 매장 동료에게 받은 8자리 코드를 입력해요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 1250,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 3,
+          "text": "내 냉장고",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 212,
+          "minContrast": 6.454715273980033,
+          "passes": true
+        },
+        {
+          "id": 4,
+          "text": "우리 집 냉장고",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 473,
+          "minContrast": 13.52357770663771,
+          "passes": true
+        },
+        {
+          "id": 5,
+          "text": "2명이 함께 써요 · 지금 보는 중",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 16.9,
+          "pixels": 681,
+          "minContrast": 7.0529543095167035,
+          "passes": true
+        },
+        {
+          "id": 6,
+          "text": "냉장고 만들기",
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "pixels": 404,
+          "minContrast": 6.681036161629571,
+          "passes": true
+        }
+      ]
+    },
+    {
+      "scene": "records",
+      "width": 360,
+      "scale": 1.3,
+      "fraction": 0.5,
+      "scrolled": null,
+      "viewport": {
+        "width": 360,
+        "height": 900
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "버린 재료를 다음 행동으로 바꿔요",
+          "x": 24,
+          "y": 24,
+          "width": 312,
+          "height": 33.796875,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 23.4,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "현재 선택한 냉장고에서 소비·폐기로 마친 기록만 집계합니다.",
+          "x": 24,
+          "y": 61.796875,
+          "width": 312,
+          "height": 52,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "최근 30일 미리보기",
+          "x": 57,
+          "y": 162.796875,
+          "width": 246,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "2026년 10월 1일 목부터 2026년 10월 31일 토까지",
+          "x": 57,
+          "y": 202,
+          "width": 246,
+          "height": 52,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "12개",
+          "x": 57,
+          "y": 286,
+          "width": 45.078125,
+          "height": 33.796875,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 23.4,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "소비 완료",
+          "x": 57,
+          "y": 323.796875,
+          "width": 57.75,
+          "height": 20.796875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 6,
+          "text": "2개",
+          "x": 192,
+          "y": 286,
+          "width": 34.34375,
+          "height": 33.796875,
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 23.4,
+          "disabled": false
+        },
+        {
+          "id": 7,
+          "text": "폐기",
+          "x": 192,
+          "y": 323.796875,
+          "width": 26.96875,
+          "height": 20.796875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 8,
+          "text": "기록이 충분히 쌓였어요. 플러스에서 폐기율, 주간 추세와 실천 제안을 확인할 수 있어요.",
+          "x": 57,
+          "y": 376.59375,
+          "width": 246,
+          "height": 78,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 9,
+          "text": "장고 플러스 살펴보기",
+          "x": 94.15625,
+          "y": 488.984375,
+          "width": 171.671875,
+          "height": 31.203125,
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 57,
+          "y": 478.59375,
+          "width": 246,
+          "height": 52,
+          "label": "장고 플러스 살펴보기",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 900,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.16"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/insights-journal-bg-NQLL7IXT.png"
+      },
+      "contrast": [
+        {
+          "id": 0,
+          "text": "버린 재료를 다음 행동으로 바꿔요",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 23.4,
+          "pixels": 1556,
+          "minContrast": 12.805959347785736,
+          "passes": true
+        },
+        {
+          "id": 1,
+          "text": "현재 선택한 냉장고에서 소비·폐기로 마친 기록만 집계합니다.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "pixels": 1067,
+          "minContrast": 6.6786946567497365,
+          "passes": true
+        },
+        {
+          "id": 2,
+          "text": "최근 30일 미리보기",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 653,
+          "minContrast": 12.435268835529653,
+          "passes": true
+        },
+        {
+          "id": 3,
+          "text": "2026년 10월 1일 목부터 2026년 10월 31일 토까지",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "pixels": 964,
+          "minContrast": 6.48536835637064,
+          "passes": true
+        },
+        {
+          "id": 4,
+          "text": "12개",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 23.4,
+          "pixels": 248,
+          "minContrast": 12.435268835529653,
+          "passes": true
+        },
+        {
+          "id": 5,
+          "text": "소비 완료",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 96,
+          "minContrast": 6.48536835637064,
+          "passes": true
+        },
+        {
+          "id": 6,
+          "text": "2개",
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 23.4,
+          "pixels": 172,
+          "minContrast": 6.470301183506787,
+          "passes": true
+        },
+        {
+          "id": 7,
+          "text": "폐기",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 52,
+          "minContrast": 6.48536835637064,
+          "passes": true
+        },
+        {
+          "id": 8,
+          "text": "기록이 충분히 쌓였어요. 플러스에서 폐기율, 주간 추세와 실천 제안을 확인할 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "pixels": 1483,
+          "minContrast": 6.48536835637064,
+          "passes": true
+        },
+        {
+          "id": 9,
+          "text": "장고 플러스 살펴보기",
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "pixels": 674,
+          "minContrast": 6.681036161629571,
+          "passes": true
+        }
+      ]
+    },
+    {
+      "scene": "records",
+      "width": 360,
+      "scale": 1.3,
+      "fraction": 1,
+      "scrolled": null,
+      "viewport": {
+        "width": 360,
+        "height": 900
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "버린 재료를 다음 행동으로 바꿔요",
+          "x": 24,
+          "y": 24,
+          "width": 312,
+          "height": 33.796875,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 23.4,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "현재 선택한 냉장고에서 소비·폐기로 마친 기록만 집계합니다.",
+          "x": 24,
+          "y": 61.796875,
+          "width": 312,
+          "height": 52,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "최근 30일 미리보기",
+          "x": 57,
+          "y": 162.796875,
+          "width": 246,
+          "height": 31.203125,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "2026년 10월 1일 목부터 2026년 10월 31일 토까지",
+          "x": 57,
+          "y": 202,
+          "width": 246,
+          "height": 52,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "12개",
+          "x": 57,
+          "y": 286,
+          "width": 45.078125,
+          "height": 33.796875,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 23.4,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "소비 완료",
+          "x": 57,
+          "y": 323.796875,
+          "width": 57.75,
+          "height": 20.796875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 6,
+          "text": "2개",
+          "x": 192,
+          "y": 286,
+          "width": 34.34375,
+          "height": 33.796875,
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 23.4,
+          "disabled": false
+        },
+        {
+          "id": 7,
+          "text": "폐기",
+          "x": 192,
+          "y": 323.796875,
+          "width": 26.96875,
+          "height": 20.796875,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "disabled": false
+        },
+        {
+          "id": 8,
+          "text": "기록이 충분히 쌓였어요. 플러스에서 폐기율, 주간 추세와 실천 제안을 확인할 수 있어요.",
+          "x": 57,
+          "y": 376.59375,
+          "width": 246,
+          "height": 78,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 9,
+          "text": "장고 플러스 살펴보기",
+          "x": 94.15625,
+          "y": 488.984375,
+          "width": 171.671875,
+          "height": 31.203125,
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 57,
+          "y": 478.59375,
+          "width": 246,
+          "height": 52,
+          "label": "장고 플러스 살펴보기",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 900,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.16"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/insights-journal-bg-NQLL7IXT.png"
+      },
+      "contrast": [
+        {
+          "id": 0,
+          "text": "버린 재료를 다음 행동으로 바꿔요",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 23.4,
+          "pixels": 1556,
+          "minContrast": 12.805959347785736,
+          "passes": true
+        },
+        {
+          "id": 1,
+          "text": "현재 선택한 냉장고에서 소비·폐기로 마친 기록만 집계합니다.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "pixels": 1067,
+          "minContrast": 6.6786946567497365,
+          "passes": true
+        },
+        {
+          "id": 2,
+          "text": "최근 30일 미리보기",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "pixels": 653,
+          "minContrast": 12.435268835529653,
+          "passes": true
+        },
+        {
+          "id": 3,
+          "text": "2026년 10월 1일 목부터 2026년 10월 31일 토까지",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "pixels": 964,
+          "minContrast": 6.48536835637064,
+          "passes": true
+        },
+        {
+          "id": 4,
+          "text": "12개",
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 23.4,
+          "pixels": 248,
+          "minContrast": 12.435268835529653,
+          "passes": true
+        },
+        {
+          "id": 5,
+          "text": "소비 완료",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 96,
+          "minContrast": 6.48536835637064,
+          "passes": true
+        },
+        {
+          "id": 6,
+          "text": "2개",
+          "color": "rgb(165, 44, 35)",
+          "fontSize": 23.4,
+          "pixels": 172,
+          "minContrast": 6.470301183506787,
+          "passes": true
+        },
+        {
+          "id": 7,
+          "text": "폐기",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 15.6,
+          "pixels": 52,
+          "minContrast": 6.48536835637064,
+          "passes": true
+        },
+        {
+          "id": 8,
+          "text": "기록이 충분히 쌓였어요. 플러스에서 폐기율, 주간 추세와 실천 제안을 확인할 수 있어요.",
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "pixels": 1483,
+          "minContrast": 6.48536835637064,
+          "passes": true
+        },
+        {
+          "id": 9,
+          "text": "장고 플러스 살펴보기",
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "pixels": 674,
+          "minContrast": 6.681036161629571,
+          "passes": true
+        }
+      ]
+    }
+  ],
+  "keyboardChecks": [
+    {
+      "viewport": {
+        "width": 360,
+        "height": 480
+      },
+      "documentWidth": 360,
+      "texts": [
+        {
+          "id": 0,
+          "text": "비밀번호를 잊었어요",
+          "x": 24,
+          "y": 24,
+          "width": 312,
+          "height": 36.40625,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 26,
+          "disabled": false
+        },
+        {
+          "id": 1,
+          "text": "재설정 링크를 메일로 보내드릴게요.",
+          "x": 24,
+          "y": 68.40625,
+          "width": 312,
+          "height": 26,
+          "color": "rgb(81, 91, 85)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 2,
+          "text": "이메일만 알려주시면, 장고가 재설정 길을 안내할게요.",
+          "x": 129,
+          "y": 143.40625,
+          "width": 190,
+          "height": 78,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 3,
+          "text": "이메일",
+          "x": 24,
+          "y": 262.40625,
+          "width": 312,
+          "height": 26,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 18.2,
+          "disabled": false
+        },
+        {
+          "id": 4,
+          "text": "qa@example.test",
+          "x": 24,
+          "y": 320.40625,
+          "width": 312,
+          "height": 52,
+          "color": "rgb(48, 46, 44)",
+          "fontSize": 20.8,
+          "disabled": false
+        },
+        {
+          "id": 5,
+          "text": "재설정 메일 받기",
+          "x": 112.140625,
+          "y": 414.390625,
+          "width": 135.71875,
+          "height": 31.203125,
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20.8,
+          "disabled": false
+        }
+      ],
+      "buttons": [
+        {
+          "x": 24,
+          "y": 404,
+          "width": 312,
+          "height": 52,
+          "label": "재설정 메일 받기",
+          "disabled": false
+        }
+      ],
+      "layer": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 480,
+        "hidden": "true",
+        "pointerEvents": "none",
+        "veil": "0.16"
+      },
+      "image": {
+        "loaded": true,
+        "width": 1024,
+        "height": 1536,
+        "src": "./assets/welcome-room-bg-ENFZWZWI.png"
+      },
+      "email": "qa@example.test",
+      "focus": true,
+      "simulatedViewport": true
+    }
+  ],
+  "nativeKeyboard": false
+}

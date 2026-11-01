@@ -1,0 +1,43 @@
+const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+const sharp=require('/Users/namu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp');
+const base=__dirname,out='/Users/namu/Desktop/ExpiryMate/design/reviews/jango-size-rollback-20261101';
+const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+(async()=>{
+ const matrix=JSON.parse(fs.readFileSync(base+'/matrix.json'));
+ assert.equal(matrix.length,198);
+ const checks=[];
+ for(const after of matrix.filter(r=>r.variant==='after')){
+  const before=matrix.find(r=>r.variant==='before'&&r.scene===after.scene&&r.width===after.width&&r.scale===after.scale);
+  const expectedAfter=after.scene==='onboarding'?112:72;
+  const expectedBefore=['home','recommendations','shopping','settings'].includes(after.scene)?112:['register-keyboard','register-progress','cooking-progress'].includes(after.scene)?72:160;
+  assert.equal(after.mascot.width,expectedAfter);assert.equal(after.mascot.height,expectedAfter);
+  assert.equal(before.mascot.width,expectedBefore);assert.equal(before.mascot.height,expectedBefore);
+  assert.equal(before.bubbleDirection,after.bubbleDirection);
+  for(const item of [before,after]){
+   assert.equal(item.decorationVisible,true);assert.equal(item.imageLoaded,true);assert.equal(item.errors.length,0);assert.equal(item.documentWidth,item.width);
+   if('primaryActionWorks'in item)assert.equal(item.primaryActionWorks,true);
+   if(item.scene==='register-keyboard')assert.equal(item.focused,'ingredient-input');
+   if(item.scene==='settings')assert.equal(item.lastSettingsActionReachable,true);
+   if(item.scene==='onboarding')assert.equal(item.onboardingFooterVisible,true);
+   assert(item.buttons.every(b=>b.width>=48&&b.height>=48),'Button bounds');
+  }
+  checks.push({scene:after.scene,width:after.width,fontScale:after.scale,before:expectedBefore,after:expectedAfter,direction:after.bubbleDirection,overflow:false,passed:true});
+ }
+ fs.writeFileSync(out+'/layout-checks.json',JSON.stringify({caseCount:99,renderCount:198,checks,matrix},null,2));
+ const images=[];
+ for(const file of fs.readdirSync(base+'/captures').filter(f=>f.startsWith('after-'))){
+  const scene=file.slice(6,-4),before=base+'/captures/before-'+scene+'.png',after=base+'/captures/'+file;
+  const meta=await sharp(after).metadata(),gap=12,top=32;
+  const labels=Buffer.from(`<svg width="${meta.width*2+gap}" height="${top}"><rect width="100%" height="100%" fill="#f4f1eb"/><text x="12" y="22" font-family="Helvetica" font-size="14" fill="#333">Before</text><text x="${meta.width+gap+12}" y="22" font-family="Helvetica" font-size="14" fill="#333">Restored</text></svg>`);
+  const dest=out+'/'+scene+'.jpg';
+  await sharp({create:{width:meta.width*2+gap,height:meta.height+top,channels:3,background:'#f4f1eb'}}).composite([{input:labels,left:0,top:0},{input:before,left:0,top},{input:after,left:meta.width+gap,top}]).jpeg({quality:86}).toFile(dest);
+  images.push({file:scene+'.jpg',sha256:hash(fs.readFileSync(dest)),beforeCaptureSHA256:hash(fs.readFileSync(before)),afterCaptureSHA256:hash(fs.readFileSync(after))});
+ }
+ fs.copyFileSync(base+'/source-audit.json',out+'/source-audit.json');
+ const scripts=[];
+ for(const name of ['build.cjs','capture.cjs','audit.cjs','finalize.cjs']){
+  fs.copyFileSync(base+'/'+name,out+'/'+name+'.txt');scripts.push({file:name+'.txt',sha256:hash(fs.readFileSync(base+'/'+name))});
+ }
+ fs.writeFileSync(out+'/evidence.json',JSON.stringify({generatedAt:new Date().toISOString(),baseline:JSON.parse(fs.readFileSync(base+'/sources.json')).baseline,images,scripts,layoutSHA256:hash(fs.readFileSync(out+'/layout-checks.json')),sourceAuditSHA256:hash(fs.readFileSync(out+'/source-audit.json'))},null,2));
+ console.log('Verified 99 before/after pairs; retained '+images.length+' comparison images.');
+})().catch(e=>{console.error(e);process.exitCode=1;});

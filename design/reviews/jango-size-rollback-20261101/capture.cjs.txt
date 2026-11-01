@@ -1,0 +1,50 @@
+const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
+const {chromium}=require('/Users/namu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core');
+const base=__dirname,root='/Users/namu/Desktop/ExpiryMate';
+const scenes=['home','recommendations','shopping','settings','onboarding','register-first','register-keyboard','register-progress','register-done','cooking-progress','cooking-done'];
+const captures=new Set(['home-360-1','recommendations-780-1','shopping-320-2','settings-360-1','onboarding-360-1','register-first-360-1','register-keyboard-780-1','register-done-360-1','cooking-done-320-2']);
+const server=http.createServer((req,res)=>{
+ const url=new URL(req.url,'http://127.0.0.1');
+ const variant=(url.searchParams.get('variant')==='before'||url.pathname==='/entry-before.js')?'before':'after';
+ const rel=decodeURIComponent(url.pathname);
+ const target=rel.startsWith('/fonts/')?root+'/apps/mobile/assets'+rel:path.join(base,'out',variant,rel==='/'?'index.html':rel);
+ if(!target.startsWith(base+'/out/')&&!target.startsWith(root+'/apps/mobile/assets/fonts/')){res.writeHead(403);return res.end();}
+ fs.readFile(target,(err,bytes)=>{if(err){res.writeHead(404);return res.end();}res.setHeader('Content-Type',target.endsWith('.html')?'text/html':target.endsWith('.js')?'text/javascript':target.endsWith('.png')?'image/png':'font/otf');res.end(bytes);});
+});
+(async()=>{
+ await new Promise((r,j)=>{server.once('error',j);server.listen(0,'127.0.0.1',r);});
+ const browser=await chromium.launch({headless:true,executablePath:'/Users/namu/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell'});
+ const results=[];fs.mkdirSync(base+'/captures',{recursive:true});
+ try{
+  for(const variant of ['before','after'])for(const width of [320,360,780])for(const scale of [1,1.3,2])for(const scene of scenes){
+   const context=await browser.newContext({viewport:{width,height:scene==='register-keyboard'?480:900},deviceScaleFactor:1,reducedMotion:'reduce'});
+   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+   await page.goto(`http://127.0.0.1:${server.address().port}/?variant=${variant}&scene=${scene}&scale=${scale}`,{waitUntil:'networkidle'});
+   await page.waitForFunction(()=>document.body.dataset.fonts==='ready'&&document.querySelector('#root')?.children.length>0,{timeout:10000});
+   await page.evaluate(()=>Promise.all(Array.from(document.images).map(i=>i.decode().catch(()=>{}))));
+   if(scene==='register-keyboard')await page.getByTestId('ingredient-input').focus();
+   const data=await page.evaluate(()=>{
+    const r=e=>{const b=e.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};};
+    const mascot=Array.from(document.querySelectorAll('img')).find(i=>i.src.includes('jango-'));
+    const frame=mascot?.parentElement?.parentElement; // RN Web Image has its own wrapper.
+    const bubbleRoot=frame?.parentElement;
+    let decorationVisible=true;for(let node=frame;node;node=node.parentElement){const style=getComputedStyle(node);if(style.opacity==='0'||style.visibility==='hidden'||style.display==='none')decorationVisible=false;}
+    const buttons=Array.from(document.querySelectorAll('[role="button"]')).map(e=>({...r(e),label:e.getAttribute('aria-label')||e.textContent}));
+    return {decorationVisible,documentWidth:document.documentElement.scrollWidth,viewportWidth:innerWidth,mascot:frame?r(frame):null,imageLoaded:!!mascot?.complete&&mascot.naturalWidth>0,imageSource:mascot?.getAttribute('src'),bubbleDirection:bubbleRoot?getComputedStyle(bubbleRoot).flexDirection:null,buttons,focused:document.activeElement?.getAttribute('data-testid')};
+   });
+   const primary=page.getByTestId('primary-action');
+   if(await primary.count()){await primary.click();data.primaryActionWorks=await page.evaluate(()=>document.body.dataset.action==='pressed');}
+   if(scene==='settings'){
+     const last=page.getByRole('button',{name:/개인정보/});await last.scrollIntoViewIfNeeded();data.lastSettingsActionReachable=await last.isVisible();
+     await page.getByText('내 장고 설정',{exact:true}).evaluate(e=>e.closest('[data-testid="settings-screen"]')?.querySelectorAll('div').forEach(n=>{if(n.scrollTop)n.scrollTop=0;}));
+   }
+   if(scene==='onboarding'){const button=page.getByTestId('onboarding-next-button');data.onboardingFooterVisible=await button.isVisible();}
+   await page.evaluate(()=>{document.querySelectorAll('*').forEach(e=>{if(e.scrollTop)e.scrollTop=0;});window.scrollTo(0,0);});
+   if(captures.has(`${scene}-${width}-${scale}`))await page.screenshot({path:`${base}/captures/${variant}-${scene}-${width}-${scale}.png`});
+   results.push({variant,scene,width,scale,...data,errors}); console.log(variant,scene,width,scale);
+   await context.close();
+   if(errors.length||!data.mascot||!data.decorationVisible)throw Error(JSON.stringify(results.at(-1)));
+  }
+ }finally{await browser.close();server.close();fs.writeFileSync(base+'/matrix.json',JSON.stringify(results,null,2));}
+ console.log('Captured and measured '+results.length+' cases.');
+})().catch(e=>{console.error(e);server.close();process.exitCode=1;});

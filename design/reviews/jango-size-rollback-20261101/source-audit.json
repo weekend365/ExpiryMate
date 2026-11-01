@@ -1,0 +1,381 @@
+{
+  "baseline": "cf37517d81d63ffea70c6235c6324a74bc4ead8b",
+  "historicalSizeBaseline": "68306b5667196ff56f5300fe1bd1c197ff8302e8",
+  "changes": [
+    {
+      "file": "apps/mobile/src/features/home/home-hero.tsx",
+      "beforeSHA256": "b9c293e8ebe6b0bdda0d36a80d4a1d61b9055ed751a200777347d599e4acb321",
+      "afterSHA256": "5537f4e0b8f71c37c8cc111ac0f125663a587ff36cc07e64abcbb05f07f46930",
+      "historicalCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "density": "{getHomeHeroDensity(width, fontScale)}",
+            "layout": "{getHomeHeroDensity(width, fontScale) === \"compact\" ? \"stacked\" : \"inline\"}",
+            "notices": "{notices.map((notice) => ({\n          id: notice.id,\n          message: notice.message,\n          mood: notice.mood,\n          onPress: notice.action\n            ? () => onNoticeAction(notice.action!)\n            : undefined,\n          accessibilityHint: notice.actionHint,\n        }))}",
+            "bubbleStyle": "{styles.heroNotice}",
+            "onIndexChange": "{setNoticeIndex}"
+          }
+        }
+      ],
+      "beforeCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "density": "{getHomeHeroDensity(width, fontScale)}",
+            "size": "\"medium\"",
+            "layout": "\"adaptive\"",
+            "notices": "{notices.map((notice) => ({\n          id: notice.id,\n          message: notice.message,\n          mood: notice.mood,\n          onPress: notice.action\n            ? () => onNoticeAction(notice.action!)\n            : undefined,\n          accessibilityHint: notice.actionHint,\n        }))}",
+            "bubbleStyle": "{styles.heroNotice}",
+            "onIndexChange": "{setNoticeIndex}"
+          }
+        }
+      ],
+      "afterCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "density": "{getHomeHeroDensity(width, fontScale)}",
+            "size": "\"small\"",
+            "layout": "{shouldStackDense ? \"stacked\" : \"inline\"}",
+            "notices": "{notices.map((notice) => ({\n          id: notice.id,\n          message: notice.message,\n          mood: notice.mood,\n          onPress: notice.action\n            ? () => onNoticeAction(notice.action!)\n            : undefined,\n          accessibilityHint: notice.actionHint,\n        }))}",
+            "bubbleStyle": "{styles.heroNotice}",
+            "onIndexChange": "{setNoticeIndex}"
+          }
+        }
+      ]
+    },
+    {
+      "file": "apps/mobile/src/features/shopping/shopping-hero-card.tsx",
+      "beforeSHA256": "1c482370db32ffbb03b78289a601b07403f0a34e60a9958e4fa513fb1840fa9a",
+      "afterSHA256": "952f05dcb5d260b44abf59fba1fa20cfd040477c056b333d3312e3179ec99c3d",
+      "historicalCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "notices": "{notices}"
+          }
+        }
+      ],
+      "beforeCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "notices": "{notices}",
+            "size": "\"medium\"",
+            "layout": "\"adaptive\""
+          }
+        }
+      ],
+      "afterCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "notices": "{notices}",
+            "size": "\"small\"",
+            "layout": "{shouldStackDense ? \"stacked\" : \"inline\"}"
+          }
+        }
+      ]
+    },
+    {
+      "file": "apps/mobile/app/(tabs)/recommendations.tsx",
+      "beforeSHA256": "691a15ed04e2d370d238100281d9699afa4785ec92985c993b384d15557f128b",
+      "afterSHA256": "81a2459b4b128697b467e7b5be28995e52d1a2b995d019c8301181d43faf66b7",
+      "historicalCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "notices": "{recommendationHeroNotices}"
+          }
+        }
+      ],
+      "beforeCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "notices": "{recommendationHeroNotices}",
+            "size": "\"medium\"",
+            "layout": "\"adaptive\""
+          }
+        }
+      ],
+      "afterCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "notices": "{recommendationHeroNotices}",
+            "size": "\"small\"",
+            "layout": "{shouldStackDense ? \"stacked\" : \"inline\"}"
+          }
+        }
+      ]
+    },
+    {
+      "file": "apps/mobile/app/(tabs)/settings.tsx",
+      "beforeSHA256": "5fe59c0138d338ab08bdb6ddfffc589b91b6d30c1808be076595f5210dc03463",
+      "afterSHA256": "952461852501d984207ef67dbd02c8f86ff07205df8b7e9f1cb0b242dc4ab908",
+      "historicalCalls": [
+        {
+          "component": "Mascot",
+          "props": {
+            "size": "\"small\"",
+            "mood": "\"idle\""
+          }
+        }
+      ],
+      "beforeCalls": [
+        {
+          "component": "Mascot",
+          "props": {
+            "size": "\"medium\"",
+            "mood": "\"acknowledge\"",
+            "decorative": true
+          }
+        }
+      ],
+      "afterCalls": [
+        {
+          "component": "Mascot",
+          "props": {
+            "size": "\"small\"",
+            "mood": "\"acknowledge\"",
+            "decorative": true
+          }
+        }
+      ]
+    },
+    {
+      "file": "apps/mobile/app/onboarding.tsx",
+      "beforeSHA256": "c4b0b3fe5362595b2f4c31c2d0d02125234ca752842cc2cc6358f1ee23752aab",
+      "afterSHA256": "2eb226669c3e1424c6bbd3c1eda635675ca4ee48bc7b4c0ac298ffe4be504218",
+      "historicalCalls": [
+        {
+          "component": "Mascot",
+          "props": {
+            "size": "\"medium\"",
+            "mood": "\"encourage\""
+          }
+        }
+      ],
+      "beforeCalls": [
+        {
+          "component": "Mascot",
+          "props": {
+            "size": "\"large\"",
+            "mood": "\"encourage\"",
+            "decorative": true
+          }
+        }
+      ],
+      "afterCalls": [
+        {
+          "component": "Mascot",
+          "props": {
+            "size": "\"medium\"",
+            "mood": "\"encourage\"",
+            "decorative": true
+          }
+        }
+      ]
+    },
+    {
+      "file": "apps/mobile/app/register.tsx",
+      "beforeSHA256": "85edef023c2ea65b384c7bd560393dd802e1f858affa385e1f2ea737fc0343c1",
+      "afterSHA256": "456f380d8dcdd28eaa682bc88c6a9b96f5b6761757d1b435d95bb945d697ab03",
+      "historicalCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "notices": "{doneHeroNotices}",
+            "density": "\"compact\"",
+            "textVariant": "\"bodyStrong\"",
+            "bubbleStyle": "{styles.doneBubble}"
+          }
+        },
+        {
+          "component": "StepFlow",
+          "props": {
+            "steps": "{visibleSteps}",
+            "currentIndex": "{Math.max(stepIndex, 0)}",
+            "onBack": "{goToPreviousStep}",
+            "density": "\"compact\"",
+            "hideBack": true,
+            "guideMessage": "{\n          step === \"product\"\n            ? productGuideMessage\n            : visibleSteps[Math.max(stepIndex, 0)]?.guideMessage\n        }",
+            "guideMood": "\"speak\""
+          }
+        }
+      ],
+      "beforeCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "notices": "{doneHeroNotices}",
+            "size": "\"large\"",
+            "layout": "\"adaptive\"",
+            "density": "\"compact\"",
+            "textVariant": "\"bodyStrong\"",
+            "bubbleStyle": "{styles.doneBubble}"
+          }
+        },
+        {
+          "component": "StepFlow",
+          "props": {
+            "steps": "{visibleSteps}",
+            "currentIndex": "{Math.max(stepIndex, 0)}",
+            "onBack": "{goToPreviousStep}",
+            "density": "\"compact\"",
+            "hideBack": true,
+            "guideMessage": "{\n          step === \"product\"\n            ? productGuideMessage\n            : visibleSteps[Math.max(stepIndex, 0)]?.guideMessage\n        }",
+            "guideMood": "{step === \"product\" ? \"encourage\" : \"check\"}",
+            "guideSize": "{step === \"product\" && !keyboardVisible ? \"large\" : \"small\"}",
+            "guideLayout": "\"adaptive\"",
+            "guideAnimation": "\"none\""
+          }
+        }
+      ],
+      "afterCalls": [
+        {
+          "component": "JangoHeroNoticeCarousel",
+          "props": {
+            "notices": "{doneHeroNotices}",
+            "size": "\"small\"",
+            "layout": "\"stacked\"",
+            "density": "\"compact\"",
+            "textVariant": "\"bodyStrong\"",
+            "bubbleStyle": "{styles.doneBubble}"
+          }
+        },
+        {
+          "component": "StepFlow",
+          "props": {
+            "steps": "{visibleSteps}",
+            "currentIndex": "{Math.max(stepIndex, 0)}",
+            "onBack": "{goToPreviousStep}",
+            "density": "\"compact\"",
+            "hideBack": true,
+            "guideMessage": "{\n          step === \"product\"\n            ? productGuideMessage\n            : visibleSteps[Math.max(stepIndex, 0)]?.guideMessage\n        }",
+            "guideMood": "{step === \"product\" ? \"encourage\" : \"check\"}",
+            "guideSize": "\"small\"",
+            "guideLayout": "{step === \"product\" && !keyboardVisible ? \"stacked\" : \"adaptive\"}",
+            "guideAnimation": "\"none\""
+          }
+        }
+      ]
+    },
+    {
+      "file": "apps/mobile/app/cooking/[recommendationId].tsx",
+      "beforeSHA256": "40c47ed7635f7c7e40a60eb3891d111e8cf00bc34defaa39cc2bdfad6166c683",
+      "afterSHA256": "0e128d34c3dd138df666adf93dd35eea1f4cdbf5ebd8683e3a90d5548c0ace82",
+      "historicalCalls": [
+        {
+          "component": "StepFlow",
+          "props": {
+            "steps": "{steps}",
+            "currentIndex": "{currentIndex}",
+            "onBack": "{handlePreviousStep}",
+            "onProgressPress": "{() => setStepsOverviewVisible(true)}",
+            "density": "\"compact\"",
+            "hideBack": true,
+            "guideMessage": "{getCookingGuideMessage(\n            currentIndex,\n            dish.steps.length,\n            uncheckedPrepCount,\n          )}",
+            "guideMood": "{currentIndex >= completionStepIndex ? \"enjoy\" : \"cooking\"}"
+          }
+        }
+      ],
+      "beforeCalls": [
+        {
+          "component": "StepFlow",
+          "props": {
+            "steps": "{steps}",
+            "currentIndex": "{currentIndex}",
+            "onBack": "{handlePreviousStep}",
+            "onProgressPress": "{() => setStepsOverviewVisible(true)}",
+            "density": "\"compact\"",
+            "hideBack": true,
+            "guideMessage": "{getCookingGuideMessage(\n            currentIndex,\n            dish.steps.length,\n            uncheckedPrepCount,\n          )}",
+            "guideMood": "{currentIndex >= completionStepIndex ? \"enjoy\" : \"cooking\"}",
+            "guideSize": "{currentIndex >= completionStepIndex ? \"large\" : \"small\"}",
+            "guideLayout": "\"adaptive\"",
+            "guideAnimation": "\"none\""
+          }
+        }
+      ],
+      "afterCalls": [
+        {
+          "component": "StepFlow",
+          "props": {
+            "steps": "{steps}",
+            "currentIndex": "{currentIndex}",
+            "onBack": "{handlePreviousStep}",
+            "onProgressPress": "{() => setStepsOverviewVisible(true)}",
+            "density": "\"compact\"",
+            "hideBack": true,
+            "guideMessage": "{getCookingGuideMessage(\n            currentIndex,\n            dish.steps.length,\n            uncheckedPrepCount,\n          )}",
+            "guideMood": "{currentIndex >= completionStepIndex ? \"enjoy\" : \"cooking\"}",
+            "guideSize": "\"small\"",
+            "guideLayout": "{currentIndex >= completionStepIndex ? \"stacked\" : \"adaptive\"}",
+            "guideAnimation": "\"none\""
+          }
+        }
+      ]
+    }
+  ],
+  "preserved": [
+    {
+      "file": "apps/mobile/src/components/Mascot.tsx",
+      "sha256": "0b15009cd03a1e954c2b34b31e03cb2ac16b3384863a935f58ccb03b7c369f0c",
+      "matchesBaseline": true
+    },
+    {
+      "file": "apps/mobile/src/components/MascotSpeechBubble.tsx",
+      "sha256": "db7f9d7a1eaefd86d305bdcacde5f37ef587a2ea298c3d12308f12b87d0c7398",
+      "matchesBaseline": true
+    },
+    {
+      "file": "apps/mobile/src/components/JangoHeroNoticeCarousel.tsx",
+      "sha256": "ed2b19db7334e45ad8805628e3e195438f667c65d2b6e33457e05026b4e2d99c",
+      "matchesBaseline": true
+    },
+    {
+      "file": "apps/mobile/src/components/StepFlow.tsx",
+      "sha256": "1c38044a0cda7f1b4ce6ab114f3baed2e0601a3c989d7f9f931cb56dcb8f0e9e",
+      "matchesBaseline": true
+    },
+    {
+      "file": "apps/mobile/src/components/Screen.tsx",
+      "sha256": "e23b57a2a2f76cc4ce186f4decc9bd9da2c840b79814398192185b418ebdd38c",
+      "matchesBaseline": true
+    },
+    {
+      "file": "apps/mobile/src/components/ScreenBackground.tsx",
+      "sha256": "d48e74e2d2a09a617a3fb32449579a18bbc8ffaa05b93e2c9d419df0451911e5",
+      "matchesBaseline": true
+    },
+    {
+      "file": "apps/mobile/src/shared/responsive-layout-core.ts",
+      "sha256": "e2b7a56f4bfb3bda667d456bdbe283504849e5fd4d45eea7c829d3d2479ec49d",
+      "matchesBaseline": true
+    },
+    {
+      "file": "apps/mobile/src/shared/theme.ts",
+      "sha256": "f32637bc3671cdea07d2a4c9c8b18f48b5e70073e3ef0d87b5d768b3fa79bd60",
+      "matchesBaseline": true
+    },
+    {
+      "file": "apps/mobile/app/register-photo.tsx",
+      "sha256": "5e4786539829c94483afe237c81edf101d4bdaa0bab8351bb1078b6501ede123",
+      "matchesBaseline": true
+    },
+    {
+      "file": "apps/mobile/assets/characters/moods.json",
+      "sha256": "87265289706fad52c0b0424e33a5482f7a2d62742b60f420581002132f2b40e2",
+      "matchesBaseline": true
+    }
+  ],
+  "unchangedAssetDiff": "",
+  "native": {
+    "android": "adb devices: no attached device",
+    "ios": "simctl list devices booted: no booted simulator; first sandbox query failed, escalated query completed after Xcode tool initialization",
+    "browserHost": "CUA browser access host unavailable; separate headless Chromium used"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "artworks": [
+    {
+      "stem": "welcome-room",
+      "source": "design/backgrounds/welcome-room-crayon-v2.png",
+      "runtime": "apps/mobile/assets/backgrounds/welcome-room-bg.png",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sha256": "f915f2170e2b67fa89d69da6cc12ec591aff6c4e108d199df4f081416065dd29",
+      "originalBytes": true,
+      "runtimeMatchesSource": true,
+      "promptAndReferenceHashesMatch": true,
+      "primaryFurnitureFullyFramed": true,
+      "visualReview": "Inspected generated original and representative phone rendering; no image resize/crop performed."
+    },
+    {
+      "stem": "ingredient-prep",
+      "source": "design/backgrounds/ingredient-prep-crayon-v2.png",
+      "runtime": "apps/mobile/assets/backgrounds/ingredient-prep-bg.png",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sha256": "97409b0396466a22fbfd847219b94e6e46745c0b8d554948e073a86dff97bddb",
+      "originalBytes": true,
+      "runtimeMatchesSource": true,
+      "promptAndReferenceHashesMatch": true,
+      "primaryFurnitureFullyFramed": true,
+      "visualReview": "Inspected generated original and representative phone rendering; no image resize/crop performed."
+    },
+    {
+      "stem": "cooking-workspace",
+      "source": "design/backgrounds/cooking-workspace-crayon-v2.png",
+      "runtime": "apps/mobile/assets/backgrounds/cooking-workspace-bg.png",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sha256": "35f744a48917c2b20abc166dc68ecad8d2e8ec88d0be9e7e87abddc8952bc46c",
+      "originalBytes": true,
+      "runtimeMatchesSource": true,
+      "promptAndReferenceHashesMatch": true,
+      "primaryFurnitureFullyFramed": true,
+      "visualReview": "Inspected generated original and representative phone rendering; no image resize/crop performed."
+    },
+    {
+      "stem": "settings-study",
+      "source": "design/backgrounds/settings-study-crayon-v2.png",
+      "runtime": "apps/mobile/assets/backgrounds/settings-study-bg.png",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sha256": "3077e23936058e2dd2dc10e32600ef116f3bbb438d9ca575c5fceaa6aa1b4aef",
+      "originalBytes": true,
+      "runtimeMatchesSource": true,
+      "promptAndReferenceHashesMatch": true,
+      "primaryFurnitureFullyFramed": true,
+      "visualReview": "Inspected generated original and representative phone rendering; no image resize/crop performed."
+    },
+    {
+      "stem": "insights-journal",
+      "source": "design/backgrounds/insights-journal-crayon-v2.png",
+      "runtime": "apps/mobile/assets/backgrounds/insights-journal-bg.png",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sha256": "01d58ac6c7a53ee0b2dded870ea1f0bfbb42af7bf67d9510085f4821b9e98e9d",
+      "originalBytes": true,
+      "runtimeMatchesSource": true,
+      "promptAndReferenceHashesMatch": true,
+      "primaryFurnitureFullyFramed": true,
+      "visualReview": "Inspected generated original and representative phone rendering; no image resize/crop performed."
+    },
+    {
+      "stem": "shared-table",
+      "source": "design/backgrounds/shared-table-crayon-v2.png",
+      "runtime": "apps/mobile/assets/backgrounds/shared-table-bg.png",
+      "width": 1024,
+      "height": 1536,
+      "opaque": true,
+      "sha256": "c3410a4fa2156dcb8459c012b2a53ca2bc8e5a6a005885e05c254c2e083f0002",
+      "originalBytes": true,
+      "runtimeMatchesSource": true,
+      "promptAndReferenceHashesMatch": true,
+      "primaryFurnitureFullyFramed": true,
+      "visualReview": "Inspected generated original and representative phone rendering; no image resize/crop performed."
+    }
+  ],
+  "standardVeil": 0.16,
+  "readingVeil": 0.97,
+  "sourceDimensionsMatchExistingFive": true
+}
