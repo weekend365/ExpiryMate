@@ -1,0 +1,27 @@
+{
+  "createdAt": "2026-11-01T06:37:29.047623+00:00",
+  "android": {
+    "buildId": "37df7a15-3b9f-433b-bb83-cd30023f7cee",
+    "version": "1.4.5",
+    "versionCode": 48,
+    "sourceCommit": "8f296394cd06628639dce746532594120313019e",
+    "retained": true
+  },
+  "iosInitial": {
+    "buildId": "f1ebdee1-5508-45be-aec5-047fe2148a81",
+    "metadataVersion": "1.4.4",
+    "buildNumber": 67,
+    "status": "CANCELED",
+    "submitted": false
+  },
+  "correction": {
+    "method": "EAS production env:exec official eas-sync-native-config.cjs",
+    "appSourceDifference": "Only apps/mobile/ios/ExpiryMate/Info.plist CFBundleShortVersionString 1.4.4 -> 1.4.5",
+    "brandingPreserved": true
+  },
+  "androidCancellation": {
+    "executed": false,
+    "automaticReviewRejected": true,
+    "reason": "Correct running Android build should be retained to avoid unnecessary cost and progress loss."
+  }
+}
