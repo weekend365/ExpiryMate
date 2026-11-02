@@ -353,6 +353,13 @@ jobs:
             sleep 1
           done
 
+      - name: Enable Android hardware acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          test -r /dev/kvm && test -w /dev/kvm
+
       - name: Build, run, and compare Android layout
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -560,7 +567,7 @@ jobs:
 
       - name: Build and install iOS layout app
         run: |
-          pnpm --filter @expirymate/mobile exec expo prebuild --platform ios --clean --no-install
+          pnpm --filter @expirymate/mobile exec expo prebuild --platform ios --no-install
           info_plist="$(find apps/mobile/ios -maxdepth 3 -name Info.plist -not -path '*/Pods/*' | head -n 1)"
           /usr/libexec/PlistBuddy -c 'Add :NSAppTransportSecurity dict' "$info_plist" || true
           /usr/libexec/PlistBuddy -c 'Add :NSAppTransportSecurity:NSAllowsLocalNetworking bool true' "$info_plist" || true

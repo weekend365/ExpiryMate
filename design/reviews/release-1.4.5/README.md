@@ -1,5 +1,9 @@
 # 1.4.5 양대 스토어 출시 작업
 
+**2026-11-02 상태:** 커밋·main 푸시 및 production 빌드 완료. iOS68은 App Review 대기·
+승인 후 전체 공개다. Android48은 내부 트랙 완료이며 production 승격은 Google403으로
+미완료다. 운영 OpenAI 키401도 사용자 갱신이 필요하다. 양대 스토어 공개 완료가 아니다.
+
 2026-11-01 사용자가 변경사항 커밋·푸시·빌드·양대 스토어 배포를 요청했다.
 직전 장고 크기 복원, 생활 공간 배경 v2, 사진 등록 전처리·인식 지침·중복 검토 수정을 포함한다.
 출시 버전1.4.5, QA 버전1.4.6이며 EAS 원격 빌드 번호 자동 증가를 유지한다.
@@ -24,7 +28,7 @@ Android는 내부 트랙 업로드 후 동일 AAB를 production 전체 제공으
 Prisma schema/migration 변경은 없다. API main 연동 자동 배포의 SHA와 health/ready를 확인한다.
 출력 상한 환경변수는 기존 값부터 확인하며 모델·비용·광고·구독 정책을 변경하지 않는다.
 
-현재 문서는 작업 시작 기록이며 빌드·심사·공개 결과는 후속 기록에서 확정한다.
+초기 준비 범위와 실제 완료·미완료 결과를 함께 기록하며, 가장 위의 상태를 현재 기준으로 둔다.
 
 ## iOS 버전 동기화
 
@@ -56,3 +60,15 @@ WAITING_FOR_REVIEW·AFTER_APPROVAL이다. 이는 공개 완료가 아니다.
 [사진 공급자 인증](photo-provider-blocker.json): 운영 키도401 invalid_api_key이며 사용자에게
 Railway api/production 키 갱신을 요청했다. 모델·계약·비용 한도는 유지한다.
 따라서 양대 스토어 공개 완료 및 사진 인식 실호출 검증 완료로 기록하지 않는다.
+
+## CI 순차 실행 결과와 네이티브 검사 준비
+
+7f897944의 quality·build·migrate가 통과했다. 전체 워크플로는 네이티브 화면 검사 환경에서
+실패했다. Android는/dev/kvm 권한 부재로 가속 없이 부팅하다 제한을 초과했고, iOS는
+clean prebuild가 추적된ExpiryMate 프로젝트를 지워 고정된scheme 경로를 찾지 못했다.
+Android에는 action 공식 KVM 준비 절차를 추가하고 iOS는 production EAS와 같은
+추적 프로젝트 보존 prebuild를 사용한다. 앱 바이너리·기능·판정·시간 제한은 바꾸지 않는다.
+후속 네이티브 CI 결과는 아직 확인 전이며 전체 네이티브 QA 통과로 기록하지 않는다.
+
+CI 환경 후속 수정의 관련15개 테스트와 문서 검사가 통과했다. 후속 네이티브 CI 실행 결과는
+확인 전이다. KVM 준비는 [emulator action 공식 안내](https://github.com/ReactiveCircus/android-emulator-runner#running-hardware-accelerated-emulators-on-linux-runners)를 따른다.

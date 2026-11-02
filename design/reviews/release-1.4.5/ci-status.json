@@ -98,5 +98,92 @@
   "failure": "Unchanged mascot reproduction assertion timed out at 20 seconds; CI measured 26134ms. No observed pixel/contract assertion mismatch.",
   "schedulingChange": "Keep all tests and timeouts; run workspace suites and Vitest workers sequentially to avoid CPU contention.",
   "timeoutOrThresholdChanged": false,
-  "localSchedulingCheck": "Overnight local execution encountered 5s/20s and worker-update timeouts; not recorded as passing."
+  "localSchedulingCheck": "Overnight local execution encountered 5s/20s and worker-update timeouts; not recorded as passing.",
+  "schedulingChangeCommit": "7f8979447933dd3b61dbb56ce1504b497a962fe5",
+  "schedulingChangeRun": {
+    "id": 41368013521,
+    "url": "https://github.com/weekend365/ExpiryMate/actions/runs/41368013521",
+    "status": "completed",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "name": "quality",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "mobile-layout-ios (ios-small)",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "mobile-layout (small-three-button)",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "migrate",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "mobile-layout-ios (ios-small-large-text)",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "mobile-layout (large-display-large-text)",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "mobile-layout (phone-landscape-large-text)",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "mobile-layout (tablet-landscape)",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "mobile-layout (phone-landscape)",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "mobile-layout (modern-gesture)",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "mobile-layout (foldable-portrait)",
+        "status": "completed",
+        "conclusion": "cancelled"
+      },
+      {
+        "name": "mobile-layout (small-large-text)",
+        "status": "completed",
+        "conclusion": "cancelled"
+      }
+    ]
+  },
+  "coreQualityBuildMigration": "passed after serializing tests; every threshold and timeout retained",
+  "nativeLayoutFailures": {
+    "android": "Emulator boot timeout: runner lacks /dev/kvm access and action disabled hardware acceleration.",
+    "ios": "Clean prebuild removed canonical ExpiryMate.xcodeproj; fixed-name variant plugin could not find ExpiryMate.xcscheme."
+  },
+  "ciOnlyFollowup": {
+    "android": "Enable KVM using emulator-runner documented udev rule before launch.",
+    "ios": "Use same non-clean tracked-project prebuild as production EAS.",
+    "assertionsOrThresholdsChanged": false,
+    "validation": "pending new CI run",
+    "relatedTestsPassed": 15,
+    "documentationCheck": "passed"
+  }
 }
