@@ -1,0 +1,102 @@
+{
+  "originalCommit": "8f296394cd06628639dce746532594120313019e",
+  "iosCommit": "55971959bdd692ef74318cae2cf64ad132110cb6",
+  "runs": [
+    {
+      "sha": "8f296394cd06628639dce746532594120313019e",
+      "runId": 41281230924,
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/weekend365/ExpiryMate/actions/runs/41281230924",
+      "jobs": [
+        {
+          "name": "quality",
+          "id": 124773404341,
+          "status": "completed",
+          "conclusion": "failure",
+          "activeOrFailedSteps": [
+            "Test"
+          ]
+        },
+        {
+          "name": "mobile-layout-ios",
+          "id": 124777362284,
+          "status": "completed",
+          "conclusion": "skipped",
+          "activeOrFailedSteps": []
+        },
+        {
+          "name": "migrate",
+          "id": 124777362620,
+          "status": "completed",
+          "conclusion": "skipped",
+          "activeOrFailedSteps": []
+        },
+        {
+          "name": "build",
+          "id": 124777362631,
+          "status": "completed",
+          "conclusion": "skipped",
+          "activeOrFailedSteps": []
+        },
+        {
+          "name": "mobile-layout",
+          "id": 124777362891,
+          "status": "completed",
+          "conclusion": "skipped",
+          "activeOrFailedSteps": []
+        }
+      ]
+    },
+    {
+      "sha": "55971959bdd692ef74318cae2cf64ad132110cb6",
+      "runId": 41281584940,
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/weekend365/ExpiryMate/actions/runs/41281584940",
+      "jobs": [
+        {
+          "name": "quality",
+          "id": 124774418981,
+          "status": "completed",
+          "conclusion": "failure",
+          "activeOrFailedSteps": [
+            "Test"
+          ]
+        },
+        {
+          "name": "migrate",
+          "id": 124777027761,
+          "status": "completed",
+          "conclusion": "skipped",
+          "activeOrFailedSteps": []
+        },
+        {
+          "name": "mobile-layout",
+          "id": 124777028063,
+          "status": "completed",
+          "conclusion": "skipped",
+          "activeOrFailedSteps": []
+        },
+        {
+          "name": "mobile-layout-ios",
+          "id": 124777028142,
+          "status": "completed",
+          "conclusion": "skipped",
+          "activeOrFailedSteps": []
+        },
+        {
+          "name": "build",
+          "id": 124777028355,
+          "status": "completed",
+          "conclusion": "skipped",
+          "activeOrFailedSteps": []
+        }
+      ]
+    }
+  ],
+  "failure": "Unchanged mascot reproduction assertion timed out at 20 seconds; CI measured 26134ms. No observed pixel/contract assertion mismatch.",
+  "schedulingChange": "Keep all tests and timeouts; run workspace suites and Vitest workers sequentially to avoid CPU contention.",
+  "timeoutOrThresholdChanged": false,
+  "localSchedulingCheck": "Overnight local execution encountered 5s/20s and worker-update timeouts; not recorded as passing."
+}

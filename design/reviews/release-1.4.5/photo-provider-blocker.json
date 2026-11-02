@@ -1,0 +1,17 @@
+{
+  "status": "unresolved",
+  "providerHttpStatus": 401,
+  "providerErrorCode": "invalid_api_key",
+  "localKeyAlsoInvalid": true,
+  "productionFeatureEnabled": true,
+  "productionModel": "gpt-5.6-luna",
+  "totalPhotoComparisonAttempts": 2,
+  "successfulPhotoComparisons": 0,
+  "usageAccounting": "unavailable; stopped after each first failed request",
+  "maxOriginalAuthorization": {
+    "calls": 60,
+    "costUsd": 1
+  },
+  "keyChangedOrCopiedToDevEnv": false,
+  "userAskedToUpdateRailwayKey": true
+}

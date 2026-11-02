@@ -1,0 +1,31 @@
+{
+  "platform": "ios",
+  "sha256": "eea3d5614a6ef643259bba11df71d0081bc6dacabf679967b78345aa5bc4ea31",
+  "bytes": 87829970,
+  "backgroundHashesFound": {
+    "login-welcome-bg": true,
+    "insights-journal-bg": true,
+    "kitchen-cooking-bg": true,
+    "home-welcome-bg": true,
+    "shared-table-bg": true,
+    "shopping-preparation-bg": true,
+    "fridge-interior-bg": true,
+    "welcome-room-bg": true,
+    "settings-study-bg": true,
+    "cooking-workspace-bg": true,
+    "ingredient-prep-bg": true
+  },
+  "productionApiInBundle": true,
+  "qaApiInBundle": false,
+  "sentryInBundle": true,
+  "CFBundleShortVersionString": "1.4.5",
+  "CFBundleVersion": "68",
+  "CFBundleIdentifier": "com.expirymate.mobile",
+  "MinimumOSVersion": "16.4",
+  "DTSDKName": "iphoneos26.0",
+  "imageManipulatorNativeSymbolPresent": true,
+  "localCodesignVerification": "CSSMERR_TP_NOT_TRUSTED; local trust verification unavailable, App Store transport verification still required",
+  "appleTransportAndProcessing": "VALID, build bfd34909-188b-4b09-a0bc-a38cd48ed32a",
+  "sourceCommit": "55971959bdd692ef74318cae2cf64ad132110cb6",
+  "nativeInteractiveQa": "Not completed; Android emulator was started then stopped to avoid test contention; no install or full camera/keyboard matrix validated."
+}

@@ -1,0 +1,23 @@
+{
+  "android": {
+    "buildId": "37df7a15-3b9f-433b-bb83-cd30023f7cee",
+    "version": "1.4.5",
+    "buildNumber": 48,
+    "commit": "8f296394cd06628639dce746532594120313019e",
+    "status": "FINISHED",
+    "submissionId": "9e6a128d-4071-4d6e-b0d3-e122a278b522",
+    "internalTrack": "completed"
+  },
+  "ios": {
+    "buildId": "98096aea-1b5b-413b-9319-df1dd5ffa034",
+    "version": "1.4.5",
+    "buildNumber": 68,
+    "commit": "55971959bdd692ef74318cae2cf64ad132110cb6",
+    "status": "FINISHED",
+    "submissionId": "0a3ba12a-d7c4-4713-884a-bf85978244e7",
+    "appleProcessing": "VALID",
+    "reviewState": "WAITING_FOR_REVIEW"
+  },
+  "appSourceDifference": "Only iOS Info.plist version and release notes differ between the source commits.",
+  "clientFailureWasFalseNegative": "The iOS68 request reported failure, but remote lookup confirmed finished build 98096aea. No duplicate build was created."
+}

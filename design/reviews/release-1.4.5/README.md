@@ -34,3 +34,25 @@ iOS67은 스토어 제출 전에 취소했다. EAS production 환경에서 공�
 Android48은 올바른 버전·앱 코드로 진행 중이므로 유지한다. 최종 iOS 재빌드와 Android48의
 소스 차이는 iOS 버전 설정 및 출시 기록으로 한정하고, 앱 소스·배경은 동일한 해시로 확인한다.
 Android 취소 시도는 자동 승인 검토가 불필요한 비용·진행 손실을 이유로 거절해 실행하지 않았다.
+
+## 빌드·업로드·심사
+
+Android1.4.5(48)와 iOS1.4.5(68) production 빌드를 완료했다.
+[빌드·업로드 ID](builds-and-uploads.json), [Android 결과물](android-artifact.json),
+[iOS 결과물](ios-artifact.json)에 버전·해시·운영 API·배경11종 일치를 기록한다.
+iOS68의 요청 클라이언트가 오류를 표시했지만 원격 조회로 이미 정상 완료된 빌드를 확인해 재사용했다.
+iOS IPA는 Apple에서 VALID 처리됐으며 [App Review 제출](ios-review-submission.json)은
+WAITING_FOR_REVIEW·AFTER_APPROVAL이다. 이는 공개 완료가 아니다.
+
+[CI 원본 결과](ci-status.json)는 원화 재현의 기존20초 제한 초과로 실패했다.
+검사·ROI·판정·시간 제한은 유지하며 CI worker 경쟁만 줄이는 순차 실행으로 조정한다.
+로컬 야간 실행도 타이머·worker 통신 제한을 초과했으므로 통과로 바꾸지 않는다.
+
+## 남은 외부 조건
+
+[Android 출시 권한](android-release-blocker.json): 내부 트랙48은completed이나 production
+승격 요청에 Google403이 반환됐다. 권한을 확대하지 않았으며 브라우저 연결도 사용할 수 없다.
+관리자 콘솔에서48을100%로 승격해 심사 제출하거나 관리자 브라우저 연결이 필요하다.
+[사진 공급자 인증](photo-provider-blocker.json): 운영 키도401 invalid_api_key이며 사용자에게
+Railway api/production 키 갱신을 요청했다. 모델·계약·비용 한도는 유지한다.
+따라서 양대 스토어 공개 완료 및 사진 인식 실호출 검증 완료로 기록하지 않는다.

@@ -1,0 +1,17 @@
+{
+  "status": "blocked",
+  "version": "1.4.5",
+  "versionCode": 48,
+  "buildId": "37df7a15-3b9f-433b-bb83-cd30023f7cee",
+  "internalTrack": "completed",
+  "productionPromotionAttempt": {
+    "httpStatus": 403,
+    "message": "The caller does not have permission"
+  },
+  "productionRolloutChanged": false,
+  "requestedRolloutPercent": 100,
+  "browserFallback": "Browser access host unavailable; native Chrome cgWindowNotFound",
+  "needed": "Existing Play Console administrator to promote code48 or make authenticated administrator browser available",
+  "serviceAccountPermissionsExpanded": false,
+  "autoApprovalTimeout": "Initial execution did not start before automatic-review deadline; one retry exposed a missing temp script, then script was created and authorized request received Google403."
+}

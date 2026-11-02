@@ -1,0 +1,23 @@
+{
+  "/health": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": {
+        "status": "ok",
+        "version": "0.1.0",
+        "gitSha": "55971959bdd692ef74318cae2cf64ad132110cb6",
+        "env": "production"
+      }
+    }
+  },
+  "/ready": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": {
+        "status": "ready"
+      }
+    }
+  }
+}

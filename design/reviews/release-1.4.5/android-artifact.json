@@ -1,0 +1,29 @@
+{
+  "platform": "android",
+  "sha256": "b2a640743bcae67a7fb509ad598258e588e9b63ae579f6c8bcbadd7bcc5e441a",
+  "bytes": 142093813,
+  "backgroundHashesFound": {},
+  "productionApiInBundle": true,
+  "qaApiInBundle": false,
+  "sentryInBundle": true,
+  "imageManipulatorNativeSymbolPresent": true,
+  "decodedBackgroundChecks": {
+    "cooking-workspace-bg.png": true,
+    "fridge-interior-bg.png": true,
+    "home-welcome-bg.png": true,
+    "ingredient-prep-bg.png": true,
+    "insights-journal-bg.png": true,
+    "kitchen-cooking-bg.png": true,
+    "login-welcome-bg.png": true,
+    "settings-study-bg.png": true,
+    "shared-table-bg.png": true,
+    "shopping-preparation-bg.png": true,
+    "welcome-room-bg.png": true
+  },
+  "version": "1.4.5",
+  "versionCode": 48,
+  "package": "com.expirymate.mobile",
+  "bundletoolValidation": "passed",
+  "sourceCommit": "8f296394cd06628639dce746532594120313019e",
+  "nativeInteractiveQa": "Not completed; Android emulator was started then stopped to avoid test contention; no install or full camera/keyboard matrix validated."
+}
