@@ -1,17 +1,24 @@
 {
-  "status": "unresolved",
-  "providerHttpStatus": 401,
-  "providerErrorCode": "invalid_api_key",
+  "status": "resolved authentication on 2026-11-06; accuracy remains mixed",
+  "providerHttpStatus": 200,
+  "providerErrorCode": null,
   "localKeyAlsoInvalid": true,
   "productionFeatureEnabled": true,
   "productionModel": "gpt-5.6-luna",
-  "totalPhotoComparisonAttempts": 2,
-  "successfulPhotoComparisons": 0,
-  "usageAccounting": "unavailable; stopped after each first failed request",
+  "totalPhotoComparisonAttempts": 32,
+  "successfulPhotoComparisons": 30,
+  "usageAccounting": "30 new calls reported; estimated USD0.041759. Prior2 failed requests retain USD0.20 conservative reserve, not confirmed charges.",
   "maxOriginalAuthorization": {
     "calls": 60,
     "costUsd": 1
   },
   "keyChangedOrCopiedToDevEnv": false,
-  "userAskedToUpdateRailwayKey": true
+  "userAskedToUpdateRailwayKey": true,
+  "historicalFailure": {
+    "providerHttpStatus": 401,
+    "providerErrorCode": "invalid_api_key",
+    "usageAccounting": "unavailable; stopped after each first failed request"
+  },
+  "keyUpdatePerformedBy": "user in Railway; no key copied into dev env or repository",
+  "resolutionRecord": "verification-20261106/provider-auth.json"
 }

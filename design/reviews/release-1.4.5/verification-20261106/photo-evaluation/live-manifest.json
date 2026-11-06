@@ -1,0 +1,40 @@
+{
+  "model": "gpt-5.6-luna",
+  "modelBasis": "Unchanged code default and approved 2026-10-20 baseline. Production configuration gpt-5.6-luna verified on 2026-11-06; local dev override not used.",
+  "maxCalls": 60,
+  "maxCostUsd": 0.8,
+  "originalTotalLimitUsd": 1,
+  "priorFailedRequestReserveUsd": 0.2,
+  "priorCallCount": 2,
+  "plannedCalls": 30,
+  "availableCases": [
+    "fridge-01",
+    "fridge-02",
+    "fridge-03",
+    "fridge-04",
+    "fridge-05",
+    "fridge-06",
+    "fridge-07",
+    "fridge-08",
+    "fridge-09",
+    "fridge-10",
+    "fridge-11",
+    "fridge-12",
+    "fridge-13",
+    "fridge-14",
+    "fridge-15"
+  ],
+  "missingCases": [],
+  "baselineRevision": "cf37517d81d63ffea70c6235c6324a74bc4ead8b",
+  "baselineSourceSha256": {
+    "inventory-photo-parse.service": "5e0177e4bbbcdd785a88d45b3d2d461f9ecac104cce62218e30630ff1ddd87d6",
+    "inventory-photo-parse.normalize": "b5b149585de835ba12cb9dc4f1be3edacea36a3f0be03b39a21aac93d804dec8"
+  },
+  "tokenCeilings": {
+    "v1": 1800,
+    "v2": 4096
+  },
+  "nativePreprocessingIncluded": false,
+  "comparison": "same image bytes and model, alternating order, one call per variant, no retries",
+  "accuracyStatus": "Requires visual review; candidate count is not accuracy."
+}

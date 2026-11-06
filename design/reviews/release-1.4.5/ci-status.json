@@ -182,8 +182,120 @@
     "android": "Enable KVM using emulator-runner documented udev rule before launch.",
     "ios": "Use same non-clean tracked-project prebuild as production EAS.",
     "assertionsOrThresholdsChanged": false,
-    "validation": "pending new CI run",
+    "validation": "completed failure; core quality/build/migrate success; native setup issues remain",
     "relatedTestsPassed": 15,
     "documentationCheck": "passed"
+  },
+  "latestRun": {
+    "sha": "6ed419d60a9be55cb777e85396fc13a7b5d4b78c",
+    "id": 41396815936,
+    "status": "completed",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "id": 125119807475,
+        "name": "quality",
+        "conclusion": "success",
+        "failedSteps": []
+      },
+      {
+        "id": 125124044765,
+        "name": "migrate",
+        "conclusion": "success",
+        "failedSteps": []
+      },
+      {
+        "id": 125124044797,
+        "name": "mobile-layout-ios (ios-small)",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Build and install iOS layout app"
+        ]
+      },
+      {
+        "id": 125124044869,
+        "name": "mobile-layout (small-three-button)",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Build, run, and compare Android layout"
+        ]
+      },
+      {
+        "id": 125124044872,
+        "name": "build",
+        "conclusion": "success",
+        "failedSteps": []
+      },
+      {
+        "id": 125124044881,
+        "name": "mobile-layout (large-display-large-text)",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Enable Android hardware acceleration"
+        ]
+      },
+      {
+        "id": 125124044884,
+        "name": "mobile-layout (tablet-landscape)",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Build, run, and compare Android layout"
+        ]
+      },
+      {
+        "id": 125124044896,
+        "name": "mobile-layout (phone-landscape-large-text)",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Build, run, and compare Android layout"
+        ]
+      },
+      {
+        "id": 125124044897,
+        "name": "mobile-layout (foldable-portrait)",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Build, run, and compare Android layout"
+        ]
+      },
+      {
+        "id": 125124044914,
+        "name": "mobile-layout-ios (ios-small-large-text)",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Build and install iOS layout app"
+        ]
+      },
+      {
+        "id": 125124044923,
+        "name": "mobile-layout (phone-landscape)",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Build, run, and compare Android layout"
+        ]
+      },
+      {
+        "id": 125124044973,
+        "name": "mobile-layout (small-large-text)",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Enable Android hardware acceleration"
+        ]
+      },
+      {
+        "id": 125124044999,
+        "name": "mobile-layout (modern-gesture)",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Build, run, and compare Android layout"
+        ]
+      }
+    ]
+  },
+  "latestFailureDetails": {
+    "ios": "Sentry source-map upload requires auth token during Release simulator build; xcodebuild65, before screenshot comparison.",
+    "androidRepresentative": "Build succeeded; pnpm forwards literal -- as first argument, runner reports Unknown layout profile: -- before screenshots.",
+    "androidKvm": "Two matrix jobs failed immediate /dev/kvm read/write check after udev trigger; settle/race hypothesis unverified.",
+    "thresholdsChanged": false
   }
 }

@@ -1,0 +1,74 @@
+{
+  "checkedAt": "2026-11-06T06:44:00.609Z",
+  "ios": [
+    {
+      "id": "d2b0bd09-ad4a-44d4-98cd-99686ea44885",
+      "version": "1.4.5",
+      "state": "READY_FOR_SALE",
+      "releaseType": "AFTER_APPROVAL"
+    }
+  ],
+  "google": {
+    "kind": "androidpublisher#tracksListResponse",
+    "tracks": [
+      {
+        "track": "production",
+        "releases": [
+          {
+            "name": "1.4.4 (47)",
+            "versionCodes": [
+              "47"
+            ],
+            "releaseNotes": [
+              {
+                "language": "ko-KR",
+                "text": "장고가 더 다정하게 안내해 드려요.\n• 화면마다 어울리는 생활 공간 배경을 더했어요.\n• 큰 글자에서도 안내와 버튼을 편하게 볼 수 있도록 다듬었어요.\n• 보관함 필터와 요리 안내를 더 알기 쉽게 정리했어요."
+              }
+            ],
+            "status": "completed"
+          }
+        ]
+      },
+      {
+        "track": "beta"
+      },
+      {
+        "track": "alpha",
+        "releases": [
+          {
+            "name": "장고야 부탁해",
+            "versionCodes": [
+              "17"
+            ],
+            "releaseNotes": [
+              {
+                "language": "ko-KR",
+                "text": "첫 버전입니다. 재료와 유통기한 관리, 알림, 공유 냉장고와 요리 추천 기능을 제공합니다."
+              }
+            ],
+            "status": "completed"
+          }
+        ]
+      },
+      {
+        "track": "internal",
+        "releases": [
+          {
+            "name": "1.4.5",
+            "versionCodes": [
+              "48"
+            ],
+            "status": "completed"
+          }
+        ]
+      }
+    ]
+  },
+  "applePublicLookup": [
+    {
+      "version": "1.4.5",
+      "releaseDate": "2026-11-02T06:20:33Z",
+      "trackId": 6793375883
+    }
+  ]
+}

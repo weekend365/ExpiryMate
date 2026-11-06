@@ -1,0 +1,122 @@
+[
+  {
+    "id": "fridge-01",
+    "host": "thumb.wikimedia.org",
+    "sha256": "19e3e3b8285184f27e09b163e3b8eb74417dc4be5f960ecdee35925efa8e5f46",
+    "expectedSha256": "19e3e3b8285184f27e09b163e3b8eb74417dc4be5f960ecdee35925efa8e5f46",
+    "match": true,
+    "bytes": 160977
+  },
+  {
+    "id": "fridge-02",
+    "host": "thumb.wikimedia.org",
+    "sha256": "34e3f32cf005e75b434f6ffe29597754a40d87e079a23d6016b70caee99efb02",
+    "expectedSha256": "34e3f32cf005e75b434f6ffe29597754a40d87e079a23d6016b70caee99efb02",
+    "match": true,
+    "bytes": 262431
+  },
+  {
+    "id": "fridge-03",
+    "host": "thumb.wikimedia.org",
+    "sha256": "77946503f3aa20b67cf651c326f150fe3a04a0fa57bb3314b24a9d8f4ef7b3c8",
+    "expectedSha256": "77946503f3aa20b67cf651c326f150fe3a04a0fa57bb3314b24a9d8f4ef7b3c8",
+    "match": true,
+    "bytes": 644283
+  },
+  {
+    "id": "fridge-04",
+    "host": "thumb.wikimedia.org",
+    "sha256": "fb6c6d805980044b9cc1d3545bf026533157b4093d15884903da248470af1fa8",
+    "expectedSha256": "fb6c6d805980044b9cc1d3545bf026533157b4093d15884903da248470af1fa8",
+    "match": true,
+    "bytes": 2145499
+  },
+  {
+    "id": "fridge-05",
+    "host": "thumb.wikimedia.org",
+    "sha256": "c41db27a2f582e0e431c486c3961ac36b7246d7b411e9ecc4ad001efc6275032",
+    "expectedSha256": "c41db27a2f582e0e431c486c3961ac36b7246d7b411e9ecc4ad001efc6275032",
+    "match": true,
+    "bytes": 2066341
+  },
+  {
+    "id": "fridge-06",
+    "host": "thumb.wikimedia.org",
+    "sha256": "a42108f75c8b4d90d92d4833a1a7483442fbd09ecfdfb6278d1bd1af565dba8f",
+    "expectedSha256": "a42108f75c8b4d90d92d4833a1a7483442fbd09ecfdfb6278d1bd1af565dba8f",
+    "match": true,
+    "bytes": 3113431
+  },
+  {
+    "id": "fridge-07",
+    "host": "thumb.wikimedia.org",
+    "sha256": "e4e25e7035b02b87f75cf8442d9fbdb0e65f32e18af787aeb0fbaa299a284ea1",
+    "expectedSha256": "e4e25e7035b02b87f75cf8442d9fbdb0e65f32e18af787aeb0fbaa299a284ea1",
+    "match": true,
+    "bytes": 881538
+  },
+  {
+    "id": "fridge-08",
+    "host": "thumb.wikimedia.org",
+    "sha256": "79e09d2ec82dc5b072e48a5f62c059446dfc3c844cdeacf0e47567673c420cbc",
+    "expectedSha256": "79e09d2ec82dc5b072e48a5f62c059446dfc3c844cdeacf0e47567673c420cbc",
+    "match": true,
+    "bytes": 3063294
+  },
+  {
+    "id": "fridge-09",
+    "host": "thumb.wikimedia.org",
+    "sha256": "966766c9c34645f18efcd86de8af2e34edaf90d663b445d09db2d3d4760689f3",
+    "expectedSha256": "966766c9c34645f18efcd86de8af2e34edaf90d663b445d09db2d3d4760689f3",
+    "match": true,
+    "bytes": 204795
+  },
+  {
+    "id": "fridge-10",
+    "host": "thumb.wikimedia.org",
+    "sha256": "a263137b772ab7c0e21c2a866383ac68f587021e755b3adaa4fce781d49093db",
+    "expectedSha256": "a263137b772ab7c0e21c2a866383ac68f587021e755b3adaa4fce781d49093db",
+    "match": true,
+    "bytes": 4192573
+  },
+  {
+    "id": "fridge-11",
+    "host": "thumb.wikimedia.org",
+    "sha256": "fba6c48f3824d35f44f2465f82433b69d19d1da00de696652f0e5c4d004932eb",
+    "expectedSha256": "fba6c48f3824d35f44f2465f82433b69d19d1da00de696652f0e5c4d004932eb",
+    "match": true,
+    "bytes": 278860
+  },
+  {
+    "id": "fridge-12",
+    "host": "thumb.wikimedia.org",
+    "sha256": "d709b9f7b1b7ffa56f8d1b07f03c0db0c23c66d2b5b0789f7369f39b4872da56",
+    "expectedSha256": "d709b9f7b1b7ffa56f8d1b07f03c0db0c23c66d2b5b0789f7369f39b4872da56",
+    "match": true,
+    "bytes": 131817
+  },
+  {
+    "id": "fridge-13",
+    "host": "thumb.wikimedia.org",
+    "sha256": "0ba198d32022d404f70815667188daf254e6c56a1619657e95511e1c74848a4c",
+    "expectedSha256": "0ba198d32022d404f70815667188daf254e6c56a1619657e95511e1c74848a4c",
+    "match": true,
+    "bytes": 3803163
+  },
+  {
+    "id": "fridge-14",
+    "host": "thumb.wikimedia.org",
+    "sha256": "19d6449b16d01655b38231f67b6f751615410ac918fb01178f9134773709b152",
+    "expectedSha256": "19d6449b16d01655b38231f67b6f751615410ac918fb01178f9134773709b152",
+    "match": true,
+    "bytes": 2503401
+  },
+  {
+    "id": "fridge-15",
+    "host": "thumb.wikimedia.org",
+    "sha256": "d02630c2772b5b1d61fff695372c599a27f5a63331bc65b2542c7cd6cecb9da3",
+    "expectedSha256": "d02630c2772b5b1d61fff695372c599a27f5a63331bc65b2542c7cd6cecb9da3",
+    "match": true,
+    "bytes": 2221484
+  }
+]

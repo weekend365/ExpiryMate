@@ -1,0 +1,22 @@
+{
+  "recordedAt": "2026-11-06T06:58:37.433870+00:00",
+  "version": "1.4.5",
+  "versionCode": 48,
+  "package": "com.expirymate.mobile",
+  "track": "production",
+  "consoleReleaseId": "10",
+  "sameInternalAab": true,
+  "rolloutPercent": 100,
+  "countriesChanged": false,
+  "managedPublishingEnabled": false,
+  "saveConfirmed": true,
+  "sendForReviewConfirmed": true,
+  "observedHeading": "검토 중인 변경사항",
+  "observedRelease": "48 (1.4.5) 전체 출시 시작",
+  "preReviewChecks": "running; console says submission will proceed after successful checks",
+  "approvalVerified": false,
+  "publicRolloutVerified": false,
+  "warning": "No deobfuscation mapping file; non-blocking, no device support changes",
+  "browser": "Existing administrator Chrome session; service account permissions unchanged",
+  "consoleUrl": "https://play.google.com/console/u/0/developers/5639833780583855859/app/4974253972827792694/publishing"
+}

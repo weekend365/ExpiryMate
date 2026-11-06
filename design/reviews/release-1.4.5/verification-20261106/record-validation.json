@@ -1,0 +1,12 @@
+{
+  "scope": "verification records only; no app/runtime/CI configuration change",
+  "docsCheck": "passed",
+  "diffCheck": "passed",
+  "comparisonRunnerSyntax": "passed",
+  "paidCallsDuringRecordValidation": 0,
+  "successfulComparisons": 30,
+  "sourcePhotoHashMatches": 15,
+  "secretValuesCopied": false,
+  "fullTestRerun": false,
+  "reason": "App code unchanged; prior core CI quality/build/migrate passed. Native CI failures retained."
+}

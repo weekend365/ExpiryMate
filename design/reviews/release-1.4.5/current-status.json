@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-11-02T05:55:23.566872+00:00",
+  "recordedAt": "2026-11-06T06:58:37.433870+00:00",
   "releaseVersion": "1.4.5",
   "commitAndMainPush": true,
   "productionBuilds": {
@@ -15,20 +15,38 @@
     }
   },
   "ios": {
-    "state": "WAITING_FOR_REVIEW",
+    "state": "READY_FOR_SALE",
     "releaseType": "AFTER_APPROVAL",
-    "phasedRelease": false
+    "phasedRelease": false,
+    "publicLookupVersion": "1.4.5",
+    "publicReleaseDate": "2026-11-02T06:20:33Z",
+    "installationVerified": false
   },
   "android": {
     "internalState": "completed",
-    "productionPromotion": "blocked by Google403",
-    "publicRolloutVerified": false
+    "productionPromotion": "100% release saved and send-for-review confirmed in administrator console",
+    "publicRolloutVerified": false,
+    "managedPublishingEnabled": false,
+    "reviewState": "pre-review automated checks running under 검토 중인 변경사항",
+    "productionTrackApiState": "completed",
+    "productionTrackVersionCode": 48,
+    "apiCheckedAt": "2026-11-06T07:00:18.427Z",
+    "apiCompletedDoesNotProvePublic": true
   },
-  "coreCi": "quality, build, migrate succeeded on 7f897944; native layout infrastructure followup pending",
+  "coreCi": "quality, build, migrate succeeded on 6ed419d6; native layout CI failed before comparison; see verification-20261106/ci-status.json",
   "allStoresPublic": false,
-  "operatorActions": [
-    "Use existing Google Play administrator to promote versionCode48 to production100% and send for review, or reconnect administrator browser.",
-    "Update Railway api/production OPENAI_API_KEY with a valid key, then recheck provider authentication and public-photo evaluation."
-  ],
-  "secretValuesInRecord": false
+  "operatorActions": [],
+  "secretValuesInRecord": false,
+  "photoProvider": {
+    "authenticationHttpStatus": 200,
+    "comparisonCalls": 30,
+    "successfulCalls": 30,
+    "estimatedCostUsd": 0.041759,
+    "accuracy": "mixed partial findings; no global accuracy improvement claim"
+  },
+  "remaining": [
+    "Google automated checks and review, then verify public version48 and installation.",
+    "Native device layout/camera/preprocessing and existing TestFlight price comparison remain unverified.",
+    "Native CI layout setup failures remain unresolved; core quality/build/migrate passed."
+  ]
 }

@@ -1,8 +1,11 @@
 # 1.4.5 양대 스토어 출시 작업
 
-**2026-11-02 상태:** 커밋·main 푸시 및 production 빌드 완료. iOS68은 App Review 대기·
-승인 후 전체 공개다. Android48은 내부 트랙 완료이며 production 승격은 Google403으로
-미완료다. 운영 OpenAI 키401도 사용자 갱신이 필요하다. 양대 스토어 공개 완료가 아니다.
+**2026-11-06 상태:** 커밋·main 푸시 및 production 빌드 완료. iOS1.4.5(68)는11월2일 전체
+공개됐다. Android1.4.5(48)는 관리자 콘솔에서100% 출시·심사 전송을 확정했고 사전 검사 중이다.
+승인 후 자동 공개 설정이며 아직 공개 완료가 아니다. 갱신된 운영 키 인증과 공개 사진30회 분석은
+성공했다. 전후 결과는 일부 개선·잔여 오류·수량 회귀가 혼재해 전체 정확도 향상으로 단정하지 않는다.
+[최신 확인과 한계](verification-20261106/README.md), [현재 상태](current-status.json).
+아래11월1~2일 기록은 당시의 과정과 한계로 보존한다.
 
 2026-11-01 사용자가 변경사항 커밋·푸시·빌드·양대 스토어 배포를 요청했다.
 직전 장고 크기 복원, 생활 공간 배경 v2, 사진 등록 전처리·인식 지침·중복 검토 수정을 포함한다.
@@ -18,7 +21,7 @@ Android는 내부 트랙 업로드 후 동일 AAB를 production 전체 제공으
 
 [사진 수정 검증](../photo-intake-quality-20261101/README.md): 전체1,533개 통과, 기존 DB6개 제외,
 관련83개 통과, 실제 등록 컴포넌트의9개 글자·폭 조합 전후 확인.
-실제 인식률 비교는 공개 사진15장 중7장만 동일 해시로 확보했고 로컬 API키401로 중단됐다.
+11월1일 실제 인식률 비교는 공개 사진15장 중7장만 동일 해시로 확보했고 로컬 API키401로 중단됐다.
 모의 테스트를 실제 정확도 향상으로 해석하지 않는다. 새 모듈 포함 네이티브 설치본에서 회전·
 사진 선명도·카메라·키보드·safe area 확인은 별도 검증 대상이다.
 이전1.4.4의 TestFlight 가격 불일치 기록도 통과로 바꾸지 않는다.
@@ -52,14 +55,15 @@ WAITING_FOR_REVIEW·AFTER_APPROVAL이다. 이는 공개 완료가 아니다.
 검사·ROI·판정·시간 제한은 유지하며 CI worker 경쟁만 줄이는 순차 실행으로 조정한다.
 로컬 야간 실행도 타이머·worker 통신 제한을 초과했으므로 통과로 바꾸지 않는다.
 
-## 남은 외부 조건
+## 11월2일 외부 조건과 후속 해결
 
 [Android 출시 권한](android-release-blocker.json): 내부 트랙48은completed이나 production
 승격 요청에 Google403이 반환됐다. 권한을 확대하지 않았으며 브라우저 연결도 사용할 수 없다.
 관리자 콘솔에서48을100%로 승격해 심사 제출하거나 관리자 브라우저 연결이 필요하다.
 [사진 공급자 인증](photo-provider-blocker.json): 운영 키도401 invalid_api_key이며 사용자에게
 Railway api/production 키 갱신을 요청했다. 모델·계약·비용 한도는 유지한다.
-따라서 양대 스토어 공개 완료 및 사진 인식 실호출 검증 완료로 기록하지 않는다.
+11월6일 사용자 키 갱신과 관리자 브라우저 연결로 인증·실호출·Android 심사 전송을 완료했다.
+Google 승인·공개와 네이티브 설치본 검증은 남아 있다. 최신 상태는 위 후속 기록을 따른다.
 
 ## CI 순차 실행 결과와 네이티브 검사 준비
 
@@ -68,7 +72,8 @@ Railway api/production 키 갱신을 요청했다. 모델·계약·비용 한도
 clean prebuild가 추적된ExpiryMate 프로젝트를 지워 고정된scheme 경로를 찾지 못했다.
 Android에는 action 공식 KVM 준비 절차를 추가하고 iOS는 production EAS와 같은
 추적 프로젝트 보존 prebuild를 사용한다. 앱 바이너리·기능·판정·시간 제한은 바꾸지 않는다.
-후속 네이티브 CI 결과는 아직 확인 전이며 전체 네이티브 QA 통과로 기록하지 않는다.
+후속 네이티브 CI도 실패했다.11월6일 확인한 새 실패 원인은 위 후속 기록에 구분하며
+전체 네이티브 QA 통과로 기록하지 않는다.
 
 CI 환경 후속 수정의 관련15개 테스트와 문서 검사가 통과했다. 후속 네이티브 CI 실행 결과는
-확인 전이다. KVM 준비는 [emulator action 공식 안내](https://github.com/ReactiveCircus/android-emulator-runner#running-hardware-accelerated-emulators-on-linux-runners)를 따른다.
+실패로 확인됐다. KVM 준비는 [emulator action 공식 안내](https://github.com/ReactiveCircus/android-emulator-runner#running-hardware-accelerated-emulators-on-linux-runners)를 따른다.

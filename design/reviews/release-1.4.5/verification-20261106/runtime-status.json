@@ -1,0 +1,32 @@
+[
+  {
+    "service": "api",
+    "status": "SUCCESS",
+    "id": "a79573b2-ccb7-46ef-871f-cfc3959584ed",
+    "createdAt": "2026-11-06T06:35:52.263Z",
+    "commit": "6ed419d60a9be55cb777e85396fc13a7b5d4b78c"
+  },
+  {
+    "path": "/health",
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": {
+        "status": "ok",
+        "version": "0.1.0",
+        "gitSha": "6ed419d60a9be55cb777e85396fc13a7b5d4b78c",
+        "env": "production"
+      }
+    }
+  },
+  {
+    "path": "/ready",
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": {
+        "status": "ready"
+      }
+    }
+  }
+]

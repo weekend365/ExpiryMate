@@ -1,0 +1,15 @@
+{
+  "provider-auth.json": "4035402fad381ee1ee8e5ca042d244270fde74af9d791c51768ea516f08362e6",
+  "reacquire.json": "a5b5f3d49fc9b7c49f5f1c391baf03ecea7669dda7d6bcf0e1db80e1982d3c31",
+  "README.md": "2b53861594ceeb806b4a265bbc87907f2f2643e85da6a9501d35646fe98e0cd0",
+  "android-console-submission.json": "6132bf2d06f273ea042bddbbb47410fbae93d0c7470a4dc49707939a7d4fe114",
+  "runtime-status.json": "0858379b0d39af8fd5894b20f67cadab596b5ea3537dbd6ac9d1b4d8ad96983f",
+  "record-validation.json": "6e647d91dc5b904bd586e21f3cf8263d5d94a72ada5bef04a26c84342c7e6253",
+  "ci-status.json": "4a88bcac09b97a64b1fbef8d3e2ce18035f00b2c0968db5ea32059eec2be082c",
+  "store-status.json": "75fc9e4100d4522884489ee42106ce883da5889c41c0845cf221ead9d64e927d",
+  "store-status-after-submission.json": "38832505ea1dc87463fec13ee967e984def06c1bfefa5ebdb7cbd43153f3e561",
+  "photo-evaluation/live-results.jsonl": "75b62ec5795ca5091489d7694394dc33c1cff0df3bac17ad058edd98aff5b29a",
+  "photo-evaluation/live-settlement.json": "874c015799545c787b2491deca52b39da5ab64bd823e18f8c9adfcc60762718e",
+  "photo-evaluation/compare.mjs": "d33e58fa241b3d0a765d834594dd140a5cc6ab1dfec23117f54942a049d29263",
+  "photo-evaluation/live-manifest.json": "658e6ea3b7b83539afac51f5a154b7505bc068a5d89dab8eb80d68ebef1fc3b5"
+}
